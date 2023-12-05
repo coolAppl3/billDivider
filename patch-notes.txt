@@ -1,24 +1,6 @@
-- General:
+General:
 
-  - Initialized a README.md. Empty for now.
-  - Set license to MIT.
-  - Created server.js in the root, and pointed package.json towards it.
-  - Installed express as a dependency.
-  - Installed nodemon as a dev-dependency.
-  - installed dotenv as a dev-dependency.
-    - Set the port for development purposes to 5000.
-    - Created a NODE_ENV variable, and set it to development.
-  - Created a patch-notes.txt file to track patch notes while developing.
-  - Created a .gitignore file.
-  - Added node_modules, .env, and patch-notes.txt to .gitignore.
-  - Added a start script in package.json to run the server using node.
-  - Added a dev script to package.json to run the server using nodemon.
-
-- server.js:
-  - Imported express.
-  - Imported dotenv.
-  - Created a port variable and set it to the default environment port, or 5000 by default.
-  - Created a server variable, and set it to express.
-  - Added JSON and urlencoded middleware.
-  - Set extended to false in the urlencoded middleware.
-  - Server listens to whatever port is when run.
+  - Added db.js to connect to MongoDB's database.
+  - Created user.js to work as a router for requests coming to /api/users. This router will essentially handle login and signup functionality.
+  - Created a User.js schema to dictate how a user object should look like.
+  - Created a util directory, and added generateLoginToken.
