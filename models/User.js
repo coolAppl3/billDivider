@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  history: {
+    type: Array,
+    default: [],
+  }
 });
 
 const User = mongoose.model('User', userSchema);

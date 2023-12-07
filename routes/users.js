@@ -7,6 +7,23 @@ const generateLoginToken = require('../util/generateLoginToken');
 
 const router = express.Router();
 
+// Get user - TESTING ONLY
+router.get('/:id', async (req, res) => {
+  const user = await User.findById(req.params.id);
+
+  if(!user) {
+    res.status(404).json({ success: false, message: 'No users by this ID' });
+    return ;
+  };
+
+  try {
+    res.json({ success: true, data: user });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false, message: 'Something went wrong' });
+  }
+});
+
 // Sign in
 router.get('/', async (req, res) => {
   const { username, password } = req.body;
@@ -38,18 +55,26 @@ router.post('/', async (req, res) => {
 
   // Checking if the username is taken
   const usernameExists = await User.findOne({ username: username });
-
   if(usernameExists) {
     res.status(409).json({ success: false, message: 'Username already taken'});
     return ;
   };
-  
 
-  // Continuing since the username is not taken
+  // Validation - only letters and numbers are allowed
+  const allowedUsernameChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  
+  for(let char of username) {
+    if(allowedUsernameChars.indexOf(char) === -1) {
+      res.status(406).json({ success: false, message: 'Invalid username. Username can only contain letters and numbers' });
+      return ;
+    };
+  };
+
+  // Continuing...
   const user = new User({
     username,
     password: hash,
-    loginToken: generateLoginToken(32),
+    loginToken: await generateLoginToken(),
   });
 
   try {
@@ -58,6 +83,35 @@ router.post('/', async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).json({ success: false, error: 'Something went wrong' });
+  }
+});
+
+// Add session
+router.post('/newSession', async (req, res) => {
+  const user = await User.findOne({ loginToken: req.get('loginToken') });
+  if(!user) {
+    res.status(403).json({ success: false, message: 'Invalid login token. Please login' });
+  };
+
+  user.history.push(req.body);
+
+  const updatedUser = await User.findByIdAndUpdate(
+    user._id,
+    {
+      $set: {
+        history: user.history,
+      },
+    },
+    {
+      new: true,
+    }
+  );
+
+  try {
+    res.json({ success: true, data: updatedUser });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false, message: 'Something went wrong' });
   }
 });
 
