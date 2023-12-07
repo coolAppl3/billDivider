@@ -5,11 +5,10 @@ const connectDB = require('./config/db');
 // Connecting to database
 connectDB();
 
-// Importing routes
-const userRouter = require('./routes/user');
-
-// Setting environment
+// Environmental variables
 process.env.NODE_ENV = 'development';
+
+// ---
 
 const port = process.env.PORT || 5000;
 const server = express();
@@ -18,9 +17,13 @@ const server = express();
 server.use(express.json());
 server.use(express.urlencoded({ extended: false }));
 
+// Importing Routers
+const userRouter = require('./routes/users');
 
-// Users path
+// routes
 server.use('/api/users', userRouter);
+
+// ---
 
 // Homepage path
 server.use('/', (req, res) => {
