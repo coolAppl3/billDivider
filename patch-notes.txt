@@ -1,13 +1,8 @@
-User.js:
+New:
 
-  - Updated the User schema to now include an empty history by default. The user's history will be an array of previous sessions.
-
-generateLoginToken.js:
-
-  - Imported Users.js and made the function asynchronous, which now ensures that the randomized login token the user receives is always unique. This might not be an ideal solution in a complex application, but it should do here.
+  - Added generateSessionID to /util. This will now create a 16-character long ID for every new session created. 
 
 users.js:
 
-  - Renamed router from user.js to users.js for the sake of consistency.
-  - When submitting a post request to api/users/newSession, with a valid login token, the user's history is updated accordingly.
-  - Added temporary GET functionality to api/users/:id for testing purposes. Will be removed once the backend is complete.
+  - Imported in generateSessionID.
+  - The POST method on the /newSession path now uses generateSessionID to create a session ID, checks the user's history to ensure that the generated session ID is not already in use, then adds it to the session object before updating the user's history.
