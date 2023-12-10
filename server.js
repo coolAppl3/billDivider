@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 require('dotenv').config();
 const connectDB = require('./config/db');
@@ -19,6 +20,9 @@ server.use(express.urlencoded({ extended: false }));
 
 // Importing Routers
 const userRouter = require('./routes/users');
+
+// Static Files
+server.use(express.static(path.join(__dirname, 'public')));
 
 // routes
 server.use('/api/users', userRouter);

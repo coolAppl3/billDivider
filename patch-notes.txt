@@ -1,8 +1,9 @@
 New:
 
-  - Added generateSessionID to /util. This will now create a 16-character long ID for every new session created. 
+  - Created a /client and /public directories, and set-up webpack withing /client (currently set to development).
+  - Set-up index.html to take in the title from webpack config.
+  - Set-up the basic SCSS styles.
 
-users.js:
+server.js:
 
-  - Imported in generateSessionID.
-  - The POST method on the /newSession path now uses generateSessionID to create a session ID, checks the user's history to ensure that the generated session ID is not already in use, then adds it to the session object before updating the user's history.
+  - Added a static file path.

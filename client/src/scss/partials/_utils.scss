@@ -1,0 +1,199 @@
+// General
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: $main-font;
+  font-size: 62.5%;
+}
+
+body {
+  font-family: $main-font;
+  font-size: 1.6rem;
+  font-weight: 400;
+  line-height: 1.4;
+  background: $main;
+  color: $light;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.2;
+  font-weight: 400;
+}
+
+button, input, textarea {
+  background: transparent;
+  border: 1px solid $light;
+  font-size: 1.6rem;
+  font-weight: 400;
+}
+
+ul, li {
+  list-style: none;
+  text-decoration: none;
+}
+
+img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+a {
+  text-decoration: none;
+  color: $light;
+}
+
+// Buttons
+
+%btn-shared {
+  display: block;
+  min-width: fit-content;
+  padding: 0 2.4rem;
+  line-height: 40px;
+  font-weight: bold !important;
+  font-size: 1.6rem;
+  text-align: center;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: filter 200ms;
+}
+
+.btn {
+  @extend %btn-shared;
+  
+  &.btn {
+
+    &:hover {
+      filter: brightness(0.7);
+    }
+    
+    &-main {
+      background: $main;
+      border-color: $main;
+      color: $light;
+    }
+  
+    &-secondary {
+      background: $secondary;
+      border-color: $secondary;
+      color: $light;
+    }
+  
+    &-light {
+      background: $light;
+      border-color: $light;
+      color: $main;
+    }
+  
+    &-light {
+      background: $light;
+      border-color: $light;
+      color: $main;
+    }
+  
+    &-cta {
+      background: $cta;
+      border-color: $cta;
+      color: $main;
+    }
+
+    &-border-main {
+      background: transparent;
+      border-color: $main;
+      color: $main;
+    }
+  
+    &-border-secondary {
+      background: transparent;
+      border-color: $secondary;
+      color: $secondary;
+    }
+  
+    &-border-light {
+      background: transparent;
+      border-color: $light;
+      color: $light;
+    }
+    
+    &-border-cta {
+      background: transparent;
+      border-color: $cta;
+      color: $cta;
+    }
+  }
+  
+}
+
+// Text
+.text {
+
+  &-main {
+    color: $main;
+  }
+
+  &-secondary {
+    color: $secondary;
+  }
+
+  &-light {
+    color: $light;
+  }
+
+  &-cta {
+    color: $cta;
+  }
+}
+
+// Miscellaneous
+.img-div {
+  display: flex;
+  overflow: hidden;
+}
+
+.btn-div {
+  display: flex;
+}
+
+// Utility classes
+.content {
+
+  &-t {
+    font-size: 3rem;
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    color: $light;
+  }
+
+  &-p {
+    font-size: 1.6rem;
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 2rem;
+    color: #CECCD5;
+  }
+
+  &-80 {
+    max-width: 80%;
+  }
+
+  &-60 {
+    max-width: 60%;
+  }
+
+  &-50 {
+    max-width: 50%;
+  }
+}
