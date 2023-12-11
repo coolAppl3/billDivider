@@ -1,9 +1,3 @@
-New:
+index.html:
 
-  - Created a /client and /public directories, and set-up webpack withing /client (currently set to development).
-  - Set-up index.html to take in the title from webpack config.
-  - Set-up the basic SCSS styles.
-
-server.js:
-
-  - Added a static file path.
+  - Homepage look finished. AOS to be added soon, followed by media queries before moving on to more pages.

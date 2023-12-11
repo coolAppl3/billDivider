@@ -2,3 +2,161 @@
 @import './partials/utils.scss';
 
 
+// Navbars --- --- ---
+
+// // Desktop Navbar
+.desktop-nav {
+  height: 6rem;
+  max-height: 6rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+
+  .container {
+    position: relative;
+  }
+
+  &-container {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    svg {
+      color: $light;
+      margin-bottom: 2px;
+      margin-right: 2px;
+      font-weight: bold;
+    }
+    
+    .logo {
+      position: relative;
+      font-size: 3rem;
+      font-weight: 400;
+      margin-right: auto;
+
+      a {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 11;
+      }
+    }
+
+    .links-container {
+      display: flex;
+      align-items: center;
+
+      .btn-div {
+
+        &:last-child {
+          margin-left: 1rem;
+        }
+      }
+    }
+
+    #user-menu-btn {
+      margin-left: 2rem;
+      border: 2px solid $light;
+      border-radius: 50%;
+      height: 40px;
+      width: 40px;
+      min-height: 40px;
+      min-width: 40px;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: background 200ms, color 200ms, border-color 200ms;
+
+      &.hidden {
+        display: none;
+      }
+
+      .user-menu-options {
+        position: absolute;
+        top: 6rem;
+        right: 0;
+        background: $black;
+        display: none;
+        
+        
+        &::after {
+          content: '';
+          position: absolute;
+          top: -6.5px;
+          right: 35px;
+          width: 0px;
+          height: 0px;
+          border-style: solid;
+          border-width: 0px 5px 7px 5px;
+          border-color: transparent transparent $black transparent;
+        }
+
+        li {
+          display: block;
+
+          a {
+            width: 100%;
+            height: 100%;
+            padding: 1rem 4rem;
+            display: block;
+            font-size: 1.4rem;
+            transition: background 200ms;
+
+            &:hover {
+              background: #333;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.hero {
+  height: calc(100vh - 6rem);
+  max-height: calc(100vh - 6rem);
+  height: calc(100svh - 6rem);
+  max-height: calc(100svh - 6rem);
+  overflow: hidden;
+
+  .container {
+    display: flex;
+  }
+  
+  &-container {
+    margin: auto 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    .svg-div {
+      grid-column: span 1;
+      margin: auto 0;
+    }
+
+    &-content {
+      grid-column: span 2;
+      margin: auto 0;
+
+      .content-t {
+        font-size: 4.2rem;
+      }
+  
+      .btn-container {
+        display: flex;
+        align-items: center;
+  
+        .btn-div {
+  
+          &:first-child {
+            margin-right: 1rem;
+          }
+        }
+      }
+    }
+  }
+}

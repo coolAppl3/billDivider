@@ -17,6 +17,10 @@ body {
   line-height: 1.4;
   background: $main;
   color: $light;
+
+  position: relative;
+  z-index: 2;
+
 }
 
 .container {
@@ -156,6 +160,26 @@ a {
   }
 }
 
+// Background
+.bg {
+
+  &-main {
+    background: $main;
+  }
+
+  &-secondary {
+    background: $secondary;
+  }
+
+  &-light {
+    background: $light;
+  }
+
+  &-cta {
+    background: $cta;
+  }
+}
+
 // Miscellaneous
 .img-div {
   display: flex;
@@ -164,6 +188,12 @@ a {
 
 .btn-div {
   display: flex;
+}
+
+.nav-push-div {
+  display: block;
+  height: 6rem;
+  width: 100%;
 }
 
 // Utility classes
@@ -185,6 +215,10 @@ a {
     color: #CECCD5;
   }
 
+  &-90 {
+    max-width: 90%;
+  }
+  
   &-80 {
     max-width: 80%;
   }
@@ -195,5 +229,12 @@ a {
 
   &-50 {
     max-width: 50%;
+  }
+}
+
+.section {
+
+  &-p {
+    padding: 5rem 0;
   }
 }
