@@ -5,7 +5,7 @@
 // Navbars --- --- ---
 
 // // Desktop Navbar
-.desktop-nav {
+.main-nav {
   height: 6rem;
   max-height: 6rem;
   position: fixed;
@@ -27,7 +27,7 @@
     svg {
       color: $light;
       margin-bottom: 2px;
-      margin-right: 2px;
+      margin-right: 5px;
       font-weight: bold;
     }
     
@@ -136,6 +136,7 @@
     .svg-div {
       grid-column: span 1;
       margin: auto 0;
+      text-align: end;
     }
 
     &-content {
@@ -160,3 +161,10 @@
     }
   }
 }
+
+
+
+
+
+// Media Queries --- --- ---
+@import './partials/media-queries';

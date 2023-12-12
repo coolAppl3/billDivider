@@ -1,0 +1,79 @@
+// Tablets
+@media(max-width: 830px) {
+  
+  // index.html --- --- ---
+
+  // Hero
+  .hero {
+
+    &-container {
+      grid-template-columns: repeat(1, 1fr);
+
+      &-content {
+        grid-column: span 1;
+        margin-top: auto;
+      }
+
+      .svg-div {
+        display: none;
+      }
+    }
+    
+  }
+}
+
+@media(max-width: 420px) {
+
+  // Utilities
+  .container {
+    padding: 0 1rem;
+  }
+  
+  // index.html --- --- ---
+
+  // Main Navbar
+  .main-nav {
+
+    .logo {
+      font-size: 2.2rem;
+      font-weight: bold;
+    }
+
+    .links-container {
+
+      .btn {
+        font-size: 1.3rem;
+        line-height: 30px;
+        padding: 0 1.8rem;
+      }
+    }
+
+  }
+
+  // Hero
+  .hero {
+
+    &-container {
+      grid-template-columns: repeat(1, 1fr);
+
+      &-content {
+        grid-column: span 1;
+        margin-top: auto;
+
+        .content-t {
+          font-size: 2.4rem;
+          font-weight: bold;
+        }
+
+        .content-p {
+          max-width: 100%;
+        }
+      }
+
+      .svg-div {
+        display: none;
+      }
+    }
+    
+  }
+}

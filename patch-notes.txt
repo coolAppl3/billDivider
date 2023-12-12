@@ -1,3 +1,4 @@
 index.html:
 
-  - Homepage look finished. AOS to be added soon, followed by media queries before moving on to more pages.
+  - Media queries implemented.
+  - AOS addition abolished for now.
