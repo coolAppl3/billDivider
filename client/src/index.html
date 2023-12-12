@@ -35,10 +35,11 @@
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
   <body>
-    <!-- Desktop Navbar -->
-    <nav class="desktop-nav bg-secondary">
+    <!-- Main Navbar -->
+    <nav class="main-nav bg-secondary">
       <div class="container">
-        <div class="desktop-nav-container">
+        <div class="main-nav-container">
+          <!-- SVG -->
           <svg
             width="24px"
             height="24px"
@@ -83,25 +84,21 @@
             <a href="index.html"></a>
           </h1>
 
-          <div
-            class="links-container"
-            id="sign-in-btn"
-          >
+          <div class="links-container">
             <div class="btn-div">
               <a
                 href="#"
                 class="btn btn-border-light"
+                id="sign-in-btn"
                 >Sign in</a
               >
             </div>
 
-            <div
-              class="btn-div"
-              id="sign-up-btn"
-            >
+            <div class="btn-div">
               <a
                 href="#"
                 class="btn btn-cta"
+                id="sign-up-btn"
                 >Sign up</a
               >
             </div>
@@ -157,6 +154,8 @@
               </div>
             </div>
           </div>
+
+          <!-- SVG -->
           <div class="svg-div">
             <svg
               width="600"
