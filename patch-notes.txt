@@ -1,4 +1,8 @@
+New:
+
+  - Added signUp.html and fully1 styled it.
+  - Added signIn.html and fully styled it.
+
 index.html:
 
-  - Media queries implemented.
-  - AOS addition abolished for now.
+  - Slight adjustment to the wording on the hero section.

@@ -40,6 +40,7 @@ button, input, textarea {
   border: 1px solid $light;
   font-size: 1.6rem;
   font-weight: 400;
+  color: $light;
 }
 
 ul, li {
@@ -188,6 +189,7 @@ a {
 
 .btn-div {
   display: flex;
+  height: fit-content;
 }
 
 .nav-push-div {
@@ -204,7 +206,6 @@ a {
     font-weight: 400;
     line-height: 1.2;
     margin-bottom: 1rem;
-    color: $light;
   }
 
   &-p {
