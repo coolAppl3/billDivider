@@ -2,8 +2,6 @@
 @import './partials/utils.scss';
 
 
-// Navbars --- --- ---
-
 // // Desktop Navbar
 .main-nav {
   height: 6rem;
@@ -117,6 +115,9 @@
   }
 }
 
+// index.html --- --- ---
+
+// Hero
 .hero {
   height: calc(100vh - 6rem);
   max-height: calc(100vh - 6rem);
@@ -162,9 +163,235 @@
   }
 }
 
+// signUp.html --- --- ---
+
+// Sign Up
+.sign-up {
+  height: 100vh;
+  max-height: 100vh;
+  height: 100svh;
+  max-height: 100svh;
+
+  &-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &-form {
+      padding: 4rem 2rem;
+      background: $secondary;
+      border-radius: 5px;
+      width: 35rem;
+      max-width: 35rem;
+      position: relative;
+
+      .content-t {
+        font-size: 2.6rem;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 5px;
+      }
+
+      .h-line {
+        height: 1px;
+        width: calc(100% + 4rem);
+        background: rgba(200, 200, 200, 0.15);
+        margin: 4rem 0 3rem;
+        transform: translateX(-2rem);
+      }
+
+      .content-p {
+        font-size: 1.4rem;
+        font-weight: 400;
+        text-align: center;
+        // margin-bottom: 4rem;
+      }
+
+      .form-group {
+        margin-bottom: 2rem;
+
+        label {
+          display: block;
+          font-size: 1.4rem;
+          margin-bottom: 4px;
+          font-weight: 500;
+        }
+
+        input {
+          width: 100%;
+          border: 1px solid rgba(200, 200, 200, 0.35);
+          border-radius: 3px;
+          line-height: 28px;
+          outline: none;
+          padding: 0 1rem;
+          font-weight: 400;
+          font-size: 1.4rem;
+        }
+      }
+
+      .btn-div {
+        margin-bottom: 2rem;
+
+        .btn {
+          width: 100%;
+        }
+      }
+
+      div + p {
+        display: block;
+        margin: 0 auto 3rem;
+        font-size: 1.2rem;
+        color: rgba(200, 200, 200, 0.85);
+        
+        a {
+          text-decoration: underline;
+          transition: color 200ms, opacity 200ms;
+          opacity: 0.9;
+
+          &:hover {
+            color: $cta;
+            opacity: 1;
+          }
+        }
+      }
+
+      #return-btn {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        font-size: 1.4rem;
+        font-weight: bold;
+        padding: 1rem;
+        cursor: pointer;
+        transition: color 200ms;
+        width: fit-content;
+
+        &:hover {
+          color: rgba(200, 200, 200, 0.85);
+        }
+
+        i {
+          color: $cta;
+        }
+      }
+
+    }
+  }
+}
+
+// signIn.html --- --- ---
+
+// Sign In
+.sign-in {
+  height: 100vh;
+  max-height: 100vh;
+  height: 100svh;
+  max-height: 100svh;
+
+  &-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &-form {
+      padding: 4rem 2rem;
+      background: $secondary;
+      border-radius: 5px;
+      width: 35rem;
+      max-width: 35rem;
+      position: relative;
+
+      .content-t {
+        font-size: 2.6rem;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 0;
+      }
+
+      .h-line {
+        height: 1px;
+        width: calc(100% + 4rem);
+        background: rgba(200, 200, 200, 0.15);
+        margin: 4rem 0 3rem;
+        transform: translateX(-2rem);
+      }
+
+      .form-group {
+        margin-bottom: 2rem;
+
+        label {
+          display: block;
+          font-size: 1.4rem;
+          margin-bottom: 4px;
+          font-weight: 500;
+        }
+
+        input {
+          width: 100%;
+          border: 1px solid rgba(200, 200, 200, 0.35);
+          border-radius: 3px;
+          line-height: 28px;
+          outline: none;
+          padding: 0 1rem;
+          font-weight: 400;
+          font-size: 1.4rem;
+        }
+      }
+
+      .btn-div {
+        margin-bottom: 2rem;
+
+        .btn {
+          width: 100%;
+        }
+      }
+
+      div + p {
+        display: block;
+        margin: 0 auto 3rem;
+        font-size: 1.2rem;
+        color: rgba(200, 200, 200, 0.85);
+        
+        a {
+          text-decoration: underline;
+          transition: color 200ms, opacity 200ms;
+          opacity: 0.9;
+
+          &:hover {
+            color: $cta;
+            opacity: 1;
+          }
+        }
+      }
+
+      #return-btn {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        font-size: 1.4rem;
+        font-weight: bold;
+        padding: 1rem;
+        cursor: pointer;
+        transition: color 200ms;
+        width: fit-content;
+
+        &:hover {
+          color: rgba(200, 200, 200, 0.85);
+        }
+
+        i {
+          color: $cta;
+        }
+      }
+
+    }
+  }
+}
 
 
 
 
 // Media Queries --- --- ---
-@import './partials/media-queries';
+@import './partials/media-queries'

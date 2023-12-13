@@ -11,7 +11,8 @@ module.exports = {
 
   entry: {
     index: './src/js/index.js',
-    // More if needed
+    signUp: './src/js/signUp.js',
+    signIn: './src/js/signIn.js',
   },
 
   output: {
@@ -76,13 +77,34 @@ module.exports = {
 
     // index.html
     new HtmlWebpackPlugin({
-      title: 'Bill Divider - Home', // - RENAME
+      title: 'Home - Bill Divider',
       filename: 'index.html',
-      template: 'src/index.html',
+      template: 'src/html/index.html',
 
-      // JS files to be used:
       chunks: [
         "index"
+      ],
+    }),
+
+    // signUp.html
+    new HtmlWebpackPlugin({
+      title: 'Sign Up - Bill Divider',
+      filename: 'signUp.html',
+      template: 'src/html/signUp.html',
+
+      chunks: [
+        "signUp"
+      ],
+    }),
+
+    // signIn.html
+    new HtmlWebpackPlugin({
+      title: 'Sign In - Bill Divider',
+      filename: 'signIn.html',
+      template: 'src/html/signIn.html',
+
+      chunks: [
+        "signIn"
       ],
     }),
 
