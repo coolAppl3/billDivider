@@ -1,8 +1,3 @@
 New:
 
-  - Added signUp.html and fully1 styled it.
-  - Added signIn.html and fully styled it.
-
-index.html:
-
-  - Slight adjustment to the wording on the hero section.
+  - Added session.html and styled it. Further styling and media queries are still to be added.
