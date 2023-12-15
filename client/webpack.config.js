@@ -13,6 +13,7 @@ module.exports = {
     index: './src/js/index.js',
     signUp: './src/js/signUp.js',
     signIn: './src/js/signIn.js',
+    session: './src/js/session.js',
   },
 
   output: {
@@ -105,6 +106,17 @@ module.exports = {
 
       chunks: [
         "signIn"
+      ],
+    }),
+
+    // session.html
+    new HtmlWebpackPlugin({
+      title: 'Session - Bill Divider',
+      filename: 'session.html',
+      template: 'src/html/session.html',
+
+      chunks: [
+        "session"
       ],
     }),
 
