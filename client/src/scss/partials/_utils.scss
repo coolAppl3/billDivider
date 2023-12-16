@@ -233,6 +233,54 @@ a {
   }
 }
 
+.form-group {
+  margin-bottom: 2rem;
+  position: relative;
+
+  label {
+    display: block;
+    font-size: 1.4rem;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+
+  input {
+    width: 100%;
+    border: 1px solid rgba(200, 200, 200, 0.35);
+    border-radius: 3px;
+    line-height: 28px;
+    outline: none;
+    padding: 0 1rem;
+    font-weight: 400;
+    font-size: 1.4rem;
+    transition: border-color 200ms;
+
+    &:focus {
+      border-color: $cta;
+    }
+    
+  }
+
+  .error-span {
+    display: none;
+  }
+
+  &.error {
+
+    input {
+      border-color: $danger;
+    }
+
+    .error-span {
+      display: block;
+      font-size: 1.2rem;
+      color: $danger;
+      margin-top: 4px;
+    }
+  }
+ 
+}
+
 .section {
 
   &-p {
