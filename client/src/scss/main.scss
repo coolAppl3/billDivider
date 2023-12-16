@@ -208,28 +208,6 @@
         // margin-bottom: 4rem;
       }
 
-      .form-group {
-        margin-bottom: 2rem;
-
-        label {
-          display: block;
-          font-size: 1.4rem;
-          margin-bottom: 4px;
-          font-weight: 500;
-        }
-
-        input {
-          width: 100%;
-          border: 1px solid rgba(200, 200, 200, 0.35);
-          border-radius: 3px;
-          line-height: 28px;
-          outline: none;
-          padding: 0 1rem;
-          font-weight: 400;
-          font-size: 1.4rem;
-        }
-      }
-
       .btn-div {
         margin-bottom: 2rem;
 
@@ -316,28 +294,6 @@
         background: rgba(200, 200, 200, 0.15);
         margin: 4rem 0 3rem;
         transform: translateX(-2rem);
-      }
-
-      .form-group {
-        margin-bottom: 2rem;
-
-        label {
-          display: block;
-          font-size: 1.4rem;
-          margin-bottom: 4px;
-          font-weight: 500;
-        }
-
-        input {
-          width: 100%;
-          border: 1px solid rgba(200, 200, 200, 0.35);
-          border-radius: 3px;
-          line-height: 28px;
-          outline: none;
-          padding: 0 1rem;
-          font-weight: 400;
-          font-size: 1.4rem;
-        }
       }
 
       .btn-div {
@@ -517,6 +473,71 @@
   }
 }
 
+.bill-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  z-index: 10;
+
+  background: rgba(0, 0, 0, 0.6);
+
+  .container {
+    display: grid;
+    place-items: center;
+  }
+
+  &-form {
+    background: $secondary;
+    padding: 4rem 2rem;
+    background: $secondary;
+    border-radius: 5px;
+    width: 35rem;
+    max-width: 35rem;
+
+    .form-group {
+
+      .options-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        text-align: center;
+        gap: 3rem;
+        margin-top: 1rem;
+
+        &-item {
+          width: 100%;
+          border: 1px solid rgba(200, 200, 200, 0.35);
+          border-radius: 3px;
+          font-size: 1.4rem;
+          padding: 1rem;
+          cursor: pointer;
+          transition: color 200ms, background 200ms, border-color 200ms, font-weight 200ms;
+          
+          &:hover {
+            border-color: $cta;
+          }
+          
+          &.selected {
+            color: $cta;
+            border-color: $cta;
+            font-weight: bold;
+          }
+        }
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+}
 
 
 // Media Queries --- --- ---

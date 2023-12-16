@@ -165,7 +165,7 @@
                 <p class="bill-name">Name: <span>Coffee</span></p>
                 <p class="bill-value">Total value: <span>500</span></p>
                 <p class="bill-nonShared">
-                  Unshared:
+                  Unshared items:
                   <span>0</span>
                 </p>
                 <p class="bill-splitValue">
@@ -205,7 +205,7 @@
                 <p class="bill-name">Name: <span>Maxi</span></p>
                 <p class="bill-value">Total value: <span>3500</span></p>
                 <p class="bill-nonShared">
-                  Unshared:
+                  Unshared items:
                   <span>1000</span>
                 </p>
                 <p class="bill-splitValue">
@@ -229,7 +229,7 @@
                 <p class="bill-name">Name: <span>Maxi</span></p>
                 <p class="bill-value">Total value: <span>3500</span></p>
                 <p class="bill-nonShared">
-                  Unshared:
+                  Unshared items:
                   <span>1000</span>
                 </p>
                 <p class="bill-splitValue">
@@ -253,7 +253,7 @@
                 <p class="bill-name">Name: <span>Maxi</span></p>
                 <p class="bill-value">Total value: <span>3500</span></p>
                 <p class="bill-nonShared">
-                  Unshared:
+                  Unshared items:
                   <span>1000</span>
                 </p>
                 <p class="bill-splitValue">
@@ -277,5 +277,73 @@
         </div>
       </div>
     </section>
+
+    <!-- Start Modal -->
+    <div class="bill-modal">
+      <div class="container">
+        <form class="bill-modal-form">
+          <div class="form-group">
+            <label for="billName">Bill name</label>
+            <input
+              type="text"
+              id="billName"
+            />
+            <span class="error-span">This field is required</span>
+          </div>
+
+          <div class="form-group">
+            <label for="billValue">Total value</label>
+            <input
+              type="text"
+              id="billValue"
+            />
+            <span class="error-span">Please enter a valid number</span>
+          </div>
+
+          <div class="form-group">
+            <label for="unshared">Total unshared bill items </label>
+            <input
+              type="text"
+              id="unshared"
+            />
+            <span class="error-span">Please enter a valid number</span>
+          </div>
+
+          <div class="form-group">
+            <label for="currency">Currency </label>
+            <div class="options-container">
+              <div
+                class="options-container-item selected"
+                data-currency="RSD"
+              >
+                RSD
+              </div>
+              <div
+                class="options-container-item"
+                data-currency="EUR"
+              >
+                EUR
+              </div>
+              <div
+                class="options-container-item"
+                data-currency="RSD"
+              >
+                USD
+              </div>
+            </div>
+            <span class="error-span">Please enter a valid number</span>
+          </div>
+
+          <div class="form-group btn-div">
+            <button
+              type="submit"
+              class="btn btn-cta"
+            >
+              Add bill
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </body>
 </html>
