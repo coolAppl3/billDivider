@@ -133,6 +133,7 @@
           </div>
 
           <div class="session-header-item">
+            <i class="fa-solid fa-pen-to-square"></i>
             <p class="session-header-item-title">
               <span class="sharedWith">Yanal</span>'s total
             </p>
@@ -140,7 +141,7 @@
           </div>
 
           <div class="session-header-item">
-            <p class="session-header-item-title">You owe/are owed</p>
+            <p class="session-header-item-title">You're owed</p>
             <p class="session-header-item-value">
               <span id="isOwed">2000</span> RSD
             </p>
@@ -153,8 +154,9 @@
           <div class="session-content-container person-1">
             <!-- Header -->
             <div class="session-content-container-header">
-              <h3>Your bills</h3>
-              <button class="btn btn-border-cta">Add a bill</button>
+              <h3><i class="fa-solid fa-chevron-down"></i>Your bills</h3>
+              <button class="btn btn-border-light">Clear</button>
+              <button class="btn btn-cta">Add a bill</button>
             </div>
 
             <div class="h-line"></div>
@@ -165,7 +167,7 @@
                 <p class="bill-name">Name: <span>Coffee</span></p>
                 <p class="bill-value">Total value: <span>500</span></p>
                 <p class="bill-nonShared">
-                  Unshared items:
+                  Unshared:
                   <span>0</span>
                 </p>
                 <p class="bill-splitValue">
@@ -193,8 +195,12 @@
           <div class="session-content-container person-2">
             <!-- Header -->
             <div class="session-content-container-header">
-              <h3><span class="sharedWith">Yanal</span>'s bills</h3>
-              <button class="btn btn-border-cta">Add a bill</button>
+              <h3>
+                <i class="fa-solid fa-chevron-down"></i
+                ><span class="sharedWith">Yanal</span>'s bills
+              </h3>
+              <button class="btn btn-border-light">Clear</button>
+              <button class="btn btn-cta">Add a bill</button>
             </div>
 
             <div class="h-line"></div>
@@ -205,7 +211,7 @@
                 <p class="bill-name">Name: <span>Maxi</span></p>
                 <p class="bill-value">Total value: <span>3500</span></p>
                 <p class="bill-nonShared">
-                  Unshared items:
+                  Unshared:
                   <span>1000</span>
                 </p>
                 <p class="bill-splitValue">
@@ -229,7 +235,7 @@
                 <p class="bill-name">Name: <span>Maxi</span></p>
                 <p class="bill-value">Total value: <span>3500</span></p>
                 <p class="bill-nonShared">
-                  Unshared items:
+                  Unshared:
                   <span>1000</span>
                 </p>
                 <p class="bill-splitValue">
@@ -253,7 +259,7 @@
                 <p class="bill-name">Name: <span>Maxi</span></p>
                 <p class="bill-value">Total value: <span>3500</span></p>
                 <p class="bill-nonShared">
-                  Unshared items:
+                  Unshared:
                   <span>1000</span>
                 </p>
                 <p class="bill-splitValue">
@@ -279,6 +285,56 @@
     </section>
 
     <!-- Start Modal -->
+    <div class="start-modal">
+      <div class="container">
+        <form class="start-modal-form">
+          <div class="form-group">
+            <label for="billName">Sharing bill with</label>
+            <input
+              type="text"
+              id="billName"
+            />
+            <span class="error-span">This field is required</span>
+          </div>
+
+          <div class="form-group">
+            <p for="currency">Currency</p>
+            <div class="options-container">
+              <div
+                class="options-container-item selected"
+                data-currency="RSD"
+              >
+                RSD
+              </div>
+              <div
+                class="options-container-item"
+                data-currency="EUR"
+              >
+                EUR
+              </div>
+              <div
+                class="options-container-item"
+                data-currency="RSD"
+              >
+                USD
+              </div>
+            </div>
+            <span class="error-span">Please enter a valid number</span>
+          </div>
+
+          <div class="form-group btn-div">
+            <button
+              type="submit"
+              class="btn btn-cta"
+            >
+              Start session
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Bill Modal -->
     <div class="bill-modal">
       <div class="container">
         <form class="bill-modal-form">
@@ -305,32 +361,8 @@
             <input
               type="text"
               id="unshared"
+              value="0"
             />
-            <span class="error-span">Please enter a valid number</span>
-          </div>
-
-          <div class="form-group">
-            <label for="currency">Currency </label>
-            <div class="options-container">
-              <div
-                class="options-container-item selected"
-                data-currency="RSD"
-              >
-                RSD
-              </div>
-              <div
-                class="options-container-item"
-                data-currency="EUR"
-              >
-                EUR
-              </div>
-              <div
-                class="options-container-item"
-                data-currency="RSD"
-              >
-                USD
-              </div>
-            </div>
             <span class="error-span">Please enter a valid number</span>
           </div>
 

@@ -2,9 +2,6 @@
 @media(max-width: 830px) {
 
   // Utilities --- --- ---
-  .container {
-    padding: 0 1rem;
-  }
   
 
   // index.html --- --- ---
@@ -27,16 +24,93 @@
     
   }
   
+  // session.html --- --- ---
+  .session {
 
-  // signUp.html --- --- ---
+    &-content {
+      grid-template-columns: repeat(1, 1fr);
+      
+      &-container {
+
+        &-header {
+
+          h3 {
+            font-size: 1.6rem;
+            font-weight: bold;
+          }
+
+          .btn {
+            padding: 0 1.4rem;
+            font-size: 1.4rem;
+            line-height: 30px;
+          }
+        }
+      }
+    }
+  }
 }
 
+// In Between
+@media(max-width: 680px) {
+  
+  // session.html --- --- ---
+  .session {
+
+    &-header {
+      grid-template-columns: repeat(1, 1fr);
+
+      &-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        &-title {
+          margin-bottom: 0;
+          font-size: 1.6rem;
+        }
+
+        &-value {
+          font-size: 1.6rem;
+        }
+      }
+    }
+
+    &-content {
+
+      &-container {
+
+        &-list {
+
+          .bill {
+            grid-template-columns: repeat(1, 1fr);
+
+            p {
+              font-weight: bold;
+            }
+
+            .icon-container {
+              padding: 0;
+
+              .fa-trash-can {
+                display: none;
+              }
+
+              .fa-pen-to-square {
+                padding: 1rem;
+              }
+              
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Phones
 @media(max-width: 430px) {
 
   // Utilities --- --- ---
-  .container {
-    padding: 0 1rem;
-  }
 
 
   // Main Navbar --- --- ---
@@ -87,4 +161,5 @@
     }
     
   }
+  
 }
