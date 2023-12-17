@@ -1,3 +1,3 @@
 session.html:
 
-  - Add a bill modal for adding new bills in the session. Not fully finished yet.
+  - Start modal and media queries added. Page is finished.

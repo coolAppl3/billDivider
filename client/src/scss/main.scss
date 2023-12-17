@@ -367,6 +367,21 @@
       border-radius: 5px;
       text-align: center;
       width: 100%;
+      position: relative;
+
+      i {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 1rem;
+        font-size: 1.4rem;
+        cursor: pointer;
+        transition: color 200ms;
+  
+        &:hover {
+          color: $cta;
+        }
+      }
 
       &-title {
         font-size: 1.4rem;
@@ -397,6 +412,39 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+
+        h3 {
+          margin-right: auto;
+          position: relative;
+          cursor: pointer;
+          transition: filter 200ms;
+
+          &:hover {
+            filter: brightness(0.7);
+          }
+
+          i {
+            margin-right: 1rem;
+
+            &::after {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+            }
+          }
+        }
+
+        .btn-border-light {
+          color: $danger;
+          border-color: $danger;
+        }
+
+        .btn:last-child {
+          margin-left: 1rem;
+        }
       }
 
       .h-line {
@@ -418,12 +466,17 @@
           grid-template-columns: repeat(2, 1fr);
           column-gap: 2rem;
 
+          &-splitValue {
+            background: $secondary;
+            border-radius: 5px;
+          }
+
           p {
             font-size: 1.4rem;
             font-weight: 400;
             line-height: 1.4;
             color: #CECCD5;
-            margin-bottom: 1rem;
+            padding: 1.4rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -445,10 +498,12 @@
             align-items: center;
             text-align: center;
             // background: red;
+
+          
             
             .fa-trash-can {
               cursor: pointer;
-              font-size: 1.1rem;
+              font-size: 1.4rem;
               margin-left: 1rem;
               transition: color 200ms;
 
@@ -459,7 +514,7 @@
 
             .fa-pen-to-square {
               cursor: pointer;
-              font-size: 1.2rem;
+              font-size: 1.4rem;
               transition: color 200ms;
 
               &:hover {
@@ -473,6 +528,84 @@
   }
 }
 
+// Start Modal
+.start-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 6rem);
+  height: calc(100svh - 6rem);
+  z-index: 10;
+  background: $main;
+  margin-top: 6rem;
+
+  display: none;
+  opacity: 0;
+  transition: opacity 200ms;
+
+  .container {
+    display: grid;
+    place-items: center;
+  }
+
+  &-form {
+    background: $secondary;
+    padding: 4rem 2rem;
+    background: $secondary;
+    border-radius: 5px;
+    width: 35rem;
+    max-width: 35rem;
+
+    .form-group {
+
+      p {
+        display: block;
+        font-size: 1.4rem;
+        margin-bottom: 4px;
+        font-weight: 500;
+      }
+
+      .options-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        text-align: center;
+        gap: 3rem;
+        margin-top: 1rem;
+
+        &-item {
+          width: 100%;
+          border: 1px solid rgba(200, 200, 200, 0.35);
+          border-radius: 3px;
+          font-size: 1.4rem;
+          padding: 1rem;
+          cursor: pointer;
+          transition: color 200ms, background 200ms, border-color 200ms, font-weight 200ms;
+          
+          &:hover {
+            border-color: $cta;
+          }
+          
+          &.selected {
+            color: $cta;
+            border-color: $cta;
+            font-weight: bold;
+          }
+        }
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+// Bill Modal
 .bill-modal {
   position: fixed;
   top: 0;
@@ -481,8 +614,11 @@
   height: 100vh;
   height: 100svh;
   z-index: 10;
-
   background: rgba(0, 0, 0, 0.6);
+
+  display: none;
+  opacity: 0;
+  transition: opacity 200ms;
 
   .container {
     display: grid;
