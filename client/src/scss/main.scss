@@ -68,7 +68,12 @@
       display: grid;
       place-items: center;
       cursor: pointer;
-      transition: background 200ms, color 200ms, border-color 200ms;
+      transition: color 200ms, border-color 200ms;
+
+      &:hover {
+        color: $cta;
+        border-color: $cta;
+      }
 
       &.hidden {
         display: none;
@@ -79,7 +84,10 @@
         top: 6rem;
         right: 0;
         background: $black;
+
         display: none;
+        opacity: 0;
+        transition: opacity 200ms;
         
         
         &::after {
@@ -357,7 +365,7 @@
     gap: 2rem;
     place-items: center;
     background: $secondary;
-    padding: 3rem;
+    padding: 3rem 2rem;
     border-radius: 5px;
     box-shadow: 0 0 10px 0 inset rgba(134, 133, 239, 0.45);
 
@@ -437,11 +445,6 @@
           }
         }
 
-        .btn-border-light {
-          color: $danger;
-          border-color: $danger;
-        }
-
         .btn:last-child {
           margin-left: 1rem;
         }
@@ -473,7 +476,7 @@
 
           p {
             font-size: 1.4rem;
-            font-weight: 400;
+            font-weight: 500;
             line-height: 1.4;
             color: #CECCD5;
             padding: 1.4rem;
@@ -483,8 +486,6 @@
 
             span {
               color: $light;
-              font-weight: bold;
-              font-size: 1.6rem;
             }
           }
 
@@ -501,23 +502,23 @@
 
           
             
-            .fa-trash-can {
-              cursor: pointer;
-              font-size: 1.4rem;
-              margin-left: 1rem;
-              transition: color 200ms;
+            i {
+              transition: filter 200ms;
 
               &:hover {
+                filter: brightness(0.7);
+              }
+
+              &.fa-trash-can {
+                cursor: pointer;
+                font-size: 1.4rem;
+                margin-left: 1rem;
                 color: $danger;
               }
-            }
-
-            .fa-pen-to-square {
-              cursor: pointer;
-              font-size: 1.4rem;
-              transition: color 200ms;
-
-              &:hover {
+  
+              &.fa-pen-to-square {
+                cursor: pointer;
+                font-size: 1.4rem;
                 color: $edit;
               }
             }
@@ -675,6 +676,128 @@
 
 }
 
+// history.html --- --- ---
+.history {
+
+  &-header {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    place-items: center;
+    background: $secondary;
+    padding: 3rem 2rem;
+    border-radius: 5px;
+    box-shadow: 0 0 10px 0 inset rgba(134, 133, 239, 0.45);
+    margin-bottom: 5rem;
+
+    &-item {
+      background: $main;
+      padding: 3rem;
+      border-radius: 5px;
+      text-align: center;
+      width: 100%;
+      position: relative;
+
+      i {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 1rem;
+        font-size: 1.4rem;
+        cursor: pointer;
+        transition: color 200ms;
+  
+        &:hover {
+          color: $cta;
+        }
+      }
+
+      &-title {
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+        color: #CECCD5;
+        font-weight: bold;
+      }
+
+      &-value {
+        font-size: 2rem;
+        font-weight: 400;
+      }
+    }
+  }
+
+  .content-t {
+    text-align: center;
+  }
+
+  &-content {
+    background: $secondary;
+    padding: 3rem 2rem;
+    border-radius: 5px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    overflow: hidden;
+    overflow: clip;
+
+    &-session {
+      background: $main;
+      padding: 2rem;
+      border-radius: 5px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &-item {
+        padding: 0.5rem 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1.4rem;
+        font-weight: 500;
+
+        &:last-child {
+          padding: 3rem 0 0;
+          display: block;
+
+          .btn {
+            margin-bottom: 1rem;
+          }
+  
+          .delete-session {
+            font-size: 1.3rem;
+            font-weight: 500;
+            text-align: center;
+            text-decoration: underline;
+            width: fit-content;
+            margin: 0 auto;
+            cursor: pointer;
+            transition: filter 200ms, color 200ms;
+
+            &:hover {
+              // filter: brightness(0.8);
+              color: rgb(149, 28, 40);
+            }
+          }
+        }
+
+        p {
+
+          &:first-child {
+            color: #ceccd5;
+            // font-weight: 400;
+          }
+
+          &:last-child {
+            // font-weight: bold;
+          }
+        }
+        
+      }
+    }
+  }
+}
 
 // Media Queries --- --- ---
 @import './partials/media-queries'
