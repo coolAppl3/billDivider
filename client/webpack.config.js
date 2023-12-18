@@ -14,6 +14,7 @@ module.exports = {
     signUp: './src/js/signUp.js',
     signIn: './src/js/signIn.js',
     session: './src/js/session.js',
+    history: './src/js/history.js',
   },
 
   output: {
@@ -117,6 +118,17 @@ module.exports = {
 
       chunks: [
         "session"
+      ],
+    }),
+
+    // history.html
+    new HtmlWebpackPlugin({
+      title: 'History - Bill Divider',
+      filename: 'history.html',
+      template: 'src/html/history.html',
+
+      chunks: [
+        "history"
       ],
     }),
 

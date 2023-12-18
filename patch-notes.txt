@@ -1,3 +1,19 @@
+New:
+
+  - Created history.html and finished its styling including its media queries.
+
 session.html:
 
-  - Start modal and media queries added. Page is finished.
+  - Changed the side margin for the session header to 2rem instead of 3rem, to align with the rest of the page.
+  - Changed the font size for spans in bill items from 1.6rem to 1.4rem.
+  - Slight adjustments to font and icon sizes.
+
+_utils.scss:
+
+  - Added a danger-colored bordered button and text classes. 
+
+Further comments:
+
+  - Logged in users will be able to see their previous sessions over on history.html, and will be able to click on any session to display it in detail using the preexisting session.html and some JavaScript functionality.
+  - For the foreseeable future, uses will not be able to amend previous sessions, but will be able to permanently delete them.
+  - The UI is mainly done. JavaScript functionality will be added next, with slight UI adjustments along the line where necessary.

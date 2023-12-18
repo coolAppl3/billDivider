@@ -137,6 +137,12 @@ a {
       border-color: $cta;
       color: $cta;
     }
+
+    &-border-danger {
+      background: transparent;
+      border-color: $danger;
+      color: $danger;
+    }
   }
   
 }
@@ -158,6 +164,10 @@ a {
 
   &-cta {
     color: $cta;
+  }
+
+  &-danger {
+    color: $danger;
   }
 }
 
