@@ -69,15 +69,13 @@
       place-items: center;
       cursor: pointer;
       transition: color 200ms, border-color 200ms;
+      display: hidden;
 
       &:hover {
         color: $cta;
         border-color: $cta;
       }
 
-      &.hidden {
-        display: none;
-      }
 
       .user-menu-options {
         position: absolute;
@@ -85,10 +83,11 @@
         right: 0;
         background: $black;
 
-        display: none;
-        opacity: 0;
-        transition: opacity 200ms;
-        
+        &.hidden {
+          display: none;
+        }
+
+      
         
         &::after {
           content: '';
