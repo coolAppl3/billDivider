@@ -10,23 +10,6 @@ const generateSessionID = require('../util/generateSessionID');
 
 const router = express.Router();
 
-// Get user - TESTING ONLY
-router.get('/:id', async (req, res) => {
-  const user = await User.findById(req.params.id);
-
-  if(!user) {
-    res.status(404).json({ success: false, message: 'No users by this ID' });
-    return ;
-  };
-
-  try {
-    res.json({ success: true, data: user });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ success: false, message: 'Something went wrong' });
-  }
-});
-
 // Sign in
 router.get('/', async (req, res) => {
   const { username, password } = req.body;
