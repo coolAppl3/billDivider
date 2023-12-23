@@ -258,17 +258,34 @@ a {
     width: 100%;
     border: 1px solid rgba(200, 200, 200, 0.35);
     border-radius: 3px;
-    line-height: 28px;
+    line-height: 40px;
     outline: none;
     padding: 0 1rem;
     font-weight: 400;
     font-size: 1.4rem;
     transition: border-color 200ms;
 
+    &#password {
+      padding-right: 3.5rem;
+    }
+    
     &:focus {
       border-color: $cta;
     }
     
+  }
+
+  #revealPassword {
+    position: absolute;
+    right: 1rem;
+    bottom: 1px;
+    line-height: 40px;
+    cursor: pointer;
+    transition: color 200ms;
+
+    &:hover {
+      color: $cta;
+    }
   }
 
   .error-span {
@@ -295,5 +312,29 @@ a {
 
   &-p {
     padding: 5rem 0;
+  }
+}
+
+// JavaScript Utilities
+.dialog {
+  position: fixed;
+  z-index: 20;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: 2rem auto 0;
+  width: fit-content;
+  max-width: 300px;
+  background: $cta;
+  color: $main;
+  padding: 1.4rem;
+  border-radius: 5px;
+
+  transform: translateY(-10rem);
+  transition: transform 200ms;
+  
+  p {
+    font-weight: bold;
+    font-size: 1.4rem;
   }
 }

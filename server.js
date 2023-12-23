@@ -18,6 +18,29 @@ const server = express();
 server.use(express.json());
 server.use(express.urlencoded({ extended: false }));
 
+// CORS
+const cors = require('cors');
+if(process.env.NODE_ENV !== 'production') {
+  const whitelist = ['http://localhost:3000', 'http://localhost:5000', 'http://46.240.183.31:3000', '46.240.183.31:3000'];
+  
+  server.use(
+    cors({
+      origin: whitelist,
+      credentials: true,
+    })
+  );
+
+};
+
+// if(process.env.NODE_ENV !== 'production') {
+//   app.use(
+//     cors({
+//       origin: ['http://localhost:5000', 'http://localhost:3000', 'http://46.240.183.31:3000'],
+//       credentials: true,
+//     })
+//   );
+// };
+
 // Importing Routers
 const userRouter = require('./routes/users');
 

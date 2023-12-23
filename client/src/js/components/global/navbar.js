@@ -3,13 +3,15 @@ class Navbar {
     this._linksContainer = document.querySelector('.links-container');
     this._userMenuBtn = document.querySelector('#user-menu-btn');
     this._userMenuOptions = document.querySelector('.user-menu-options');
+    this._logoutBtn = document.querySelector('.user-menu-options').lastElementChild.firstElementChild;
 
-    this.loadEventListeners();
+    this._loadEventListeners();
   };
 
-  loadEventListeners() {
+  _loadEventListeners() {
     window.addEventListener('DOMContentLoaded', this._displayUserMenuBtn.bind(this));
     this._userMenuBtn.addEventListener('click', this._displayUserMenu.bind(this));
+    this._logoutBtn.addEventListener('click', this._logout.bind(this));
   };
   
   _displayUserMenuBtn() {
@@ -30,6 +32,12 @@ class Navbar {
     } else {
       this._userMenuOptions.classList.add('hidden');
     };
+  };
+
+  _logout(e) {
+    e.preventDefault();
+    localStorage.removeItem('loginToken');
+    window.location.reload();
   };
 }
 

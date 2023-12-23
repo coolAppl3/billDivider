@@ -1,10 +1,14 @@
-Fixes:
-
-  - Insured all the links are okay in all the HTML pages.
-
 New:
 
-  - Added /global under js/components for global JS components.
-  - Added navbar.js as a global component, and imported it into all JS files dedicated for pages with a navbar.
-  - Added /services directory under js/components for API services.
-  - Added loginToken.js under /services. Currently not in use.
+  - Sign up functionality almost complete. A few adjustments to error messages is needed, as well as further functionality once a user successfully signs up.
+
+  - Added ValidateUser.js into the server's /util. This will work as second layer of safety to prevent backend errors, in-case the front-end validation is bypassed or fails.
+
+  - Added MessageDialog.js into the client's /util. This class will be used for important pop-up messages, but is still incomplete for now.
+
+Changes:
+  - Adjusted a few component names in alignment with convention and for the sake of consistency.
+
+Bug fixes:
+
+  - Fixed CORS not working properly in the development environment.
