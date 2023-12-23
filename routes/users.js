@@ -1,6 +1,7 @@
 const express = require('express');
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
+const ValidateUser = require('../util/ValidateUser');
 
 // Util
 const generateLoginToken = require('../util/generateLoginToken');
@@ -38,6 +39,18 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   const { username, password } = req.body;
   const hash = await bcrypt.hash(password, 10);
+
+  // Ensuring both the username and password are valid.
+  const validateUser = new ValidateUser();
+
+  const isValidUsername = validateUser.validateUsername(username); // returns true if it is
+  const isValidPassword = validateUser.validatePassword(password); // returns true if it is
+
+  if(!isValidUsername || !isValidPassword) {
+    res.status(401).json({ success: false, message: 'Invalid username or password.' });
+    return ;
+  };
+
 
   // Checking if the username is taken
   const usernameExists = await User.findOne({ username: username });
