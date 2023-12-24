@@ -1,14 +1,18 @@
-New:
+ValidateUser.js:
 
-  - Sign up functionality almost complete. A few adjustments to error messages is needed, as well as further functionality once a user successfully signs up.
+  - Simplified the validation functions, making them only use a regular expression test, as this is mainly a second layer of safety and will most likely never encounter an invalid username or password. The frontend functions will take care of user feedback.
 
-  - Added ValidateUser.js into the server's /util. This will work as second layer of safety to prevent backend errors, in-case the front-end validation is bypassed or fails.
+signUp.html:
 
-  - Added MessageDialog.js into the client's /util. This class will be used for important pop-up messages, but is still incomplete for now.
+  - Set the autocomplete attribute to off on both inputs, since it wouldn't make sense to have it on.
 
-Changes:
-  - Adjusted a few component names in alignment with convention and for the sake of consistency.
+signUp.up:
+
+  - Added _displayErrorSpan() and _hideErrorSpan() to avoid repetition.
+  - Slightly adjusted the error span messages to make them a bit more understandable.
+  - Abandoned the use of MessageDialog for now, as the error spans are already taking care of user feedback.
+
 
 Bug fixes:
 
-  - Fixed CORS not working properly in the development environment.
+  - Fixed a bug where the password could accept any special characters, instead of only underscores and dots.
