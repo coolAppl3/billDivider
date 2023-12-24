@@ -1,36 +1,33 @@
 class ValidateUser {
 
   validateUsername(username) {
-    // Username must contain at least 5, but no more than 24, characters. It also must have at least 1 letter, and must not contain any special characters or whitespace.
-    const re = /^[a-zA-Z0-9]*[a-zA-Z][a-zA-Z0-9]*$/;
+    // Username must be 5-24 characters long (both inclusive) and:
+    // Must include at least one letter
+    // Must not include any special characters
+    // Must not include any whitespace
     
-    if(username.length < 5) {
+    
+    const re = /^(?=.*[a-zA-Z])[a-zA-Z0-9]{5,24}$/;
+    
+    if(!re.test(username)) {
       return false;
-  
-    } else if(username.length > 24) {
-      return false;
-  
-    } else if(!re.test(username)) {
-      return false;
-  
+
     } else {
       return true;
     };
   };
   
   validatePassword(password) {
-    // Password must contain at least 8, but no more than 24, characters. It also must not contain any whitespace.
-    const re = /^\S*$/;
+    // Password must be 8-24 characters long (both inclusive) and:
+    // Can accept dots and underscores
+    // Must not include any other special characters
+    // Must not include any whitespace
     
-    if(password.length < 8) {
+    const re = /^[a-zA-Z0-9_.]{8,24}$/;
+    
+    if(!re.test(password)) {
       return false;
-  
-    } else if(password.length > 24) {
-      return false;
-  
-    } else if(!re.test(password)) {
-      return false;
-  
+
     } else {
       return true;
     };
