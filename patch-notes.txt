@@ -1,18 +1,24 @@
-ValidateUser.js:
+New:
 
-  - Simplified the validation functions, making them only use a regular expression test, as this is mainly a second layer of safety and will most likely never encounter an invalid username or password. The frontend functions will take care of user feedback.
+  - Added locateLoginToken() in client /util to check for a loginToken in both sessionStorage and localStorage. Updated existing classes (e.g Navbar.js) to use this function when needing to find/use a loginToken.
+
+  - Added loadingModal() in client /util to have general-use loading modal.
+
 
 signUp.html:
 
-  - Set the autocomplete attribute to off on both inputs, since it wouldn't make sense to have it on.
-
-signUp.up:
-
-  - Added _displayErrorSpan() and _hideErrorSpan() to avoid repetition.
-  - Slightly adjusted the error span messages to make them a bit more understandable.
-  - Abandoned the use of MessageDialog for now, as the error spans are already taking care of user feedback.
+  - Added a checkbox in the form for the user to decide if they want to stay logged in. This controls whether their loginToken, upon signing in/up, is stored in the sessionStorage or localStorage.
 
 
-Bug fixes:
+signUp.js:
 
-  - Fixed a bug where the password could accept any special characters, instead of only underscores and dots.
+  - Added _displayCheckBox() to change the give feedback to the user on whether the keepMeSignedIn checkbox is checked.
+
+  - _signupUser() now looks for a "checked" class on the keepMeSignedIn checkbox to determine where to add the loginToken.
+
+  - _signupUser(), and in turn, signUp.js is now complete.
+
+
+Other changes:
+
+  - MessageDialog is no longer a class, but a simple global messageDialog component. Updated its use across the app to reflect the changes. It now also has a "success" option to match the $success color variable.

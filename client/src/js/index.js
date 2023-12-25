@@ -1,5 +1,6 @@
 import '../scss/main.scss';
 import Navbar from './components/global/Navbar';
+import locateLoginToken from './components/global/locateLoginToken';
 
 // Initializing imports
 new Navbar();
@@ -18,7 +19,7 @@ class Index {
   };
 
   _displayHeroButtons() {
-    const loginToken = localStorage.getItem('loginToken');
+    const loginToken = locateLoginToken();
 
     if(loginToken) {
       this._heroSignUpBtn.style.display = 'none';
