@@ -1,3 +1,5 @@
+import locateLoginToken from "./locateLoginToken";
+
 class Navbar {
   constructor() {
     this._linksContainer = document.querySelector('.links-container');
@@ -15,7 +17,7 @@ class Navbar {
   };
   
   _displayUserMenuBtn() {
-    const loginToken = localStorage.getItem('loginToken');
+    const loginToken = locateLoginToken();
 
     if(!loginToken) {
       this._linksContainer.style.display = 'flex';
@@ -37,6 +39,7 @@ class Navbar {
   _logout(e) {
     e.preventDefault();
     localStorage.removeItem('loginToken');
+    sessionStorage.removeItem('loginToken');
     window.location.reload();
   };
 }

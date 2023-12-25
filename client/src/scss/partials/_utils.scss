@@ -247,6 +247,70 @@ a {
   margin-bottom: 2rem;
   position: relative;
 
+  &.checkbox-group {
+    display: flex;
+    align-items: center;
+
+    p {
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: $light;
+      width: fit-content;
+      margin: 0;
+      padding: 0;
+    }
+
+    .checkbox {
+      width: 16px;
+      height: 16px;
+      background: $light;
+      margin-right: 1rem;
+      border-radius: 3px;
+      transition: background 200ms, opacity 200ms;
+      cursor: pointer;
+
+      display: grid;
+      place-items: center;
+      text-align: center;
+
+      &:hover {
+        background: rgba(200, 200, 200, 0.5);
+      }
+
+      &.checked {
+        background: $cta;
+
+        .check-icon {
+          transform: rotate(-45deg) translate(1px, 1px) scale(1);
+        }
+      }
+
+      .check-icon {
+        width: 10px;
+        height: 2px;
+        background: $main;
+        // border-top-right-radius: 50px;
+        // border-bottom-right-radius: 50px;
+        position: relative;
+        transform: rotate(-45deg) translate(1px, 1px) scale(0);
+        transition: transform 200ms;
+
+        &::after {
+          content: '';
+          box-sizing: border-box;
+          position: absolute;
+          display: block;
+          left: 0;
+          bottom: 0;
+          height: 5px;
+          width: 2px;
+          background: $main;
+        }
+      }
+      
+    }
+  }
+
   label {
     display: block;
     font-size: 1.4rem;
@@ -316,6 +380,8 @@ a {
 }
 
 // JavaScript Utilities
+
+// Dialog
 .dialog {
   position: fixed;
   z-index: 20;
@@ -337,4 +403,39 @@ a {
     font-weight: bold;
     font-size: 1.4rem;
   }
+}
+
+// Loading Modal
+.loading-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  z-index: 11;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .spinner {
+    width: 48px;
+    height: 48px;
+    border: 5px solid $light;
+    border-bottom-color: $cta;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+    }
+
+    @keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+    } 
 }

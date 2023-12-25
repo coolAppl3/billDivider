@@ -1,10 +1,10 @@
 import '../scss/main.scss';
 import SignUpAPI from './components/services/SignUpAPI';
-import MessageDialog from './components/global/MessageDialog';
+import messageDialog from './components/global/messageDialog';
+import loadingModal from './components/global/loadingModal';
 
 // Initializing imports
 const signUpAPI = new SignUpAPI();
-const messageDialog = new MessageDialog();
 
 
 class SignUp {
@@ -12,12 +12,14 @@ class SignUp {
     this._signupContainerForm = document.querySelector('.sign-up-container-form');
     this._usernameInput = document.querySelector('#username');
     this._passwordInput = document.querySelector('#password');
+    this._keepMeSignedInCheckBox = document.querySelector('#keepMeSignedIn');
 
     this._loadEventListeners();
   };
 
   _loadEventListeners() {
     this._signupContainerForm.addEventListener('submit', this._signupUser.bind(this));
+    this._keepMeSignedInCheckBox.addEventListener('click', this._displayCheckBox.bind(this));
   };
 
   async _signupUser(e) {
@@ -34,15 +36,24 @@ class SignUp {
     const newUser = { username: this._usernameInput.value, password: this._passwordInput.value };
     
     try {
-      const data = await signUpAPI.signUp(newUser);
-      // continue.........
+      const res = await signUpAPI.signUp(newUser);
+
+      // Adding the login token to local or session storage depending on the user's choice.
+      if(this._keepMeSignedInCheckBox.classList.contains('checked')) {
+        localStorage.setItem('loginToken', res.data.data.loginToken);
+      } else {
+        sessionStorage.setItem('loginToken', res.data.data.loginToken);
+      };
+
+      messageDialog('Signed up successfully!', 'success');
+      loadingModal();
+      setTimeout(() => window.location.replace('history.html'), 1000);
     } catch (error) {
       
       if(error.response) { // There's a response object
         const statusCode = error.response.status;
 
         if(statusCode === 401) { // Invalid username or password - Just as an extra layer of safety.
-          // messageDialog.display('Sign up failed. Invalid username or password.', 'danger');
           this._displayErrorSpan('username', 'Invalid username')
 
         } else if(statusCode === 409) { // Username taken
@@ -50,7 +61,7 @@ class SignUp {
         };;
 
       } else { // There's no response object
-        messageDialog.display('Username already exists.');
+        messageDialog('Username already exists.');
       };
       
     }
@@ -131,6 +142,17 @@ class SignUp {
       this._passwordInput.nextElementSibling.textContent = '';
       this._passwordInput.parentElement.classList.remove('error');
     };
+  };
+
+  _displayCheckBox(e) {
+    e.stopImmediatePropagation();
+
+    if(!e.target.classList.contains('checked')) {
+      this._keepMeSignedInCheckBox.classList.add('checked');
+    } else {
+      this._keepMeSignedInCheckBox.classList.remove('checked');
+    };
+
   };
 };
 
