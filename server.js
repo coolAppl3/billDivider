@@ -6,9 +6,6 @@ const connectDB = require('./config/db');
 // Connecting to database
 connectDB();
 
-// Environmental variables
-process.env.NODE_ENV = 'development';
-
 // ---
 
 const port = process.env.PORT || 5000;
@@ -31,15 +28,6 @@ if(process.env.NODE_ENV !== 'production') {
   );
 
 };
-
-// if(process.env.NODE_ENV !== 'production') {
-//   app.use(
-//     cors({
-//       origin: ['http://localhost:5000', 'http://localhost:3000', 'http://46.240.183.31:3000'],
-//       credentials: true,
-//     })
-//   );
-// };
 
 // Importing Routers
 const userRouter = require('./routes/users');

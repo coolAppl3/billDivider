@@ -13,6 +13,7 @@ class SignUp {
     this._usernameInput = document.querySelector('#username');
     this._passwordInput = document.querySelector('#password');
     this._keepMeSignedInCheckBox = document.querySelector('#keepMeSignedIn');
+    this._linksContainer = document.querySelector('.links-container');
 
     this._loadEventListeners();
   };
@@ -20,6 +21,7 @@ class SignUp {
   _loadEventListeners() {
     this._signupContainerForm.addEventListener('submit', this._signupUser.bind(this));
     this._keepMeSignedInCheckBox.addEventListener('click', this._displayCheckBox.bind(this));
+    this._linksContainer.addEventListener('click', this._handleFormLinks.bind(this));
   };
 
   async _signupUser(e) {
@@ -147,12 +149,22 @@ class SignUp {
   _displayCheckBox(e) {
     e.stopImmediatePropagation();
 
-    if(!e.target.classList.contains('checked')) {
+    if(!this._keepMeSignedInCheckBox.classList.contains('checked')) {
       this._keepMeSignedInCheckBox.classList.add('checked');
     } else {
       this._keepMeSignedInCheckBox.classList.remove('checked');
     };
 
+  };
+
+  _handleFormLinks(e) {
+    e.stopImmediatePropagation();
+
+    if(e.target.id === 'returnToPreviousPage') {
+      history.back();
+    } else if(e.target.id === 'returnToHomepage') {
+      window.location.href = 'index.html';
+    };
   };
 };
 
