@@ -241,23 +241,42 @@
         }
       }
 
-      #return-btn {
-        position: absolute;
-        bottom: 0;
-        left: 0;
+      .links-container {
         font-size: 1.4rem;
         font-weight: bold;
-        padding: 1rem;
-        cursor: pointer;
-        transition: color 200ms;
-        width: fit-content;
 
-        &:hover {
-          color: rgba(200, 200, 200, 0.85);
-        }
+        p {
+          &:hover {
+            color: rgba(200, 200, 200, 0.85);
+          }
+  
+          i {
+            color: $cta;
+          }
 
-        i {
-          color: $cta;
+          &:first-child {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            font-size: 1.4rem;
+            font-weight: bold;
+            padding: 1rem;
+            cursor: pointer;
+            transition: color 200ms;
+            width: fit-content;
+          }
+
+          &:last-child {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            font-size: 1.4rem;
+            font-weight: bold;
+            padding: 1rem;
+            cursor: pointer;
+            transition: color 200ms;
+            width: fit-content;
+          }
         }
       }
 
@@ -329,23 +348,42 @@
         }
       }
 
-      #return-btn {
-        position: absolute;
-        bottom: 0;
-        left: 0;
+      .links-container {
         font-size: 1.4rem;
         font-weight: bold;
-        padding: 1rem;
-        cursor: pointer;
-        transition: color 200ms;
-        width: fit-content;
 
-        &:hover {
-          color: rgba(200, 200, 200, 0.85);
-        }
+        p {
+          &:hover {
+            color: rgba(200, 200, 200, 0.85);
+          }
+  
+          i {
+            color: $cta;
+          }
 
-        i {
-          color: $cta;
+          &:first-child {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            font-size: 1.4rem;
+            font-weight: bold;
+            padding: 1rem;
+            cursor: pointer;
+            transition: color 200ms;
+            width: fit-content;
+          }
+
+          &:last-child {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            font-size: 1.4rem;
+            font-weight: bold;
+            padding: 1rem;
+            cursor: pointer;
+            transition: color 200ms;
+            width: fit-content;
+          }
         }
       }
 

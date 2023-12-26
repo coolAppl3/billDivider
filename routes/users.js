@@ -12,7 +12,7 @@ const generateSessionID = require('../util/generateSessionID');
 const router = express.Router();
 
 // Sign in
-router.get('/', async (req, res) => {
+router.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   const user = await User.findOne({ username: username });
