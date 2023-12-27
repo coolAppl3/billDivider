@@ -1,31 +1,16 @@
 Frontend:
 
-  - signUp.html:
-
-    - Added a homepage button alongside the returnToPreviousPage button.
-    - Slight adjustments to accommodate both buttons.
-
-  - signUp.js:
-
-    - Added _handleFormLinks to the the returnToPreviousPage and homepage buttons, as they're not really links.
-    - Fixed a bug where clicking the checkbox within the keepMeSignedIn button wouldn't work well. Problem was with the if-statement logic.
-
-  - signIn.html:
-
-    - Added the links container and keepMeSignedIn checkbox similar to signUp.html.
+  - loadingModal.js:
+    - added an option to pass in an argument, and if it's equal to 'remove', the loadingModal is removed.
 
   - signIn.js:
-
-    - Included the, now fixed, _displayCheckBox() function from signUp.js.
-    - Included the same _handleFormLinks() function from signUp.js.
-    - Included the same _displayErrorSpan() function from signUp.js, but amended it to account for the position of the revealPasswordBtn.
-    - Included the same _hideErrorSpan() function from signUp.js, but amended it to account for the position of the revealPasswordBtn.
-    - Added _usernameInputIsEmpty() and _passwordInputIsEmpty() to check if either fields is empty. No need for further validation, as the server will only have to check if the username exists, and validate whether the password is correct.
+    - Added _revealPassword() to change the password input type between password and text, as well as change the icon accordingly.
+    - Added _redirect() to redirect the user if they're logged in but try to manually access signIn.html. It works by detecting the existence of a loginToken in localStorage and sessionStorage.
+    - Completed the functionality of _signIn. signIn.js is fully implemented for now.
 
 
 Backend:
 
-  - users.js:
-  
-    - Changed the login functionality to a POST request, since GET requests don't allow a body.
-    - Login API endpoint is now api/users/login.
+  - server.js:
+    - added 'http://46.240.183.31:5000' and '46.240.183.31:5000' to the CORS whitelist for development purposes.
+    
