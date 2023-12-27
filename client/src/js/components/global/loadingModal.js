@@ -1,4 +1,9 @@
-function loadingModal() {
+function loadingModal(command) {
+  if(command === 'remove') {
+    document.querySelector('.loading-modal').remove();
+    return ;
+  };
+  
   const loadingModal = document.createElement('div');
   loadingModal.className = 'loading-modal';
 
