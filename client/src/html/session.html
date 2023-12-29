@@ -127,24 +127,50 @@
       <div class="container">
         <!-- Session Header -->
         <div class="session-header">
-          <div class="session-header-item">
-            <p class="session-header-item-title">Your total</p>
-            <p class="session-header-item-value">4000 RSD</p>
+          <div class="session-header-container">
+            <div class="session-header-container-item">
+              <p class="session-header-container-item-title">Your total</p>
+              <p class="session-header-container-item-value">
+                <span id="yourTotal">0</span>
+                <span class="currency">RSD</span>
+              </p>
+            </div>
+
+            <div class="session-header-container-item">
+              <i
+                class="fa-solid fa-pen-to-square"
+                id="updateSharedWith"
+              ></i>
+              <p class="session-header-container-item-title">
+                <span id="sharedWith"></span> total
+              </p>
+              <p class="session-header-container-item-value">
+                <span id="sharedWithTotal">0</span>
+                <span class="currency">RSD</span>
+              </p>
+            </div>
+
+            <div class="session-header-container-item">
+              <p
+                class="session-header-container-item-title"
+                id="debtResult"
+              >
+                You're owed
+              </p>
+              <p class="session-header-container-item-value">
+                <span id="debtResultValue">0</span>
+                <span class="currency">RSD</span>
+              </p>
+            </div>
           </div>
 
-          <div class="session-header-item">
-            <i class="fa-solid fa-pen-to-square"></i>
-            <p class="session-header-item-title">
-              <span class="sharedWith">Yanal</span>'s total
-            </p>
-            <p class="session-header-item-value">2000 RSD</p>
-          </div>
-
-          <div class="session-header-item">
-            <p class="session-header-item-title">You're owed</p>
-            <p class="session-header-item-value">
-              <span id="isOwed">2000</span> RSD
-            </p>
+          <div class="session-header-controls">
+            <div class="btn-div">
+              <button class="btn btn-border-light">Reset</button>
+            </div>
+            <div class="btn-div">
+              <button class="btn btn-light">Save</button>
+            </div>
           </div>
         </div>
 
@@ -289,10 +315,11 @@
       <div class="container">
         <form class="start-modal-form">
           <div class="form-group">
-            <label for="billName">Sharing bill with</label>
+            <label for="sharingWith">Sharing bills with</label>
             <input
               type="text"
-              id="billName"
+              id="sharingWith"
+              autocomplete="off"
             />
             <span class="error-span">This field is required</span>
           </div>
@@ -314,12 +341,12 @@
               </div>
               <div
                 class="options-container-item"
-                data-currency="RSD"
+                data-currency="USD"
               >
                 USD
               </div>
             </div>
-            <span class="error-span">Please enter a valid number</span>
+            <span class="error-span"></span>
           </div>
 
           <div class="form-group btn-div">
