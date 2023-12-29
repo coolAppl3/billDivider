@@ -1,16 +1,37 @@
 Frontend:
 
-  - loadingModal.js:
-    - added an option to pass in an argument, and if it's equal to 'remove', the loadingModal is removed.
+  - New:
+  
+    - Created /session in js/components.
 
-  - signIn.js:
-    - Added _revealPassword() to change the password input type between password and text, as well as change the icon accordingly.
-    - Added _redirect() to redirect the user if they're logged in but try to manually access signIn.html. It works by detecting the existence of a loginToken in localStorage and sessionStorage.
-    - Completed the functionality of _signIn. signIn.js is fully implemented for now.
+    - Added ErrorSpan.js under js/components/session to control input user feedback to the user.
 
+    - Added InitSession.js under js/components/session to handle the start modal.
 
-Backend:
+    - Added SessionContent.js under js/components/session to handle the session content.
 
-  - server.js:
-    - added 'http://46.240.183.31:5000' and '46.240.183.31:5000' to the CORS whitelist for development purposes.
+    - Added SessionHeader.js under js/components/session to handle the session header.
+
+    - Added SessionInfo.js under js/components/session to gather all of the session's info and be shared between the components, to eventually be used in the POST request.
+
+  - session.html:
+  
+    - Slightly adjusted the session header, to now include a session-header-controls element with access save and a reset buttons.
     
+    - Adjusted the session-header-item elements to better target the values with Javascript.
+  
+  - session.js:
+
+    - Main functionality will be split into InitSession.js, SessionContent.js, SessionHeader.js, and SessionInfo.js.
+  
+  InitSession.js:
+
+    - Completed functionality for now. This class will handle the start of any given session, as well as be used for changing the sessions sharedWith or currency values, which will update the SessionInfo object.
+
+  SessionHeader.js:
+
+    - Session Header functionality will be handled here. Basic functionality implemented, but more to come.
+  
+  SessionInfo.js:
+
+    - Within this component, a sessionInfo variable is instantiated and exported to be shared between all other components. Internal functions to the object can be added through the SessionInfo class.

@@ -33,7 +33,7 @@
 
     <!-- Title -->
     <title>Sign In - Bill Divider</title>
-  <script defer src="js/signIn-60076a3847234cbfb65d.js"></script></head>
+  <script defer src="js/signIn-abc4a5c3b769c19cfa25.js"></script></head>
   <body>
     <!-- Sign In-->
     <section class="sign-in">
@@ -51,6 +51,7 @@
                 id="username"
                 autocomplete="off"
               />
+              <span class="error-span"></span>
             </div>
 
             <div class="form-group">
@@ -60,6 +61,21 @@
                 id="password"
                 autocapitalize="on"
               />
+              <i
+                class="fa-solid fa-eye"
+                id="revealPassword"
+              ></i>
+              <span class="error-span"></span>
+            </div>
+
+            <div class="form-group checkbox-group">
+              <div
+                class="checkbox"
+                id="keepMeSignedIn"
+              >
+                <span class="check-icon"></span>
+              </div>
+              <p>Keep me signed in</p>
             </div>
 
             <div class="btn-div">
@@ -77,10 +93,16 @@
               <a href="session.html">start an anonymous session</a>.
             </p>
 
-            <p id="return-btn">
-              <i class="fa-solid fa-angle-left"></i>
-              Return to previous page
-            </p>
+            <div class="links-container">
+              <p id="returnToPreviousPage">
+                <i class="fa-solid fa-angle-left"></i>
+                Return to previous page
+              </p>
+              <p id="returnToHomepage">
+                <i class="fa-solid fa-house"></i>
+                Homepage
+              </p>
+            </div>
           </form>
         </div>
       </div>

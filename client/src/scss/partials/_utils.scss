@@ -405,7 +405,7 @@ a {
   }
 }
 
-// Loading Modal
+// loadingModal()
 .loading-modal {
   position: fixed;
   top: 0;
@@ -438,4 +438,27 @@ a {
         transform: rotate(360deg);
     }
     } 
+}
+
+// _updateSharedWith
+.update-sharedWith-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 11;
+  display: grid;
+  place-items: center;
+
+  &-form {
+    background: $secondary;
+    padding: 4rem 2rem;
+    border-radius: 5px;
+    width: 35rem;
+    max-width: 35rem;
+    position: relative;
+  }
 }

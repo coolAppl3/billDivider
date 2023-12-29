@@ -11,6 +11,7 @@
   left: 0;
   width: 100%;
   z-index: 10;
+  background: #232326;
 
   .container {
     position: relative;
@@ -397,47 +398,72 @@
 .session {
 
   &-header {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    place-items: center;
-    background: $secondary;
-    padding: 3rem 2rem;
-    border-radius: 5px;
     box-shadow: 0 0 10px 0 inset rgba(134, 133, 239, 0.45);
+    background: $secondary;
+    border-radius: 5px;
 
-    &-item {
-      background: $main;
-      padding: 3rem;
-      border-radius: 5px;
-      text-align: center;
-      width: 100%;
-      position: relative;
-
-      i {
-        position: absolute;
-        top: 0;
-        right: 0;
-        margin: 1rem;
-        font-size: 1.4rem;
-        cursor: pointer;
-        transition: color 200ms;
+    &-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      place-items: center;
+      padding: 3rem 2rem;
   
-        &:hover {
-          color: $cta;
+      &-item {
+        background: $main;
+        padding: 3rem;
+        border-radius: 5px;
+        text-align: center;
+        width: 100%;
+        position: relative;
+  
+        i {
+          position: absolute;
+          top: 0;
+          right: 0; 
+          margin: 1rem;
+          font-size: 1.4rem;
+          cursor: pointer;
+          transition: color 200ms;
+    
+          &:hover {
+            color: $cta;
+          }
+        }
+  
+        &-title {
+          font-size: 1.4rem;
+          margin-bottom: 1rem;
+          color: #CECCD5;
+          font-weight: bold;
+
+          
+        }
+  
+        &-value {
+          font-size: 2rem;
+          font-weight: 400;
+          
         }
       }
+    }
 
-      &-title {
-        font-size: 1.4rem;
-        margin-bottom: 1rem;
-        color: #CECCD5;
-        font-weight: bold;
-      }
+    &-controls {
+      padding: 2rem;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
 
-      &-value {
-        font-size: 2rem;
-        font-weight: 400;
+      .btn-div {
+
+        &:last-child {
+          margin-left: 1rem;
+          
+          .btn {
+            // background: #0062cc;
+            // border-color: #0062cc;
+          }
+        }
       }
     }
   }
@@ -578,9 +604,9 @@
   background: $main;
   margin-top: 6rem;
 
-  display: none;
-  opacity: 0;
-  transition: opacity 200ms;
+  transition: transform 200ms;
+  // display: none;
+  // transform: scale(0);
 
   .container {
     display: grid;
