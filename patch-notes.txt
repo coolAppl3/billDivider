@@ -1,37 +1,13 @@
 Frontend:
 
-  - New:
+  - SessionInfo.js:
+
+    - Added _handleSessionContentClickEvents() to handle all session-content click events, and avoid having many event listeners. A simple if-statement will call the appropriate function within the class depending on the event target.
+
+    - Added two separate functions to expand and retract the contentList [_expandContentList() and _retractContentList()].
+
+    - Added __resizeList() to handle contentList resize click events. It uses the two aforementioned functions.
   
-    - Created /session in js/components.
-
-    - Added ErrorSpan.js under js/components/session to control input user feedback to the user.
-
-    - Added InitSession.js under js/components/session to handle the start modal.
-
-    - Added SessionContent.js under js/components/session to handle the session content.
-
-    - Added SessionHeader.js under js/components/session to handle the session header.
-
-    - Added SessionInfo.js under js/components/session to gather all of the session's info and be shared between the components, to eventually be used in the POST request.
-
   - session.html:
-  
-    - Slightly adjusted the session header, to now include a session-header-controls element with access save and a reset buttons.
-    
-    - Adjusted the session-header-item elements to better target the values with Javascript.
-  
-  - session.js:
 
-    - Main functionality will be split into InitSession.js, SessionContent.js, SessionHeader.js, and SessionInfo.js.
-  
-  InitSession.js:
-
-    - Completed functionality for now. This class will handle the start of any given session, as well as be used for changing the sessions sharedWith or currency values, which will update the SessionInfo object.
-
-  SessionHeader.js:
-
-    - Session Header functionality will be handled here. Basic functionality implemented, but more to come.
-  
-  SessionInfo.js:
-
-    - Within this component, a sessionInfo variable is instantiated and exported to be shared between all other components. Internal functions to the object can be added through the SessionInfo class.
+    - Changed the default chevron icon in the content header to aim to the right, and added a "rotate" class to rotate it 450 degrees.

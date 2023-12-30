@@ -142,7 +142,7 @@
                 id="updateSharedWith"
               ></i>
               <p class="session-header-container-item-title">
-                <span id="sharedWith"></span> total
+                <span id="sharedWith"></span>'s total
               </p>
               <p class="session-header-container-item-value">
                 <span id="sharedWithTotal">0</span>
@@ -177,18 +177,23 @@
         <!-- Session Content -->
         <div class="session-content">
           <!-- Person 1 (user) -->
-          <div class="session-content-container person-1">
+          <div
+            class="session-content-container"
+            id="content-main"
+          >
             <!-- Header -->
             <div class="session-content-container-header">
-              <h3><i class="fa-solid fa-chevron-down"></i>Your bills</h3>
-              <button class="btn btn-border-danger">Clear</button>
-              <button class="btn btn-cta">Add a bill</button>
+              <h3 class="expandList">
+                <i class="fa-solid fa-chevron-right"></i>Your bills
+              </h3>
+              <button class="btn btn-border-danger clearListBtn">Clear</button>
+              <button class="btn btn-cta addBillBtn">Add a bill</button>
             </div>
 
             <div class="h-line"></div>
 
             <!-- List -->
-            <div class="session-content-container-list">
+            <div class="session-content-container-list list-main">
               <div class="bill">
                 <p class="bill-name">Name: <span>Coffee</span></p>
                 <p class="bill-value">Total value: <span>500</span></p>
@@ -218,15 +223,18 @@
           <!-- --- --- --- -->
 
           <!-- Person 2 (sharedWith) -->
-          <div class="session-content-container person-2">
+          <div
+            class="session-content-container"
+            id="content-secondary"
+          >
             <!-- Header -->
             <div class="session-content-container-header">
-              <h3>
-                <i class="fa-solid fa-chevron-down"></i
+              <h3 class="expandList">
+                <i class="fa-solid fa-chevron-right"></i
                 ><span class="sharedWith">Yanal</span>'s bills
               </h3>
-              <button class="btn btn-border-danger">Clear</button>
-              <button class="btn btn-cta">Add a bill</button>
+              <button class="btn btn-border-danger clearListBtn">Clear</button>
+              <button class="btn btn-cta addBillBtn">Add a bill</button>
             </div>
 
             <div class="h-line"></div>
