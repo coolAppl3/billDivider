@@ -38,7 +38,7 @@ class InitSession {
     // Hiding error span if one existed
     errorSpan.hide(this._sharingWithInput.parentElement);
 
-    sessionInfo.sharedWith = this._sharingWithInput.value || 'Person';
+    sessionInfo.sharedWith = this._sharingWithInput.value || 'Friend';
     sessionInfo.currency = this._getSelectedCurrency() || 'RSD';
 
     this._collapseStartModal();

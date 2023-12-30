@@ -471,6 +471,7 @@
   &-content {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    align-items: flex-start;
     gap: 2rem;
     margin-top: 5rem;
 
@@ -490,21 +491,31 @@
           cursor: pointer;
           transition: filter 200ms;
 
+          &:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+          }
+
           &:hover {
             filter: brightness(0.7);
           }
 
+          &.rotate {
+            
+            i {
+              transform: rotate(450deg);
+            }
+          }
+
           i {
             margin-right: 1rem;
-
-            &::after {
-              content: '';
-              position: absolute;
-              top: 0;
-              left: 0;
-              width: 100%;
-              height: 100%;
-            }
+            transition: transform 200ms;
+            font-size: 1.4rem;
+            
           }
         }
 
@@ -521,6 +532,14 @@
       }
 
       &-list {
+        transition: max-height 200ms;
+        overflow: hidden;
+        max-height: 0;
+        
+        // &.expanded {
+        //   max-height: 50rem;
+        // }
+
 
         .bill {
           background: $main;
@@ -531,6 +550,10 @@
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           column-gap: 2rem;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
 
           &-splitValue {
             background: $secondary;
