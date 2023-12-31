@@ -416,6 +416,11 @@
         text-align: center;
         width: 100%;
         position: relative;
+
+        .currency {
+          font-size: 1.4rem;
+          font-weight: bold;
+        }
   
         i {
           position: absolute;
@@ -436,8 +441,6 @@
           margin-bottom: 1rem;
           color: #CECCD5;
           font-weight: bold;
-
-          
         }
   
         &-value {
@@ -568,10 +571,14 @@
             padding: 1.4rem;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+
 
             span {
               color: $light;
+              width: fit-content;
+              max-width: 70%;
+              overflow-wrap: break-word;
+              word-break: break-all;
             }
           }
 
@@ -632,8 +639,10 @@
   // transform: scale(0);
 
   .container {
-    display: grid;
-    place-items: center;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   &-form {
@@ -708,8 +717,10 @@
   transition: opacity 200ms;
 
   .container {
-    display: grid;
-    place-items: center;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   &-form {
@@ -722,40 +733,24 @@
 
     .form-group {
 
-      .options-container {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        text-align: center;
-        gap: 3rem;
-        margin-top: 1rem;
-
-        &-item {
-          width: 100%;
-          border: 1px solid rgba(200, 200, 200, 0.35);
-          border-radius: 3px;
-          font-size: 1.4rem;
-          padding: 1rem;
-          cursor: pointer;
-          transition: color 200ms, background 200ms, border-color 200ms, font-weight 200ms;
-          
-          &:hover {
-            border-color: $cta;
-          }
-          
-          &.selected {
-            color: $cta;
-            border-color: $cta;
-            font-weight: bold;
-          }
-        }
-      }
-
-      .btn {
-        width: 100%;
+      p {
+        font-size: 1.6rem;
+        margin-bottom: 4rem;
       }
 
       &:last-child {
         margin-bottom: 0;
+      }
+      
+      .btn-div {
+
+        &:first-child {
+          margin-bottom: 1rem;
+        }
+
+        .btn {
+          width: 100%;
+        }
       }
     }
   }

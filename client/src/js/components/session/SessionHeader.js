@@ -27,7 +27,7 @@ class SessionHeader {
     this._sharedWith.textContent = sessionInfo.sharedWith;
   };
 
-  _updateSharedWith(e) {
+  _updateSharedWith() {
     // InitSession will listen for this event, and call _displayStartModal()
     window.dispatchEvent(new Event('editSharedWith')); 
   };
