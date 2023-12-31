@@ -240,7 +240,7 @@
             <div class="h-line"></div>
 
             <!-- List -->
-            <div class="session-content-container-list">
+            <div class="session-content-container-list list-scondary">
               <div class="bill">
                 <p class="bill-name">Name: <span>Maxi</span></p>
                 <p class="bill-value">Total value: <span>3500</span></p>
@@ -373,41 +373,51 @@
     <div class="bill-modal">
       <div class="container">
         <form class="bill-modal-form">
+          <div class="form-group form-group-title">
+            <p class="content-p">
+              Adding a bill paid by <span id="billOwnerName"></span>
+            </p>
+          </div>
           <div class="form-group">
             <label for="billName">Bill name</label>
             <input
               type="text"
               id="billName"
             />
-            <span class="error-span">This field is required</span>
+            <span class="error-span"></span>
           </div>
 
           <div class="form-group">
-            <label for="billValue">Total value</label>
+            <label for="billValue">Bill value</label>
             <input
               type="text"
               id="billValue"
             />
-            <span class="error-span">Please enter a valid number</span>
+            <span class="error-span"></span>
           </div>
 
           <div class="form-group">
-            <label for="unshared">Total unshared bill items </label>
+            <label for="unshared">Value of unshared items</label>
             <input
               type="text"
               id="unshared"
               value="0"
             />
-            <span class="error-span">Please enter a valid number</span>
+            <span class="error-span"></span>
           </div>
 
-          <div class="form-group btn-div">
-            <button
-              type="submit"
-              class="btn btn-cta"
-            >
-              Add bill
-            </button>
+          <div class="form-group">
+            <div class="btn-div">
+              <button
+                type="submit"
+                class="btn btn-cta"
+              >
+                Add bill
+              </button>
+            </div>
+            <div class="btn-div">
+              <div class="btn btn-border-light cancelBtn">Cancel</div>
+            </div>
           </div>
         </form>
       </div>

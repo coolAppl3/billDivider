@@ -1,13 +1,21 @@
 Frontend:
 
-  - SessionInfo.js:
+  InitSession.js:
 
-    - Added _handleSessionContentClickEvents() to handle all session-content click events, and avoid having many event listeners. A simple if-statement will call the appropriate function within the class depending on the event target.
-
-    - Added two separate functions to expand and retract the contentList [_expandContentList() and _retractContentList()].
-
-    - Added __resizeList() to handle contentList resize click events. It uses the two aforementioned functions.
+    - Fixed the startSessionModal showing "Start session" when it's used for editing who the session is shared with.
+    
+    - Added validation to the sharedWithInput, to disallow special characters and long names. Whitespace is allowed. Longer names might be allowed in future patches depending on the direction this app takes in terms of user freedom.
   
+  SessionContent.js:
+
+    - Added functionality to display/hide the bill modal.
+
+    - Added _isNumber() to ensure the bill value and unshared value inputs are always numbers. Further validation coming in future patches.
+
   - session.html:
 
-    - Changed the default chevron icon in the content header to aim to the right, and added a "rotate" class to rotate it 450 degrees.
+    - Fixed very long names breaking the how a bill's details are showing. Will run checks on the rest of the app in a future patch.
+    
+    - Fixed the start modal and bill modals now shrinking properly on lower resolutions due to being displayed as a grid. Changed to flex.
+
+    - Added a cancel button to the bill modal for a better user experience, despite the fact that clicking outside of the form hides the modal.

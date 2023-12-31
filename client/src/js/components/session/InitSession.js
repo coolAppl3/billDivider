@@ -10,7 +10,7 @@ class InitSession {
   constructor() {
     this._startModal = document.querySelector('.start-modal');
     this._startModalForm = document.querySelector('.start-modal-form');
-    this._sharingWithInput = document.querySelector('#sharingWith');
+    this._sharedWithInput = document.querySelector('#sharingWith');
     this._optionsContainer = document.querySelector('.options-container');
     this._optionsContainerItems = document.querySelectorAll('.options-container-item');
 
@@ -21,28 +21,54 @@ class InitSession {
   _loadEventListeners() {
     this._startModalForm.addEventListener('submit', this._start.bind(this));
     this._optionsContainer.addEventListener('click', this._changeCurrency.bind(this));
-    window.addEventListener('editSharedWith', this._displayStartModal.bind(this));
+    window.addEventListener('editSharedWith', this._editSharedWith.bind(this));
   };
 
   _start(e) {
     e.preventDefault();
 
-    if(this._sharingWithInput.value === '') {
-      errorSpan.display(this._sharingWithInput.parentElement, 'This field is required.');
+    const validSharedWithInputValue = this._validateSharedWithInput();
+    if(!validSharedWithInputValue) {
       return ;
-    } else if(this._sharingWithInput.value.length > 15) {
-      errorSpan.display(this._sharingWithInput.parentElement, 'Name must not exceed 15 characters.');
-      return ;
-    };;
+    };
 
-    // Hiding error span if one existed
-    errorSpan.hide(this._sharingWithInput.parentElement);
-
-    sessionInfo.sharedWith = this._sharingWithInput.value || 'Friend';
+    sessionInfo.sharedWith = this._sharedWithInput.value || 'Friend';
     sessionInfo.currency = this._getSelectedCurrency() || 'RSD';
 
     this._collapseStartModal();
     dispatchEvent(new Event('sessionStarted'));
+  };
+
+  _validateSharedWithInput() {
+    // Ensuring at least 1 letter is present, and that special characters are not present.
+    const re = /^[a-zA-Z0-9\s]*[a-zA-Z][a-zA-Z0-9\s]*$/;
+
+    const inputValue = this._sharedWithInput.value;
+    const inputFormGroup = this._sharedWithInput.parentElement;
+    
+    if(inputValue.length === 0) {
+      errorSpan.display(inputFormGroup, 'This field is required.');
+      return false;
+
+    } else if(inputValue.length > 15) {
+      errorSpan.display(inputFormGroup, 'Can not be longer than 15 characters');
+      return false;
+
+    } else if(!re.test(inputValue)) {
+      errorSpan.display(inputFormGroup, 'This field must contain at least 1 letter, and must not contain special characters.');
+      return false;
+
+    } else {
+      errorSpan.hide(inputFormGroup);
+      return true;
+    };
+    
+  };
+
+  _editSharedWith() {
+    this._displayStartModal();
+    const formBtn = this._startModalForm.lastElementChild.firstElementChild;
+    formBtn.textContent = 'Continue';
   };
 
   _changeCurrency(e) {
@@ -65,20 +91,23 @@ class InitSession {
     return currency;
   };
 
-  _collapseStartModal() {
-    this._startModal.style.transform = 'scale(0)';
-    setTimeout(() => this._startModal.style.display = 'none', 200);
-  };
-
   _displayStartModal() {
-    this._startModal.style.display = 'block'
+    this._startModal.style.display = 'block';
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         this._startModal.style.transform = 'scale(1)';
-        this._sharingWithInput.focus();
+        this._sharedWithInput.focus();
       });
     });
+  };
+
+  _collapseStartModal() {
+    this._startModal.style.transform = 'scale(0)';
+    setTimeout(() => this._startModal.style.display = 'none', 200);
+
+    const formBtn = this._startModalForm.lastElementChild.firstElementChild;
+    formBtn.textContent = 'Start session';
   };
 };
 
