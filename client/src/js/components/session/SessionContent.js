@@ -1,8 +1,11 @@
 import sessionInfo from "./SessionInfo";
 import ErrorSpan from "./ErrorSpan";
+import BillElement from "./BillElement";
+import messageDialog from "../global/messageDialog";
 
 // Initializing imports
 const errorSpan = new ErrorSpan();
+const billElement = new BillElement();
 
 class SessionContent {
   constructor() {
@@ -22,7 +25,7 @@ class SessionContent {
     this._sessionContent.addEventListener('click', this._handleSessionContentClickEvents.bind(this));
 
     // Bill modal
-    this._billModal.addEventListener('click', this._handleBillModalClickEvents.bind(this));
+    this._billModal.addEventListener('mousedown', this._handleBillModalClickEvents.bind(this));
     this._billModalForm.addEventListener('submit', this._addNewBill.bind(this));
   };
 
@@ -39,7 +42,6 @@ class SessionContent {
   };
 
   _startNewBill(e) {
-    const clickedBtn = e.target;
     const contentList = e.target.parentElement.parentElement.lastElementChild;
     const billOwner = this._findBillOwner(contentList); // main for user, secondary for who the user is sharing with.
 
@@ -49,11 +51,60 @@ class SessionContent {
   _addNewBill(e) {
     e.preventDefault();
 
+    const validBillName = this._validateBillName(this._billNameInput);
     const validBillValue = this._isNumber(this._billValueInput);
-    // CONTINUE HERE
+    const validUnsharedValue = this._isNumber(this._billUnsharedInput);
 
+
+    if(!validBillName || !validBillValue || !validUnsharedValue) {
+      return ;
+    };
+
+    const newBill = {
+      name: this._billNameInput.value,
+      value: +this._billValueInput.value,
+      unshared: +this._billUnsharedInput.value,
+      splitValue: (+this._billValueInput.value - +this._billUnsharedInput.value) / 2,
+    };
+
+    const billOwner = this._billModalForm.getAttribute('data-bill-owner');
+
+    if(billOwner === 'main') {
+      sessionInfo.billsPaid.push(newBill);
+    } else if(billOwner === 'secondary') {
+      sessionInfo.billsToPay.push(newBill);
+    };
+
+    const newBillElement = billElement.create(newBill);
+    this._appendNewBill(newBillElement, billOwner);
+    this._hideBillModal();
+    messageDialog('New bill added', 'success');
+    
+    dispatchEvent(new Event('render'));
   };
 
+  _appendNewBill(billElement, billOwner) {
+    const contentList = document.querySelector(`.list-${billOwner}`);
+    contentList.appendChild(billElement);
+    
+    this._expandContentList(contentList);
+  };
+
+  _validateBillName(input) {
+    const value = input.value;
+    const inputFormGroup = input.parentElement;
+
+    const re = /.*[a-zA-Z].*/; // ensuring at least 1 letter is passed anywhere within the string.
+    
+    if(!re.test(value)) {
+      errorSpan.display(inputFormGroup, 'Bill name must contain at least 1 letter.');
+      return false;
+    };
+
+    errorSpan.hide(inputFormGroup);
+    return true;
+  };
+  
   _isNumber(input) {
     const value = input.value;
     const inputFormGroup = input.parentElement;
@@ -98,7 +149,14 @@ class SessionContent {
   _hideBillModal() {
     this._billModalForm.removeAttribute('data-bill-owner');
     this._billModal.style.opacity = '0';
+    this._clearBillModalForm();
     setTimeout(() => this._billModal.style.display = 'none', 200);
+  };
+
+  _clearBillModalForm() {
+    this._billNameInput.value = '';
+    this._billValueInput.value = '';
+    this._billUnsharedInput.value = 0;
   };
 
   _findBillOwner(contentList) {
@@ -107,7 +165,7 @@ class SessionContent {
     for(let classItem of contentList.classList) {
       if(classItem === 'list-main') {
         billOwner = 'main';
-      } else {
+      } else if(classItem === 'list-secondary') {
         billOwner = 'secondary';
       };
     };
@@ -116,19 +174,21 @@ class SessionContent {
   };
 
   _resizeList(e) {
-    const chevronIcon = e.target;
+    // const chevronIcon = e.target;
     const contentList = e.target.closest('.session-content-container').lastElementChild;
     
     if(contentList.classList.contains('expanded')) {
-      this._retractContentList(contentList, chevronIcon);
+      this._retractContentList(contentList);
     } else {
-      this._expandContentList(contentList, chevronIcon);
+      this._expandContentList(contentList);
     };
     
   };
 
-  _expandContentList(contentList, chevronIcon) {
+  _expandContentList(contentList) {
     contentList.classList.add('expanded');
+
+    const chevronIcon = contentList.parentElement.firstElementChild.firstElementChild.firstElementChild;
     chevronIcon.classList.add('rotate');
     
     let listHeight = 0;
@@ -144,8 +204,10 @@ class SessionContent {
     });
   };
 
-  _retractContentList(contentList, chevronIcon) {
+  _retractContentList(contentList) {
     contentList.classList.remove('expanded');
+    
+    const chevronIcon = contentList.parentElement.firstElementChild.firstElementChild.firstElementChild;
     chevronIcon.classList.remove('rotate');
 
     requestAnimationFrame(() => {

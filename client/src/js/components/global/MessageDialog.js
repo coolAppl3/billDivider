@@ -39,6 +39,12 @@ function messageDialog(message, type) {
       });
     });
   };
+
+  setTimeout(() => {
+    document.querySelector('.dialog').style.transform = 'translateY(-10rem)';
+
+    setTimeout(() => document.querySelector('.dialog').remove(), 200);
+  }, 2000);
 };
 
 export default messageDialog;
