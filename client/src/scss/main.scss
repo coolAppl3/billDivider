@@ -507,18 +507,17 @@
             filter: brightness(0.7);
           }
 
-          &.rotate {
-            
-            i {
-              transform: rotate(450deg);
-            }
-          }
+          
 
           i {
             margin-right: 1rem;
             transition: transform 200ms;
             font-size: 1.4rem;
             
+            &.rotate {
+            
+              transform: rotate(450deg);
+            }
           }
         }
 
