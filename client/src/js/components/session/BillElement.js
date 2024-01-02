@@ -1,12 +1,14 @@
+import addThousandComma from "./addThousandComma";
+
 class BillElement {
 
   create(billItem) {
-    const billDiv = this._createParentBillElement();
+    const billDiv = this._createParentBillElement(billItem.id);
 
     billDiv.appendChild(this._createBillNameElement(billItem.name));
     billDiv.appendChild(this._createBillValueElement(billItem.value));
     billDiv.appendChild(this._createBillUnsharedElement(billItem.unshared));
-    billDiv.appendChild(this._createBillSplitValueElement(billItem));
+    billDiv.appendChild(this._createBillSplitValueElement(billItem.splitValue));
 
     return billDiv;
 
@@ -18,9 +20,10 @@ class BillElement {
     
   };
 
-  _createParentBillElement() {
+  _createParentBillElement(billID) {
     const billDiv = document.createElement('div');
     billDiv.className = 'bill';
+    billDiv.setAttribute('data-id', billID);
 
     return billDiv;
   };
@@ -38,7 +41,7 @@ class BillElement {
     const billValue = document.createElement('p');
     billValue.className = 'bill-value';
     billValue.appendChild(document.createTextNode('Total value: '));
-    billValue.appendChild(this._createSpanElement(value));
+    billValue.appendChild(this._createSpanElement(addThousandComma(value)));
 
     return billValue;
   };
@@ -47,18 +50,16 @@ class BillElement {
     const billUnshared = document.createElement('p');
     billUnshared.className = 'bill-unshared';
     billUnshared.appendChild(document.createTextNode('Unshared: '));
-    billUnshared.appendChild(this._createSpanElement(unshared));
+    billUnshared.appendChild(this._createSpanElement(addThousandComma(unshared)));
 
     return billUnshared;
   };
 
-  _createBillSplitValueElement(billItem) {
+  _createBillSplitValueElement(splitValue) {
     const billSplitValue = document.createElement('p');
     billSplitValue.className = 'bill-splitValue';
     billSplitValue.appendChild(document.createTextNode('Split value: '));
-
-    const calculatedSplitValue = (billItem.value - billItem.unshared) / 2;
-    billSplitValue.appendChild(this._createSpanElement(calculatedSplitValue));
+    billSplitValue.appendChild(this._createSpanElement(addThousandComma(splitValue)));
 
     return billSplitValue;
   };
