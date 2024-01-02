@@ -1,17 +1,22 @@
 Frontend:
 
-  - Added BillElement.js to take care of creating the bill elements within SessionContent.js.
+  - Added generateBillID.js to generate a random 10-digit ID for every bill item.
+  - Added addThousandComma.js for all bill values across the app. It also forces 2 decimal points.
 
-  - messageDialog.js:
+  - SessionContent.js:
 
-    - Made it so that the message flies up and is then removed, rather than it just sticking around.
+    - Added an id to the newBill item, using generateBillID().
+  
+  - BillElement.js:
 
+    - The main bill div know has a data-id attribute with the billID.
+
+  - SessionHeader.js:
+
+    - Fixed setSharedWith() not setting up the sharedWithListTitle element.
+    - Added _render() to rerender the header every time a "render" event is heard.
+    - Added an _updateTotals() function to update the totals.
   
   - SessionInfo.js:
 
-    - Set up the constructor with basic values to make it easier for data entry within the app.
-  
-  SessionContent.js:
-
-    - Added _clearBillModalForm() to ensure that the bill modal form is cleared every time it's closed.
-    - _addNewBill() is now complete, and dispatches a "render" event, which will be used in other components.
+    - Added functionality to calculate and update the yourTotal and sharedWithTotal values in the sessionInfo object. The object will listen for an "updateSessionInfo" event to update the data.

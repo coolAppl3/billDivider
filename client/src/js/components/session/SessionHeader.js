@@ -1,4 +1,5 @@
 import sessionInfo from "./SessionInfo";
+import addThousandComma from "./addThousandComma";
 
 class SessionHeader {
   constructor() {
@@ -12,6 +13,7 @@ class SessionHeader {
     this._debtResultValue = document.querySelector('#debtResultValue');
 
     this._currencySpans = document.querySelectorAll('.currency');
+    this._sharedWithListHeader = document.querySelector('#sharedWithListHeader');
     
     this._loadEventListeners();
   };
@@ -19,12 +21,24 @@ class SessionHeader {
   _loadEventListeners() {
     window.addEventListener('sessionStarted', this._setSharedWith.bind(this));
     window.addEventListener('sessionStarted', this._setCurrency.bind(this));
-    
     this._updateSharedWithBtn.addEventListener('click', this._updateSharedWith.bind(this));
+    window.addEventListener('render', this._render.bind(this));
   };
+
+  _render() {
+    this._updateTotals();
+  };
+
+  _updateTotals() {
+    this._yourTotal.textContent = addThousandComma(sessionInfo.yourTotal);
+    this._sharedWithTotal.textContent = addThousandComma(sessionInfo.sharedWithTotal);
+  };
+
+  // CONTINUE HERE - add a function to update who owes who what in the header
 
   _setSharedWith() {
     this._sharedWith.textContent = sessionInfo.sharedWith;
+    this._sharedWithListHeader.textContent = sessionInfo.sharedWith;
   };
 
   _updateSharedWith() {

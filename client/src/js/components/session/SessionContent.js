@@ -2,6 +2,7 @@ import sessionInfo from "./SessionInfo";
 import ErrorSpan from "./ErrorSpan";
 import BillElement from "./BillElement";
 import messageDialog from "../global/messageDialog";
+import generateBillID from "./generateBillID";
 
 // Initializing imports
 const errorSpan = new ErrorSpan();
@@ -61,6 +62,7 @@ class SessionContent {
     };
 
     const newBill = {
+      id: generateBillID(),
       name: this._billNameInput.value,
       value: +this._billValueInput.value,
       unshared: +this._billUnsharedInput.value,
@@ -80,6 +82,7 @@ class SessionContent {
     this._hideBillModal();
     messageDialog('New bill added', 'success');
     
+    dispatchEvent(new Event('updateSessionInfo'));
     dispatchEvent(new Event('render'));
   };
 
@@ -109,7 +112,7 @@ class SessionContent {
     const value = input.value;
     const inputFormGroup = input.parentElement;
 
-    const re = /^\d+$/;
+    const re = /^\d+(\.\d+)?$/;
 
     if(!re.test(value)) {
       errorSpan.display(inputFormGroup, 'Please enter a valid number.')
@@ -217,6 +220,7 @@ class SessionContent {
     });
    
   };
+
 };
 
 export default SessionContent;
