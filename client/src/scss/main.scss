@@ -538,11 +538,6 @@
         overflow: hidden;
         max-height: 0;
         
-        // &.expanded {
-        //   max-height: 50rem;
-        // }
-
-
         .bill {
           background: $main;
           border-radius: 5px;
@@ -590,26 +585,24 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            // background: red;
+            cursor: pointer;
 
-          
-            
             i {
               transition: filter 200ms;
+              position: relative;
 
               &:hover {
                 filter: brightness(0.7);
               }
 
               &.fa-trash-can {
-                cursor: pointer;
                 font-size: 1.4rem;
                 margin-left: 1rem;
                 color: $danger;
+
               }
   
               &.fa-pen-to-square {
-                cursor: pointer;
                 font-size: 1.4rem;
                 color: $edit;
               }

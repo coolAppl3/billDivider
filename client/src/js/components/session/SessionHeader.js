@@ -27,6 +27,7 @@ class SessionHeader {
 
   _render() {
     this._updateTotals();
+    this._updateDebtResult();
   };
 
   _updateTotals() {
@@ -34,7 +35,17 @@ class SessionHeader {
     this._sharedWithTotal.textContent = addThousandComma(sessionInfo.sharedWithTotal);
   };
 
-  // CONTINUE HERE - add a function to update who owes who what in the header
+  _updateDebtResult() {
+    const difference = sessionInfo.yourTotal - sessionInfo.sharedWithTotal;
+
+    if(difference < 0) { // You owe something
+      this._debtResult.textContent = 'You owe';
+      this._debtResultValue.textContent = addThousandComma(Math.abs(difference));
+    } else { // Either equal or are owed
+      this._debtResult.textContent = `You're owed`;
+      this._debtResultValue.textContent = addThousandComma(difference);
+    };
+  };
 
   _setSharedWith() {
     this._sharedWith.textContent = sessionInfo.sharedWith;
