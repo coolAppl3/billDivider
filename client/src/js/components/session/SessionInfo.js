@@ -23,7 +23,7 @@ class SessionInfo {
     let total = 0;
     
     this.billsPaid.forEach((bill) => {
-      total += bill.value;
+      total += bill.splitValue;
     });
 
     return total;
@@ -33,7 +33,7 @@ class SessionInfo {
     let total = 0;
     
     this.billsToPay.forEach((bill) => {
-      total += bill.value;
+      total += bill.splitValue;
     });
 
     return total;

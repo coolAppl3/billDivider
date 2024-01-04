@@ -1,22 +1,32 @@
 Frontend:
 
-  - Added generateBillID.js to generate a random 10-digit ID for every bill item.
-  - Added addThousandComma.js for all bill values across the app. It also forces 2 decimal points.
-
-  - SessionContent.js:
-
-    - Added an id to the newBill item, using generateBillID().
-  
   - BillElement.js:
 
-    - The main bill div know has a data-id attribute with the billID.
-
-  - SessionHeader.js:
-
-    - Fixed setSharedWith() not setting up the sharedWithListTitle element.
-    - Added _render() to rerender the header every time a "render" event is heard.
-    - Added an _updateTotals() function to update the totals.
+    - Fixed bill elements not containing the iconContainer which includes the edit and delete buttons.
   
   - SessionInfo.js:
 
-    - Added functionality to calculate and update the yourTotal and sharedWithTotal values in the sessionInfo object. The object will listen for an "updateSessionInfo" event to update the data.
+    - Fixed totals being calculated off of the bills total values, and not the split value as they should be.
+  
+  - SessionHeader.js:
+
+    - Added _updateDebtResult() to update the debtResult/debtResultValue elements, effectively communicating to the user whether they owe or are owed an amount, instead of dealing with negative values.
+
+  - SessionContent.js:
+
+    - Added _compareValueAndUnshared() to check and prevent:
+    
+      - The bill's value from being less than or equal to 0.
+      - The unshared value from being less than 0.
+      - The unshared value exceeding the bill's value.
+    
+    - Added _handleBillModalFormSubmission() to determine if the form's submission is meant to add a new bill, or update an existing one. _updateBill() is the function that will take care of updating the bill.
+
+    - Added a billID argument to _displayBillModal() and set it to false by default. If one is passed in, a data-editing attribute is added to the bill modal form containing the bill's ID.
+
+    - Clicking on a bill's edit icon will trigger _editBill(), which will:
+
+      - Fetch the bill's ID from the element.
+      - Figure out the contentList in question, then use _findBillOwner() to define the bill owner.
+      - Call _displayBillModal() and pass in the billID.
+      - Call _populateBillModal() and pass the billOwner and billID, which will fetch the bill's details from the sessionInfo object and append them to the inputs in the form.

@@ -27,7 +27,7 @@ class SessionContent {
 
     // Bill modal
     this._billModal.addEventListener('mousedown', this._handleBillModalClickEvents.bind(this));
-    this._billModalForm.addEventListener('submit', this._addNewBill.bind(this));
+    this._billModalForm.addEventListener('submit', this._handleBillModalFormSubmission.bind(this));
   };
 
   _handleSessionContentClickEvents(e) {
@@ -40,6 +40,21 @@ class SessionContent {
     if(e.target.classList.contains('addBillBtn')) {
       return this._startNewBill(e);
     };
+
+    if(e.target.classList.contains('editBillIcon')) {
+      return this._editBill(e);
+    };
+  };
+
+  _handleBillModalFormSubmission(e) {
+    e.preventDefault();
+
+    const editingBillID = this._billModalForm.getAttribute('data-editing');
+    if(!editingBillID) {
+      return this._addNewBill();
+    };
+
+    return this._updateBill(editingBillID);
   };
 
   _startNewBill(e) {
@@ -49,13 +64,14 @@ class SessionContent {
     this._displayBillModal(billOwner);
   };
 
-  _addNewBill(e) {
-    e.preventDefault();
+  _addNewBill() {
+    if(!this._compareValueAndUnshared()) {
+      return ;
+    };
 
     const validBillName = this._validateBillName(this._billNameInput);
     const validBillValue = this._isNumber(this._billValueInput);
     const validUnsharedValue = this._isNumber(this._billUnsharedInput);
-
 
     if(!validBillName || !validBillValue || !validUnsharedValue) {
       return ;
@@ -123,6 +139,46 @@ class SessionContent {
     return true;
   };
 
+  _editBill(e) {
+    const billID = e.target.parentElement.parentElement.getAttribute('data-id');
+    const contentList = e.target.closest('.session-content-container-list');
+    const billOwner = this._findBillOwner(contentList);
+
+    this._displayBillModal(billOwner, billID);
+    this._populateBillModal(billOwner, billID);
+  };
+
+  _updateBill(billID) {
+    console.log(billID)
+    // DONT FORGET THE RENDER EVENT.
+  };
+
+  _compareValueAndUnshared() {
+    errorSpan.hide(this._billValueInput.parentElement);
+    errorSpan.hide(this._billUnsharedInput.parentElement);
+    
+    const billValue = this._billValueInput.value;
+    const unsharedValue = this._billUnsharedInput.value;
+
+    if(+billValue <= 0) {
+      errorSpan.display(this._billValueInput.parentElement, 'Bill value can not be equal to or below 0.');
+      return false;
+    };
+
+    if(+unsharedValue < 0) {
+      errorSpan.display(this._billUnsharedInput.parentElement, 'Unshared value can not be a negative value.');
+      return false;
+    };
+
+
+    if(+billValue < +unsharedValue) {
+      errorSpan.display(this._billUnsharedInput.parentElement, `Unshared value can not exceed the bill's value.`);
+      return false;
+    };
+
+    return true;
+  };
+
   _handleBillModalClickEvents(e) {
     e.stopImmediatePropagation();
 
@@ -135,10 +191,14 @@ class SessionContent {
     };
   };
 
-  _displayBillModal(billOwner) {
+  _displayBillModal(billOwner, editingBillID = false) {
     const billOwnerNameSpan = document.querySelector('#billOwnerName');
     billOwnerNameSpan.textContent = billOwner === 'main' ? 'you' : sessionInfo.sharedWith;
     this._billModalForm.setAttribute('data-bill-owner', billOwner);
+
+    if(editingBillID) {
+      this._billModalForm.setAttribute('data-editing', editingBillID);
+    };
 
     this._billModal.style.display = 'block';
 
@@ -151,6 +211,8 @@ class SessionContent {
 
   _hideBillModal() {
     this._billModalForm.removeAttribute('data-bill-owner');
+    this._billModalForm.removeAttribute('data-editing');
+
     this._billModal.style.opacity = '0';
     this._clearBillModalForm();
     setTimeout(() => this._billModal.style.display = 'none', 200);
@@ -160,6 +222,19 @@ class SessionContent {
     this._billNameInput.value = '';
     this._billValueInput.value = '';
     this._billUnsharedInput.value = 0;
+  };
+
+  _populateBillModal(billOwner, billID) {
+    let selectedBill;
+    if(billOwner === 'main') {
+      selectedBill = sessionInfo.billsPaid.find(({ id }) => id === billID);
+    } else if(billOwner === 'secondary') {
+      selectedBill = sessionInfo.billsToPay.find(({ id }) => id === billID);
+    };
+
+    this._billNameInput.value = selectedBill.name;
+    this._billValueInput.value = selectedBill.value;
+    this._billUnsharedInput.value = selectedBill.unshared;
   };
 
   _findBillOwner(contentList) {

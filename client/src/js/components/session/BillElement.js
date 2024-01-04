@@ -9,15 +9,9 @@ class BillElement {
     billDiv.appendChild(this._createBillValueElement(billItem.value));
     billDiv.appendChild(this._createBillUnsharedElement(billItem.unshared));
     billDiv.appendChild(this._createBillSplitValueElement(billItem.splitValue));
+    billDiv.appendChild(this._createIconContainer());
 
     return billDiv;
-
-    // const billName = this._createBillNameElement();
-    // const billValue = this._createBillValueElement();
-    // const billUnshared = this._createBillUnsharedElement();
-    // const billSplitValue = this._createBillSplitValueElement();
-
-    
   };
 
   _createParentBillElement(billID) {
@@ -69,6 +63,24 @@ class BillElement {
     span.appendChild(document.createTextNode(spanContent));
 
     return span;
+  };
+
+  _createIconContainer() {
+    const iconContainer = document.createElement('div');
+    iconContainer.className = 'icon-container';
+
+    const editIcon = document.createElement('i');
+    editIcon.className = 'fa-solid fa-pen-to-square editBillIcon';
+    editIcon.setAttribute('title', 'Edit bill');
+
+    const deleteIcon = document.createElement('i');
+    deleteIcon.className = 'fa-solid fa-trash-can removeBillIcon';
+    deleteIcon.setAttribute('title', 'Remove bill');
+
+    iconContainer.appendChild(editIcon);
+    iconContainer.appendChild(deleteIcon);
+    
+    return iconContainer;
   };
 };
 
