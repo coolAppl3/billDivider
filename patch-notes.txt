@@ -1,32 +1,17 @@
 Frontend:
 
-  - BillElement.js:
+  - messageDialog.js:
 
-    - Fixed bill elements not containing the iconContainer which includes the edit and delete buttons.
-  
-  - SessionInfo.js:
-
-    - Fixed totals being calculated off of the bills total values, and not the split value as they should be.
-  
-  - SessionHeader.js:
-
-    - Added _updateDebtResult() to update the debtResult/debtResultValue elements, effectively communicating to the user whether they owe or are owed an amount, instead of dealing with negative values.
+    - Fixed a bug with how the dialog element is removed, which caused errors when bills were being added quickly.
 
   - SessionContent.js:
 
-    - Added _compareValueAndUnshared() to check and prevent:
+    - Added _startBillModalEditMode() and _endBillModalEditMode() to dynamically change the text content of the title and submit button for the bill modal form when editing a bill.
     
-      - The bill's value from being less than or equal to 0.
-      - The unshared value from being less than 0.
-      - The unshared value exceeding the bill's value.
-    
-    - Added _handleBillModalFormSubmission() to determine if the form's submission is meant to add a new bill, or update an existing one. _updateBill() is the function that will take care of updating the bill.
+    - Abolished _appendNewBill().
 
-    - Added a billID argument to _displayBillModal() and set it to false by default. If one is passed in, a data-editing attribute is added to the bill modal form containing the bill's ID.
+    - Added an eventListener for the custom "render" event, which will call _render(). This function will clear the bill elements using _clearContentList(), then load them again after the sessionInfo object was updated through the _addNewBill() or _editBill().
 
-    - Clicking on a bill's edit icon will trigger _editBill(), which will:
+    - _clearContentList() will be used later down the line.
 
-      - Fetch the bill's ID from the element.
-      - Figure out the contentList in question, then use _findBillOwner() to define the bill owner.
-      - Call _displayBillModal() and pass in the billID.
-      - Call _populateBillModal() and pass the billOwner and billID, which will fetch the bill's details from the sessionInfo object and append them to the inputs in the form.
+    - The functionality for adding/editing bills is complete currently.
