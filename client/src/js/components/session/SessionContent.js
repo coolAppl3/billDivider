@@ -18,11 +18,16 @@ class SessionContent {
     this._billNameInput = document.querySelector('#billName');
     this._billValueInput = document.querySelector('#billValue');
     this._billUnsharedInput = document.querySelector('#unshared');
+    this._billSubmitBtn = document.querySelector('#billSubmitBtn');
+
+    this._mainContentList = document.querySelector('.list-main');
+    this._secondaryContentList = document.querySelector('.list-secondary');
 
     this._loadEventListeners();
   };
 
   _loadEventListeners() {
+    window.addEventListener('render', this._render.bind(this));
     this._sessionContent.addEventListener('click', this._handleSessionContentClickEvents.bind(this));
 
     // Bill modal
@@ -55,6 +60,39 @@ class SessionContent {
     };
 
     return this._updateBill(editingBillID);
+  };
+
+  _render() {
+    this._clearContentList(this._mainContentList);
+    this._clearContentList(this._secondaryContentList);
+    
+    this._loadBills();
+  };
+
+  _clearContentList(contentList) {
+    const contentListArr = Array.from(contentList.childNodes);
+    contentListArr.forEach((bill) => bill.remove());
+  };
+
+  _loadBills() {
+    
+    if(sessionInfo.billsPaid[0]) {
+      sessionInfo.billsPaid.forEach((bill) => {
+        const billDiv = billElement.create(bill);
+        this._mainContentList.appendChild(billDiv);
+      });
+
+      this._expandContentList(this._mainContentList);
+    };
+
+    if(sessionInfo.billsToPay[0]) {
+      sessionInfo.billsToPay.forEach((bill) => {
+        const billDiv = billElement.create(bill);
+        this._secondaryContentList.appendChild(billDiv);
+      });
+
+      this._expandContentList(this._secondaryContentList);
+    };
   };
 
   _startNewBill(e) {
@@ -93,8 +131,6 @@ class SessionContent {
       sessionInfo.billsToPay.push(newBill);
     };
 
-    const newBillElement = billElement.create(newBill);
-    this._appendNewBill(newBillElement, billOwner);
     this._hideBillModal();
     messageDialog('New bill added', 'success');
     
@@ -102,12 +138,6 @@ class SessionContent {
     dispatchEvent(new Event('render'));
   };
 
-  _appendNewBill(billElement, billOwner) {
-    const contentList = document.querySelector(`.list-${billOwner}`);
-    contentList.appendChild(billElement);
-    
-    this._expandContentList(contentList);
-  };
 
   _validateBillName(input) {
     const value = input.value;
@@ -149,8 +179,40 @@ class SessionContent {
   };
 
   _updateBill(billID) {
-    console.log(billID)
-    // DONT FORGET THE RENDER EVENT.
+    if(!this._compareValueAndUnshared()) {
+      return ;
+    };
+
+    const validBillName = this._validateBillName(this._billNameInput);
+    const validBillValue = this._isNumber(this._billValueInput);
+    const validUnsharedValue = this._isNumber(this._billUnsharedInput);
+
+    if(!validBillName || !validBillValue || !validUnsharedValue) {
+      return ;
+    };
+
+    const updatedBill = {
+      id: billID,
+      name: this._billNameInput.value,
+      value: +this._billValueInput.value,
+      unshared: +this._billUnsharedInput.value,
+      splitValue: (+this._billValueInput.value - +this._billUnsharedInput.value) / 2,
+    };
+    
+    const billOwner = this._billModalForm.getAttribute('data-bill-owner');
+    if(billOwner === 'main') {
+      const billIndex = sessionInfo.billsPaid.findIndex((bill) => bill.id === updatedBill.id);
+      sessionInfo.billsPaid[billIndex] = updatedBill;
+    } else if(billOwner === 'secondary') {
+      const billIndex = sessionInfo.billsToPay.findIndex((bill) => bill.id === updatedBill.id);
+      sessionInfo.billsToPay[billIndex] = updatedBill;
+    };
+
+    this._hideBillModal();
+    messageDialog('Bill edited', 'success');
+    
+    dispatchEvent(new Event('updateSessionInfo'));
+    dispatchEvent(new Event('render'));
   };
 
   _compareValueAndUnshared() {
@@ -198,6 +260,7 @@ class SessionContent {
 
     if(editingBillID) {
       this._billModalForm.setAttribute('data-editing', editingBillID);
+      this._startBillModalEditMode();
     };
 
     this._billModal.style.display = 'block';
@@ -215,13 +278,35 @@ class SessionContent {
 
     this._billModal.style.opacity = '0';
     this._clearBillModalForm();
-    setTimeout(() => this._billModal.style.display = 'none', 200);
+    setTimeout(() => {
+      this._billModal.style.display = 'none'
+      this._endBillModalEditMode();
+    }, 200);
+    
   };
 
   _clearBillModalForm() {
     this._billNameInput.value = '';
     this._billValueInput.value = '';
     this._billUnsharedInput.value = 0;
+
+    errorSpan.hide(this._billNameInput.parentElement);
+    errorSpan.hide(this._billValueInput.parentElement);
+    errorSpan.hide(this._billUnsharedInput.parentElement);
+  };
+
+  _startBillModalEditMode() {
+    this._billSubmitBtn.textContent = 'Update bill';
+
+    const billModalFormTitle = document.querySelector('.bill-modal-form .form-group-title p');
+    billModalFormTitle.firstChild.textContent = 'Editing a bill paid by ';
+  };
+
+  _endBillModalEditMode() {
+    this._billSubmitBtn.textContent = 'Add bill';
+
+    const billModalFormTitle = document.querySelector('.bill-modal-form .form-group-title p');
+    billModalFormTitle.firstChild.textContent = 'Adding a bill paid by ';
   };
 
   _populateBillModal(billOwner, billID) {

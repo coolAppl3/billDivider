@@ -23,27 +23,23 @@ function messageDialog(message, type) {
   // Appending into the body, and preventing duplicates.
   if(document.querySelector('.dialog')) {
     document.querySelector('.dialog').remove();
-    document.querySelector('body').appendChild(dialog);
+  }
 
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        dialog.style.transform = 'translateY(0)';
-      });
-    });
-  } else {
-    document.querySelector('body').appendChild(dialog);
+  document.querySelector('body').appendChild(dialog);
 
+  requestAnimationFrame(() => {
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        dialog.style.transform = 'translateY(0)';
-      });
+      dialog.style.transform = 'translateY(0)';
     });
-  };
+  });
 
   setTimeout(() => {
-    document.querySelector('.dialog').style.transform = 'translateY(-10rem)';
+    dialog.style.transform = 'translateY(-10rem)';
 
-    setTimeout(() => document.querySelector('.dialog').remove(), 200);
+    setTimeout(() => {
+      dialog.remove();
+    }, 200);
+
   }, 2000);
 };
 
