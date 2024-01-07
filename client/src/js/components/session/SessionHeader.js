@@ -48,8 +48,12 @@ class SessionHeader {
   };
 
   _setSharedWith() {
-    this._sharedWith.textContent = sessionInfo.sharedWith;
-    this._sharedWithListHeader.textContent = sessionInfo.sharedWith;
+    const sharedWithSpans = document.querySelectorAll('.sharedWithSpan');
+    const sharedWithSpansArr = Array.from(sharedWithSpans);
+
+    sharedWithSpansArr.forEach((span) => {
+      span.textContent = sessionInfo.sharedWith;
+    });
   };
 
   _updateSharedWith() {

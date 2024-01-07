@@ -68,7 +68,7 @@ class InitSession {
   _editSharedWith() {
     this._displayStartModal();
     const formBtn = this._startModalForm.lastElementChild.firstElementChild;
-    formBtn.textContent = 'Continue';
+    formBtn.textContent = 'Update';
   };
 
   _changeCurrency(e) {

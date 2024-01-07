@@ -730,6 +730,11 @@
         margin-bottom: 4rem;
       }
 
+      div + p {
+        font-size: 1.3rem;
+        margin-bottom: 0;
+      }
+
       &:last-child {
         margin-bottom: 0;
       }
