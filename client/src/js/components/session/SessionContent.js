@@ -1,25 +1,15 @@
 import sessionInfo from "./SessionInfo";
-import ErrorSpan from "./ErrorSpan";
+import BillModal from "./BillModal";
+
 import BillElement from "./BillElement";
-import messageDialog from "../global/messageDialog";
-import generateBillID from "./generateBillID";
 
 // Initializing imports
-const errorSpan = new ErrorSpan();
 const billElement = new BillElement();
+const billModal = new BillModal();
 
 class SessionContent {
   constructor() {
     this._sessionContent = document.querySelector('.session-content');
-
-    this._billModal = document.querySelector('.bill-modal');
-    this._billModalForm = document.querySelector('.bill-modal-form');
-
-    this._billNameInput = document.querySelector('#billName');
-    this._billValueInput = document.querySelector('#billValue');
-    this._billUnsharedInput = document.querySelector('#unshared');
-    this._billSubmitBtn = document.querySelector('#billSubmitBtn');
-
     this._mainContentList = document.querySelector('.list-main');
     this._secondaryContentList = document.querySelector('.list-secondary');
 
@@ -30,9 +20,6 @@ class SessionContent {
     window.addEventListener('render', this._render.bind(this));
     this._sessionContent.addEventListener('click', this._handleSessionContentClickEvents.bind(this));
 
-    // Bill modal
-    this._billModal.addEventListener('mousedown', this._handleBillModalClickEvents.bind(this));
-    this._billModalForm.addEventListener('submit', this._handleBillModalFormSubmission.bind(this));
   };
 
   _handleSessionContentClickEvents(e) {
@@ -49,17 +36,6 @@ class SessionContent {
     if(e.target.classList.contains('editBillIcon')) {
       return this._editBill(e);
     };
-  };
-
-  _handleBillModalFormSubmission(e) {
-    e.preventDefault();
-
-    const editingBillID = this._billModalForm.getAttribute('data-editing');
-    if(!editingBillID) {
-      return this._addNewBill();
-    };
-
-    return this._updateBill(editingBillID);
   };
 
   _render() {
@@ -99,74 +75,7 @@ class SessionContent {
     const contentList = e.target.parentElement.parentElement.lastElementChild;
     const billOwner = this._findBillOwner(contentList); // main for user, secondary for who the user is sharing with.
 
-    this._displayBillModal(billOwner);
-  };
-
-  _addNewBill() {
-    if(!this._compareValueAndUnshared()) {
-      return ;
-    };
-
-    const validBillName = this._validateBillName(this._billNameInput);
-    const validBillValue = this._isNumber(this._billValueInput);
-    const validUnsharedValue = this._isNumber(this._billUnsharedInput);
-
-    if(!validBillName || !validBillValue || !validUnsharedValue) {
-      return ;
-    };
-
-    const newBill = {
-      id: generateBillID(),
-      name: this._billNameInput.value,
-      value: +this._billValueInput.value,
-      unshared: +this._billUnsharedInput.value,
-      splitValue: (+this._billValueInput.value - +this._billUnsharedInput.value) / 2,
-    };
-
-    const billOwner = this._billModalForm.getAttribute('data-bill-owner');
-
-    if(billOwner === 'main') {
-      sessionInfo.billsPaid.push(newBill);
-    } else if(billOwner === 'secondary') {
-      sessionInfo.billsToPay.push(newBill);
-    };
-
-    this._hideBillModal();
-    messageDialog('New bill added', 'success');
-    
-    dispatchEvent(new Event('updateSessionInfo'));
-    dispatchEvent(new Event('render'));
-  };
-
-
-  _validateBillName(input) {
-    const value = input.value;
-    const inputFormGroup = input.parentElement;
-
-    const re = /.*[a-zA-Z].*/; // ensuring at least 1 letter is passed anywhere within the string.
-    
-    if(!re.test(value)) {
-      errorSpan.display(inputFormGroup, 'Bill name must contain at least 1 letter.');
-      return false;
-    };
-
-    errorSpan.hide(inputFormGroup);
-    return true;
-  };
-  
-  _isNumber(input) {
-    const value = input.value;
-    const inputFormGroup = input.parentElement;
-
-    const re = /^\d+(\.\d+)?$/;
-
-    if(!re.test(value)) {
-      errorSpan.display(inputFormGroup, 'Please enter a valid number.')
-      return false;
-    };
-
-    errorSpan.hide(inputFormGroup);
-    return true;
+    billModal.display(billOwner);
   };
 
   _editBill(e) {
@@ -174,154 +83,10 @@ class SessionContent {
     const contentList = e.target.closest('.session-content-container-list');
     const billOwner = this._findBillOwner(contentList);
 
-    this._displayBillModal(billOwner, billID);
-    this._populateBillModal(billOwner, billID);
+    billModal.display(billOwner, billID);
+    billModal.populate(billOwner, billID);
   };
-
-  _updateBill(billID) {
-    if(!this._compareValueAndUnshared()) {
-      return ;
-    };
-
-    const validBillName = this._validateBillName(this._billNameInput);
-    const validBillValue = this._isNumber(this._billValueInput);
-    const validUnsharedValue = this._isNumber(this._billUnsharedInput);
-
-    if(!validBillName || !validBillValue || !validUnsharedValue) {
-      return ;
-    };
-
-    const updatedBill = {
-      id: billID,
-      name: this._billNameInput.value,
-      value: +this._billValueInput.value,
-      unshared: +this._billUnsharedInput.value,
-      splitValue: (+this._billValueInput.value - +this._billUnsharedInput.value) / 2,
-    };
-    
-    const billOwner = this._billModalForm.getAttribute('data-bill-owner');
-    if(billOwner === 'main') {
-      const billIndex = sessionInfo.billsPaid.findIndex((bill) => bill.id === updatedBill.id);
-      sessionInfo.billsPaid[billIndex] = updatedBill;
-    } else if(billOwner === 'secondary') {
-      const billIndex = sessionInfo.billsToPay.findIndex((bill) => bill.id === updatedBill.id);
-      sessionInfo.billsToPay[billIndex] = updatedBill;
-    };
-
-    this._hideBillModal();
-    messageDialog('Bill edited', 'success');
-    
-    dispatchEvent(new Event('updateSessionInfo'));
-    dispatchEvent(new Event('render'));
-  };
-
-  _compareValueAndUnshared() {
-    errorSpan.hide(this._billValueInput.parentElement);
-    errorSpan.hide(this._billUnsharedInput.parentElement);
-    
-    const billValue = this._billValueInput.value;
-    const unsharedValue = this._billUnsharedInput.value;
-
-    if(+billValue <= 0) {
-      errorSpan.display(this._billValueInput.parentElement, 'Bill value can not be equal to or below 0.');
-      return false;
-    };
-
-    if(+unsharedValue < 0) {
-      errorSpan.display(this._billUnsharedInput.parentElement, 'Unshared value can not be a negative value.');
-      return false;
-    };
-
-
-    if(+billValue < +unsharedValue) {
-      errorSpan.display(this._billUnsharedInput.parentElement, `Unshared value can not exceed the bill's value.`);
-      return false;
-    };
-
-    return true;
-  };
-
-  _handleBillModalClickEvents(e) {
-    e.stopImmediatePropagation();
-
-    if(
-      e.target.className === this._billModal.className ||
-      e.target.className === 'container' ||
-      e.target.classList.contains('cancelBtn')
-    ) {
-      return this._hideBillModal();
-    };
-  };
-
-  _displayBillModal(billOwner, editingBillID = false) {
-    const billOwnerNameSpan = document.querySelector('#billOwnerName');
-    billOwnerNameSpan.textContent = billOwner === 'main' ? 'you' : sessionInfo.sharedWith;
-    this._billModalForm.setAttribute('data-bill-owner', billOwner);
-
-    if(editingBillID) {
-      this._billModalForm.setAttribute('data-editing', editingBillID);
-      this._startBillModalEditMode();
-    };
-
-    this._billModal.style.display = 'block';
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        this._billModal.style.opacity = '1';
-      });
-    });
-  };
-
-  _hideBillModal() {
-    this._billModalForm.removeAttribute('data-bill-owner');
-    this._billModalForm.removeAttribute('data-editing');
-
-    this._billModal.style.opacity = '0';
-    this._clearBillModalForm();
-    setTimeout(() => {
-      this._billModal.style.display = 'none'
-      this._endBillModalEditMode();
-    }, 200);
-    
-  };
-
-  _clearBillModalForm() {
-    this._billNameInput.value = '';
-    this._billValueInput.value = '';
-    this._billUnsharedInput.value = 0;
-
-    errorSpan.hide(this._billNameInput.parentElement);
-    errorSpan.hide(this._billValueInput.parentElement);
-    errorSpan.hide(this._billUnsharedInput.parentElement);
-  };
-
-  _startBillModalEditMode() {
-    this._billSubmitBtn.textContent = 'Update bill';
-
-    const billModalFormTitle = document.querySelector('.bill-modal-form .form-group-title p');
-    billModalFormTitle.firstChild.textContent = 'Editing a bill paid by ';
-  };
-
-  _endBillModalEditMode() {
-    this._billSubmitBtn.textContent = 'Add bill';
-
-    const billModalFormTitle = document.querySelector('.bill-modal-form .form-group-title p');
-    billModalFormTitle.firstChild.textContent = 'Adding a bill paid by ';
-  };
-
-  _populateBillModal(billOwner, billID) {
-    let selectedBill;
-    if(billOwner === 'main') {
-      selectedBill = sessionInfo.billsPaid.find(({ id }) => id === billID);
-    } else if(billOwner === 'secondary') {
-      selectedBill = sessionInfo.billsToPay.find(({ id }) => id === billID);
-    };
-
-    this._billNameInput.value = selectedBill.name;
-    this._billValueInput.value = selectedBill.value;
-    this._billUnsharedInput.value = selectedBill.unshared;
-  };
-
+  
   _findBillOwner(contentList) {
     let billOwner;
     

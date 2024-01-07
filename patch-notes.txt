@@ -1,17 +1,3 @@
 Frontend:
 
-  - messageDialog.js:
-
-    - Fixed a bug with how the dialog element is removed, which caused errors when bills were being added quickly.
-
-  - SessionContent.js:
-
-    - Added _startBillModalEditMode() and _endBillModalEditMode() to dynamically change the text content of the title and submit button for the bill modal form when editing a bill.
-    
-    - Abolished _appendNewBill().
-
-    - Added an eventListener for the custom "render" event, which will call _render(). This function will clear the bill elements using _clearContentList(), then load them again after the sessionInfo object was updated through the _addNewBill() or _editBill().
-
-    - _clearContentList() will be used later down the line.
-
-    - The functionality for adding/editing bills is complete currently.
+  - Created a new BillModal class under BillModal.js to handle everything related to it, as the SessionContent class was getting too large and hard to keep track of. Submitting this as a separate patch before continuing.

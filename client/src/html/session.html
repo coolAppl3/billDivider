@@ -142,7 +142,11 @@
                 id="updateSharedWith"
               ></i>
               <p class="session-header-container-item-title">
-                <span id="sharedWith"></span>'s total
+                <span
+                  id="sharedWith"
+                  class="sharedWithSpan"
+                ></span
+                >'s total
               </p>
               <p class="session-header-container-item-value">
                 <span id="sharedWithTotal">0.00</span>
@@ -207,7 +211,11 @@
             <div class="session-content-container-header">
               <h3 class="expandList">
                 <i class="fa-solid fa-chevron-right"></i
-                ><span id="sharedWithListHeader"></span>'s bills
+                ><span
+                  id="sharedWithListHeader"
+                  class="sharedWithSpan"
+                ></span
+                >'s bills
               </h3>
               <button class="btn btn-border-danger clearListBtn">Clear</button>
               <button class="btn btn-cta addBillBtn">Add a bill</button>
@@ -301,13 +309,35 @@
           </div>
 
           <div class="form-group">
-            <label for="unshared">Value of unshared items</label>
+            <label for="unshared">Value of items only for you</label>
             <input
               type="text"
               id="unshared"
               value="0"
             />
             <span class="error-span"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="unshared"
+              >Value of items only for <span class="sharedWithSpan"></span
+            ></label>
+            <input
+              type="text"
+              id="unsharedSecondary"
+              value="0"
+            />
+            <span class="error-span"></span>
+          </div>
+
+          <div class="form-group checkbox-group">
+            <div
+              class="checkbox"
+              id="onlyForSharedWith"
+            >
+              <span class="check-icon"></span>
+            </div>
+            <p>Mark bill as only for <span class="sharedWithSpan"></span></p>
           </div>
 
           <div class="form-group">
