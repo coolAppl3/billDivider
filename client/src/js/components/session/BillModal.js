@@ -17,12 +17,18 @@ class BillModal {
     this._billUnsharedInput = document.querySelector('#unshared');
     this._billSubmitBtn = document.querySelector('#billSubmitBtn');
 
+    // Checkbox form group
+    this._toBeFullyPaidCheckbox = document.querySelector('#toBeFullyPaid');
+    this._toBeFullyPaidBySpan = document.querySelector('#toBeFullyPaidBy');
+
     this._loadEventListeners();
   };
 
   _loadEventListeners() {
     this._billModal.addEventListener('mousedown', this._handleClickEvents.bind(this));
     this._billModalForm.addEventListener('submit', this._handleFormSubmission.bind(this));
+
+    this._toBeFullyPaidCheckbox.addEventListener('click', this._displayCheckBox.bind(this));
   };
 
   _handleFormSubmission(e) {
@@ -61,15 +67,24 @@ class BillModal {
       return ;
     };
 
+    let toBeFullyPaid;
+    if(this._toBeFullyPaidCheckbox.classList.contains('checked')) {
+      toBeFullyPaid = true;
+    } else {
+      toBeFullyPaid = false;
+    };
+
+    const billOwner = this._billModalForm.getAttribute('data-bill-owner');
+
     const newBill = {
       id: generateBillID(),
       name: this._billNameInput.value,
       value: +this._billValueInput.value,
       unshared: +this._billUnsharedInput.value,
       splitValue: (+this._billValueInput.value - +this._billUnsharedInput.value) / 2,
+      toBeFullyPaid,
+      billOwner,
     };
-
-    const billOwner = this._billModalForm.getAttribute('data-bill-owner');
 
     if(billOwner === 'main') {
       sessionInfo.billsPaid.push(newBill);
@@ -97,15 +112,25 @@ class BillModal {
       return ;
     };
 
+    let toBeFullyPaid;
+    if(this._toBeFullyPaidCheckbox.classList.contains('checked')) {
+      toBeFullyPaid = true;
+    } else {
+      toBeFullyPaid = false;
+    };
+
+    const billOwner = this._billModalForm.getAttribute('data-bill-owner');
+    
     const updatedBill = {
       id: billID,
       name: this._billNameInput.value,
       value: +this._billValueInput.value,
       unshared: +this._billUnsharedInput.value,
       splitValue: (+this._billValueInput.value - +this._billUnsharedInput.value) / 2,
+      toBeFullyPaid,
+      billOwner,
     };
     
-    const billOwner = this._billModalForm.getAttribute('data-bill-owner');
     if(billOwner === 'main') {
       const billIndex = sessionInfo.billsPaid.findIndex((bill) => bill.id === updatedBill.id);
       sessionInfo.billsPaid[billIndex] = updatedBill;
@@ -186,6 +211,8 @@ class BillModal {
     billOwnerNameSpan.textContent = billOwner === 'main' ? 'you' : sessionInfo.sharedWith;
     this._billModalForm.setAttribute('data-bill-owner', billOwner);
 
+    this._toBeFullyPaidBySpan.textContent = billOwner === 'main' ? sessionInfo.sharedWith : 'you';
+
     if(editingBillID) {
       this._billModalForm.setAttribute('data-editing', editingBillID);
       this._startEditMode();
@@ -205,6 +232,7 @@ class BillModal {
     this._billModalForm.removeAttribute('data-editing');
 
     this._billModal.style.opacity = '0';
+    this._toBeFullyPaidCheckbox.classList.remove('checked');
     this._clearForm();
 
     setTimeout(() => {
@@ -251,6 +279,16 @@ class BillModal {
     this._billUnsharedInput.value = selectedBill.unshared;
   };
 
+  _displayCheckBox(e) {
+    e.stopImmediatePropagation();
+    
+    if(this._toBeFullyPaidCheckbox.classList.contains('checked')) {
+      this._toBeFullyPaidCheckbox.classList.remove('checked');
+    } else {
+      this._toBeFullyPaidCheckbox.classList.add('checked');
+      
+    };
+  };
 };
 
 export default BillModal;

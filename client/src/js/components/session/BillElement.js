@@ -1,3 +1,4 @@
+import sessionInfo from "./SessionInfo";
 import addThousandComma from "./addThousandComma";
 
 class BillElement {
@@ -7,6 +8,13 @@ class BillElement {
 
     billDiv.appendChild(this._createBillNameElement(billItem.name));
     billDiv.appendChild(this._createBillValueElement(billItem.value));
+
+    if(billItem.toBeFullyPaid) {
+      billDiv.appendChild(this._createToBeFullyPaidAlert(billItem.billOwner));
+      billDiv.appendChild(this._createIconContainer());
+      return billDiv;
+    };
+    
     billDiv.appendChild(this._createBillUnsharedElement(billItem.unshared));
     billDiv.appendChild(this._createBillSplitValueElement(billItem.splitValue));
     billDiv.appendChild(this._createIconContainer());
@@ -81,6 +89,22 @@ class BillElement {
     iconContainer.appendChild(deleteIcon);
     
     return iconContainer;
+  };
+
+  _createToBeFullyPaidAlert(billOwner) {
+    const toBeFullyPaidAlert = document.createElement('p');
+    toBeFullyPaidAlert.className = 'toBeFullyPaidAlert';
+    toBeFullyPaidAlert.appendChild(document.createTextNode('Fully paid by '));
+
+    let billToBePaidBy;
+    if(billOwner === 'main') {
+      billToBePaidBy = sessionInfo.sharedWith;
+    } else {
+      billToBePaidBy = 'you'
+    };
+
+    toBeFullyPaidAlert.appendChild(this._createSpanElement(billToBePaidBy));
+    return toBeFullyPaidAlert;
   };
 };
 
