@@ -318,6 +318,13 @@ a {
     font-weight: 500;
   }
 
+  .label-info {
+    display: block;
+    font-size: 1.2rem;
+    margin-bottom: 4px;
+    color: #ceccd5;
+  }
+  
   input {
     width: 100%;
     border: 1px solid rgba(200, 200, 200, 0.35);
@@ -328,6 +335,12 @@ a {
     font-weight: 400;
     font-size: 1.4rem;
     transition: border-color 200ms;
+
+    &::placeholder {
+      font-size: 1.4rem;
+      font-family: $main-font;
+      font-weight: 500;
+    }
 
     &#password {
       padding-right: 3.5rem;

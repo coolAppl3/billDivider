@@ -309,7 +309,10 @@
           </div>
 
           <div class="form-group">
-            <label for="unshared">Value of items only for you</label>
+            <label for="unshared">Unshared</label>
+            <span class="label-info"
+              >Total value of items not being shared</span
+            >
             <input
               type="text"
               id="unshared"
@@ -318,26 +321,14 @@
             <span class="error-span"></span>
           </div>
 
-          <div class="form-group">
-            <label for="unshared"
-              >Value of items only for <span class="sharedWithSpan"></span
-            ></label>
-            <input
-              type="text"
-              id="unsharedSecondary"
-              value="0"
-            />
-            <span class="error-span"></span>
-          </div>
-
           <div class="form-group checkbox-group">
             <div
               class="checkbox"
-              id="onlyForSharedWith"
+              id="toBeFullyPaid"
             >
               <span class="check-icon"></span>
             </div>
-            <p>Mark bill as only for <span class="sharedWithSpan"></span></p>
+            <p>To be fully paid by <span id="toBeFullyPaidBy"></span></p>
           </div>
 
           <div class="form-group">

@@ -1,3 +1,16 @@
 Frontend:
 
-  - Created a new BillModal class under BillModal.js to handle everything related to it, as the SessionContent class was getting too large and hard to keep track of. Submitting this as a separate patch before continuing.
+  - BillModal.js:
+
+    - Added the option to mark a bill to be fully paid by the other party.
+
+    - If the above options is checked, the resulting newBill/updatedBill object will reflect that in a boolean key-value pair.
+
+    - newBill and updatedBill objects now contain a billOwner key-value pair.
+  
+  - BillElement.js:
+
+    - Added an if statement to check if the bill is supposed to be fully paid by the other party, to remove the unshared and splitValue elements.
+
+    - If the bill is edited to exclude the aforementioned option, the bill will be displayed normally after the app renders.
+  

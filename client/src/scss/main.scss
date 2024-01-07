@@ -574,6 +574,11 @@
               overflow-wrap: break-word;
               word-break: break-all;
             }
+
+            &.toBeFullyPaidAlert {
+              background: $secondary;
+              border-radius: 3px;
+            }
           }
 
           .icon-container {
@@ -724,6 +729,24 @@
     max-width: 35rem;
 
     .form-group {
+
+      &-inner {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+
+        input {
+          grid-column: span 5;
+        }
+
+        .btn {
+          grid-column: span 3;
+          margin-left: 1rem;
+        }
+
+        .error-span {
+          grid-column: span 8;
+        }
+      }
 
       p {
         font-size: 1.6rem;
