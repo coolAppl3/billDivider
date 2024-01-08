@@ -21,10 +21,15 @@ class SessionInfo {
 
   _calculateYourTotal() {
     let total = 0;
-    
-    this.billsPaid.forEach((bill) => {
+
+    for(let bill of this.billsPaid) {
+      if(bill.directlyOwed) {
+        total += bill.value;
+        continue;
+      };
+      
       total += bill.splitValue;
-    });
+    };
 
     return total;
   };
@@ -32,9 +37,14 @@ class SessionInfo {
   _calculateSharedWithTotal() {
     let total = 0;
     
-    this.billsToPay.forEach((bill) => {
+    for(let bill of this.billsToPay) {
+      if(bill.directlyOwed) {
+        total += bill.value;
+        continue;
+      };
+      
       total += bill.splitValue;
-    });
+    };
 
     return total;
   };

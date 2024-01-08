@@ -18,8 +18,8 @@ class BillModal {
     this._billSubmitBtn = document.querySelector('#billSubmitBtn');
 
     // Checkbox form group
-    this._toBeFullyPaidCheckbox = document.querySelector('#toBeFullyPaid');
-    this._toBeFullyPaidBySpan = document.querySelector('#toBeFullyPaidBy');
+    this._directlyOwedCheckbox = document.querySelector('#directlyOwed');
+    this._directlyOwedBySpan = document.querySelector('#directlyOwedBy');
 
     this._loadEventListeners();
   };
@@ -28,7 +28,7 @@ class BillModal {
     this._billModal.addEventListener('mousedown', this._handleClickEvents.bind(this));
     this._billModalForm.addEventListener('submit', this._handleFormSubmission.bind(this));
 
-    this._toBeFullyPaidCheckbox.addEventListener('click', this._displayCheckBox.bind(this));
+    this._directlyOwedCheckbox.addEventListener('click', this._displayCheckBox.bind(this));
   };
 
   _handleFormSubmission(e) {
@@ -67,11 +67,11 @@ class BillModal {
       return ;
     };
 
-    let toBeFullyPaid;
-    if(this._toBeFullyPaidCheckbox.classList.contains('checked')) {
-      toBeFullyPaid = true;
+    let directlyOwed;
+    if(this._directlyOwedCheckboxChecked()) {
+      directlyOwed = true;
     } else {
-      toBeFullyPaid = false;
+      directlyOwed = false;
     };
 
     const billOwner = this._billModalForm.getAttribute('data-bill-owner');
@@ -82,7 +82,7 @@ class BillModal {
       value: +this._billValueInput.value,
       unshared: +this._billUnsharedInput.value,
       splitValue: (+this._billValueInput.value - +this._billUnsharedInput.value) / 2,
-      toBeFullyPaid,
+      directlyOwed,
       billOwner,
     };
 
@@ -112,11 +112,11 @@ class BillModal {
       return ;
     };
 
-    let toBeFullyPaid;
-    if(this._toBeFullyPaidCheckbox.classList.contains('checked')) {
-      toBeFullyPaid = true;
+    let directlyOwed;
+    if(this._directlyOwedCheckboxChecked()) {
+      directlyOwed = true;
     } else {
-      toBeFullyPaid = false;
+      directlyOwed = false;
     };
 
     const billOwner = this._billModalForm.getAttribute('data-bill-owner');
@@ -127,7 +127,7 @@ class BillModal {
       value: +this._billValueInput.value,
       unshared: +this._billUnsharedInput.value,
       splitValue: (+this._billValueInput.value - +this._billUnsharedInput.value) / 2,
-      toBeFullyPaid,
+      directlyOwed,
       billOwner,
     };
     
@@ -211,7 +211,7 @@ class BillModal {
     billOwnerNameSpan.textContent = billOwner === 'main' ? 'you' : sessionInfo.sharedWith;
     this._billModalForm.setAttribute('data-bill-owner', billOwner);
 
-    this._toBeFullyPaidBySpan.textContent = billOwner === 'main' ? sessionInfo.sharedWith : 'you';
+    this._directlyOwedBySpan.textContent = billOwner === 'main' ? sessionInfo.sharedWith : 'you';
 
     if(editingBillID) {
       this._billModalForm.setAttribute('data-editing', editingBillID);
@@ -232,7 +232,7 @@ class BillModal {
     this._billModalForm.removeAttribute('data-editing');
 
     this._billModal.style.opacity = '0';
-    this._toBeFullyPaidCheckbox.classList.remove('checked');
+    this._directlyOwedCheckbox.classList.remove('checked');
     this._clearForm();
 
     setTimeout(() => {
@@ -277,17 +277,25 @@ class BillModal {
     this._billNameInput.value = selectedBill.name;
     this._billValueInput.value = selectedBill.value;
     this._billUnsharedInput.value = selectedBill.unshared;
+
+    if(selectedBill.directlyOwed) {
+      this._directlyOwedCheckbox.classList.add('checked');
+    };
   };
 
   _displayCheckBox(e) {
     e.stopImmediatePropagation();
     
-    if(this._toBeFullyPaidCheckbox.classList.contains('checked')) {
-      this._toBeFullyPaidCheckbox.classList.remove('checked');
+    if(this._directlyOwedCheckbox.classList.contains('checked')) {
+      this._directlyOwedCheckbox.classList.remove('checked');
     } else {
-      this._toBeFullyPaidCheckbox.classList.add('checked');
+      this._directlyOwedCheckbox.classList.add('checked');
       
     };
+  };
+
+  _directlyOwedCheckboxChecked() {
+    return this._directlyOwedCheckbox.classList.contains('checked');
   };
 };
 

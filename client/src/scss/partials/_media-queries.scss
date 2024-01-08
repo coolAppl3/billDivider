@@ -113,6 +113,13 @@
           .bill {
             grid-template-columns: repeat(1, 1fr);
 
+            p {
+
+              &.directlyOwedTag {
+                grid-column: span 1;
+              }
+            }
+
             .icon-container {
               padding: 0;
 
