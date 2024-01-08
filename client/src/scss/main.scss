@@ -547,6 +547,7 @@
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           column-gap: 2rem;
+          row-gap: 1rem;
 
           &:last-child {
             margin-bottom: 0;
@@ -575,9 +576,16 @@
               word-break: break-all;
             }
 
-            &.toBeFullyPaidAlert {
+            &.directlyOwedTag {
               background: $secondary;
-              border-radius: 3px;
+              border-radius: 5px;
+              grid-column: span 2;
+              display: block;
+              text-align: center;
+
+              span {
+                color: $main;
+              }
             }
           }
 

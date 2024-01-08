@@ -2,15 +2,26 @@ Frontend:
 
   - BillModal.js:
 
-    - Added the option to mark a bill to be fully paid by the other party.
+    - Bills to be fully paid by the other party are now referred to as "directly owed". any mention of "toBeFullyPaid" has been renamed to directlyOwed.
 
-    - If the above options is checked, the resulting newBill/updatedBill object will reflect that in a boolean key-value pair.
+    - Fixed populate() not dynamically setting the directlyOwed checkbox when launching the modal.
 
-    - newBill and updatedBill objects now contain a billOwner key-value pair.
+    - Added __directlyOwedCheckboxChecked() for the sake of better readability.
   
-  - BillElement.js:
 
-    - Added an if statement to check if the bill is supposed to be fully paid by the other party, to remove the unshared and splitValue elements.
+  BillElement.js:
 
-    - If the bill is edited to exclude the aforementioned option, the bill will be displayed normally after the app renders.
+    - Renamed _createToBeFullyPaidAlert() to _createDirectlyOwedTag().
+
+    - _createDirectlyOwedTag() no longer includes a span, but rather simply states "Directly owed".
   
+  
+  -SessionInfo.js:
+
+    - Changed how both totals are calculated to take into account whether or not a bill is directly owed.
+  
+
+  session.html:
+
+    - Refactored the relevant ID's to use the directlyOwed logic.
+
