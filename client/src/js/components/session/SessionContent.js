@@ -2,6 +2,7 @@ import sessionInfo from "./SessionInfo";
 import BillModal from "./BillModal";
 
 import BillElement from "./BillElement";
+import dispatchMainGlobalEvents from "./dispatchMainGlobalEvents";
 
 // Initializing imports
 const billElement = new BillElement();
@@ -35,6 +36,10 @@ class SessionContent {
 
     if(e.target.classList.contains('editBillIcon')) {
       return this._editBill(e);
+    };
+
+    if(e.target.classList.contains('removeBillIcon')) {
+      return this._deleteBill(e);
     };
   };
 
@@ -85,6 +90,46 @@ class SessionContent {
 
     billModal.display(billOwner, billID);
     billModal.populate(billOwner, billID);
+  };
+
+  _deleteBill(e) {
+    const billElement = e.target.parentElement.parentElement;
+
+    const billID = billElement.getAttribute('data-id');
+    const billOwner = billElement.getAttribute('data-bill-owner');
+
+    let billIndex;
+    if(billOwner === 'main') {
+      billIndex = sessionInfo.billsPaid.findIndex(({ id }) => id === billID);
+    } else if(billOwner === 'secondary') {
+      billIndex = sessionInfo.billsToPay.findIndex(({ id }) => id === billID);
+    };
+
+    if(billIndex === -1) {
+      return ;
+    };
+
+    if(billOwner === 'main') {
+      sessionInfo.billsPaid.splice(billIndex, 1);
+    } else if(billOwner === 'secondary') {
+      sessionInfo.billsToPay.splice(billIndex, 1);
+    };
+
+    this._slideAndRemoveBill(billElement);
+    setTimeout(() => dispatchMainGlobalEvents(), 250); // ensuring the animation has time to take place.
+  };
+  
+  _slideAndRemoveBill(billElement) {
+    if(window.innerWidth < 500) {
+      billElement.style.transform = 'translateX(-30rem)';
+    } else {
+      billElement.style.transform = 'translateX(-60rem)';
+    };
+
+    billElement.style.opacity = '0';
+    billElement.style.filter = 'blur(3px)';
+
+    setTimeout(() => billElement.remove(), 250);
   };
   
   _findBillOwner(contentList) {

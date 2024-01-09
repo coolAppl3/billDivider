@@ -121,14 +121,22 @@
             }
 
             .icon-container {
-              padding: 0;
+              width: 100%;
+              // display: flex;
+              // justify-content: space-between;
+              // align-items: center;
+              display: grid;
+              grid-template-areas: "b a";
+              justify-content: space-between;
 
-              .fa-trash-can {
-                display: none;
-              }
-
-              .fa-pen-to-square {
+              i {
                 padding: 1rem;
+
+                &.removeBillIcon {
+                  margin-left: 0;
+                  grid-area: b;
+  
+                }
               }
               
             }

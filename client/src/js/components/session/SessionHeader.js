@@ -62,7 +62,7 @@ class SessionHeader {
   };
 
   _setCurrency() {
-    // This will set the currency throughout the page, not just the header.
+    // This will set the currency throughout the page if they exist, not just the header.
     this._currencySpans.forEach((span) => span.textContent = sessionInfo.currency);
   };
 };

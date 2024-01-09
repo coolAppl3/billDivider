@@ -1,27 +1,15 @@
 Frontend:
 
-  - BillModal.js:
+  - General:
 
-    - Bills to be fully paid by the other party are now referred to as "directly owed". any mention of "toBeFullyPaid" has been renamed to directlyOwed.
+    - Added "user-scalable=no" in the meta tag for session.html, signIn.html, and signUp.html. This is to prevent mobile phone browsers from automatically zooming in on any inputs when focused, as it's not at all needed in this app, and ends up worsening the user experience.
 
-    - Fixed populate() not dynamically setting the directlyOwed checkbox when launching the modal.
-
-    - Added __directlyOwedCheckboxChecked() for the sake of better readability.
+    - Added dispatchMainGlobalEvents() under components/session to dispatch frequent main events. This will help avoid a factoring nightmare if more features are added that rely on dispatching events.
   
+  - InitSession.js:
 
-  BillElement.js:
+    - The main .session element is now hidden with 0 opacity, and is controlled through the _displayMainSessionElement() and _hideMainSessionElement() functions. This is to prevent any unwanted visual bugs or user confusion due to the presence of a scrollbar for the rest of the page, while the start modal is set to "position: fixed".
 
-    - Renamed _createToBeFullyPaidAlert() to _createDirectlyOwedTag().
+  - SessionContent.js:
 
-    - _createDirectlyOwedTag() no longer includes a span, but rather simply states "Directly owed".
-  
-  
-  -SessionInfo.js:
-
-    - Changed how both totals are calculated to take into account whether or not a bill is directly owed.
-  
-
-  session.html:
-
-    - Refactored the relevant ID's to use the directlyOwed logic.
-
+    - Add functionality to delete one bill at a time using the delete icon. No confirmation modal will be used here.
