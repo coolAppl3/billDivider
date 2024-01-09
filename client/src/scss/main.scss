@@ -396,7 +396,10 @@
 
 // session
 .session {
-
+  display: none; // Is shown once the session is started using JS.
+  opacity: 0;
+  transition: opacity 200ms;
+  
   &-header {
     box-shadow: 0 0 10px 0 inset rgba(134, 133, 239, 0.45);
     background: $secondary;
@@ -549,6 +552,8 @@
           column-gap: 2rem;
           row-gap: 1rem;
 
+          transition: transform 300ms, opacity 300ms, filter 200ms;
+
           &:last-child {
             margin-bottom: 0;
           }
@@ -640,8 +645,6 @@
   margin-top: 6rem;
 
   transition: transform 200ms;
-  // display: none;
-  // transform: scale(0);
 
   .container {
     height: 100%;

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
 
     <!-- Fonts -->
@@ -33,7 +33,7 @@
 
     <!-- Title -->
     <title>Session - Bill Divider</title>
-  <script defer src="js/session-a77425392d40a6c6d86d.js"></script></head>
+  <script defer src="js/session-5232f8d6504f9d55e125.js"></script></head>
   <body>
     <!-- Main Navbar -->
     <nav class="main-nav bg-secondary">
@@ -131,7 +131,7 @@
             <div class="session-header-container-item">
               <p class="session-header-container-item-title">Your total</p>
               <p class="session-header-container-item-value">
-                <span id="yourTotal">0</span>
+                <span id="yourTotal">0.00</span>
                 <span class="currency">RSD</span>
               </p>
             </div>
@@ -142,10 +142,14 @@
                 id="updateSharedWith"
               ></i>
               <p class="session-header-container-item-title">
-                <span id="sharedWith"></span> total
+                <span
+                  id="sharedWith"
+                  class="sharedWithSpan"
+                ></span
+                >'s total
               </p>
               <p class="session-header-container-item-value">
-                <span id="sharedWithTotal">0</span>
+                <span id="sharedWithTotal">0.00</span>
                 <span class="currency">RSD</span>
               </p>
             </div>
@@ -158,7 +162,7 @@
                 You're owed
               </p>
               <p class="session-header-container-item-value">
-                <span id="debtResultValue">0</span>
+                <span id="debtResultValue">0.00</span>
                 <span class="currency">RSD</span>
               </p>
             </div>
@@ -177,134 +181,50 @@
         <!-- Session Content -->
         <div class="session-content">
           <!-- Person 1 (user) -->
-          <div class="session-content-container person-1">
+          <div
+            class="session-content-container"
+            id="content-main"
+          >
             <!-- Header -->
             <div class="session-content-container-header">
-              <h3><i class="fa-solid fa-chevron-down"></i>Your bills</h3>
-              <button class="btn btn-border-danger">Clear</button>
-              <button class="btn btn-cta">Add a bill</button>
+              <h3 class="expandList">
+                <i class="fa-solid fa-chevron-right"></i>Your bills
+              </h3>
+              <button class="btn btn-border-danger clearListBtn">Clear</button>
+              <button class="btn btn-cta addBillBtn">Add a bill</button>
             </div>
 
             <div class="h-line"></div>
 
             <!-- List -->
-            <div class="session-content-container-list">
-              <div class="bill">
-                <p class="bill-name">Name: <span>Coffee</span></p>
-                <p class="bill-value">Total value: <span>500</span></p>
-                <p class="bill-nonShared">
-                  Unshared:
-                  <span>0</span>
-                </p>
-                <p class="bill-splitValue">
-                  Split value:
-                  <span>250</span>
-                </p>
-
-                <div class="icon-container">
-                  <i
-                    class="fa-solid fa-pen-to-square"
-                    title="Edit bill"
-                  ></i>
-                  <i
-                    class="fa-solid fa-trash-can"
-                    title="Remove bill"
-                  ></i>
-                </div>
-              </div>
-            </div>
+            <div class="session-content-container-list list-main"></div>
           </div>
 
           <!-- --- --- --- -->
 
           <!-- Person 2 (sharedWith) -->
-          <div class="session-content-container person-2">
+          <div
+            class="session-content-container"
+            id="content-secondary"
+          >
             <!-- Header -->
             <div class="session-content-container-header">
-              <h3>
-                <i class="fa-solid fa-chevron-down"></i
-                ><span class="sharedWith">Yanal</span>'s bills
+              <h3 class="expandList">
+                <i class="fa-solid fa-chevron-right"></i
+                ><span
+                  id="sharedWithListHeader"
+                  class="sharedWithSpan"
+                ></span
+                >'s bills
               </h3>
-              <button class="btn btn-border-danger">Clear</button>
-              <button class="btn btn-cta">Add a bill</button>
+              <button class="btn btn-border-danger clearListBtn">Clear</button>
+              <button class="btn btn-cta addBillBtn">Add a bill</button>
             </div>
 
             <div class="h-line"></div>
 
             <!-- List -->
-            <div class="session-content-container-list">
-              <div class="bill">
-                <p class="bill-name">Name: <span>Maxi</span></p>
-                <p class="bill-value">Total value: <span>3500</span></p>
-                <p class="bill-nonShared">
-                  Unshared:
-                  <span>1000</span>
-                </p>
-                <p class="bill-splitValue">
-                  Split value:
-                  <span>1250</span>
-                </p>
-
-                <div class="icon-container">
-                  <i
-                    class="fa-solid fa-pen-to-square"
-                    title="Edit bill"
-                  ></i>
-                  <i
-                    class="fa-solid fa-trash-can"
-                    title="Remove bill"
-                  ></i>
-                </div>
-              </div>
-
-              <div class="bill">
-                <p class="bill-name">Name: <span>Maxi</span></p>
-                <p class="bill-value">Total value: <span>3500</span></p>
-                <p class="bill-nonShared">
-                  Unshared:
-                  <span>1000</span>
-                </p>
-                <p class="bill-splitValue">
-                  Split value:
-                  <span>1250</span>
-                </p>
-
-                <div class="icon-container">
-                  <i
-                    class="fa-solid fa-pen-to-square"
-                    title="Edit bill"
-                  ></i>
-                  <i
-                    class="fa-solid fa-trash-can"
-                    title="Remove bill"
-                  ></i>
-                </div>
-              </div>
-
-              <div class="bill">
-                <p class="bill-name">Name: <span>Maxi</span></p>
-                <p class="bill-value">Total value: <span>3500</span></p>
-                <p class="bill-nonShared">
-                  Unshared:
-                  <span>1000</span>
-                </p>
-                <p class="bill-splitValue">
-                  Split value:
-                  <span>1250</span>
-                </p>
-
-                <div class="icon-container">
-                  <i
-                    class="fa-solid fa-pen-to-square"
-                    title="Edit bill"
-                  ></i>
-                  <i
-                    class="fa-solid fa-trash-can"
-                    title="Remove bill"
-                  ></i>
-                </div>
-              </div>
-            </div>
+            <div class="session-content-container-list list-secondary"></div>
           </div>
         </div>
       </div>
@@ -365,41 +285,65 @@
     <div class="bill-modal">
       <div class="container">
         <form class="bill-modal-form">
+          <div class="form-group form-group-title">
+            <p class="content-p">
+              Adding a bill paid by <span id="billOwnerName"></span>
+            </p>
+          </div>
           <div class="form-group">
             <label for="billName">Bill name</label>
             <input
               type="text"
               id="billName"
             />
-            <span class="error-span">This field is required</span>
+            <span class="error-span"></span>
           </div>
 
           <div class="form-group">
-            <label for="billValue">Total value</label>
+            <label for="billValue">Bill value</label>
             <input
               type="text"
               id="billValue"
             />
-            <span class="error-span">Please enter a valid number</span>
+            <span class="error-span"></span>
           </div>
 
           <div class="form-group">
-            <label for="unshared">Total unshared bill items </label>
+            <label for="unshared">Unshared</label>
+            <span class="label-info"
+              >Total value of items not being shared</span
+            >
             <input
               type="text"
               id="unshared"
               value="0"
             />
-            <span class="error-span">Please enter a valid number</span>
+            <span class="error-span"></span>
           </div>
 
-          <div class="form-group btn-div">
-            <button
-              type="submit"
-              class="btn btn-cta"
+          <div class="form-group checkbox-group">
+            <div
+              class="checkbox"
+              id="directlyOwed"
             >
-              Add bill
-            </button>
+              <span class="check-icon"></span>
+            </div>
+            <p>To be fully paid by <span id="directlyOwedBy"></span></p>
+          </div>
+
+          <div class="form-group">
+            <div class="btn-div">
+              <button
+                type="submit"
+                class="btn btn-cta"
+                id="billSubmitBtn"
+              >
+                Add bill
+              </button>
+            </div>
+            <div class="btn-div">
+              <div class="btn btn-border-light cancelBtn">Cancel</div>
+            </div>
           </div>
         </form>
       </div>

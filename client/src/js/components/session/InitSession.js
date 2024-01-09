@@ -36,6 +36,7 @@ class InitSession {
     sessionInfo.currency = this._getSelectedCurrency() || 'RSD';
 
     this._collapseStartModal();
+    this._displayMainSessionElement();
     dispatchEvent(new Event('sessionStarted'));
   };
 
@@ -93,6 +94,8 @@ class InitSession {
 
   _displayStartModal() {
     this._startModal.style.display = 'block';
+    setTimeout(() => this._startModal.style.display = 'block', 210);
+    this._hideMainSessionElement();
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -108,6 +111,24 @@ class InitSession {
 
     const formBtn = this._startModalForm.lastElementChild.firstElementChild;
     formBtn.textContent = 'Start session';
+  };
+
+  _displayMainSessionElement() {
+    const sessionElement = document.querySelector('.session');
+    sessionElement.style.display = 'block';
+    setTimeout(() => sessionElement.style.display = 'block', 210);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        sessionElement.style.opacity = '1';
+      });
+    });
+  };
+
+  _hideMainSessionElement() {
+    const sessionElement = document.querySelector('.session');
+    sessionElement.style.opacity = '0';
+    setTimeout(() => sessionElement.style.display = 'none', 200);
   };
 };
 

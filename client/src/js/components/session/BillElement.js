@@ -3,7 +3,7 @@ import addThousandComma from "./addThousandComma";
 class BillElement {
 
   create(billItem) {
-    const billDiv = this._createParentBillElement(billItem.id);
+    const billDiv = this._createParentBillElement(billItem.id, billItem.billOwner);
 
     billDiv.appendChild(this._createBillNameElement(billItem.name));
     billDiv.appendChild(this._createBillValueElement(billItem.value));
@@ -21,10 +21,12 @@ class BillElement {
     return billDiv;
   };
 
-  _createParentBillElement(billID) {
+  _createParentBillElement(billID, billOwner) {
     const billDiv = document.createElement('div');
     billDiv.className = 'bill';
+    
     billDiv.setAttribute('data-id', billID);
+    billDiv.setAttribute('data-bill-owner', billOwner);
 
     return billDiv;
   };
