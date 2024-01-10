@@ -1,5 +1,4 @@
 import ErrorSpan from "./ErrorSpan";
-import loadingModal from '../global/loadingModal';
 import sessionInfo from "./SessionInfo";
 
 // Initializing imports

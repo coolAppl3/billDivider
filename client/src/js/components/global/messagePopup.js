@@ -1,4 +1,4 @@
-function messageDialog(message, type) {
+function messagePopup(message, type) {
   // Creating the parent div
   const dialog = document.createElement('div');
   dialog.className = 'dialog';
@@ -43,4 +43,4 @@ function messageDialog(message, type) {
   }, 2000);
 };
 
-export default messageDialog;
+export default messagePopup;

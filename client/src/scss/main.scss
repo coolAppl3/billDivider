@@ -603,11 +603,11 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            cursor: pointer;
 
             i {
               transition: filter 200ms;
               position: relative;
+              cursor: pointer;
 
               &:hover {
                 filter: brightness(0.7);

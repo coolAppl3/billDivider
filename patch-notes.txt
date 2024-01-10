@@ -2,14 +2,20 @@ Frontend:
 
   - General:
 
-    - Added "user-scalable=no" in the meta tag for session.html, signIn.html, and signUp.html. This is to prevent mobile phone browsers from automatically zooming in on any inputs when focused, as it's not at all needed in this app, and ends up worsening the user experience.
+    - Changed loadingModal.js to LoadingModal.js and set it as a class, with two static methods; display and remove.
 
-    - Added dispatchMainGlobalEvents() under components/session to dispatch frequent main events. This will help avoid a factoring nightmare if more features are added that rely on dispatching events.
+    - Renamed messageDialog() to messagePopup(), as the previous name made no sense whatsoever.
+
+    - Added ConfirmModal.js under components/global to be used throughout the application wherever needed.
   
-  - InitSession.js:
-
-    - The main .session element is now hidden with 0 opacity, and is controlled through the _displayMainSessionElement() and _hideMainSessionElement() functions. This is to prevent any unwanted visual bugs or user confusion due to the presence of a scrollbar for the rest of the page, while the start modal is set to "position: fixed".
-
   - SessionContent.js:
 
-    - Add functionality to delete one bill at a time using the delete icon. No confirmation modal will be used here.
+    - Imported, the now renamed, messagePopup().
+
+    - Deleting bills now creates a popup message to confirm it to the user.
+
+    - Deleting the final bill in a given list will now retract it.
+
+    - Added _enableClearButtons() to check the sessionInfo object for bills. If either arrays is empty, the clear button is disabled. This function is called whenever a "render" or "sessionStarted" event is detected.
+
+    - Clicking either of the clear displays the confirm modal. Functionality will be added in the next patch.
