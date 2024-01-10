@@ -1,7 +1,7 @@
 import sessionInfo from "./SessionInfo";
 
 import ErrorSpan from "./ErrorSpan";
-import messageDialog from "../global/messageDialog";
+import messagePopup from "../global/messagePopup";
 import generateBillID from "./generateBillID";
 import dispatchMainGlobalEvents from "./dispatchMainGlobalEvents";
 
@@ -94,7 +94,7 @@ class BillModal {
     };
 
     this.hide();
-    messageDialog('New bill added', 'success');
+    messagePopup('New bill added', 'success');
     
     dispatchMainGlobalEvents();
   };

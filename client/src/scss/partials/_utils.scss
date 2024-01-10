@@ -77,6 +77,15 @@ a {
 
 .btn {
   @extend %btn-shared;
+
+  &.disabled {
+    cursor: not-allowed;
+    filter: saturate(25%);
+
+    &:hover {
+      filter: saturate(25%) !important;
+    }
+  }
   
   &.btn {
 
@@ -102,10 +111,10 @@ a {
       color: $main;
     }
   
-    &-light {
-      background: $light;
-      border-color: $light;
-      color: $main;
+    &-danger {
+      background: $danger;
+      border-color: $danger;
+      color: $light;
     }
   
     &-cta {
@@ -417,7 +426,7 @@ a {
   }
 }
 
-// loadingModal()
+// Loading Modal
 .loading-modal {
   position: fixed;
   top: 0;
@@ -450,6 +459,55 @@ a {
         transform: rotate(360deg);
     }
     } 
+}
+
+// Confirm Modal
+.confirm-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.6);
+  transition: opacity 200ms;
+  display: none;
+  opacity: 0;
+
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &-container {
+    padding: 4rem 2rem;
+    background: $secondary;
+    border-radius: 5px;
+    width: 30rem;
+    max-width: 30rem;
+    position: relative;
+    
+    p {
+      margin-bottom: 2rem;
+    }
+
+    .btn-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .btn {
+        width: 100%;
+
+        &:last-child {
+          margin-left: 1rem;
+        }
+      }
+    }
+
+  }
 }
 
 // _updateSharedWith

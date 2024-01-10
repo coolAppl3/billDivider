@@ -3,10 +3,13 @@ import BillModal from "./BillModal";
 
 import BillElement from "./BillElement";
 import dispatchMainGlobalEvents from "./dispatchMainGlobalEvents";
+import ConfirmModal from "../global/ConfirmModal";
+import messagePopup from "../global/messagePopup";
 
 // Initializing imports
 const billElement = new BillElement();
 const billModal = new BillModal();
+const confirmModal = new ConfirmModal();
 
 class SessionContent {
   constructor() {
@@ -18,6 +21,7 @@ class SessionContent {
   };
 
   _loadEventListeners() {
+    window.addEventListener('sessionStarted', this._enableClearButtons());
     window.addEventListener('render', this._render.bind(this));
     this._sessionContent.addEventListener('click', this._handleSessionContentClickEvents.bind(this));
 
@@ -41,13 +45,18 @@ class SessionContent {
     if(e.target.classList.contains('removeBillIcon')) {
       return this._deleteBill(e);
     };
+
+    if(e.target.classList.contains('clearListBtn')) {
+      return this._clearBillList(e);
+    };
   };
 
   _render() {
     this._clearContentList(this._mainContentList);
     this._clearContentList(this._secondaryContentList);
-    
     this._loadBills();
+
+    this._enableClearButtons();
   };
 
   _clearContentList(contentList) {
@@ -77,16 +86,14 @@ class SessionContent {
   };
 
   _startNewBill(e) {
-    const contentList = e.target.parentElement.parentElement.lastElementChild;
-    const billOwner = this._findBillOwner(contentList); // main for user, secondary for who the user is sharing with.
-
+    const billOwner = e.target.parentElement.getAttribute('data-list');
     billModal.display(billOwner);
   };
 
   _editBill(e) {
     const billID = e.target.parentElement.parentElement.getAttribute('data-id');
     const contentList = e.target.closest('.session-content-container-list');
-    const billOwner = this._findBillOwner(contentList);
+    const billOwner = contentList.getAttribute('data-list');
 
     billModal.display(billOwner, billID);
     billModal.populate(billOwner, billID);
@@ -94,6 +101,7 @@ class SessionContent {
 
   _deleteBill(e) {
     const billElement = e.target.parentElement.parentElement;
+    const contentList = billElement.parentElement;
 
     const billID = billElement.getAttribute('data-id');
     const billOwner = billElement.getAttribute('data-bill-owner');
@@ -116,14 +124,30 @@ class SessionContent {
     };
 
     this._slideAndRemoveBill(billElement);
-    setTimeout(() => dispatchMainGlobalEvents(), 250); // ensuring the animation has time to take place.
+    setTimeout(() => {
+      dispatchMainGlobalEvents();
+      messagePopup('Bill deleted', 'danger');
+
+      // Retracting the contentList if the user is deleting the only element in the list.
+      if(billIndex === 0) {
+        this._retractContentList(contentList);
+      };
+    }, 250); // ensuring the animation has time to take place.
   };
+
+  _clearBillList(e) {
+    const contentListType = e.target.parentElement.getAttribute('data-list');
+    const listOwner = contentListType === 'main' ? 'you' : sessionInfo.sharedWith;
+    confirmModal.display(`Are you sure you want to delete all the bills paid by ${listOwner}?`, 'danger');
+  };
+
+  // Utility
   
   _slideAndRemoveBill(billElement) {
     if(window.innerWidth < 500) {
-      billElement.style.transform = 'translateX(-30rem)';
+      billElement.style.transform = 'translate3d(-30rem, 0, 0)';
     } else {
-      billElement.style.transform = 'translateX(-60rem)';
+      billElement.style.transform = 'translate3d(-60rem, 0, 0)';
     };
 
     billElement.style.opacity = '0';
@@ -132,22 +156,7 @@ class SessionContent {
     setTimeout(() => billElement.remove(), 250);
   };
   
-  _findBillOwner(contentList) {
-    let billOwner;
-    
-    for(let classItem of contentList.classList) {
-      if(classItem === 'list-main') {
-        billOwner = 'main';
-      } else if(classItem === 'list-secondary') {
-        billOwner = 'secondary';
-      };
-    };
-
-    return billOwner;
-  };
-
   _resizeList(e) {
-    // const chevronIcon = e.target;
     const contentList = e.target.closest('.session-content-container').lastElementChild;
     
     if(contentList.classList.contains('expanded')) {
@@ -189,6 +198,26 @@ class SessionContent {
       });
     });
    
+  };
+
+  _enableClearButtons() {
+    const mainClearListBtn = document.querySelector('#content-main .clearListBtn');
+    if(this._mainContentList.hasChildNodes()) {
+      mainClearListBtn.removeAttribute('disabled');
+      mainClearListBtn.classList.remove('disabled');
+    } else {
+      mainClearListBtn.setAttribute('disabled', '');
+      mainClearListBtn.classList.add('disabled');
+    }
+
+    const secondaryClearListBtn = document.querySelector('#content-secondary .clearListBtn');
+    if(this._secondaryContentList.hasChildNodes()) {
+      secondaryClearListBtn.removeAttribute('disabled');
+      secondaryClearListBtn.classList.remove('disabled');
+    } else {
+      secondaryClearListBtn.setAttribute('disabled', '');
+      secondaryClearListBtn.classList.add('disabled');
+    }
   };
 
 };

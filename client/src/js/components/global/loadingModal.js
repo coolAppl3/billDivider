@@ -1,17 +1,25 @@
-function loadingModal(command) {
-  if(command === 'remove') {
-    document.querySelector('.loading-modal').remove();
-    return ;
-  };
+class LoadingModal {
   
-  const loadingModal = document.createElement('div');
-  loadingModal.className = 'loading-modal';
+  static display() {
+    const loadingModalElement = document.createElement('div');
+    loadingModalElement.className = 'loading-modal';
 
-  const spinner = document.createElement('span');
-  spinner.className = 'spinner';
+    const spinner = document.createElement('span');
+    spinner.className = 'spinner';
 
-  loadingModal.appendChild(spinner);
-  document.querySelector('body').appendChild(loadingModal);
+    loadingModalElement.appendChild(spinner);
+    
+    if(document.querySelector('.loading-modal')) {
+      return ;
+    };
+    
+    document.querySelector('body').appendChild(loadingModalElement);
+  };
+
+  static remove() {
+    document.querySelector('.loading-modal').remove();
+  };
+
 };
 
-export default loadingModal;
+export default LoadingModal;

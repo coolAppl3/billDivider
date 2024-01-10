@@ -1,7 +1,7 @@
 import '../scss/main.scss';
 import SignInAPI from './components/services/SignInAPI';
-import messageDialog from './components/global/messageDialog';
-import loadingModal from './components/global/loadingModal';
+import messagePopup from './components/global/messagePopup';
+import LoadingModal from './components/global/LoadingModal';
 import locateLoginToken from './components/global/locateLoginToken';
 
 // Initializing imports
@@ -29,7 +29,7 @@ class SignIn {
 
   async _signIn(e) {
     e.preventDefault();
-    loadingModal();
+    LoadingModal.display();
 
     // Ensuring neither inputs is empty
     this._usernameInputIsEmpty();
@@ -55,21 +55,21 @@ class SignIn {
         sessionStorage.setItem('loginToken', loginToken);
       };
 
-      messageDialog('Login successful!', 'success');
+      messagePopup('Login successful!', 'success');
       setTimeout(() => window.location.href = 'index.html', 500);
     } catch (error) {
       const status = error.response.status;
       if(status === 404) { // username doesn't exist
         this._displayErrorSpan('username', `Username doesn't exist.`);
-        loadingModal('remove');
+        LoadingModal.remove();
         return ;
       } else if(status === 401) { // incorrect password
         this._displayErrorSpan('password', 'Incorrect password.');
-        loadingModal('remove');
+        LoadingModal.remove();
         return ;
       } else { // Will usually be 500
-        messageDialog('Something went wrong.', 'danger');
-        loadingModal('remove');
+        messagePopup('Something went wrong.', 'danger');
+        LoadingModal.remove();
         return ;
       };
     }

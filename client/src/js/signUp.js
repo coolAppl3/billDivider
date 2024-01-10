@@ -1,7 +1,7 @@
 import '../scss/main.scss';
 import SignUpAPI from './components/services/SignUpAPI';
-import messageDialog from './components/global/messageDialog';
-import loadingModal from './components/global/loadingModal';
+import messagePopup from './components/global/messagePopup';
+import LoadingModal from './components/global/LoadingModal';
 
 // Initializing imports
 const signUpAPI = new SignUpAPI();
@@ -47,8 +47,8 @@ class SignUp {
         sessionStorage.setItem('loginToken', res.data.data.loginToken);
       };
 
-      messageDialog('Signed up successfully!', 'success');
-      loadingModal();
+      messagePopup('Signed up successfully!', 'success');
+      LoadingModal.display();
       setTimeout(() => window.location.replace('history.html'), 1000);
     } catch (error) {
       
@@ -63,7 +63,7 @@ class SignUp {
         };;
 
       } else { // There's no response object
-        messageDialog('Username already exists.');
+        messagePopup('Username already exists.');
       };
       
     }
