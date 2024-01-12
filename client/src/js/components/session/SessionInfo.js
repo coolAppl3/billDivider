@@ -48,6 +48,13 @@ class SessionInfo {
 
     return total;
   };
+
+  reset() {
+    this.yourTotal = 0;
+    this.sharedWithTotal = 0;
+    this.billsPaid = [];
+    this.billsToPay = [];
+  };
 };
 
 const sessionInfo = new SessionInfo();

@@ -140,7 +140,7 @@ class BillModal {
     };
 
     this.hide();
-    messageDialog('Bill edited', 'success');
+    messagePopup('Bill updated', 'success');
     
     dispatchMainGlobalEvents();
   };

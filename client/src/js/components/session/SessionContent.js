@@ -23,8 +23,8 @@ class SessionContent {
   _loadEventListeners() {
     window.addEventListener('sessionStarted', this._enableClearButtons());
     window.addEventListener('render', this._render.bind(this));
+    
     this._sessionContent.addEventListener('click', this._handleSessionContentClickEvents.bind(this));
-
   };
 
   _handleSessionContentClickEvents(e) {
@@ -47,19 +47,19 @@ class SessionContent {
     };
 
     if(e.target.classList.contains('clearListBtn')) {
-      return this._clearBillList(e);
+      return this._startClearContentList(e);
     };
   };
 
   _render() {
-    this._clearContentList(this._mainContentList);
-    this._clearContentList(this._secondaryContentList);
+    this._emptyContentList(this._mainContentList);
+    this._emptyContentList(this._secondaryContentList);
     this._loadBills();
 
     this._enableClearButtons();
   };
 
-  _clearContentList(contentList) {
+  _emptyContentList(contentList) {
     const contentListArr = Array.from(contentList.childNodes);
     contentListArr.forEach((bill) => bill.remove());
   };
@@ -123,22 +123,56 @@ class SessionContent {
       sessionInfo.billsToPay.splice(billIndex, 1);
     };
 
+    let isOnlyBillInList = false;
+    if(!billElement.nextElementSibling && !billElement.previousElementSibling) {
+      isOnlyBillInList = true;
+    };
+
     this._slideAndRemoveBill(billElement);
     setTimeout(() => {
       dispatchMainGlobalEvents();
       messagePopup('Bill deleted', 'danger');
 
       // Retracting the contentList if the user is deleting the only element in the list.
-      if(billIndex === 0) {
+      if(isOnlyBillInList) {
         this._retractContentList(contentList);
       };
     }, 250); // ensuring the animation has time to take place.
   };
 
-  _clearBillList(e) {
-    const contentListType = e.target.parentElement.getAttribute('data-list');
-    const listOwner = contentListType === 'main' ? 'you' : sessionInfo.sharedWith;
-    confirmModal.display(`Are you sure you want to delete all the bills paid by ${listOwner}?`, 'danger');
+  _startClearContentList(e) {
+    const listOwner = e.target.parentElement.getAttribute('data-list');
+    const listOwnerName = listOwner === 'main' ? 'you' : sessionInfo.sharedWith;
+    confirmModal.display(`Are you sure you want to delete all the bills paid by ${listOwnerName}?`, 'danger');
+
+    const confirmModalElement = document.querySelector('.confirm-modal');
+    confirmModalElement.addEventListener('click', (e) => {
+      if(confirmModal.isExitClick(e)) {
+        confirmModal.removeModal();
+        return ;
+      };
+  
+      if(e.target.id === 'confirmModalConfirmBtn') {
+        this._clearContentList(listOwner);
+        confirmModal.removeModal();
+        return ;
+      };
+    });
+  };
+
+  _clearContentList(listOwner) {
+    if(listOwner === 'main') {
+      sessionInfo.billsPaid = [];
+      messagePopup('Cleared bills paid by you', 'danger');
+      this._retractContentList(this._mainContentList);
+      
+    } else if(listOwner === 'secondary') {
+      sessionInfo.billsToPay = [];
+      messagePopup(`Cleared bills paid by ${sessionInfo.sharedWith}`, 'danger');
+      this._retractContentList(this._secondaryContentList);
+    };
+    
+    dispatchMainGlobalEvents();
   };
 
   // Utility
