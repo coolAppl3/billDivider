@@ -1,21 +1,19 @@
 Frontend:
 
-  - General:
+  - ConfirmModal.js:
 
-    - Changed loadingModal.js to LoadingModal.js and set it as a class, with two static methods; display and remove.
+    - Event listeners will be handled within the function calling the modal, to avoid an event dispatch nightmare.
 
-    - Renamed messageDialog() to messagePopup(), as the previous name made no sense whatsoever.
-
-    - Added ConfirmModal.js under components/global to be used throughout the application wherever needed.
+    - Added isExitClick() to determine if a click event's target was meant to exit the modal. This should help with abstraction.
   
   - SessionContent.js:
 
-    - Imported, the now renamed, messagePopup().
+    - SessionContent is complete for now. Might revisit later for further optimization.
+  
+  - SessionInfo.js:
 
-    - Deleting bills now creates a popup message to confirm it to the user.
+    - Added reset() which will set both totals to 0, and both bill arrays to empty arrays.
+  
+  - SessionHeader.js:
 
-    - Deleting the final bill in a given list will now retract it.
-
-    - Added _enableClearButtons() to check the sessionInfo object for bills. If either arrays is empty, the clear button is disabled. This function is called whenever a "render" or "sessionStarted" event is detected.
-
-    - Clicking either of the clear displays the confirm modal. Functionality will be added in the next patch.
+    - Added _resetSession() to clear all totals and bills, and dispatch a "render"event. A confirm modal is used to confirm the user's decision.

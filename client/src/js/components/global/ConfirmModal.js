@@ -1,11 +1,11 @@
 class ConfirmModal {
   
-  display(message, type = 'cta') {
+  display(message, btnColor = 'cta') {
     if(document.querySelector('.confirm-modal')) {
       return ;
     };
     
-    const confirmModal = this._create(message, type);
+    const confirmModal = this._create(message, btnColor);
     document.body.appendChild(confirmModal);
 
     confirmModal.style.display = 'block';
@@ -16,11 +16,23 @@ class ConfirmModal {
     });
   };
   
-  remove() {
+  removeModal() {
     document.querySelector('.confirm-modal').remove();
   };
+
+  isExitClick(e) {
+    if(
+      e.target.classList.contains('container') ||
+      e.target.classList.contains('confirm-modal') ||
+      e.target.id === 'confirmModalCancelBtn'
+    ) {
+      return true;
+    };
+
+    return false;
+  };
   
-  _create(message, type) {
+  _create(message, btnColor) {
     const confirmModalElement = document.createElement('div');
     confirmModalElement.className = 'confirm-modal';
 
@@ -31,7 +43,7 @@ class ConfirmModal {
     confirmModalElementContainer.className = 'confirm-modal-container';
 
     const confirmMessage = this._createConfirmMessage(message);
-    const btnContainer = this._createBtnContainer(type);
+    const btnContainer = this._createBtnContainer(btnColor);
 
     confirmModalElementContainer.appendChild(confirmMessage);
     confirmModalElementContainer.appendChild(btnContainer);
@@ -42,7 +54,7 @@ class ConfirmModal {
     return confirmModalElement;
   };
 
-  _createBtnContainer(type) {
+  _createBtnContainer(btnColor) {
     const btnContainer = document.createElement('div');
     btnContainer.className = 'btn-container';
 
@@ -52,7 +64,7 @@ class ConfirmModal {
     cancelBtn.appendChild(document.createTextNode('Cancel'));
 
     const confirmBtn = document.createElement('button');
-    confirmBtn.className = `btn btn-${type}`;
+    confirmBtn.className = `btn btn-${btnColor}`;
     confirmBtn.id = 'confirmModalConfirmBtn';
     confirmBtn.appendChild(document.createTextNode('Confirm'));
 
@@ -68,7 +80,7 @@ class ConfirmModal {
 
     return confirmMessage;
   };
-
+  
 };
 
 export default ConfirmModal;

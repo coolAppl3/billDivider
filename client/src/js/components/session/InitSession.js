@@ -20,6 +20,7 @@ class InitSession {
   _loadEventListeners() {
     this._startModalForm.addEventListener('submit', this._start.bind(this));
     this._optionsContainer.addEventListener('click', this._changeCurrency.bind(this));
+
     window.addEventListener('editSharedWith', this._editSharedWith.bind(this));
   };
 

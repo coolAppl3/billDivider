@@ -1,5 +1,11 @@
 import sessionInfo from "./SessionInfo";
+
+import ConfirmModal from "../global/ConfirmModal";
 import addThousandComma from "./addThousandComma";
+import messagePopup from "../global/messagePopup";
+
+// Initializing imports
+const confirmModal = new ConfirmModal();
 
 class SessionHeader {
   constructor() {
@@ -14,6 +20,8 @@ class SessionHeader {
 
     this._currencySpans = document.querySelectorAll('.currency');
     this._sharedWithListHeader = document.querySelector('#sharedWithListHeader');
+
+    this._sessionHeaderControls = document.querySelector('.session-header-controls');
     
     this._loadEventListeners();
   };
@@ -21,10 +29,12 @@ class SessionHeader {
   _loadEventListeners() {
     window.addEventListener('sessionStarted', this._setSharedWith.bind(this));
     window.addEventListener('sessionStarted', this._setCurrency.bind(this));
-    this._updateSharedWithBtn.addEventListener('click', this._updateSharedWith.bind(this));
     window.addEventListener('render', this._render.bind(this));
-  };
 
+    this._updateSharedWithBtn.addEventListener('click', this._updateSharedWith.bind(this));
+    this._sessionHeaderControls.addEventListener('click', this._handleSessionHeaderControlsClickEvents.bind(this));
+  };
+c
   _render() {
     this._updateTotals();
     this._updateDebtResult();
@@ -65,6 +75,33 @@ class SessionHeader {
     // This will set the currency throughout the page if they exist, not just the header.
     this._currencySpans.forEach((span) => span.textContent = sessionInfo.currency);
   };
+
+  _handleSessionHeaderControlsClickEvents(e) {
+    if(e.target.id === 'resetSessionBtn') {
+      this._resetSession();
+    };
+  };
+
+  _resetSession() {
+    confirmModal.display('Are you sure you want to clear all the bills in this session?', 'danger');
+
+    const confirmModalElement = document.querySelector('.confirm-modal');
+    confirmModalElement.addEventListener('click', (e) => {
+      if(confirmModal.isExitClick(e)) {
+        confirmModal.removeModal();
+        return ;
+      };
+
+      if(e.target.id === 'confirmModalConfirmBtn') {
+        sessionInfo.reset();
+        messagePopup('Session reset', 'success');
+        window.dispatchEvent(new Event('render'));
+        confirmModal.removeModal();
+        return ;
+      };
+    });
+  };
+  
 };
 
 export default SessionHeader;
