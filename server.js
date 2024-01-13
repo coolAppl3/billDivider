@@ -29,11 +29,11 @@ if(process.env.NODE_ENV !== 'production') {
 
 };
 
-// Importing Routers
-const userRouter = require('./routes/users');
-
 // Static Files
 server.use(express.static(path.join(__dirname, 'public')));
+
+// Importing Routers
+const userRouter = require('./routes/users');
 
 // routes
 server.use('/api/users', userRouter);

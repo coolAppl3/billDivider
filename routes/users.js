@@ -90,6 +90,7 @@ router.post('/newSession', async (req, res) => {
   const user = await User.findOne({ loginToken: req.get('loginToken') });
   if(!user) {
     res.status(403).json({ success: false, message: 'Invalid login token. Please login' });
+    return ;
   };
 
   const newSession = req.body;
@@ -131,6 +132,7 @@ router.delete('/delete-session/:sessionID', async (req, res) => {
   const user = await User.findOne({ loginToken: req.get('loginToken') });
   if(!user) {
     res.status(403).json({ success: false, message: 'Invalid login token. Please login' });
+    return ;
   };
 
   user.history = user.history.filter((session) => session.sessionID !== req.params.sessionID);
@@ -152,6 +154,25 @@ router.delete('/delete-session/:sessionID', async (req, res) => {
     res.json({ success: true, data: updatedHistory });
   } catch (err) {
     console.log(err);
+    res.status(500).json({ success: false, message: 'Something went wrong' });
+  }
+});
+
+// Retrieve user sessions
+router.post('/history', async (req, res) => {
+  const loginToken = req.body.loginToken;
+
+  const user = await User.findOne({ loginToken: loginToken });
+  if(!user) {
+    res.status(404).json({ success: false, message: 'Invalid login' });
+    return ;
+  };
+
+  userHistory = user.history;
+  try {
+    res.json({ success: true, data: userHistory });
+  } catch (err) {
+    console.log(err)
     res.status(500).json({ success: false, message: 'Something went wrong' });
   }
 });

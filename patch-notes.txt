@@ -1,19 +1,30 @@
 Frontend:
 
-  - ConfirmModal.js:
+  - General:
 
-    - Event listeners will be handled within the function calling the modal, to avoid an event dispatch nightmare.
+    - Functionality for session.js as a whole is finished for the most part. Further work will be done once history.js is done.
 
-    - Added isExitClick() to determine if a click event's target was meant to exit the modal. This should help with abstraction.
-  
-  - SessionContent.js:
-
-    - SessionContent is complete for now. Might revisit later for further optimization.
-  
-  - SessionInfo.js:
-
-    - Added reset() which will set both totals to 0, and both bill arrays to empty arrays.
+    - Added HistoryAPI.js under /components/services.
   
   - SessionHeader.js:
 
-    - Added _resetSession() to clear all totals and bills, and dispatch a "render"event. A confirm modal is used to confirm the user's decision.
+    - Added _enableResetButton() to control when the reset button is enabled/disabled. The button is disabled by default.
+  
+  - SessionContent.js:
+
+    - Content lists' clear buttons are now disabled by default, and rely on _render() to enable/disabled them. This is to avoid needing to list for a "sessionStarted" event just for this Functionality.
+  
+  history.js:
+
+    - Created a History class and initialized it. Nothing added here yet.
+  
+  HistoryAPI.js:
+
+    - Added getUserHistory() which will send the user's loginToken in the body, and retrieve the user's session history.
+
+
+Backend:
+
+  - users.js:
+
+    - Added Functionality for POST requests to /api/users/history, with a valid loginToken in the body, to retrieve the user's session history.

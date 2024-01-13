@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-
 class SignUpAPI {
   constructor() {
     this._apiURL = window.location.hostname === 'localhost'

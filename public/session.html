@@ -33,7 +33,7 @@
 
     <!-- Title -->
     <title>Session - Bill Divider</title>
-  <script defer src="js/session-a5a7f37297cd64b79969.js"></script></head>
+  <script defer src="js/session-dd1f1b7a65b1b7628176.js"></script></head>
   <body>
     <!-- Main Navbar -->
     <nav class="main-nav bg-secondary">
@@ -170,10 +170,22 @@
 
           <div class="session-header-controls">
             <div class="btn-div">
-              <button class="btn btn-border-light">Reset</button>
+              <button
+                class="btn btn-border-light disabled"
+                id="resetSessionBtn"
+                disabled
+              >
+                Reset
+              </button>
             </div>
             <div class="btn-div">
-              <button class="btn btn-light">Save</button>
+              <button
+                class="btn btn-light disabled"
+                id="saveSessionBtn"
+                disabled
+              >
+                Save
+              </button>
             </div>
           </div>
         </div>
@@ -186,18 +198,29 @@
             id="content-main"
           >
             <!-- Header -->
-            <div class="session-content-container-header">
+            <div
+              class="session-content-container-header"
+              data-list="main"
+            >
               <h3 class="expandList">
                 <i class="fa-solid fa-chevron-right"></i>Your bills
               </h3>
-              <button class="btn btn-border-danger clearListBtn">Clear</button>
+              <button
+                class="btn btn-border-danger clearListBtn disabled"
+                disabled
+              >
+                Clear
+              </button>
               <button class="btn btn-cta addBillBtn">Add a bill</button>
             </div>
 
             <div class="h-line"></div>
 
             <!-- List -->
-            <div class="session-content-container-list list-main"></div>
+            <div
+              class="session-content-container-list list-main"
+              data-list="main"
+            ></div>
           </div>
 
           <!-- --- --- --- -->
@@ -208,7 +231,10 @@
             id="content-secondary"
           >
             <!-- Header -->
-            <div class="session-content-container-header">
+            <div
+              class="session-content-container-header"
+              data-list="secondary"
+            >
               <h3 class="expandList">
                 <i class="fa-solid fa-chevron-right"></i
                 ><span
@@ -217,14 +243,22 @@
                 ></span
                 >'s bills
               </h3>
-              <button class="btn btn-border-danger clearListBtn">Clear</button>
+              <button
+                class="btn btn-border-danger clearListBtn disabled"
+                disabled
+              >
+                Clear
+              </button>
               <button class="btn btn-cta addBillBtn">Add a bill</button>
             </div>
 
             <div class="h-line"></div>
 
             <!-- List -->
-            <div class="session-content-container-list list-secondary"></div>
+            <div
+              class="session-content-container-list list-secondary"
+              data-list="secondary"
+            ></div>
           </div>
         </div>
       </div>
