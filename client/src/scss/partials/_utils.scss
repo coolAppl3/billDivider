@@ -80,11 +80,12 @@ a {
 
   &.disabled {
     cursor: not-allowed;
-    filter: saturate(25%);
+    filter: grayscale(70%);
 
     &:hover {
-      filter: saturate(25%) !important;
+      filter: grayscale(70%) !important;
     }
+
   }
   
   &.btn {
@@ -109,6 +110,16 @@ a {
       background: $light;
       border-color: $light;
       color: $main;
+
+      &.disabled {
+        cursor: not-allowed;
+        filter: brightness(50%);
+    
+        &:hover {
+          filter: brightness(50%) !important;
+        }
+    
+      }
     }
   
     &-danger {
@@ -139,6 +150,16 @@ a {
       background: transparent;
       border-color: $light;
       color: $light;
+
+      &.disabled {
+        cursor: not-allowed;
+        filter: brightness(50%);
+    
+        &:hover {
+          filter: brightness(50%) !important;
+        }
+    
+      }
     }
     
     &-border-cta {

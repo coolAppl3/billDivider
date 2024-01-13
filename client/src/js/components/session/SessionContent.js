@@ -21,7 +21,6 @@ class SessionContent {
   };
 
   _loadEventListeners() {
-    window.addEventListener('sessionStarted', this._enableClearButtons());
     window.addEventListener('render', this._render.bind(this));
     
     this._sessionContent.addEventListener('click', this._handleSessionContentClickEvents.bind(this));

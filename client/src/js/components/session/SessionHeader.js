@@ -3,6 +3,7 @@ import sessionInfo from "./SessionInfo";
 import ConfirmModal from "../global/ConfirmModal";
 import addThousandComma from "./addThousandComma";
 import messagePopup from "../global/messagePopup";
+import locateLoginToken from "../global/locateLoginToken";
 
 // Initializing imports
 const confirmModal = new ConfirmModal();
@@ -22,6 +23,8 @@ class SessionHeader {
     this._sharedWithListHeader = document.querySelector('#sharedWithListHeader');
 
     this._sessionHeaderControls = document.querySelector('.session-header-controls');
+    this._resetSessionBtn = document.querySelector('#resetSessionBtn');
+    this._saveSessionBtn = document.querySelector('#saveSessionBtn');
     
     this._loadEventListeners();
   };
@@ -38,6 +41,9 @@ c
   _render() {
     this._updateTotals();
     this._updateDebtResult();
+
+    this._enableResetButton();
+    this._enableSaveButton();
   };
 
   _updateTotals() {
@@ -101,7 +107,34 @@ c
       };
     });
   };
+
+  _enableResetButton() {
+    if(!sessionInfo.billsPaid[0] && !sessionInfo.billsToPay[0]) {
+      this._resetSessionBtn.setAttribute('disabled', '');
+      this._resetSessionBtn.classList.add('disabled');
+    } else {
+      this._resetSessionBtn.removeAttribute('disabled');
+      this._resetSessionBtn.classList.remove('disabled');
+    };
+  };
+
   
+  _enableSaveButton() {
+    const isLoggedIn = locateLoginToken();
+
+    // ADD - If the user is logged in and the sessionInfo object is different than the one in the data base, which we'll store in session storage, then the button should be enabled.
+    
+    // This button should behave differently depending on whether or not the user is logged in.
+    
+    // If the user isn't logged in, and there's at least 1 bill, it should be enabled and ready to suggest saving the bill if the user creates an account. 
+
+    // If the user is logged in, but there's no sessionInfo object in session storage, this means that a logged in user is working on a new session. In this case, it should be enabled if the session has at least one bill.
+
+    // If the user is logged in AND there is a sessionInfo object in session storage, that means that the user is editing a session, and the button should be enabled AS LONG AS the sessionInfo object in session storage (from the database) is different than the resulting sessionInfo object.
+
+    // Performance might be a concern with the last part. Also, perhaps having two sessionStorage items, one for the sessionInfo object, and one to confirm the session is being edited, is more ideal. Probably best to handle through a query string in the href from history.js.
+
+  };
 };
 
 export default SessionHeader;
