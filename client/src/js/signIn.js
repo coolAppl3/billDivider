@@ -1,11 +1,14 @@
 import '../scss/main.scss';
 import SignInAPI from './components/services/SignInAPI';
+import Cookies from './components/global/Cookies';
+
 import messagePopup from './components/global/messagePopup';
 import LoadingModal from './components/global/LoadingModal';
 import locateLoginToken from './components/global/locateLoginToken';
 
 // Initializing imports
 const signInAPI = new SignInAPI();
+const cookies = new Cookies();
 
 class SignIn {
   constructor() {
@@ -50,14 +53,16 @@ class SignIn {
 
       // Saving the loginToken depending on the user's preference.
       if(this._keepMeSignedInCheckBox.classList.contains('checked')) {
-        localStorage.setItem('loginToken', loginToken);
+        cookies.set('loginToken', loginToken);
       } else {
-        sessionStorage.setItem('loginToken', loginToken);
+        cookies.set('loginToken', loginToken, 'no-age');
       };
 
       messagePopup('Login successful!', 'success');
       setTimeout(() => window.location.href = 'index.html', 500);
+      
     } catch (error) {
+      console.log(error)
       const status = error.response.status;
       if(status === 404) { // username doesn't exist
         this._displayErrorSpan('username', `Username doesn't exist.`);
@@ -115,7 +120,9 @@ class SignIn {
   };
 
   _redirect() {
-    if(locateLoginToken()) { // already logged in and shouldn't be on this page - redirecting...
+    const loginToken = locateLoginToken();
+    
+    if(loginToken) { // already logged in and shouldn't be on this page - redirecting...
       window.location.href = 'index.html';
     };
   };

@@ -1,4 +1,5 @@
 import sessionInfo from "./SessionInfo";
+import SessionAPi from "../services/SessionAPI";
 
 import ConfirmModal from "../global/ConfirmModal";
 import addThousandComma from "./addThousandComma";
@@ -7,6 +8,7 @@ import locateLoginToken from "../global/locateLoginToken";
 
 // Initializing imports
 const confirmModal = new ConfirmModal();
+const sessionAPI = new SessionAPi();
 
 class SessionHeader {
   constructor() {
@@ -84,7 +86,11 @@ c
 
   _handleSessionHeaderControlsClickEvents(e) {
     if(e.target.id === 'resetSessionBtn') {
-      this._resetSession();
+      return this._resetSession();
+    };
+
+    if(e.target.id === 'saveSessionBtn') {
+      return this._saveSession();
     };
   };
 
@@ -108,6 +114,28 @@ c
     });
   };
 
+  async _saveSession() {
+    // FIX - This should behave differently depending on similar conditions as in enableSaveButton.
+
+
+    const session = sessionInfo;
+    if(!session.createdOn) { // FIX - figure out how to make this work bug-free
+      session.createdOn = Date.now();
+    };
+    
+    const loginToken = locateLoginToken();
+
+    try {
+      const res = await sessionAPI.addSession(session, loginToken);
+      const newSession = res.data.data;
+    } catch (err) {
+      console.log(err)
+    }
+
+    // NOT DONE - ONLY FOR TESTING SO FAR
+
+  };
+
   _enableResetButton() {
     if(!sessionInfo.billsPaid[0] && !sessionInfo.billsToPay[0]) {
       this._resetSessionBtn.setAttribute('disabled', '');
@@ -120,7 +148,15 @@ c
 
   
   _enableSaveButton() {
-    const isLoggedIn = locateLoginToken();
+    // const isLoggedIn = locateLoginToken();
+
+    this._saveSessionBtn.removeAttribute('disabled');
+    this._saveSessionBtn.classList.remove('disabled');
+    
+    
+    // CHECK LATER ----
+
+    // LOCAL AND SESSION STORAGE NO LONGER IN USE - CHANGE THE LOGIC BELOW ACCORDINGLY
 
     // ADD - If the user is logged in and the sessionInfo object is different than the one in the data base, which we'll store in session storage, then the button should be enabled.
     

@@ -1,10 +1,14 @@
 import '../scss/main.scss';
 import SignUpAPI from './components/services/SignUpAPI';
+import Cookies from './components/global/Cookies';
+
 import messagePopup from './components/global/messagePopup';
 import LoadingModal from './components/global/LoadingModal';
+import locateLoginToken from './components/global/locateLoginToken';
 
 // Initializing imports
 const signUpAPI = new SignUpAPI();
+const cookies = new Cookies();
 
 
 class SignUp {
@@ -19,6 +23,8 @@ class SignUp {
   };
 
   _loadEventListeners() {
+    window.addEventListener('DOMContentLoaded', this._redirect.bind(this));
+    
     this._signupContainerForm.addEventListener('submit', this._signupUser.bind(this));
     this._keepMeSignedInCheckBox.addEventListener('click', this._displayCheckBox.bind(this));
     this._linksContainer.addEventListener('click', this._handleFormLinks.bind(this));
@@ -39,31 +45,25 @@ class SignUp {
     
     try {
       const res = await signUpAPI.signUp(newUser);
+      const loginToken = res.data.data.loginToken;
 
-      // Adding the login token to local or session storage depending on the user's choice.
       if(this._keepMeSignedInCheckBox.classList.contains('checked')) {
-        localStorage.setItem('loginToken', res.data.data.loginToken);
+        cookies.set('loginToken', loginToken);
       } else {
-        sessionStorage.setItem('loginToken', res.data.data.loginToken);
+        cookies.set('loginToken', loginToken, 'no-age');
       };
 
       messagePopup('Signed up successfully!', 'success');
       LoadingModal.display();
       setTimeout(() => window.location.replace('history.html'), 1000);
-    } catch (error) {
       
-      if(error.response) { // There's a response object
-        const statusCode = error.response.status;
+    } catch (error) {
+      const statusCode = error.response.status;
+      if(statusCode === 401) { // Invalid username or password - Just as an extra layer of safety.
+        this._displayErrorSpan('username', 'Invalid username')
 
-        if(statusCode === 401) { // Invalid username or password - Just as an extra layer of safety.
-          this._displayErrorSpan('username', 'Invalid username')
-
-        } else if(statusCode === 409) { // Username taken
-          this._displayErrorSpan('username', 'Username already taken.')
-        };;
-
-      } else { // There's no response object
-        messagePopup('Username already exists.');
+      } else if(statusCode === 409) { // Username taken
+        this._displayErrorSpan('username', 'Username already taken.')
       };
       
     }
@@ -163,6 +163,14 @@ class SignUp {
     if(e.target.id === 'returnToPreviousPage') {
       history.back();
     } else if(e.target.id === 'returnToHomepage') {
+      window.location.href = 'index.html';
+    };
+  };
+
+  _redirect() {
+    const loginToken = locateLoginToken();
+    
+    if(loginToken) { // already logged in and shouldn't be on this page - redirecting...
       window.location.href = 'index.html';
     };
   };

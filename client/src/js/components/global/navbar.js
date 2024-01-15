@@ -1,4 +1,8 @@
+import Cookies from "./Cookies";
 import locateLoginToken from "./locateLoginToken";
+
+// Initializing imports
+const cookies = new Cookies();
 
 class Navbar {
   constructor() {
@@ -38,8 +42,7 @@ class Navbar {
 
   _logout(e) {
     e.preventDefault();
-    localStorage.removeItem('loginToken');
-    sessionStorage.removeItem('loginToken');
+    cookies.remove('loginToken');
     window.location.reload();
   };
 }
