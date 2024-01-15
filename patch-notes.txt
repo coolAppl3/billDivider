@@ -2,29 +2,25 @@ Frontend:
 
   - General:
 
-    - Functionality for session.js as a whole is finished for the most part. Further work will be done once history.js is done.
+    - Switched to using cookies for the loginToken, as using sessionStorage wouldn't be ideal for this website.
 
-    - Added HistoryAPI.js under /components/services.
-  
-  - SessionHeader.js:
+    - Removed any usage of local and session storage for now.
 
-    - Added _enableResetButton() to control when the reset button is enabled/disabled. The button is disabled by default.
-  
-  - SessionContent.js:
+    - Added Cookies.js under global components. This class will take care of getting, setting, and removing any cookies on the site.
 
-    - Content lists' clear buttons are now disabled by default, and rely on _render() to enable/disabled them. This is to avoid needing to list for a "sessionStarted" event just for this Functionality.
+    - locateLoginToken() now uses Cookies.js to locate the loginToken.
+
+    - Added HistoryAPI.js. This class will contain all history.js related HTTP requests.
+
+    - Added HistoryContent.js and HistoryHeader.js as components for history.js.
   
   history.js:
 
-    - Created a History class and initialized it. Nothing added here yet.
+    - Added _loadUserHistory() for now, but it will change in future patches, as the functionality will be split between HistoryContent.js and HistoryHeader.js.
   
-  HistoryAPI.js:
-
-    - Added getUserHistory() which will send the user's loginToken in the body, and retrieve the user's session history.
-
 
 Backend:
 
-  - users.js:
+  - util/ValidateUser.js:
 
-    - Added Functionality for POST requests to /api/users/history, with a valid loginToken in the body, to retrieve the user's session history.
+    - Fixed backend not matching front end validation.

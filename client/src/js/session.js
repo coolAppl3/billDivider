@@ -1,10 +1,8 @@
 import '../scss/main.scss';
 import Navbar from './components/global/Navbar';
-import locateLoginToken from './components/global/locateLoginToken';
 
 // session-specific components
 import InitSession from './components/session/InitSession';
-import sessionInfo from './components/session/SessionInfo'; // instance of a class
 import SessionHeader from './components/session/SessionHeader';
 import SessionContent from './components/session/SessionContent';
 

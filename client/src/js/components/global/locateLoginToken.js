@@ -1,9 +1,10 @@
-function locateLoginToken() {
-  const inLocalStorage = localStorage.getItem('loginToken');
-  const inSessionStorage = sessionStorage.getItem('loginToken');
+import Cookies from "./Cookies";
 
-  // Prioritizes the value for localStorage. If it doesn't exist at all, it returns null.
-  return inLocalStorage || inSessionStorage;
+const cookies = new Cookies();
+
+function locateLoginToken() {
+  const loginToken = cookies.get('loginToken');
+  return loginToken;
 };
 
 export default locateLoginToken;

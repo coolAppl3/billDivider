@@ -120,7 +120,7 @@ router.post('/newSession', async (req, res) => {
   );
 
   try {
-    res.json({ success: true, data: updatedUser });
+    res.json({ success: true, data: newSession });
   } catch (err) {
     console.log(err);
     res.status(500).json({ success: false, message: 'Something went wrong' });
@@ -169,8 +169,10 @@ router.post('/history', async (req, res) => {
   };
 
   userHistory = user.history;
+  username = user.username;
+  
   try {
-    res.json({ success: true, data: userHistory });
+    res.json({ success: true, data: userHistory, username });
   } catch (err) {
     console.log(err)
     res.status(500).json({ success: false, message: 'Something went wrong' });
