@@ -169,10 +169,29 @@ router.post('/history', async (req, res) => {
   };
 
   userHistory = user.history;
+  
+  try {
+    res.json({ success: true, data: userHistory });
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({ success: false, message: 'Something went wrong' });
+  }
+});
+
+// Retrieve username
+router.post('/username', async (req, res) => {
+  const loginToken = req.body.loginToken;
+
+  const user = await User.findOne({ loginToken: loginToken });
+  if(!user) {
+    res.status(404).json({ success: false, message: 'Invalid login' });
+    return ;
+  };
+
   username = user.username;
   
   try {
-    res.json({ success: true, data: userHistory, username });
+    res.json({ success: true, data: username });
   } catch (err) {
     console.log(err)
     res.status(500).json({ success: false, message: 'Something went wrong' });
