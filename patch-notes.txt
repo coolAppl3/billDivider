@@ -1,26 +1,32 @@
 Frontend:
 
-  - General:
+  - General
 
-    - Switched to using cookies for the loginToken, as using sessionStorage wouldn't be ideal for this website.
+    - Added createDateString.js as a global component. This is an example of the date format: 14 Jan 2024.
 
-    - Removed any usage of local and session storage for now.
 
-    - Added Cookies.js under global components. This class will take care of getting, setting, and removing any cookies on the site.
+  - history.js:
 
-    - locateLoginToken() now uses Cookies.js to locate the loginToken.
+    - Imported HistoryHeader and HistoryContent in and initialized them. Similar to session.js, history.js will essentially just initialize the other components, and most of the work will be done through said components.
 
-    - Added HistoryAPI.js. This class will contain all history.js related HTTP requests.
+    - Added fetchUserHistory.js and fetchUsername.js as async components for history.js.
 
-    - Added HistoryContent.js and HistoryHeader.js as components for history.js.
+  - HistoryHeader.js:
+
+    - Functionality complete for now.
   
-  history.js:
+  - HistoryAPI.js:
 
-    - Added _loadUserHistory() for now, but it will change in future patches, as the functionality will be split between HistoryContent.js and HistoryHeader.js.
+    - This class will handle a number of HTTP requests relating to history.js. Currently, it can fetch the username and the user's session history. 
+  
+
+  
   
 
 Backend:
 
-  - util/ValidateUser.js:
+  - users.js:
 
-    - Fixed backend not matching front end validation.
+    - Added a separate endpoint for fetching a username: api/users/username.
+    
+    - The api/users/history endpoint will only return the user's history moving forward.

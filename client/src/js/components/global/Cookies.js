@@ -63,9 +63,9 @@ class Cookies {
       ageMilliseconds = 2592000000; // 30 days
     };
     
-    const currentTimeStamp = new Date().getTime();
-    const cookieExpiryTimeStamp = new Date(currentTimeStamp + ageMilliseconds)
-    const cookieExpiryDate = cookieExpiryTimeStamp.toUTCString();
+    const currentTimestamp = new Date().getTime();
+    const cookieExpiryTimestamp = new Date(currentTimestamp + ageMilliseconds)
+    const cookieExpiryDate = cookieExpiryTimestamp.toUTCString();
   
     return cookieExpiryDate;
   };
