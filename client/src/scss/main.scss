@@ -10,7 +10,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 10;
+  z-index: 20;
   background: #232326;
 
   .container {
@@ -845,6 +845,7 @@
 
   &-content {
     background: $secondary;
+    min-height: 10rem;
     padding: 3rem 2rem;
     border-radius: 5px;
     display: grid;
@@ -852,6 +853,7 @@
     gap: 2rem;
     overflow: hidden;
     overflow: clip;
+    position: relative;
 
     &-session {
       background: $main;
@@ -903,6 +905,22 @@
         }
         
       }
+    }
+
+    .no-sessions {
+      background: $main;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      max-width: fit-content;
+      max-height: fit-content;
+      padding: 1rem;
+      border-radius: 3px;
+      font-size: 1.4rem;
+      font-weight: bold;
     }
   }
 }

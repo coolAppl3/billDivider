@@ -2,7 +2,7 @@ import sessionInfo from "./SessionInfo";
 import SessionAPi from "../services/SessionAPI";
 
 import ConfirmModal from "../global/ConfirmModal";
-import addThousandComma from "./addThousandComma";
+import addThousandComma from '../global/addThousandComma';
 import messagePopup from "../global/messagePopup";
 import locateLoginToken from "../global/locateLoginToken";
 

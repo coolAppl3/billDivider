@@ -1,4 +1,4 @@
-import addThousandComma from "./addThousandComma";
+import addThousandComma from '../global/addThousandComma';
 
 class BillElement {
 

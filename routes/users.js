@@ -136,7 +136,6 @@ router.delete('/delete-session/:sessionID', async (req, res) => {
   };
 
   user.history = user.history.filter((session) => session.sessionID !== req.params.sessionID);
-
   
   const updatedHistory = await User.findByIdAndUpdate(
     user._id,
