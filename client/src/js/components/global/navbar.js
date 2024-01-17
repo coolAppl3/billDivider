@@ -43,6 +43,7 @@ class Navbar {
   _logout(e) {
     e.preventDefault();
     cookies.remove('loginToken');
+    
     window.location.reload();
   };
 }

@@ -17,7 +17,10 @@ class LoadingModal {
   };
 
   static remove() {
-    document.querySelector('.loading-modal').remove();
+    if(document.querySelector('.loading-modal')) {
+      document.querySelector('.loading-modal').remove();
+    };
+    
   };
 
 };

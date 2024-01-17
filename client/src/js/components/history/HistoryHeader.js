@@ -13,6 +13,7 @@ class HistoryHeader {
 
   _loadEventListeners() {
     window.addEventListener('DOMContentLoaded', this._render.bind(this));
+    window.addEventListener('render', this._render.bind(this));
   };
 
   _render() {
@@ -22,12 +23,20 @@ class HistoryHeader {
 
   async _renderUsername() {
     const username = await fetchUsername(); 
-    console.log(username)
+
+    if(!username) {
+      return ;
+    };
+    
     this._usernameElement.textContent = username;
   };
 
   async _renderHeaderInfo() {
     const sessions = await fetchUserHistory();
+
+    if(!sessions) {
+      return ;
+    };
     
     const totalSessions = this._getTotalSessions(sessions);
     this._totalSessionsElement.textContent = totalSessions;
@@ -46,8 +55,13 @@ class HistoryHeader {
     return total;
   };
   
-  _getLatestSessionDate(session) {
-    const timestampArr = session.map((session) => session.createdOn);
+  _getLatestSessionDate(sessions) {
+    if(sessions.length === 0) {
+      const latestSessionDate = '-';
+      return latestSessionDate;
+    };
+    
+    const timestampArr = sessions.map((sessions) => sessions.createdOn);
 
     let latestTimestamp = timestampArr[0];
     timestampArr.forEach((timestamp) => {

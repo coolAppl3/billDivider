@@ -3,13 +3,13 @@ import Navbar from './components/global/Navbar';
 import HistoryHeader from './components/history/HistoryHeader';
 import HistoryContent from './components/history/HistoryContent';
 
-import locateLoginToken from './components/global/locateLoginToken';
-import messagePopup from './components/global/messagePopup';
+import LoadingModal from './components/global/LoadingModal';
 
 // Initializing imports
 new Navbar();
 new HistoryHeader();
 new HistoryContent();
+
 
 class History {
   constructor() {
@@ -18,7 +18,16 @@ class History {
   };
 
   _loadEventListeners() {
-    // 
+    window.addEventListener('DOMContentLoaded', this._displayLoadingModal.bind(this));
+    window.addEventListener('sessionsLoaded', this._removeLoadingModal.bind(this));
+  };
+
+  _displayLoadingModal() {
+    LoadingModal.display();
+  };
+
+  _removeLoadingModal() {
+    LoadingModal.remove();
   };
 
 };
