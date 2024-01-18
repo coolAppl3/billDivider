@@ -21,6 +21,9 @@ async function fetchUserHistory() {
     console.log(err)
 
     if(!err.response) {
+      cookies.remove('loginToken');
+      messagePopup('Something went wrong', 'danger');
+      setTimeout(() => window.location.href = 'signIn.html', 500);
       return ;
     };
     

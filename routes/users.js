@@ -177,6 +177,33 @@ router.post('/history', async (req, res) => {
   }
 });
 
+// Get single session
+router.get('/session/:sessionID', async (req, res) => {
+  const loginToken = req.get('loginToken');
+  const requestedSessionID = req.params.sessionID;
+
+  const user = await User.findOne({ loginToken: loginToken });
+  if(!user) {
+    res.status(403).json({ success: false, message: 'Invalid login token. Please log in.' });
+    return ;
+  };
+
+  const userSessions = user.history;
+  const requestedSession = userSessions.find(({ sessionID }) => sessionID === requestedSessionID);
+
+  if(!requestedSession) {
+    res.status(404).json({ success: false, message: 'Session not found' });
+    return ;
+  };
+
+  try {
+    res.json({ success: true, data: requestedSession });
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({ success: false, message: 'Something went wrong' });
+  }
+});
+
 // Retrieve username
 router.post('/username', async (req, res) => {
   const loginToken = req.body.loginToken;

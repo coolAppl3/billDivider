@@ -1,7 +1,16 @@
-import ErrorSpan from "./ErrorSpan";
+import SessionAPi from "../services/SessionAPI";
 import sessionInfo from "./SessionInfo";
+import Cookies from "../global/Cookies";
+
+import messagePopup from "../global/messagePopup";
+import ErrorSpan from "./ErrorSpan";
+import LoadingModal from '../global/LoadingModal';
+import locateLoginToken from "../global/locateLoginToken";
+import SessionReference from "./SessionReference";
 
 // Initializing imports
+const sessionAPI = new SessionAPi();
+const cookies = new Cookies();
 const errorSpan = new ErrorSpan();
 
 class InitSession {
@@ -22,6 +31,65 @@ class InitSession {
     this._optionsContainer.addEventListener('click', this._changeCurrency.bind(this));
 
     window.addEventListener('editSharedWith', this._editSharedWith.bind(this));
+    window.addEventListener('DOMContentLoaded', this._checkUrlForSessionID.bind(this));
+  };
+
+  async _checkUrlForSessionID() {
+    LoadingModal.display();
+    const searchString = window.location.search;
+    const sessionID = searchString.substring(1);
+
+    if(!sessionID) {
+      LoadingModal.remove();
+      return ;
+    };
+
+    const loginToken = locateLoginToken();
+    if(!loginToken) { // Not logged in. Removing the query string.
+      window.location.href = 'session.html';
+    };
+    
+    try {
+      const res = await sessionAPI.getSession(loginToken, sessionID);
+      const session = await res.data.data;
+
+      sessionInfo.set(session);
+      SessionReference.set(session);
+
+      dispatchEvent(new Event('sessionStarted'));
+      setTimeout(() => dispatchEvent(new Event('render')), 100);
+
+      this._collapseStartModal();
+      this._displayMainSessionElement();
+      LoadingModal.remove();
+
+    } catch (err) {
+      console.log(err)
+
+      if(!err.response) {
+        cookies.remove('loginToken');
+        messagePopup('Something went wrong', 'danger');
+        setTimeout(() => window.location.href = 'session.html', 500);
+        return ;
+      };
+      
+      const status = err.response.status;
+
+      if(status === 403) { // Invalid loginToken
+        cookies.remove('loginToken');
+        messagePopup('Not logged in. Redirecting...', 'danger');
+        setTimeout(() => window.location.href = 'session.html', 500);
+
+      } else if(status === 404) { // Session ID not found
+        messagePopup('Session not found', 'danger');
+        setTimeout(() => window.location.href = 'session.html', 500);
+
+      } else { // Most likely 500
+        cookies.remove('loginToken');
+        messagePopup('Something went wrong', 'danger');
+        setTimeout(() => window.location.href = 'session.html', 500);
+      };
+    }
   };
 
   _start(e) {
@@ -93,6 +161,10 @@ class InitSession {
   };
 
   _displayStartModal() {
+    if(sessionInfo.sharedWith) {
+      this._sharedWithInput.value = sessionInfo.sharedWith;
+    };
+    
     this._startModal.style.display = 'block';
     setTimeout(() => this._startModal.style.display = 'block', 210);
     this._hideMainSessionElement();

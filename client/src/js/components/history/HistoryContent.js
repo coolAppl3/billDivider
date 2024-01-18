@@ -74,14 +74,14 @@ class HistoryContent {
 
       if(confirmModal.isExitClick(e)) {
         sessionElement.style.boxShadow = 'none';
-        confirmModal.removeModal();
+        confirmModal.remove();
         return ;
       };
 
       if(e.target.id === 'confirmModalConfirmBtn') {
         await deleteSession(sessionID);
         messagePopup('Session removed', 'success');
-        confirmModal.removeModal();
+        confirmModal.remove();
         
         dispatchEvent(new Event('render'));
       };

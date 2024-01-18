@@ -2,19 +2,53 @@ Frontend:
 
   - General:
 
-    - Moved addThousandComma.js to global components, as there's no reason for it to be specific to session.js.
-  
-    - Added SessionElement.js under history components to handle the creation of session elements, and imported into SessionContent.js.
+    - Changed "logout" in the navbar to "log out" for consistency. 
 
-    - Moving back to session.js in the next patch to complete its functionality.
-  
-  - session.js:
 
-    - Imported LoadingModal. It will be displayed when the page loads, and removed when a "sessionsLoaded" is dispatched from SessionContent.js.
-  
-  - HistoryContent.js:
+  - history.html:
 
-    - Added deleteSession.js under history.js components to handle the DELETE request.
-
-    - Functionality complete for now.
+    - Added a button to start a new session under the history header.
   
+  SessionAPI.js:
+
+    - Added getSession() to handle requests meant to retrieve a single session object.
+  
+  InitSession.js:
+
+    - Added _checkUrlForSessionID() which will be called when the page loads. The function will check for the existence of query string in the URL and do the following:
+
+      - If there's no query string, the function will just end and the page will behave as normal.
+      - If there is a query string, the function will check for a valid loginToken. If there isn't any, it will redirect to sessions.html.
+      - If there's a valid loginToken, the query string will be treated as a session ID, and the function will attempt a GET request to retrieve the session object. If it's successful, the page's details will be populated.
+    
+    - _checkUrlForSessionID() will also set "editingSession" to "true" in the sessionStorage, which will be relied on for enabling the save button for a session that's being edited.
+    
+    - SessionInfo.js:
+
+      - Added set() to populate the sessionInfo object with the details of the session being edited.
+    
+    - ConfirmModal.js:
+    
+      - Renamed removeModal() to remove() for consistency.
+    
+    - session.js:
+    
+      - Added SessionReference.js which will store a reference of a session that's being edited in sessionStorage, if that's the case. SessionReference.set() will only be called if the user is displaying/editing a bill from their history.
+
+      - Added _removeSessionReference() to remove originalSessionReference from sessionStorage whenever a user leaves the page.
+
+      - Enabled _confirmExist() which will stop any "unload" for the user to confirm it, unless the session save button is disabled.
+    
+    SessionHeader.js:
+
+      - Implemented functionality for enabling/disabling the save button. It will depend on whether the user is logged in, logged in and editing a bill, or not logged in at all.
+
+      - If the user is logged in and they're editing a bill from their history, SessionReference.changesMade() will be called every time a "render" or "sessionStarted" event is heard. The method compares the reference session and the current sessionInfo object after stringify-ing both of them, and the performance is negligible.
+  
+
+
+Backend:
+
+  - users.js:
+
+    - Added GET request functionality to the following endpoint: /session/:sessionID. It will retrieve a single session object based on the session ID that's passed in.

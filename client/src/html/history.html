@@ -112,7 +112,7 @@
 
             <ul class="user-menu-options hidden">
               <li><a href="history.html">History</a></li>
-              <li><a href="index.html">Logout</a></li>
+              <li><a href="index.html">Log out</a></li>
             </ul>
           </div>
         </div>
@@ -126,30 +126,43 @@
       <div class="container">
         <!-- History Header -->
         <div class="history-header">
-          <div class="history-header-item">
-            <p class="history-header-item-title">Username</p>
-            <p
-              class="history-header-item-value"
-              id="username"
-            ></p>
+          <div class="history-header-container">
+            <div class="history-header-container-item">
+              <p class="history-header-container-item-title">Username</p>
+              <p
+                class="history-header-container-item-value"
+                id="username"
+              ></p>
+            </div>
+
+            <div class="history-header-container-item">
+              <p class="history-header-container-item-title">Total sessions</p>
+              <p
+                class="history-header-container-item-value"
+                id="totalSessions"
+              ></p>
+            </div>
+
+            <div class="history-header-container-item">
+              <p class="history-header-container-item-title">Latest session</p>
+              <p
+                class="history-header-container-item-value"
+                id="latestSessionDate"
+              >
+                14 Jan 2024
+              </p>
+            </div>
           </div>
 
-          <div class="history-header-item">
-            <p class="history-header-item-title">Total sessions</p>
-            <p
-              class="history-header-item-value"
-              id="totalSessions"
-            ></p>
-          </div>
-
-          <div class="history-header-item">
-            <p class="history-header-item-title">Latest session</p>
-            <p
-              class="history-header-item-value"
-              id="latestSessionDate"
-            >
-              14 Jan 2024
-            </p>
+          <div class="history-header-controls">
+            <div class="btn-div">
+              <a
+                href="session.html"
+                class="btn btn-cta"
+              >
+                Start a new session
+              </a>
+            </div>
           </div>
         </div>
 
