@@ -150,20 +150,23 @@
   .history {
 
     &-header {
-      grid-template-columns: repeat(1, 1fr);
 
-      &-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        &-title {
-          margin-bottom: 0;
-          font-size: 1.6rem;
-        }
-
-        &-value {
-          font-size: 1.6rem;
+      &-container {
+        grid-template-columns: repeat(1, 1fr);
+  
+        &-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+  
+          &-title {
+            margin-bottom: 0;
+            font-size: 1.6rem;
+          }
+  
+          &-value {
+            font-size: 1.6rem;
+          }
         }
       }
     }
@@ -231,6 +234,32 @@
       }
     }
     
+  }
+
+  // history.html --- --- ---
+  .history {
+
+    &-header {
+
+      &-controls {
+
+        .btn-div {
+          width: 100%;
+
+          .btn {
+            width: 100%;
+          }
+        }
+      }
+    }
+
+    .content-t {
+      font-size: 2.6rem;
+    }
+
+    &-content {
+      grid-template-columns: repeat(1, 1fr);
+    }
   }
   
 }

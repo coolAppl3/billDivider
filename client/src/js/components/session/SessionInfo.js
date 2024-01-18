@@ -1,7 +1,7 @@
 class SessionInfo {
-  constructor(sharedWith, currency) {
-    this.sharedWith = sharedWith;
-    this.currency = currency;
+  constructor() {
+    this.sharedWith = undefined;
+    this.currency = undefined;
     this.yourTotal = 0;
     this.sharedWithTotal = 0;
     this.billsPaid = [];
@@ -49,11 +49,34 @@ class SessionInfo {
     return total;
   };
 
+  set(session) {
+    this.sharedWith = session.sharedWith;
+    this.currency = session.currency;
+    this.yourTotal = session.yourTotal;
+    this.sharedWithTotal = session.sharedWithTotal;
+
+    for(let bill of session.billsPaid) {
+      this.billsPaid.push(bill);
+    };
+
+    for(let bill of session.billsToPay) {
+      this.billsToPay.push(bill);
+    };
+  };
+
   reset() {
     this.yourTotal = 0;
     this.sharedWithTotal = 0;
     this.billsPaid = [];
     this.billsToPay = [];
+  };
+
+  isEmpty() {
+    if(this.billsPaid.length === 0 && this.billsToPay.length === 0) {
+      return true;
+    };
+
+    return false;
   };
 };
 

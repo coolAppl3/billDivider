@@ -1,8 +1,10 @@
 import Cookies from "./Cookies";
 import locateLoginToken from "./locateLoginToken";
+import ConfirmModal from './ConfirmModal';
 
 // Initializing imports
 const cookies = new Cookies();
+const confirmModal = new ConfirmModal();
 
 class Navbar {
   constructor() {
@@ -42,9 +44,23 @@ class Navbar {
 
   _logout(e) {
     e.preventDefault();
-    cookies.remove('loginToken');
-    
-    window.location.reload();
+
+    confirmModal.display('Are you sure you want to log out?');
+    const confirmModalElement = document.querySelector('.confirm-modal');
+
+    confirmModalElement.addEventListener('click', (e) => {
+      if(confirmModal.isExitClick(e)) {
+        confirmModal.remove();
+        return ;
+      };
+
+      if(e.target.id === 'confirmModalConfirmBtn') {
+        confirmModal.remove();
+        cookies.remove('loginToken');
+        window.location.reload();
+      };
+    });
+
   };
 }
 

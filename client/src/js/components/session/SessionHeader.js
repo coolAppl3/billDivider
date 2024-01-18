@@ -5,6 +5,7 @@ import ConfirmModal from "../global/ConfirmModal";
 import addThousandComma from '../global/addThousandComma';
 import messagePopup from "../global/messagePopup";
 import locateLoginToken from "../global/locateLoginToken";
+import SessionReference from "./SessionReference";
 
 // Initializing imports
 const confirmModal = new ConfirmModal();
@@ -32,8 +33,7 @@ class SessionHeader {
   };
 
   _loadEventListeners() {
-    window.addEventListener('sessionStarted', this._setSharedWith.bind(this));
-    window.addEventListener('sessionStarted', this._setCurrency.bind(this));
+    window.addEventListener('sessionStarted', this._handleSessionStartedEvents.bind(this));
     window.addEventListener('render', this._render.bind(this));
 
     this._updateSharedWithBtn.addEventListener('click', this._updateSharedWith.bind(this));
@@ -45,7 +45,13 @@ c
     this._updateDebtResult();
 
     this._enableResetButton();
-    this._enableSaveButton();
+    this._handleSaveButtonEnabling();
+  };
+
+  _handleSessionStartedEvents() {
+    this._setSharedWith();
+    this._setCurrency();
+    this._handleSaveButtonEnabling();
   };
 
   _updateTotals() {
@@ -100,7 +106,7 @@ c
     const confirmModalElement = document.querySelector('.confirm-modal');
     confirmModalElement.addEventListener('click', (e) => {
       if(confirmModal.isExitClick(e)) {
-        confirmModal.removeModal();
+        confirmModal.remove();
         return ;
       };
 
@@ -108,7 +114,7 @@ c
         sessionInfo.reset();
         messagePopup('Session reset', 'success');
         window.dispatchEvent(new Event('render'));
-        confirmModal.removeModal();
+        confirmModal.remove();
         return ;
       };
     });
@@ -132,8 +138,6 @@ c
       console.log(err)
     }
 
-    // NOT DONE - ONLY FOR TESTING SO FAR
-
   };
 
   _enableResetButton() {
@@ -147,29 +151,39 @@ c
   };
 
   
-  _enableSaveButton() {
-    // const isLoggedIn = locateLoginToken();
+  _handleSaveButtonEnabling() {
+    const loginToken = locateLoginToken();
 
+    if(SessionReference.referenceExists() && loginToken) {
+      if(SessionReference.changesMade(sessionInfo)) {
+        return this._enableSaveButton(true);
+      };
+
+      return this._disableSaveButton(true);
+    };
+
+    if(loginToken) {
+      if(!sessionInfo.isEmpty()) {
+        return this._enableSaveButton();
+      };
+
+      return this._disableSaveButton();
+    };
+
+    // User not logged in:
+    this._saveSessionBtn.setAttribute('title', 'Available when logged in');
+    this._disableSaveButton();
+    
+  };
+
+  _enableSaveButton() {
     this._saveSessionBtn.removeAttribute('disabled');
     this._saveSessionBtn.classList.remove('disabled');
-    
-    
-    // CHECK LATER ----
+  };
 
-    // LOCAL AND SESSION STORAGE NO LONGER IN USE - CHANGE THE LOGIC BELOW ACCORDINGLY
-
-    // ADD - If the user is logged in and the sessionInfo object is different than the one in the data base, which we'll store in session storage, then the button should be enabled.
-    
-    // This button should behave differently depending on whether or not the user is logged in.
-    
-    // If the user isn't logged in, and there's at least 1 bill, it should be enabled and ready to suggest saving the bill if the user creates an account. 
-
-    // If the user is logged in, but there's no sessionInfo object in session storage, this means that a logged in user is working on a new session. In this case, it should be enabled if the session has at least one bill.
-
-    // If the user is logged in AND there is a sessionInfo object in session storage, that means that the user is editing a session, and the button should be enabled AS LONG AS the sessionInfo object in session storage (from the database) is different than the resulting sessionInfo object.
-
-    // Performance might be a concern with the last part. Also, perhaps having two sessionStorage items, one for the sessionInfo object, and one to confirm the session is being edited, is more ideal. Probably best to handle through a query string in the href from history.js.
-
+  _disableSaveButton() {
+    this._saveSessionBtn.setAttribute('disabled', 'true');
+    this._saveSessionBtn.classList.add('disabled');
   };
 };
 

@@ -113,10 +113,10 @@ a {
 
       &.disabled {
         cursor: not-allowed;
-        filter: brightness(50%);
+        filter: brightness(30%);
     
         &:hover {
-          filter: brightness(50%) !important;
+          filter: brightness(30%) !important;
         }
     
       }

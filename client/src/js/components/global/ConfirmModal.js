@@ -16,7 +16,7 @@ class ConfirmModal {
     });
   };
   
-  removeModal() {
+  remove() {
     document.querySelector('.confirm-modal').remove();
   };
 

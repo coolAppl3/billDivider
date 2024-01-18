@@ -147,13 +147,13 @@ class SessionContent {
     const confirmModalElement = document.querySelector('.confirm-modal');
     confirmModalElement.addEventListener('click', (e) => {
       if(confirmModal.isExitClick(e)) {
-        confirmModal.removeModal();
+        confirmModal.remove();
         return ;
       };
   
       if(e.target.id === 'confirmModalConfirmBtn') {
         this._clearContentList(listOwner);
-        confirmModal.removeModal();
+        confirmModal.remove();
         return ;
       };
     });
@@ -162,12 +162,12 @@ class SessionContent {
   _clearContentList(listOwner) {
     if(listOwner === 'main') {
       sessionInfo.billsPaid = [];
-      messagePopup('Cleared bills paid by you', 'danger');
+      messagePopup('Cleared bills paid by you', 'success');
       this._retractContentList(this._mainContentList);
       
     } else if(listOwner === 'secondary') {
       sessionInfo.billsToPay = [];
-      messagePopup(`Cleared bills paid by ${sessionInfo.sharedWith}`, 'danger');
+      messagePopup(`Cleared bills paid by ${sessionInfo.sharedWith}`, 'success');
       this._retractContentList(this._secondaryContentList);
     };
     
