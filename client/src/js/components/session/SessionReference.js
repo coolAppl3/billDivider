@@ -1,15 +1,15 @@
+import sessionInfo from "./SessionInfo";
+
 class SessionReference {
 
   static set(session) {
     const sessionJSONString = JSON.stringify(session);
     const originalSessionReference = JSON.parse(sessionJSONString);
 
-    delete originalSessionReference.sessionID;
-    delete originalSessionReference.createdOn;
     sessionStorage.setItem('originalSessionReference', JSON.stringify(originalSessionReference));
   };
 
-  static changesMade(sessionInfo) {
+  static changesMade() {
     const originalSessionReference = sessionStorage.getItem('originalSessionReference');
 
     if(JSON.stringify(sessionInfo) === originalSessionReference) {

@@ -2,53 +2,41 @@ Frontend:
 
   - General:
 
-    - Changed "logout" in the navbar to "log out" for consistency. 
-
-
-  - history.html:
-
-    - Added a button to start a new session under the history header.
+    - Minimum viable product reached! Further improvements coming in future patches.
   
-  SessionAPI.js:
+    - Updated all components to reflect the backend endpoint changes.
 
-    - Added getSession() to handle requests meant to retrieve a single session object.
+    - Fixed SessionAPI.js's class being named SessionAPi. Typo fixed in all imports throughout the app.
+
+    - Ran a build command in honour of reaching an MVP.
   
-  InitSession.js:
+  - SessionHeader.js:
 
-    - Added _checkUrlForSessionID() which will be called when the page loads. The function will check for the existence of query string in the URL and do the following:
-
-      - If there's no query string, the function will just end and the page will behave as normal.
-      - If there is a query string, the function will check for a valid loginToken. If there isn't any, it will redirect to sessions.html.
-      - If there's a valid loginToken, the query string will be treated as a session ID, and the function will attempt a GET request to retrieve the session object. If it's successful, the page's details will be populated.
-    
-    - _checkUrlForSessionID() will also set "editingSession" to "true" in the sessionStorage, which will be relied on for enabling the save button for a session that's being edited.
-    
-    - SessionInfo.js:
-
-      - Added set() to populate the sessionInfo object with the details of the session being edited.
-    
-    - ConfirmModal.js:
-    
-      - Renamed removeModal() to remove() for consistency.
-    
-    - session.js:
-    
-      - Added SessionReference.js which will store a reference of a session that's being edited in sessionStorage, if that's the case. SessionReference.set() will only be called if the user is displaying/editing a bill from their history.
-
-      - Added _removeSessionReference() to remove originalSessionReference from sessionStorage whenever a user leaves the page.
-
-      - Enabled _confirmExist() which will stop any "unload" for the user to confirm it, unless the session save button is disabled.
-    
-    SessionHeader.js:
-
-      - Implemented functionality for enabling/disabling the save button. It will depend on whether the user is logged in, logged in and editing a bill, or not logged in at all.
-
-      - If the user is logged in and they're editing a bill from their history, SessionReference.changesMade() will be called every time a "render" or "sessionStarted" event is heard. The method compares the reference session and the current sessionInfo object after stringify-ing both of them, and the performance is negligible.
+    - _saveSession() fully working. Its behavior will vary depending on whether the (logged in) user is editing a session or adding a new one.
   
+  - SessionReference.js:
+
+    - Fixed changesMade() requiring the user to pass in the sessionInfo object. The object has been directly imported into the module.
+  
+  - SessionAPI.js:
+
+    - Updated the methods to reflect the recent changes in the API endpoints.
+
+    - Removed the different URLs from the constructor, and unified them into this._sessionURL.
+
+    - Added updateSession() as a PUT request for editing existing sessions.
 
 
 Backend:
 
   - users.js:
 
-    - Added GET request functionality to the following endpoint: /session/:sessionID. It will retrieve a single session object based on the session ID that's passed in.
+    - Changed all session-related requests to target the same /api/users/session endpoint. They all now use proper requests to determine what needs to be done.
+
+    - Login tokens are now exclusively sent within the request's header for all requests.
+
+    - Fixed the DELETE request for /api/users/session/:sessionID returning the entire user history. This was forgotten about during API testing. It now returns a message confirming that the request was successful.
+
+    - The DELETE request for /api/users/session/:sessionID now returns a 404 if the session doesn't exist.
+
+    - Added a PUT request for /api/users/session/:sessionID.

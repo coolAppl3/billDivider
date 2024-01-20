@@ -1,4 +1,4 @@
-import SessionAPi from "../services/SessionAPI";
+import SessionAPI from "../services/SessionAPI";
 import sessionInfo from "./SessionInfo";
 import Cookies from "../global/Cookies";
 
@@ -9,7 +9,7 @@ import locateLoginToken from "../global/locateLoginToken";
 import SessionReference from "./SessionReference";
 
 // Initializing imports
-const sessionAPI = new SessionAPi();
+const sessionAPI = new SessionAPI();
 const cookies = new Cookies();
 const errorSpan = new ErrorSpan();
 

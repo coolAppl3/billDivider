@@ -8,11 +8,14 @@ const generateLoginToken = require('../util/generateLoginToken');
 const generateSessionID = require('../util/generateSessionID');
 
 // ---
-
 const router = express.Router();
 
+
+
+// Account --- --- ---
+
 // Sign in
-router.post('/login', async (req, res) => {
+router.post('/signin', async (req, res) => {
   const { username, password } = req.body;
 
   const user = await User.findOne({ username: username });
@@ -36,7 +39,7 @@ router.post('/login', async (req, res) => {
 });
 
 // Sign up
-router.post('/', async (req, res) => {
+router.post('/signup', async (req, res) => {
   const { username, password } = req.body;
   const hash = await bcrypt.hash(password, 10);
 
@@ -85,97 +88,9 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Add session
-router.post('/newSession', async (req, res) => {
-  const user = await User.findOne({ loginToken: req.get('loginToken') });
-  if(!user) {
-    res.status(403).json({ success: false, message: 'Invalid login token. Please login' });
-    return ;
-  };
 
-  const newSession = req.body;
-  let newSessionID;
-  let index = 0;
-  while(index < 1) {
-    newSessionID = generateSessionID();
 
-    if(user.history.find(({ sessionID }) => sessionID === newSessionID) === undefined) {
-      newSession.sessionID = newSessionID;
-      index++;
-    };
-  };
-
-  user.history.push(newSession);
-
-  const updatedUser = await User.findByIdAndUpdate(
-    user._id,
-    {
-      $set: {
-        history: user.history,
-      },
-    },
-    {
-      new: true,
-    }
-  );
-
-  try {
-    res.json({ success: true, data: newSession });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ success: false, message: 'Something went wrong' });
-  }
-});
-
-// Delete session
-router.delete('/delete-session/:sessionID', async (req, res) => {
-  const user = await User.findOne({ loginToken: req.get('loginToken') });
-  if(!user) {
-    res.status(403).json({ success: false, message: 'Invalid login token. Please login' });
-    return ;
-  };
-
-  user.history = user.history.filter((session) => session.sessionID !== req.params.sessionID);
-  
-  const updatedHistory = await User.findByIdAndUpdate(
-    user._id,
-    {
-      $set: {
-        history: user.history,
-      },
-    },
-    {
-      new: true,
-    }
-  );
-
-  try {
-    res.json({ success: true, data: updatedHistory });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ success: false, message: 'Something went wrong' });
-  }
-});
-
-// Retrieve user sessions
-router.post('/history', async (req, res) => {
-  const loginToken = req.body.loginToken;
-
-  const user = await User.findOne({ loginToken: loginToken });
-  if(!user) {
-    res.status(404).json({ success: false, message: 'Invalid login' });
-    return ;
-  };
-
-  userHistory = user.history;
-  
-  try {
-    res.json({ success: true, data: userHistory });
-  } catch (err) {
-    console.log(err)
-    res.status(500).json({ success: false, message: 'Something went wrong' });
-  }
-});
+// Session --- --- ---
 
 // Get single session
 router.get('/session/:sessionID', async (req, res) => {
@@ -204,9 +119,155 @@ router.get('/session/:sessionID', async (req, res) => {
   }
 });
 
+// Add session
+router.post('/session', async (req, res) => {
+  const loginToken = req.get('loginToken');
+  
+  const user = await User.findOne({ loginToken: loginToken});
+  if(!user) {
+    res.status(403).json({ success: false, message: 'Invalid login token. Please login' });
+    return ;
+  };
+
+  const newSession = req.body;
+  let newSessionID;
+  let index = 0;
+  while(index < 1) {
+    newSessionID = generateSessionID();
+
+    if(user.history.find(({ sessionID }) => sessionID === newSessionID) === undefined) {
+      newSession.sessionID = newSessionID;
+      index++;
+    };
+  };
+
+  user.history.push(newSession);
+
+  await User.findByIdAndUpdate(
+    user._id,
+    {
+      $set: {
+        history: user.history,
+      },
+    },
+    {
+      new: true,
+    }
+  );
+
+  try {
+    res.json({ success: true, data: newSession });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false, message: 'Something went wrong' });
+  }
+});
+
+// Delete session
+router.delete('/session/:sessionID', async (req, res) => {
+  const loginToken = req.get('loginToken');
+  
+  const user = await User.findOne({ loginToken: loginToken });
+  if(!user) {
+    res.status(403).json({ success: false, message: 'Invalid login token. Please login' });
+    return ;
+  };
+
+  const sessionID = req.params.sessionID;
+  const updatedHistory = user.history.filter((session) => session.sessionID !== sessionID);
+  
+  if(JSON.stringify(updatedHistory) === JSON.stringify(user.history)) { // Session doesn't exist if they're the same.
+    res.status(404).json({ success: false, message: 'Session does not exist' });
+    return ;
+  };
+  
+  await User.findByIdAndUpdate(
+    user._id,
+    {
+      $set: {
+        history: updatedHistory,
+      },
+    },
+    {
+      new: true,
+    }
+  );
+
+  try {
+    res.json({ success: true, message: 'Session successfully deleted' });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false, message: 'Something went wrong' });
+  }
+});
+
+// Update session
+router.put('/session/:sessionID', async (req, res) => {
+  const loginToken = req.get('loginToken');
+  const id = req.params.sessionID;
+  const updatedSession = req.body;
+
+  const user = await User.findOne({ loginToken: loginToken });
+  if(!user) {
+    res.status(403).json({ success: false, message: 'Invalid login' });
+    return ;
+  };
+
+  const sessionIndex = user.history.findIndex(({ sessionID }) => sessionID === id );
+  if(sessionIndex === -1) {
+    res.status(404).json({ success: false, message: 'Invalid session ID. Could not find session to update.' });
+    return ;
+  };
+
+  user.history[sessionIndex] = updatedSession;
+
+  await User.findByIdAndUpdate(
+    user._id,
+    {
+      $set: {
+        history: user.history,
+      },
+    },
+    {
+      new: true,
+    }
+  );
+
+  try {
+    res.json({ success: true, data: updatedSession });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false, message: 'Something went wrong' });
+  }
+});
+
+
+
+// History --- --- ---
+
+// Retrieve user history 
+router.get('/history', async (req, res) => {
+  const loginToken = req.get('loginToken');
+
+  const user = await User.findOne({ loginToken: loginToken });
+  if(!user) {
+    res.status(404).json({ success: false, message: 'Invalid login' });
+    return ;
+  };
+
+  userHistory = user.history;
+  
+  try {
+    res.json({ success: true, data: userHistory });
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({ success: false, message: 'Something went wrong' });
+  }
+});
+
 // Retrieve username
-router.post('/username', async (req, res) => {
-  const loginToken = req.body.loginToken;
+router.get('/username', async (req, res) => {
+  const loginToken = req.get('loginToken');
 
   const user = await User.findOne({ loginToken: loginToken });
   if(!user) {

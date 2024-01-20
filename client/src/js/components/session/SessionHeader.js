@@ -1,15 +1,16 @@
 import sessionInfo from "./SessionInfo";
-import SessionAPi from "../services/SessionAPI";
+import SessionAPI from "../services/SessionAPI";
 
 import ConfirmModal from "../global/ConfirmModal";
 import addThousandComma from '../global/addThousandComma';
 import messagePopup from "../global/messagePopup";
 import locateLoginToken from "../global/locateLoginToken";
 import SessionReference from "./SessionReference";
+import LoadingModal from "../global/LoadingModal";
 
 // Initializing imports
 const confirmModal = new ConfirmModal();
-const sessionAPI = new SessionAPi();
+const sessionAPI = new SessionAPI();
 
 class SessionHeader {
   constructor() {
@@ -121,23 +122,58 @@ c
   };
 
   async _saveSession() {
-    // FIX - This should behave differently depending on similar conditions as in enableSaveButton.
+    LoadingModal.display();
 
-
-    const session = sessionInfo;
-    if(!session.createdOn) { // FIX - figure out how to make this work bug-free
-      session.createdOn = Date.now();
+    const loginToken = locateLoginToken();
+    if(!loginToken) {
+      messagePopup('Something went wrong', 'danger');
+      this._disableSaveButton(); // To prevent the page from asking the user to confirm leaving/reloading the page.
+      setTimeout(() => window.location.href = 'session.html', 1000);
+      
+      return ;
     };
     
-    const loginToken = locateLoginToken();
+    if(SessionReference.referenceExists() && SessionReference.changesMade()) {
+      try {
+        await sessionAPI.updateSession(loginToken, sessionInfo.sessionID, sessionInfo);
+        messagePopup('Session updated', 'success');
+        this._disableSaveButton(); // To prevent the page from asking the user to confirm leaving/reloading the page.
+        setTimeout(() => window.location.href = 'history.html', 1000);
 
+      } catch (err) {
+        console.log(user);
+        messagePopup('Something went wrong', 'danger');
+        this._disableSaveButton(); // To prevent the page from asking the user to confirm leaving/reloading the page.
+        setTimeout(() => window.location.href = 'history.html', 1000);
+      }
+
+      return ;
+    };
+
+    if(SessionReference.referenceExists() && !SessionReference.changesMade()) { // In case a user messes with the save button.
+      messagePopup('Something went wrong', 'danger');
+      this._disableSaveButton(); // To prevent the page from asking the user to confirm leaving/reloading the page.
+      setTimeout(() => window.location.href = 'history.html', 1000);
+
+      return ;
+    };
+
+    // User logged in, but not editing a session
     try {
-      const res = await sessionAPI.addSession(session, loginToken);
-      const newSession = res.data.data;
-    } catch (err) {
-      console.log(err)
-    }
+      const timestamp = Date.now();
+      sessionInfo.createdOn = timestamp;
 
+      await sessionAPI.addSession(loginToken, sessionInfo);
+      messagePopup('Session saved', 'success');
+      this._disableSaveButton(); // To prevent the page from asking the user to confirm leaving/reloading the page.
+      setTimeout(() => window.location.href = 'history.html', 1000);
+
+    } catch (err) {
+      console.log(err);
+      messagePopup('Something went wrong', 'danger');
+      this._disableSaveButton(); // To prevent the page from asking the user to confirm leaving/reloading the page.
+      setTimeout(() => window.location.href = 'session.html', 1000);
+    }
   };
 
   _enableResetButton() {
@@ -149,12 +185,9 @@ c
       this._resetSessionBtn.classList.remove('disabled');
     };
   };
-
   
   _handleSaveButtonEnabling() {
-    const loginToken = locateLoginToken();
-
-    if(SessionReference.referenceExists() && loginToken) {
+    if(SessionReference.referenceExists()) {
       if(SessionReference.changesMade(sessionInfo)) {
         return this._enableSaveButton(true);
       };
@@ -162,6 +195,7 @@ c
       return this._disableSaveButton(true);
     };
 
+    const loginToken = locateLoginToken();
     if(loginToken) {
       if(!sessionInfo.isEmpty()) {
         return this._enableSaveButton();

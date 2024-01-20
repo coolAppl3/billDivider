@@ -59,10 +59,11 @@ class SignIn {
       };
 
       messagePopup('Login successful!', 'success');
-      setTimeout(() => window.location.href = 'index.html', 500);
+      setTimeout(() => window.location.replace('history.html'), 1000);
       
     } catch (error) {
       console.log(error)
+      
       const status = error.response.status;
       if(status === 404) { // username doesn't exist
         this._displayErrorSpan('username', `Username doesn't exist.`);
