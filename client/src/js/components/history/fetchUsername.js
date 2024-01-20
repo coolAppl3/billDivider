@@ -1,8 +1,12 @@
-import HistoryAPI from "../services/historyAPI";
+import HistoryAPI from "../services/HistoryAPI";
 import locateLoginToken from "../global/locateLoginToken";
+
+import Cookies from "../global/Cookies";
+import messagePopup from "../global/messagePopup";
 
 // Initializing imports
 const historyAPI = new HistoryAPI();
+const cookies = new Cookies();
 
 async function fetchUsername() {
   const loginToken = locateLoginToken();
@@ -13,7 +17,7 @@ async function fetchUsername() {
   };
 
   try {
-    const res = await historyAPI.getUsername({ loginToken });
+    const res = await historyAPI.getUsername(loginToken);
     const username = res.data.data;
     return username;
     

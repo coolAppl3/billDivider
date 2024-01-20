@@ -1,8 +1,8 @@
-import HistoryAPI from "../services/historyAPI";
+import SessionAPI from "../services/SessionAPI";
 import locateLoginToken from "../global/locateLoginToken";
 
 // Initializing imports
-const historyAPI = new HistoryAPI();
+const sessionAPI = new SessionAPI();
 
 
 async function deleteSession(sessionID) {
@@ -14,7 +14,7 @@ async function deleteSession(sessionID) {
   };
 
   try {
-    const res = await historyAPI.deleteSession(loginToken, sessionID);
+    await sessionAPI.deleteSession(loginToken, sessionID);
     return ;
 
   } catch (err) {

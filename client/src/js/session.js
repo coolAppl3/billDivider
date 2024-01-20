@@ -33,7 +33,7 @@ class Session {
       e.returnValue = '';
     };
   };
-
+  
   _removeSessionReference() {
     SessionReference.remove();
   };

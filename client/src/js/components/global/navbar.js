@@ -1,6 +1,8 @@
 import Cookies from "./Cookies";
 import locateLoginToken from "./locateLoginToken";
 import ConfirmModal from './ConfirmModal';
+import messagePopup from "./messagePopup";
+import LoadingModal from "./LoadingModal";
 
 // Initializing imports
 const cookies = new Cookies();
@@ -56,8 +58,10 @@ class Navbar {
 
       if(e.target.id === 'confirmModalConfirmBtn') {
         confirmModal.remove();
+        LoadingModal.display();
         cookies.remove('loginToken');
-        window.location.reload();
+        messagePopup('Logged out successfully');
+        setTimeout(() => window.location.href = 'index.html', 1000);
       };
     });
 

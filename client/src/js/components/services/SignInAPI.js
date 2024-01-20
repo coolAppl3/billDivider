@@ -3,8 +3,8 @@ import axios from 'axios';
 class SignInAPI {
   constructor() {
     this._apiURL = window.location.hostname === 'localhost'
-    ? `http://${window.location.hostname}:5000/api/users/login`
-    : `https://${window.location.hostname}/api/users/login`;
+    ? `http://${window.location.hostname}:5000/api/users/signin`
+    : `https://${window.location.hostname}/api/users/signin`;
 
   };
 

@@ -7,6 +7,9 @@ class SessionInfo {
     this.billsPaid = [];
     this.billsToPay = [];
 
+    this.createdOn = undefined;
+    this.sessionID = undefined;
+
     this._loadEventListeners();
   }
 
@@ -62,6 +65,9 @@ class SessionInfo {
     for(let bill of session.billsToPay) {
       this.billsToPay.push(bill);
     };
+
+    this.sessionID = session.sessionID;
+    this.createdOn = session.createdOn;
   };
 
   reset() {

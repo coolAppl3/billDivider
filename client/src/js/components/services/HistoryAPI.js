@@ -9,22 +9,16 @@ class HistoryAPI {
     this._usernameURL = window.location.hostname === 'localhost'
     ? `http://${window.location.hostname}:5000/api/users/username`
     : `https://${window.location.hostname}/api/users/username`;
-
-    this._deleteSessionURL = window.location.hostname === 'localhost'
-    ? `http://${window.location.hostname}:5000/api/users/delete-session`
-    : `https://${window.location.hostname}/api/users/delete-session`;
   };
 
   async getSessionHistory(loginToken) {
-    return axios.post(this._sessionHistoryURL, loginToken);
+    return axios.get(this._sessionHistoryURL, {
+      headers: { loginToken },
+    });
   };
 
   async getUsername(loginToken) {
-    return axios.post(this._usernameURL, loginToken);
-  };
-
-  async deleteSession(loginToken, sessionID) {
-    return axios.delete(`${this._deleteSessionURL}/${sessionID}`, {
+    return axios.get(this._usernameURL, {
       headers: { loginToken },
     });
   };

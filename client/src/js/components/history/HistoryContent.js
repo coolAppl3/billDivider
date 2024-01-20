@@ -43,7 +43,7 @@ class HistoryContent {
     const sessions = await fetchUserHistory();
 
     if(!sessions) {
-      return ;
+      return dispatchEvent(new Event('sessionsLoaded'));
     };
 
     if(sessions.length === 0) {
