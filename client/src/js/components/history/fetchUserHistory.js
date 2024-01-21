@@ -3,6 +3,7 @@ import locateLoginToken from "../global/locateLoginToken";
 
 import Cookies from "../global/Cookies";
 import messagePopup from "../global/messagePopup";
+import redirectAfterDelayMillisecond from "../global/redirectAfterDelayMillisecond";
 
 // Initializing imports
 const historyAPI = new HistoryAPI();
@@ -26,22 +27,18 @@ async function fetchUserHistory() {
 
     if(!err.response) {
       cookies.remove('loginToken');
-      messagePopup('Something went wrong', 'danger');
-      setTimeout(() => window.location.href = 'signIn.html', 500);
-      return ;
+      return redirectAfterDelayMillisecond('signIn.html');
     };
     
     const status = err.response.status;
 
     if(status === 404) { // Invalid loginToken
       cookies.remove('loginToken');
-      messagePopup('Not logged in. Redirecting...', 'danger');
-      setTimeout(() => window.location.href = 'signIn.html', 500);
+      return redirectAfterDelayMillisecond('signIn.html', 1000, 'Not logged in');
 
     } else { // Most likely 500
       cookies.remove('loginToken');
-      messagePopup('Something went wrong', 'danger');
-      setTimeout(() => window.location.href = 'signIn.html', 500);
+      return redirectAfterDelayMillisecond('signIn.html');
     };
   }
 };

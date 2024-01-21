@@ -1,4 +1,4 @@
-function messagePopup(message, type) {
+function messagePopup(message, type = 'cta') {
   // Creating the parent div
   const dialog = document.createElement('div');
   dialog.className = 'dialog';

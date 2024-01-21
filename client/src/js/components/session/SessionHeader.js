@@ -7,6 +7,7 @@ import messagePopup from "../global/messagePopup";
 import locateLoginToken from "../global/locateLoginToken";
 import SessionReference from "./SessionReference";
 import LoadingModal from "../global/LoadingModal";
+import redirectAfterDelayMillisecond from "../global/redirectAfterDelayMillisecond";
 
 // Initializing imports
 const confirmModal = new ConfirmModal();
@@ -124,36 +125,29 @@ c
   async _saveSession() {
     LoadingModal.display();
 
+    const unsavedSessionChanges = JSON.parse(sessionStorage.getItem('unsavedSessionChanges'));
+    if(!unsavedSessionChanges) {
+      return SessionReference.referenceExists()
+        ? redirectAfterDelayMillisecond('history.html')
+        : redirectAfterDelayMillisecond('session.html')
+      ;
+    };
+    
+
     const loginToken = locateLoginToken();
     if(!loginToken) {
-      messagePopup('Something went wrong', 'danger');
-      this._disableSaveButton(); // To prevent the page from asking the user to confirm leaving/reloading the page.
-      setTimeout(() => window.location.href = 'session.html', 1000);
-      
-      return ;
+      return redirectAfterDelayMillisecond('session.html');
     };
     
     if(SessionReference.referenceExists() && SessionReference.changesMade()) {
       try {
         await sessionAPI.updateSession(loginToken, sessionInfo.sessionID, sessionInfo);
-        messagePopup('Session updated', 'success');
-        this._disableSaveButton(); // To prevent the page from asking the user to confirm leaving/reloading the page.
-        setTimeout(() => window.location.href = 'history.html', 1000);
+        redirectAfterDelayMillisecond('history.html');
 
       } catch (err) {
-        console.log(user);
-        messagePopup('Something went wrong', 'danger');
-        this._disableSaveButton(); // To prevent the page from asking the user to confirm leaving/reloading the page.
-        setTimeout(() => window.location.href = 'history.html', 1000);
+        console.log(err);
+        redirectAfterDelayMillisecond('history.html');
       }
-
-      return ;
-    };
-
-    if(SessionReference.referenceExists() && !SessionReference.changesMade()) { // In case a user messes with the save button.
-      messagePopup('Something went wrong', 'danger');
-      this._disableSaveButton(); // To prevent the page from asking the user to confirm leaving/reloading the page.
-      setTimeout(() => window.location.href = 'history.html', 1000);
 
       return ;
     };
@@ -164,20 +158,16 @@ c
       sessionInfo.createdOn = timestamp;
 
       await sessionAPI.addSession(loginToken, sessionInfo);
-      messagePopup('Session saved', 'success');
-      this._disableSaveButton(); // To prevent the page from asking the user to confirm leaving/reloading the page.
-      setTimeout(() => window.location.href = 'history.html', 1000);
+      redirectAfterDelayMillisecond('history.html');
 
     } catch (err) {
       console.log(err);
-      messagePopup('Something went wrong', 'danger');
-      this._disableSaveButton(); // To prevent the page from asking the user to confirm leaving/reloading the page.
-      setTimeout(() => window.location.href = 'session.html', 1000);
+      redirectAfterDelayMillisecond('session.html');
     }
   };
 
   _enableResetButton() {
-    if(!sessionInfo.billsPaid[0] && !sessionInfo.billsToPay[0]) {
+    if(sessionInfo.billsPaid.length !== 0 && !sessionInfo.billsToPay.length !== 0) {
       this._resetSessionBtn.setAttribute('disabled', '');
       this._resetSessionBtn.classList.add('disabled');
     } else {
@@ -188,7 +178,7 @@ c
   
   _handleSaveButtonEnabling() {
     if(SessionReference.referenceExists()) {
-      if(SessionReference.changesMade(sessionInfo)) {
+      if(SessionReference.changesMade()) {
         return this._enableSaveButton(true);
       };
 
@@ -211,11 +201,15 @@ c
   };
 
   _enableSaveButton() {
+    sessionStorage.setItem('unsavedSessionChanges', true);
+    
     this._saveSessionBtn.removeAttribute('disabled');
     this._saveSessionBtn.classList.remove('disabled');
   };
 
   _disableSaveButton() {
+    sessionStorage.setItem('unsavedSessionChanges', false);
+    
     this._saveSessionBtn.setAttribute('disabled', 'true');
     this._saveSessionBtn.classList.add('disabled');
   };

@@ -3,6 +3,7 @@ import locateLoginToken from "./locateLoginToken";
 import ConfirmModal from './ConfirmModal';
 import messagePopup from "./messagePopup";
 import LoadingModal from "./LoadingModal";
+import redirectAfterDelayMillisecond from "./redirectAfterDelayMillisecond";
 
 // Initializing imports
 const cookies = new Cookies();
@@ -60,8 +61,7 @@ class Navbar {
         confirmModal.remove();
         LoadingModal.display();
         cookies.remove('loginToken');
-        messagePopup('Logged out successfully');
-        setTimeout(() => window.location.href = 'index.html', 1000);
+        redirectAfterDelayMillisecond('index.html', 1000, 'Logged out successfully', 'cta');
       };
     });
 

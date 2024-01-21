@@ -30,6 +30,7 @@ class BillModal {
     this._billModalForm.addEventListener('submit', this._handleFormSubmission.bind(this));
 
     this._directlyOwedCheckbox.addEventListener('click', this._displayCheckBox.bind(this));
+    this._directlyOwedCheckbox.addEventListener('keyup', this._handleCheckBoxKeyEvents.bind(this));
   };
 
   _handleFormSubmission(e) {
@@ -56,7 +57,7 @@ class BillModal {
   };
 
   _addNewBill() {
-    if(!this._compareValueAndUnshared()) {
+    if(!this._validValueAndUnshared()) {
       return ;
     };
 
@@ -100,7 +101,7 @@ class BillModal {
   };
 
   _updateBill(billID) {
-    if(!this._compareValueAndUnshared()) {
+    if(!this._validValueAndUnshared()) {
       return ;
     };
 
@@ -112,13 +113,8 @@ class BillModal {
       return ;
     };
 
-    let directlyOwed;
-    if(this._directlyOwedCheckboxChecked()) {
-      directlyOwed = true;
-    } else {
-      directlyOwed = false;
-    };
 
+    const directlyOwed = this._directlyOwedCheckboxChecked(); // Boolean
     const billOwner = this._billModalForm.getAttribute('data-bill-owner');
     
     const updatedBill = {
@@ -177,7 +173,7 @@ class BillModal {
     return true;
   };
 
-  _compareValueAndUnshared() {
+  _validValueAndUnshared() {
     errorSpan.hide(this._billValueInput.parentElement);
     errorSpan.hide(this._billUnsharedInput.parentElement);
     
@@ -218,6 +214,7 @@ class BillModal {
     };
 
     this._billModal.style.display = 'block';
+    this._billNameInput.focus();
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -282,19 +279,40 @@ class BillModal {
     };
   };
 
+  _handleCheckBoxKeyEvents(e) {
+    const pressedKey = e.key;
+
+    if(pressedKey === 'Enter') {
+      this._displayCheckBox(e);
+    };
+  };
+  
   _displayCheckBox(e) {
     e.stopImmediatePropagation();
     
     if(this._directlyOwedCheckbox.classList.contains('checked')) {
       this._directlyOwedCheckbox.classList.remove('checked');
+      this._enableUnsharedInput();
     } else {
       this._directlyOwedCheckbox.classList.add('checked');
-      
+      this._disableUnsharedInput();
     };
   };
 
   _directlyOwedCheckboxChecked() {
     return this._directlyOwedCheckbox.classList.contains('checked');
+  };
+
+  _disableUnsharedInput() {
+    this._billUnsharedInput.value = 0;
+    this._billUnsharedInput.setAttribute('disabled', 'true');
+    this._billUnsharedInput.parentElement.classList.add('disabled');
+  };
+
+  _enableUnsharedInput() {
+    this._billUnsharedInput.value = 0;
+    this._billUnsharedInput.removeAttribute('disabled');
+    this._billUnsharedInput.parentElement.classList.remove('disabled');
   };
 };
 

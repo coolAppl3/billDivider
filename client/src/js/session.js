@@ -15,23 +15,26 @@ new SessionContent();
 
 class Session {
   constructor() {
-    this._saveSessionBtn = document.querySelector('#saveSessionBtn');
-
     this._loadEventListeners();
   };
 
   _loadEventListeners() {
     window.addEventListener('beforeunload', this._confirmExit.bind(this));
-    window.addEventListener('pagehide', this._removeSessionReference.bind(this));
+    window.addEventListener('pagehide', this._handlePageHideEvents.bind(this));
   };
 
   _confirmExit(e) {
-    const saveSessionBtn = document.querySelector('#saveSessionBtn');
+    const unsavedSessionChanges = JSON.parse(sessionStorage.getItem('unsavedSessionChanges'));
     
-    if(!saveSessionBtn.classList.contains('disabled')) {
+    if(unsavedSessionChanges) {
       e.preventDefault();
       e.returnValue = '';
     };
+  };
+
+  _handlePageHideEvents() {
+    this._removeSessionReference();
+    sessionStorage.removeItem('unsavedSessionChanges');
   };
   
   _removeSessionReference() {
