@@ -53,8 +53,9 @@ class HistoryContent {
       dispatchEvent(new Event('sessionsLoaded'));
       return ;
     };
-    
-    for(let session of sessions) {
+
+    const reversedSessions = sessions.toReversed();
+    for(let session of reversedSessions) {
       const sessionItem = sessionElement.create(session);
       this._historyContentElement.appendChild(sessionItem);
     };

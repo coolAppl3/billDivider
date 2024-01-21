@@ -5,6 +5,7 @@ import Cookies from './components/global/Cookies';
 import messagePopup from './components/global/messagePopup';
 import LoadingModal from './components/global/LoadingModal';
 import locateLoginToken from './components/global/locateLoginToken';
+import redirectAfterDelayMillisecond from './components/global/redirectAfterDelayMillisecond';
 
 // Initializing imports
 const signInAPI = new SignInAPI();
@@ -25,7 +26,11 @@ class SignIn {
   _loadEventListeners() {
     window.addEventListener('DOMContentLoaded', this._redirect.bind(this));
     this._signInContainerForm.addEventListener('submit', this._signIn.bind(this));
+
     this._keepMeSignedInCheckBox.addEventListener('click', this._displayCheckBox.bind(this));
+    this._keepMeSignedInCheckBox.addEventListener('keyup', this._handleCheckBoxKeyEvents.bind(this));
+
+    
     this._linksContainer.addEventListener('click', this._handleFormLinks.bind(this));
     this._revealPasswordIcon.addEventListener('click', this._revalPassword.bind(this));
   };
@@ -58,13 +63,18 @@ class SignIn {
         cookies.set('loginToken', loginToken, 'no-age');
       };
 
-      messagePopup('Login successful!', 'success');
-      setTimeout(() => window.location.replace('history.html'), 1000);
+      redirectAfterDelayMillisecond('history.html', 1000, 'Login successful!', 'success');
       
-    } catch (error) {
-      console.log(error)
+    } catch (err) {
+      console.log(err)
       
-      const status = error.response.status;
+      if(!err.response) {
+        cookies.remove('loginToken');
+        return redirectAfterDelayMillisecond('signIn.html');
+      };
+      
+      const status = err.response.status;
+
       if(status === 404) { // username doesn't exist
         this._displayErrorSpan('username', `Username doesn't exist.`);
         LoadingModal.remove();
@@ -153,6 +163,14 @@ class SignIn {
       
       // Ensuring the revealPasswordBtn stays properly aligned
       document.querySelector('#revealPassword').style.bottom = '1px';
+    };
+  };
+
+  _handleCheckBoxKeyEvents(e) {
+    const pressedKey = e.key;
+
+    if(pressedKey === 'Enter') {
+      this._displayCheckBox(e);
     };
   };
 

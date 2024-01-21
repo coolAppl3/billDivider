@@ -7,6 +7,7 @@ import ErrorSpan from "./ErrorSpan";
 import LoadingModal from '../global/LoadingModal';
 import locateLoginToken from "../global/locateLoginToken";
 import SessionReference from "./SessionReference";
+import redirectAfterDelayMillisecond from "../global/redirectAfterDelayMillisecond";
 
 // Initializing imports
 const sessionAPI = new SessionAPI();
@@ -65,29 +66,24 @@ class InitSession {
 
     } catch (err) {
       console.log(err)
-
+      
       if(!err.response) {
         cookies.remove('loginToken');
-        messagePopup('Something went wrong', 'danger');
-        setTimeout(() => window.location.href = 'session.html', 500);
-        return ;
+        return redirectAfterDelayMillisecond('signIn.html');
       };
       
       const status = err.response.status;
-
+      
       if(status === 403) { // Invalid loginToken
         cookies.remove('loginToken');
-        messagePopup('Not logged in. Redirecting...', 'danger');
-        setTimeout(() => window.location.href = 'session.html', 500);
+        return redirectAfterDelayMillisecond('signIn.html', 1000, 'Not logged in');
 
       } else if(status === 404) { // Session ID not found
-        messagePopup('Session not found', 'danger');
-        setTimeout(() => window.location.href = 'session.html', 500);
-
+        return redirectAfterDelayMillisecond('session.html', 1000, 'Session not found');
+        
       } else { // Most likely 500
         cookies.remove('loginToken');
-        messagePopup('Something went wrong', 'danger');
-        setTimeout(() => window.location.href = 'session.html', 500);
+        return redirectAfterDelayMillisecond('session.html', 1000, 'Something went wrong');
       };
     }
   };

@@ -2,41 +2,39 @@ Frontend:
 
   - General:
 
-    - Minimum viable product reached! Further improvements coming in future patches.
-  
-    - Updated all components to reflect the backend endpoint changes.
+    - Added redirectAfterDelayMillisecond.js under global components. The function can take 4 arguments, 3 of which are optional:
 
-    - Fixed SessionAPI.js's class being named SessionAPi. Typo fixed in all imports throughout the app.
+      - target: The redirect destination. This argument is mandatory.
+      - delay: Delay before the user is redirect. Default value is 1000ms.
+      - message: Message to be displayed using messagePopup.js. The default message is "Something went wrong".
+      - popupColor: The color of the message popup. Default color is "danger" (red).
+    
+    - Adopted the use of redirectAfterDelayMillisecond.js throughout the app where it made sense, to avoid repetitive code and improve readability.
 
-    - Ran a build command in honour of reaching an MVP.
-  
   - SessionHeader.js:
 
-    - _saveSession() fully working. Its behavior will vary depending on whether the (logged in) user is editing a session or adding a new one.
+    - _enableSaveButton() and _disableSaveButton() now set a session storage item called "unsavedSessionChanges", and give it a value of true or false accordingly.
+
+    - Added a new if-statement to check if the unsavedSessionChanges item is false. If it is, but the function is still somehow called (users potentially inspecting the save button element), the function will abort and redirect the user depending on whether they are editing a new bill or creating a new one.
   
-  - SessionReference.js:
+  - session.js:
 
-    - Fixed changesMade() requiring the user to pass in the sessionInfo object. The object has been directly imported into the module.
+    - _confirmExit() now relies on the unsavedSessionChanges item in session storage, rather than the save session button.
   
-  - SessionAPI.js:
+  - HistoryContent.js:
 
-    - Updated the methods to reflect the recent changes in the API endpoints.
+    - Sessions are now reversed before being displayed. This is to ensure the most recent sessions show up first, which makes much more sense.
+  
+  - BillModal.js:
 
-    - Removed the different URLs from the constructor, and unified them into this._sessionURL.
+    - Checking the "To be fully paid by" checkbox now disabled the unshared input, and sets its value to 0. This will help avoid confusion on the user's end.
 
-    - Added updateSession() as a PUT request for editing existing sessions.
+    - Checkbox is now reachable and functional using only a keyboard.
+  
+  - signIn.js:
 
+    - The "Keep me signed in" checkbox is now reachable and functional using only a keyboard.
 
-Backend:
+  - signUp.js:
 
-  - users.js:
-
-    - Changed all session-related requests to target the same /api/users/session endpoint. They all now use proper requests to determine what needs to be done.
-
-    - Login tokens are now exclusively sent within the request's header for all requests.
-
-    - Fixed the DELETE request for /api/users/session/:sessionID returning the entire user history. This was forgotten about during API testing. It now returns a message confirming that the request was successful.
-
-    - The DELETE request for /api/users/session/:sessionID now returns a 404 if the session doesn't exist.
-
-    - Added a PUT request for /api/users/session/:sessionID.
+    - The "Keep me signed in" checkbox is now reachable and functional using only a keyboard.

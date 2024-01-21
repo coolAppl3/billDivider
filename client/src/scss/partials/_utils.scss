@@ -341,6 +341,10 @@ a {
     }
   }
 
+  &.disabled {
+    filter: brightness(0.6);
+  }
+
   label {
     display: block;
     font-size: 1.4rem;
@@ -371,13 +375,13 @@ a {
       font-family: $main-font;
       font-weight: 500;
     }
-
-    &#password {
-      padding-right: 3.5rem;
-    }
     
     &:focus {
       border-color: $cta;
+    }
+
+    &#password {
+      padding-right: 3.5rem;
     }
   }
 

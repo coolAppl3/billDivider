@@ -1,5 +1,6 @@
 import SessionAPI from "../services/SessionAPI";
 import locateLoginToken from "../global/locateLoginToken";
+import redirectAfterDelayMillisecond from "../global/redirectAfterDelayMillisecond";
 
 // Initializing imports
 const sessionAPI = new SessionAPI();
@@ -22,22 +23,18 @@ async function deleteSession(sessionID) {
 
     if(!err.response) {
       cookies.remove('loginToken');
-      messagePopup('Something went wrong', 'danger');
-      setTimeout(() => window.location.href = 'signIn.html', 500);
-      return ;
+      return redirectAfterDelayMillisecond('signIn.html');
     };
     
     const status = err.response.status;
 
     if(status === 403) { // Invalid loginToken
       cookies.remove('loginToken');
-      messagePopup('Not logged in. Redirecting...', 'danger');
-      setTimeout(() => window.location.href = 'signIn.html', 500);
+      return redirectAfterDelayMillisecond('signIn.html', 1000, 'Not logged in');
 
     } else { // Most likely 500
       cookies.remove('loginToken');
-      messagePopup('Something went wrong', 'danger');
-      setTimeout(() => window.location.href = 'signIn.html', 500);
+      return redirectAfterDelayMillisecond('signIn.html');
     };
   }
 };

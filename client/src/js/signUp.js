@@ -5,6 +5,7 @@ import Cookies from './components/global/Cookies';
 import messagePopup from './components/global/messagePopup';
 import LoadingModal from './components/global/LoadingModal';
 import locateLoginToken from './components/global/locateLoginToken';
+import redirectAfterDelayMillisecond from './components/global/redirectAfterDelayMillisecond';
 
 // Initializing imports
 const signUpAPI = new SignUpAPI();
@@ -24,9 +25,11 @@ class SignUp {
 
   _loadEventListeners() {
     window.addEventListener('DOMContentLoaded', this._redirect.bind(this));
-    
     this._signupContainerForm.addEventListener('submit', this._signupUser.bind(this));
+
     this._keepMeSignedInCheckBox.addEventListener('click', this._displayCheckBox.bind(this));
+    this._keepMeSignedInCheckBox.addEventListener('keyup', this._handleCheckBoxKeyEvents.bind(this));
+    
     this._linksContainer.addEventListener('click', this._handleFormLinks.bind(this));
   };
 
@@ -53,12 +56,12 @@ class SignUp {
         cookies.set('loginToken', loginToken, 'no-age');
       };
 
-      messagePopup('Signed up successfully!', 'success');
       LoadingModal.display();
-      setTimeout(() => window.location.replace('history.html'), 1000);
+      redirectAfterDelayMillisecond('history.html', 1000, 'Signed up successfully!', 'success');
       
-    } catch (error) {
-      const statusCode = error.response.status;
+    } catch (err) {
+      const statusCode = err.response.status;
+      
       if(statusCode === 401) { // Invalid username or password - Just as an extra layer of safety.
         this._displayErrorSpan('username', 'Invalid username')
 
@@ -146,6 +149,14 @@ class SignUp {
     };
   };
 
+  _handleCheckBoxKeyEvents(e) {
+    const pressedKey = e.key;
+
+    if(pressedKey === 'Enter') {
+      this._displayCheckBox(e);
+    };
+  };
+  
   _displayCheckBox(e) {
     e.stopImmediatePropagation();
 
