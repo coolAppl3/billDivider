@@ -2,8 +2,7 @@ import SessionAPI from "../services/SessionAPI";
 import sessionInfo from "./SessionInfo";
 import Cookies from "../global/Cookies";
 
-import messagePopup from "../global/messagePopup";
-import ErrorSpan from "./ErrorSpan";
+import ErrorSpan from "../global/ErrorSpan";
 import LoadingModal from '../global/LoadingModal';
 import locateLoginToken from "../global/locateLoginToken";
 import SessionReference from "./SessionReference";
@@ -22,7 +21,7 @@ class InitSession {
     this._sharedWithInput = document.querySelector('#sharingWith');
     this._optionsContainer = document.querySelector('.options-container');
     this._optionsContainerItems = document.querySelectorAll('.options-container-item');
-
+    this._startModalStartBtn = document.querySelector('#startModalStartBtn');
 
     this._loadEventListeners();
   };
@@ -46,8 +45,8 @@ class InitSession {
     };
 
     const loginToken = locateLoginToken();
-    if(!loginToken) { // Not logged in. Removing the query string.
-      window.location.href = 'session.html';
+    if(!loginToken) {
+      return redirectAfterDelayMillisecond('session.html', 1000, 'Session not found');
     };
     
     try {
@@ -57,12 +56,12 @@ class InitSession {
       sessionInfo.set(session);
       SessionReference.set(session);
 
-      dispatchEvent(new Event('sessionStarted'));
-      setTimeout(() => dispatchEvent(new Event('render')), 100);
-
       this._collapseStartModal();
       this._displayMainSessionElement();
       LoadingModal.remove();
+      
+      dispatchEvent(new Event('sessionStarted'));
+      dispatchEvent(new Event('render'));
 
     } catch (err) {
       console.log(err)
@@ -132,8 +131,7 @@ class InitSession {
 
   _editSharedWith() {
     this._displayStartModal();
-    const formBtn = this._startModalForm.lastElementChild.firstElementChild;
-    formBtn.textContent = 'Update';
+    this._startModalStartBtn.textContent = 'Update';
   };
 
   _changeCurrency(e) {
@@ -175,10 +173,10 @@ class InitSession {
 
   _collapseStartModal() {
     this._startModal.style.transform = 'scale(0)';
-    setTimeout(() => this._startModal.style.display = 'none', 200);
-
-    const formBtn = this._startModalForm.lastElementChild.firstElementChild;
-    formBtn.textContent = 'Start session';
+    setTimeout(() => {
+      this._startModal.style.display = 'none'
+      this._startModalStartBtn.textContent = 'Start session';
+    }, 200);
   };
 
   _displayMainSessionElement() {
@@ -201,4 +199,3 @@ class InitSession {
 };
 
 export default InitSession;
-

@@ -40,7 +40,7 @@
       <div class="container">
         <div class="sign-up-container">
           <form class="sign-up-container-form">
-            <h3 class="content-t text-cta">Create a new account</h3>
+            <h3 class="content-t">Create a new account</h3>
             <p class="content-p">Quick and simple. No email needed!</p>
 
             <div class="h-line"></div>
@@ -58,11 +58,14 @@
             <div class="form-group">
               <label for="password">Password</label>
               <input
-                type="text"
+                type="password"
                 id="password"
-                autocomplete="off"
+                autocomplete="on"
               />
-
+              <i
+                class="fa-solid fa-eye"
+                id="revealPassword"
+              ></i>
               <span class="error-span"></span>
             </div>
 
@@ -93,11 +96,17 @@
             </p>
 
             <div class="links-container">
-              <p id="returnToPreviousPage">
+              <p
+                id="returnToPreviousPage"
+                tabindex="0"
+              >
                 <i class="fa-solid fa-angle-left"></i>
                 Return to previous page
               </p>
-              <p id="returnToHomepage">
+              <p
+                id="returnToHomepage"
+                tabindex="0"
+              >
                 <i class="fa-solid fa-house"></i>
                 Homepage
               </p>

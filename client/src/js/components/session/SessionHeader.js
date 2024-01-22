@@ -125,6 +125,10 @@ c
   async _saveSession() {
     LoadingModal.display();
 
+    if(!sessionInfo.sharedWith) { // To protect against potential element manipulation.
+      return redirectAfterDelayMillisecond('session.html');
+    };
+
     const unsavedSessionChanges = JSON.parse(sessionStorage.getItem('unsavedSessionChanges'));
     if(!unsavedSessionChanges) {
       return SessionReference.referenceExists()
