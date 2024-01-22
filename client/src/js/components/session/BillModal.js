@@ -1,6 +1,6 @@
 import sessionInfo from "./SessionInfo";
 
-import ErrorSpan from "./ErrorSpan";
+import ErrorSpan from "../global/ErrorSpan";
 import messagePopup from "../global/messagePopup";
 import generateBillID from "./generateBillID";
 import dispatchMainGlobalEvents from "./dispatchMainGlobalEvents";

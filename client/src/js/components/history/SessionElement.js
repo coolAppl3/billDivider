@@ -113,6 +113,7 @@ class SessionElement {
 
   _createSessionRemoveBtn() {
     const btn = document.createElement('p');
+    btn.setAttribute('tabindex', 0);
     btn.classList = 'delete-session text-danger removeSessionBtn';
     btn.appendChild(document.createTextNode('Remove session'));
     return btn;

@@ -19,12 +19,22 @@ class HistoryContent {
   _loadEventListeners() {
     window.addEventListener('DOMContentLoaded', this._render.bind(this));
     window.addEventListener('render', this._render.bind(this));
+
     this._historyContentElement.addEventListener('click', this._handleHistoryContentClickEvents.bind(this));
+    this._historyContentElement.addEventListener('keyup', this._handleHistoryContentKeyEvents.bind(this));
   };
 
   _render() {
     this._clearSessions();
     this._renderSessions();
+  };
+
+  _handleHistoryContentKeyEvents(e) {
+    const pressedKey = e.key;
+
+    if(pressedKey === 'Enter') {
+      this._handleHistoryContentClickEvents(e);
+    };
   };
 
   _handleHistoryContentClickEvents(e) {

@@ -2,39 +2,53 @@ Frontend:
 
   - General:
 
-    - Added redirectAfterDelayMillisecond.js under global components. The function can take 4 arguments, 3 of which are optional:
+    - Keyboard navigation possible throughout the app.
 
-      - target: The redirect destination. This argument is mandatory.
-      - delay: Delay before the user is redirect. Default value is 1000ms.
-      - message: Message to be displayed using messagePopup.js. The default message is "Something went wrong".
-      - popupColor: The color of the message popup. Default color is "danger" (red).
+  - redirectAfterDelayMillisecond.js:
+
+    - The function now checks for an unsavedSessionChanges item in session storage, and removes it before continuing to avoid conflict with confirmExit() in session.js.
+  
+  signUp.html:
+  
+    - The "Create a new account" title is no longer theme colored and is just white. This is for consistency sake, as well as to prevent to many CTA colors in one place.
+
+    - Imported ErrorSpan and refactored existing functions to work with it.
+
+    - _displayErrorSpan and _hideErrorSpan() are depreciated and removed.
+
+    - Renamed _redirect() to _redirectIfLoggedIn().
+
+    - Further refactoring coming in future patches.
+  
+  signUp.js:
+
+    - Added an eye icon to hide/show the password when signing up, similarly to signIn.js.
+
+    - Imported ErrorSpan and refactored existing functions to work with it.
+
+    - _displayErrorSpan and _hideErrorSpan() are depreciated and removed.
     
-    - Adopted the use of redirectAfterDelayMillisecond.js throughout the app where it made sense, to avoid repetitive code and improve readability.
+    - Renamed _redirect() to _redirectIfLoggedIn().
 
-  - SessionHeader.js:
-
-    - _enableSaveButton() and _disableSaveButton() now set a session storage item called "unsavedSessionChanges", and give it a value of true or false accordingly.
-
-    - Added a new if-statement to check if the unsavedSessionChanges item is false. If it is, but the function is still somehow called (users potentially inspecting the save button element), the function will abort and redirect the user depending on whether they are editing a new bill or creating a new one.
-  
-  - session.js:
-
-    - _confirmExit() now relies on the unsavedSessionChanges item in session storage, rather than the save session button.
-  
-  - HistoryContent.js:
-
-    - Sessions are now reversed before being displayed. This is to ensure the most recent sessions show up first, which makes much more sense.
-  
-  - BillModal.js:
-
-    - Checking the "To be fully paid by" checkbox now disabled the unshared input, and sets its value to 0. This will help avoid confusion on the user's end.
-
-    - Checkbox is now reachable and functional using only a keyboard.
+    - Further refactoring coming in future patches.
   
   - signIn.js:
 
-    - The "Keep me signed in" checkbox is now reachable and functional using only a keyboard.
+    - Fixed a bug where the loading modal wouldn't be removed after validating the value of the form inputs.
+  
+  - SessionElement.js:
 
-  - signUp.js:
+    - Remove buttons now have a tabindex attribute added and set to 0 to make them selectable with a keyboard.
+  
+  HistoryContent.js:
 
-    - The "Keep me signed in" checkbox is now reachable and functional using only a keyboard.
+    - Added _handleHistoryContentKeyEvents() to handle any "Enter" keyup events and make keyboard navigation possible.
+  
+  session.html:
+
+    - Improved how both billModal and startModal are centered vertically, as it was not quite right and was causing issues with shorter devices.
+  
+  ErrorSpan.js:
+
+    - Moved under global components, instead of unnecessarily being specific to session components. All related imports have been update accordingly. 
+  

@@ -7,6 +7,10 @@ function redirectAfterDelayMillisecond(
   popupColor = 'danger'
 ) {
 
+  if(sessionStorage.getItem('unsavedSessionChanges')) {
+    sessionStorage.removeItem('unsavedSessionChanges');
+  };
+  
   messagePopup(message, popupColor);
   setTimeout(() => window.location.href = target, delay);
 };
