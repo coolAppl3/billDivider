@@ -171,13 +171,14 @@ c
   };
 
   _enableResetButton() {
-    if(sessionInfo.billsPaid.length !== 0 && !sessionInfo.billsToPay.length !== 0) {
+    if(sessionInfo.billsPaid.length === 0 && sessionInfo.billsToPay.length === 0) {
       this._resetSessionBtn.setAttribute('disabled', '');
       this._resetSessionBtn.classList.add('disabled');
-    } else {
-      this._resetSessionBtn.removeAttribute('disabled');
-      this._resetSessionBtn.classList.remove('disabled');
+      return ;
     };
+
+    this._resetSessionBtn.removeAttribute('disabled');
+    this._resetSessionBtn.classList.remove('disabled');
   };
   
   _handleSaveButtonEnabling() {

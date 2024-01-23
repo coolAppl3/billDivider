@@ -33,7 +33,7 @@
 
     <!-- Title -->
     <title>Sign In - Bill Divider</title>
-  <script defer src="js/signIn-4c33fa10894064d3b169.js"></script></head>
+  <script defer src="js/signIn-feebcb7276e7b2cd92cf.js"></script></head>
   <body>
     <!-- Sign In-->
     <section class="sign-in">
@@ -59,11 +59,12 @@
               <input
                 type="password"
                 id="password"
-                autocapitalize="on"
+                autocomplete="on"
               />
               <i
                 class="fa-solid fa-eye"
                 id="revealPassword"
+                tabindex="0"
               ></i>
               <span class="error-span"></span>
             </div>
@@ -72,6 +73,7 @@
               <div
                 class="checkbox"
                 id="keepMeSignedIn"
+                tabindex="0"
               >
                 <span class="check-icon"></span>
               </div>
@@ -94,11 +96,17 @@
             </p>
 
             <div class="links-container">
-              <p id="returnToPreviousPage">
+              <p
+                id="returnToPreviousPage"
+                tabindex="0"
+              >
                 <i class="fa-solid fa-angle-left"></i>
                 Return to previous page
               </p>
-              <p id="returnToHomepage">
+              <p
+                id="returnToHomepage"
+                tabindex="0"
+              >
                 <i class="fa-solid fa-house"></i>
                 Homepage
               </p>
