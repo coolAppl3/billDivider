@@ -293,10 +293,11 @@ class BillModal {
     if(this._directlyOwedCheckbox.classList.contains('checked')) {
       this._directlyOwedCheckbox.classList.remove('checked');
       this._enableUnsharedInput();
-    } else {
-      this._directlyOwedCheckbox.classList.add('checked');
-      this._disableUnsharedInput();
-    };
+      return ;
+    }
+
+    this._directlyOwedCheckbox.classList.add('checked');
+    this._disableUnsharedInput();
   };
 
   _directlyOwedCheckboxChecked() {

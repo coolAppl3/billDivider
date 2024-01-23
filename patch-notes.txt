@@ -2,53 +2,32 @@ Frontend:
 
   - General:
 
-    - Keyboard navigation possible throughout the app.
+    - Added FormCheckbox.js under global components. It will handle checkbox functionality within a form throughout the application unless it creates too big of an abstraction. Multiple instances can be created if necessary. The ID of the checkbox must be passed in for every instance.
 
-  - redirectAfterDelayMillisecond.js:
+    - Added RevealPassword.js under components/signing/ to handle password revealing functionality for signIn.js and signUp.js. The input's ID must be passed in, and the reveal icon must have an ID of "revealPassword".
 
-    - The function now checks for an unsavedSessionChanges item in session storage, and removes it before continuing to avoid conflict with confirmExit() in session.js.
+    - Added LinksContainer.js under components/signing/ to handle the form's bottom navigation links for both signIn.js and signUp.js.
+
+  - SessionHeader.js:
+
+    - Fixed a bug with _enableResetButton() that caused the reset button to still be enabled even after the session is reset.
   
-  signUp.html:
-  
-    - The "Create a new account" title is no longer theme colored and is just white. This is for consistency sake, as well as to prevent to many CTA colors in one place.
+  -signIn.js:
 
-    - Imported ErrorSpan and refactored existing functions to work with it.
+    - Imported FormCheckbox to handle the keepMeSignedIn checkbox, and removed the existing functions that previously handled that functionality.
 
-    - _displayErrorSpan and _hideErrorSpan() are depreciated and removed.
-
-    - Renamed _redirect() to _redirectIfLoggedIn().
-
-    - Further refactoring coming in future patches.
-  
-  signUp.js:
-
-    - Added an eye icon to hide/show the password when signing up, similarly to signIn.js.
-
-    - Imported ErrorSpan and refactored existing functions to work with it.
-
-    - _displayErrorSpan and _hideErrorSpan() are depreciated and removed.
+    - Fixed revealPasswordIcon not being reachable only using a keyboard.
     
-    - Renamed _redirect() to _redirectIfLoggedIn().
+    - Imported RevealPassword.js to handle password revealing functionality, and removed _revealPassword().
 
-    - Further refactoring coming in future patches.
-  
-  - signIn.js:
+    - Imported LinksContainer.js to handle navigation, and removed the previous functions within the class that did the same thing.
 
-    - Fixed a bug where the loading modal wouldn't be removed after validating the value of the form inputs.
-  
-  - SessionElement.js:
+  -signUp.js:
 
-    - Remove buttons now have a tabindex attribute added and set to 0 to make them selectable with a keyboard.
-  
-  HistoryContent.js:
+    - Imported FormCheckbox to handle the keepMeSignedIn checkbox, and removed the existing functions that previously handled that functionality.
 
-    - Added _handleHistoryContentKeyEvents() to handle any "Enter" keyup events and make keyboard navigation possible.
-  
-  session.html:
+    - Fixed revealPasswordIcon not being reachable only using a keyboard.
+    
+    - Imported RevealPassword.js to handle password revealing functionality, and removed _revealPassword().
 
-    - Improved how both billModal and startModal are centered vertically, as it was not quite right and was causing issues with shorter devices.
-  
-  ErrorSpan.js:
-
-    - Moved under global components, instead of unnecessarily being specific to session components. All related imports have been update accordingly. 
-  
+    - Imported LinksContainer.js to handle navigation, and removed the previous functions within the class that did the same thing.
