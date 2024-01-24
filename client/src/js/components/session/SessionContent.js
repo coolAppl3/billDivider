@@ -2,7 +2,6 @@ import sessionInfo from "./SessionInfo";
 import BillModal from "./BillModal";
 
 import BillElement from "./BillElement";
-import dispatchMainGlobalEvents from "./dispatchMainGlobalEvents";
 import ConfirmModal from "../global/ConfirmModal";
 import messagePopup from "../global/messagePopup";
 
@@ -129,7 +128,8 @@ class SessionContent {
 
     this._slideAndRemoveBill(billElement);
     setTimeout(() => {
-      dispatchMainGlobalEvents();
+      dispatchEvent(new Event('updateSessionInfo'));
+      dispatchEvent(new Event('render'));
       messagePopup('Bill deleted', 'danger');
 
       // Retracting the contentList if the user is deleting the only element in the list.
@@ -171,7 +171,8 @@ class SessionContent {
       this._retractContentList(this._secondaryContentList);
     };
     
-    dispatchMainGlobalEvents();
+    dispatchEvent(new Event('updateSessionInfo'));
+    dispatchEvent(new Event('render'));
   };
 
   // Utility
