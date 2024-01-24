@@ -114,10 +114,6 @@ class InitSession {
       errorSpan.display(inputFormGroup, 'This field is required.');
       return false;
 
-    } else if(inputValue.length > 15) {
-      errorSpan.display(inputFormGroup, 'Can not be longer than 15 characters');
-      return false;
-
     } else if(!re.test(inputValue)) {
       errorSpan.display(inputFormGroup, 'This field must contain at least 1 letter, and must not contain special characters.');
       return false;

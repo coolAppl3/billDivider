@@ -78,16 +78,16 @@ class BillElement {
     const iconContainer = document.createElement('div');
     iconContainer.className = 'icon-container';
 
-    const editIcon = document.createElement('i');
-    editIcon.className = 'fa-solid fa-pen-to-square editBillIcon';
-    editIcon.setAttribute('title', 'Edit bill');
-
     const deleteIcon = document.createElement('i');
     deleteIcon.className = 'fa-solid fa-trash-can removeBillIcon';
     deleteIcon.setAttribute('title', 'Remove bill');
 
-    iconContainer.appendChild(editIcon);
+    const editIcon = document.createElement('i');
+    editIcon.className = 'fa-solid fa-pen-to-square editBillIcon';
+    editIcon.setAttribute('title', 'Edit bill');
+
     iconContainer.appendChild(deleteIcon);
+    iconContainer.appendChild(editIcon);
     
     return iconContainer;
   };

@@ -3,7 +3,6 @@ import sessionInfo from "./SessionInfo";
 import ErrorSpan from "../global/ErrorSpan";
 import messagePopup from "../global/messagePopup";
 import generateBillID from "./generateBillID";
-import dispatchMainGlobalEvents from "./dispatchMainGlobalEvents";
 
 // Initializing imports
 const errorSpan = new ErrorSpan();
@@ -96,8 +95,8 @@ class BillModal {
 
     this.hide();
     messagePopup('New bill added', 'success');
-    
-    dispatchMainGlobalEvents();
+    dispatchEvent(new Event('updateSessionInfo'));
+    dispatchEvent(new Event('render'));
   };
 
   _updateBill(billID) {
@@ -137,8 +136,9 @@ class BillModal {
 
     this.hide();
     messagePopup('Bill updated', 'success');
-    
-    dispatchMainGlobalEvents();
+
+    dispatchEvent(new Event('updateSessionInfo'));
+    dispatchEvent(new Event('render'));
   };
 
 
@@ -214,7 +214,9 @@ class BillModal {
     };
 
     this._billModal.style.display = 'block';
-    this._billNameInput.focus();
+    if(!editingBillID) {
+      this._billNameInput.focus();
+    };
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {

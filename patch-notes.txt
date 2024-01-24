@@ -1,33 +1,22 @@
 Frontend:
 
-  - General:
-
-    - Added FormCheckbox.js under global components. It will handle checkbox functionality within a form throughout the application unless it creates too big of an abstraction. Multiple instances can be created if necessary. The ID of the checkbox must be passed in for every instance.
-
-    - Added RevealPassword.js under components/signing/ to handle password revealing functionality for signIn.js and signUp.js. The input's ID must be passed in, and the reveal icon must have an ID of "revealPassword".
-
-    - Added LinksContainer.js under components/signing/ to handle the form's bottom navigation links for both signIn.js and signUp.js.
-
-  - SessionHeader.js:
-
-    - Fixed a bug with _enableResetButton() that caused the reset button to still be enabled even after the session is reset.
+  -General:
   
-  -signIn.js:
+    - Removed dispatchMainGlobalEvents.js. The abstraction simply wasn't worth it, and made the code a little less readable and intuitive.
+  
+  - BillModal.js:
 
-    - Imported FormCheckbox to handle the keepMeSignedIn checkbox, and removed the existing functions that previously handled that functionality.
+    - The bill's name input is now only focused when adding a new bill to improve the user's experience.
+  
+  - InitSession.js:
 
-    - Fixed revealPasswordIcon not being reachable only using a keyboard.
-    
-    - Imported RevealPassword.js to handle password revealing functionality, and removed _revealPassword().
+    - _validateSharedWithInput() will now allow names longer than 15 characters long. Users will rarely input a name that long, but it's allowed now.
+  
+  - history.html:
 
-    - Imported LinksContainer.js to handle navigation, and removed the previous functions within the class that did the same thing.
+    - Amended the CSS to workaround longer sharedWith names.
+  
+  - history.html:
 
-  -signUp.js:
+    - Amended the CSS to workaround longer sharedWith and bill names.
 
-    - Imported FormCheckbox to handle the keepMeSignedIn checkbox, and removed the existing functions that previously handled that functionality.
-
-    - Fixed revealPasswordIcon not being reachable only using a keyboard.
-    
-    - Imported RevealPassword.js to handle password revealing functionality, and removed _revealPassword().
-
-    - Imported LinksContainer.js to handle navigation, and removed the previous functions within the class that did the same thing.

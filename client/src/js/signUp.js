@@ -28,6 +28,8 @@ class SignUp {
     this._usernameInput = document.querySelector('#username');
     this._passwordInput = document.querySelector('#password');
 
+    this._keepMeSignedInCheckBox = document.querySelector('#keepMeSignedIn');
+
     this._loadEventListeners();
   };
 
