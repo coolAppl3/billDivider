@@ -2,7 +2,6 @@ import HistoryAPI from "../services/HistoryAPI";
 import locateLoginToken from "../global/locateLoginToken";
 
 import Cookies from "../global/Cookies";
-import messagePopup from "../global/messagePopup";
 import redirectAfterDelayMillisecond from "../global/redirectAfterDelayMillisecond";
 
 // Initializing imports

@@ -1,9 +1,11 @@
 import SessionAPI from "../services/SessionAPI";
 import locateLoginToken from "../global/locateLoginToken";
 import redirectAfterDelayMillisecond from "../global/redirectAfterDelayMillisecond";
+import Cookies from "../global/Cookies";
 
 // Initializing imports
 const sessionAPI = new SessionAPI();
+const cookies = new Cookies();
 
 
 async function deleteSession(sessionID) {
