@@ -1,6 +1,9 @@
 class Cookies {
-  
   get(cookieKey) {
+    if(!cookieKey) {
+      return ;
+    };
+    
     const cookieMap = this._createCookieMap();
     if(!cookieMap) {
       return ;
@@ -29,13 +32,6 @@ class Cookies {
     document.cookie = `${cookieKey}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
   };
 
-  // clear() {
-  //   const cookieMap = this._createCookieMap();
-  //   cookieMap.forEach((cookieValue, cookieKey) => {
-  //     this.remove(cookieKey);
-  //   });
-  // };
-
   _createCookieMap() {
     if(!document.cookie) {
       return ;
@@ -44,23 +40,19 @@ class Cookies {
     const cookieArr = document.cookie.split(';');
     const cookieMap = new Map();
 
-    cookieArr.forEach((cookie) => {
+    for(let cookie of cookieArr) {
       const cookieKey = cookie.split('=')[0].trim();
       const cookieValue = cookie.split('=')[1].trim();
 
       cookieMap.set(cookieKey, cookieValue);
-    });
+    };
 
     return cookieMap;
   };
 
   _setCookieExpiryDate(ageMilliseconds) {
-    if(ageMilliseconds === 'no-age') {
-      return undefined;
-    };
-    
-    if(!ageMilliseconds) {
-      ageMilliseconds = 2592000000; // 30 days
+    if(!ageMilliseconds || typeof ageMilliseconds !== 'number') {
+      return ;
     };
     
     const currentTimestamp = new Date().getTime();

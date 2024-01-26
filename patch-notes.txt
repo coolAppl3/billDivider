@@ -1,22 +1,35 @@
 Frontend:
 
-  -General:
-  
-    - Removed dispatchMainGlobalEvents.js. The abstraction simply wasn't worth it, and made the code a little less readable and intuitive.
-  
-  - BillModal.js:
+  - General:
 
-    - The bill's name input is now only focused when adding a new bill to improve the user's experience.
+    - Removed messagePopup.js imports from modules not using it.
+    - Installed jest as a dev dependency, and set-up its environment to work around import statements.
+    - Unit testing has started.
   
-  - InitSession.js:
+  deleteSession.js:
 
-    - _validateSharedWithInput() will now allow names longer than 15 characters long. Users will rarely input a name that long, but it's allowed now.
+    - Fixed Cookies not being imported.
+
+  - messagePopup.js:
+
+    - Renamed the old 'dialog' element to 'popup' within the function. Purely a semantic change.
+
+  - addThousandComma.js:
+
+    - The function now checks if a number is passed in, and returns undefined if not. It will also return undefined if anything but a number is passed in.
   
-  - history.html:
+  - Cookies.js:
 
-    - Amended the CSS to workaround longer sharedWith names.
+    - _setCookieExpiryDate() now returns undefined if the argument passed in is falsy, or not a type of number. This means that:
+
+      - To ensure a cookie is temporary and has no age, ageMilliseconds shouldn't be passed in when calling set(). 0 (as a number) can also be passed in to achieve the same result.
+
+      - To set a cookie with a given age, ageMilliseconds must be passed in. signIn.js and signUp.js now have a _loginTokenAge variable, which is now set to 14 days.
+
+  - get() now first checks if a falsy value is passed in, and returns undefined if one was.
+
   
-  - history.html:
+  - Unit testing:
 
-    - Amended the CSS to workaround longer sharedWith and bill names.
-
+    - addThousandComma.js passed unit testing.
+    - Cookies.js passed unit testing.

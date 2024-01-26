@@ -1,7 +1,6 @@
 import Cookies from "./Cookies";
 import locateLoginToken from "./locateLoginToken";
 import ConfirmModal from './ConfirmModal';
-import messagePopup from "./messagePopup";
 import LoadingModal from "./LoadingModal";
 import redirectAfterDelayMillisecond from "./redirectAfterDelayMillisecond";
 

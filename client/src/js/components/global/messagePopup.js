@@ -1,43 +1,39 @@
 function messagePopup(message, type = 'cta') {
   // Creating the parent div
-  const dialog = document.createElement('div');
-  dialog.className = 'dialog';
+  const popup = document.createElement('div');
+  popup.className = 'popup';
 
-  // Change the theme if necessary - Default is $cta color.
   if(type === 'danger') {
-    dialog.style.background = '#bd2130';
-    dialog.style.color = '#faf8ff';
+    popup.style.background = '#bd2130';
+    popup.style.color = '#faf8ff';
     
   } else if(type === 'success') {
-    dialog.style.background = '#28a745';
+    popup.style.background = '#28a745';
   };
 
-  // Creating the child p element, and appending the message to it
-  const dialogMessage = document.createElement('p');
-  dialogMessage.className = 'dialog-message';
-  dialogMessage.appendChild(document.createTextNode(message));
+  const popupMessage = document.createElement('p');
+  popupMessage.className = 'popup-message';
+  popupMessage.appendChild(document.createTextNode(message));
 
-  // Appending the child p element in the parent div
-  dialog.appendChild(dialogMessage);
+  popup.appendChild(popupMessage);
 
-  // Appending into the body, and preventing duplicates.
-  if(document.querySelector('.dialog')) {
-    document.querySelector('.dialog').remove();
+  if(document.querySelector('.popup')) {
+    document.querySelector('.popup').remove();
   }
 
-  document.querySelector('body').appendChild(dialog);
+  document.querySelector('body').appendChild(popup);
 
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
-      dialog.style.transform = 'translateY(0)';
+      popup.style.transform = 'translateY(0)';
     });
   });
 
   setTimeout(() => {
-    dialog.style.transform = 'translateY(-10rem)';
+    popup.style.transform = 'translateY(-10rem)';
 
     setTimeout(() => {
-      dialog.remove();
+      popup.remove();
     }, 200);
 
   }, 2000);

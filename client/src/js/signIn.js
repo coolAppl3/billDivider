@@ -28,6 +28,7 @@ class SignIn {
     this._passwordInput = document.querySelector('#password');
 
     this._keepMeSignedInCheckBox = document.querySelector('#keepMeSignedIn');
+    this._loginTokenAge = 1209600000; // 14 days
     
     this._loadEventListeners();
   };
@@ -61,9 +62,9 @@ class SignIn {
 
       // Saving the loginToken depending on the user's preference.
       if(this._keepMeSignedInCheckBox.classList.contains('checked')) {
-        cookies.set('loginToken', loginToken);
+        cookies.set('loginToken', loginToken, this._loginTokenAge);
       } else {
-        cookies.set('loginToken', loginToken, 'no-age');
+        cookies.set('loginToken', loginToken);
       };
 
       redirectAfterDelayMillisecond('history.html', 1000, 'Login successful!', 'success');
