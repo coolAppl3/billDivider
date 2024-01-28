@@ -46,7 +46,7 @@ describe('get(cookieKey)', () => {
     expect(cookies.get('loginToken')).toEqual('dummyLoginToken');
     expect(cookies.get('someOtherKey')).toEqual('dummyValue');
   });
-})
+});
 
 describe('set(cookieKey, cookieValue, ageMilliseconds)', () => {
   it('should be a function', () => {
@@ -86,7 +86,7 @@ describe('set(cookieKey, cookieValue, ageMilliseconds)', () => {
     
     expect(window.document.cookie).toEqual(`someKey=someValue; expires=${cookieExpiryDate}; path=/`);
   });
-})
+});
 
 describe('remove(cookieKey)', () => {
   it('should be a function', () => {
@@ -112,8 +112,7 @@ describe('remove(cookieKey)', () => {
     // Browser will proceed with removing the cookie as soon as its date is in the past.
   });
   
-})
-
+});
 
 describe('_createCookieMap()', () => {
   it('should be a function', () => {
@@ -143,7 +142,7 @@ describe('_createCookieMap()', () => {
 
     expect(cookies._createCookieMap()).toEqual(expectedMap);
   });
-})
+});
 
 describe('_setCookieExpiryDate(ageMilliseconds)', () => {
   it('should be a function', () => {
@@ -177,7 +176,7 @@ describe('_setCookieExpiryDate(ageMilliseconds)', () => {
     
     expect(cookies._setCookieExpiryDate(150000)).toEqual(cookieExpiryDate2);
   });
-})
+});
 
 
  

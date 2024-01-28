@@ -6,7 +6,8 @@
   "scripts": {
     "build": "webpack",
     "dev": "webpack serve",
-    "test": "jest"
+    "test": "jest",
+    "clear-test-cache": "jest --clearCache"
   },
   "keywords": [],
   "author": "",

@@ -17,7 +17,9 @@ class ConfirmModal {
   };
   
   remove() {
-    document.querySelector('.confirm-modal').remove();
+    if(document.querySelector('.confirm-modal')) {
+      document.querySelector('.confirm-modal').remove();
+    };
   };
 
   isExitClick(e) {
@@ -64,7 +66,7 @@ class ConfirmModal {
     cancelBtn.appendChild(document.createTextNode('Cancel'));
 
     const confirmBtn = document.createElement('button');
-    confirmBtn.className = `btn btn-${btnColor}`;
+    confirmBtn.className = `btn btn-${btnColor || 'cta'}`;
     confirmBtn.id = 'confirmModalConfirmBtn';
     confirmBtn.appendChild(document.createTextNode('Confirm'));
 
@@ -75,6 +77,10 @@ class ConfirmModal {
   };
 
   _createConfirmMessage(message) {
+    if(!message) {
+      message = 'Are you sure?';
+    };
+    
     const confirmMessage = document.createElement('p');
     confirmMessage.appendChild(document.createTextNode(message));
 
