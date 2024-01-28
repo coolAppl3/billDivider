@@ -1,13 +1,13 @@
 function messagePopup(message, type = 'cta') {
-  // Creating the parent div
   const popup = document.createElement('div');
   popup.className = 'popup';
 
   if(type === 'danger') {
     popup.style.background = '#bd2130';
     popup.style.color = '#faf8ff';
-    
-  } else if(type === 'success') {
+  };
+  
+  if(type === 'success') {
     popup.style.background = '#28a745';
   };
 
@@ -15,12 +15,11 @@ function messagePopup(message, type = 'cta') {
   popupMessage.className = 'popup-message';
   popupMessage.appendChild(document.createTextNode(message));
 
-  popup.appendChild(popupMessage);
-
   if(document.querySelector('.popup')) {
     document.querySelector('.popup').remove();
   }
 
+  popup.appendChild(popupMessage);
   document.querySelector('body').appendChild(popup);
 
   requestAnimationFrame(() => {
@@ -31,11 +30,7 @@ function messagePopup(message, type = 'cta') {
 
   setTimeout(() => {
     popup.style.transform = 'translateY(-10rem)';
-
-    setTimeout(() => {
-      popup.remove();
-    }, 200);
-
+    setTimeout(() => popup.remove(), 200);
   }, 2000);
 };
 

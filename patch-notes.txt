@@ -1,35 +1,20 @@
 Frontend:
 
-  - General:
-
-    - Removed messagePopup.js imports from modules not using it.
-    - Installed jest as a dev dependency, and set-up its environment to work around import statements.
-    - Unit testing has started.
-  
-  deleteSession.js:
-
-    - Fixed Cookies not being imported.
-
   - messagePopup.js:
 
-    - Renamed the old 'dialog' element to 'popup' within the function. Purely a semantic change.
-
-  - addThousandComma.js:
-
-    - The function now checks if a number is passed in, and returns undefined if not. It will also return undefined if anything but a number is passed in.
+    - Slight adjustment to semantics.
   
-  - Cookies.js:
+  - createDateString.js:
 
-    - _setCookieExpiryDate() now returns undefined if the argument passed in is falsy, or not a type of number. This means that:
+    - The function now checks if the timestamp passed in is a type of number. If not, it will return undefined.
+  
+  - ConfirmModal.js:
 
-      - To ensure a cookie is temporary and has no age, ageMilliseconds shouldn't be passed in when calling set(). 0 (as a number) can also be passed in to achieve the same result.
-
-      - To set a cookie with a given age, ageMilliseconds must be passed in. signIn.js and signUp.js now have a _loginTokenAge variable, which is now set to 14 days.
-
-  - get() now first checks if a falsy value is passed in, and returns undefined if one was.
+    - _createBtnContainer() now falls back to 'cta' as the confirm button color, if a falsy argument is passed in.
+    - _createConfirmMessage() now falls back to 'Are you sure?' as the confirmation message if a falsy argument is passed in.
 
   
   - Unit testing:
 
-    - addThousandComma.js passed unit testing.
-    - Cookies.js passed unit testing.
+    - createDateString.js passed unit testing.
+    - ConfirmModal.js passed unit testing.

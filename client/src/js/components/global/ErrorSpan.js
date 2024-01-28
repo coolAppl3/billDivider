@@ -1,5 +1,5 @@
 class ErrorSpan {
-
+  
   display(formGroup, message) {
     formGroup.classList.add('error');
     formGroup.lastElementChild.textContent = message;

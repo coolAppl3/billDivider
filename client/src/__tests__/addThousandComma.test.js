@@ -26,4 +26,4 @@ describe('addThousandComma', () => {
     expect(addThousandComma(61.5)).toEqual('61.50');
     expect(addThousandComma(123000.2)).toEqual('123,000.20');
   });
-})
+});
