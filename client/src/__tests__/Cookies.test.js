@@ -1,5 +1,4 @@
 import Cookies from '../js/components/global/Cookies';
-
 const cookies = new Cookies();
 
 describe('get(cookieKey)', () => {
@@ -15,7 +14,7 @@ describe('get(cookieKey)', () => {
   });
 
   it('should return undefined if there are no cookies for the domain', () => {
-    // Mocking no cookies
+    // Mocking the lack of cookies
     Object.defineProperty(window.document, 'cookie', {
       writable: true,
       value: '',
@@ -59,19 +58,19 @@ describe('set(cookieKey, cookieValue, ageMilliseconds)', () => {
     expect(cookies.set('someKey', 'someValue',)).toBeUndefined();
   });
   
-  it('should set a cookie with no expiry date, which would be removed once the browser is closed, if the type of ageMilliseconds is not a number or is falsy', () => {
-    // Mocking no cookies
+  it('should set a cookie with no expiry date, if the type of ageMilliseconds is not a number or is falsy', () => {
+    // Mocking the lack of cookies
     Object.defineProperty(window.document, 'cookie', {
       writable: true,
       value: '',
     });
 
-    cookies.set('someKey', 'someValue', 0); //Even though 0 is a number, it's a falsy value, meaning the expiry date will not be setup.
+    cookies.set('someKey', 'someValue', 0); // 0 is falsy and will result in no expiry date
     expect(window.document.cookie).toEqual('someKey=someValue; path=/');
   });
 
   it('should set a cookie with the desired age if a valid ageMilliseconds is passed in', () => {
-    // Mocking no cookies
+    // Mocking the lack of cookies
     Object.defineProperty(window.document, 'cookie', {
       writable: true,
       value: '',
@@ -120,7 +119,7 @@ describe('_createCookieMap()', () => {
   });
   
   it('should return undefined if there are no cookies set for the domain', () => {
-    // Mocking no cookies
+    // Mocking the lack of cookies
     Object.defineProperty(window.document, 'cookie', {
       writable: true,
       value: '',

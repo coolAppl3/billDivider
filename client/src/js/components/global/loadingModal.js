@@ -1,6 +1,10 @@
 class LoadingModal {
   
   static display() {
+    if(document.querySelector('.loading-modal')) {
+      return ;
+    };
+
     const loadingModalElement = document.createElement('div');
     loadingModalElement.className = 'loading-modal';
 
@@ -8,12 +12,7 @@ class LoadingModal {
     spinner.className = 'spinner';
 
     loadingModalElement.appendChild(spinner);
-    
-    if(document.querySelector('.loading-modal')) {
-      return ;
-    };
-    
-    document.querySelector('body').appendChild(loadingModalElement);
+    document.body.appendChild(loadingModalElement);
   };
 
   static remove() {
