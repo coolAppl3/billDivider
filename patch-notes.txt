@@ -1,20 +1,17 @@
 Frontend:
 
-  - messagePopup.js:
-
-    - Slight adjustment to semantics.
+  - ErrorSpan.js:
   
-  - createDateString.js:
-
-    - The function now checks if the timestamp passed in is a type of number. If not, it will return undefined.
+    - Both display() and hide() will not both stop and return undefined if the formGroup argument is falsy or not an instance of HTMLElement.
   
-  - ConfirmModal.js:
+  - LoadingModal.js:
 
-    - _createBtnContainer() now falls back to 'cta' as the confirm button color, if a falsy argument is passed in.
-    - _createConfirmMessage() now falls back to 'Are you sure?' as the confirmation message if a falsy argument is passed in.
-
+    - display() now first checks if a loading modal exists in the DOM before continuing. If one exists, it stops and returns undefined. If not, it continues normally.
   
+
   - Unit testing:
 
-    - createDateString.js passed unit testing.
-    - ConfirmModal.js passed unit testing.
+    - ErrorSpan.js passed unit testing.
+    - FormCheckbox.js passed unit testing.
+    - LoadingModal.js passed unit testing.
+    - locateLoginToken.js passed unit testing.

@@ -1,5 +1,4 @@
 import Cookies from "./Cookies";
-
 const cookies = new Cookies();
 
 function locateLoginToken() {
