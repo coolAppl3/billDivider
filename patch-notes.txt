@@ -1,17 +1,10 @@
 Frontend:
 
-  - ErrorSpan.js:
-  
-    - Both display() and hide() will not both stop and return undefined if the formGroup argument is falsy or not an instance of HTMLElement.
-  
-  - LoadingModal.js:
+  - messagePopup.js:
 
-    - display() now first checks if a loading modal exists in the DOM before continuing. If one exists, it stops and returns undefined. If not, it continues normally.
+    - The function now checks if the message argument passed in is of type string. If not, it will turn it into an empty string.
   
 
   - Unit testing:
 
-    - ErrorSpan.js passed unit testing.
-    - FormCheckbox.js passed unit testing.
-    - LoadingModal.js passed unit testing.
-    - locateLoginToken.js passed unit testing.
+    - messagePopup.js passed unit testing.
