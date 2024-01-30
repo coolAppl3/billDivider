@@ -1,4 +1,8 @@
 function messagePopup(message, type = 'cta') {
+  if(typeof message !== 'string') {
+    message = '';
+  };
+  
   const popup = document.createElement('div');
   popup.className = 'popup';
 
