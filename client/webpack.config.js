@@ -4,10 +4,10 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require("copy-webpack-plugin");
 
-process.env.NODE_ENV = 'development'
+process.env.NODE_ENV = 'production'
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
 
   entry: {
     index: './src/js/index.js',
