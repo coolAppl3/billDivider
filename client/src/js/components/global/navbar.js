@@ -30,18 +30,20 @@ class Navbar {
     if(!loginToken) {
       this._linksContainer.style.display = 'flex';
       this._userMenuBtn.style.display = 'none';
-    } else {
-      this._linksContainer.style.display = 'none';
-      this._userMenuBtn.style.display = 'grid';
-    };
+      return ;
+    }
+    
+    this._linksContainer.style.display = 'none';
+    this._userMenuBtn.style.display = 'grid';
   };
 
   _displayUserMenu() {
     if(this._userMenuOptions.classList.contains('hidden')) {
       this._userMenuOptions.classList.remove('hidden');
-    } else {
-      this._userMenuOptions.classList.add('hidden');
-    };
+      return ;
+    }
+    
+    this._userMenuOptions.classList.add('hidden');
   };
 
   _logout(e) {

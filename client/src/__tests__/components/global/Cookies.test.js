@@ -1,4 +1,4 @@
-import Cookies from '../js/components/global/Cookies';
+import Cookies from '../../../js/components/global/Cookies';
 const cookies = new Cookies();
 
 describe('get(cookieKey)', () => {

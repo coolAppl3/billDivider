@@ -70,7 +70,8 @@
       place-items: center;
       cursor: pointer;
       transition: color 200ms, border-color 200ms;
-      display: hidden;
+      
+      display: none;
 
       &:hover {
         color: $cta;

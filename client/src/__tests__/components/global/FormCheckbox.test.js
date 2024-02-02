@@ -1,4 +1,4 @@
-import FormCheckbox from "../js/components/global/FormCheckbox";
+import FormCheckbox from "../../../js/components/global/FormCheckbox";
 
 const mockCheckBox = document.createElement('div');
 mockCheckBox.id = 'mockID';
