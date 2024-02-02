@@ -146,7 +146,7 @@ c
     if(SessionReference.referenceExists() && SessionReference.changesMade()) {
       try {
         await sessionAPI.updateSession(loginToken, sessionInfo.sessionID, sessionInfo);
-        redirectAfterDelayMillisecond('history.html');
+        redirectAfterDelayMillisecond('history.html', 1000, 'Session successfully updated', 'success');
 
       } catch (err) {
         console.log(err);
@@ -162,7 +162,7 @@ c
       sessionInfo.createdOn = timestamp;
 
       await sessionAPI.addSession(loginToken, sessionInfo);
-      redirectAfterDelayMillisecond('history.html');
+      redirectAfterDelayMillisecond('history.html', 1000, 'Session saved', 'success');
 
     } catch (err) {
       console.log(err);
