@@ -1,12 +1,14 @@
 {
   "name": "billdivider",
-  "version": "1.0.2",
+  "version": "0.26.14",
   "description": "A simple bill splitting application, mainly for practice purposes.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "release": "standard-version"
+    "release-patch": "standard-version --release-as patch",
+    "release-minor": "standard-version --release-as minor",
+    "release-major": "standard-version --release-as major"
   },
   "keywords": [],
   "author": "Yanal Mohsen",
