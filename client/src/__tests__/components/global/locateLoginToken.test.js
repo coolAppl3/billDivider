@@ -1,4 +1,4 @@
-import locateLoginToken from "../js/components/global/locateLoginToken";
+import locateLoginToken from "../../../js/components/global/locateLoginToken";
 
 
 describe('locateLoginToken()', () => {

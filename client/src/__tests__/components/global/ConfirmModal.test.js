@@ -1,4 +1,4 @@
-import ConfirmModal from "../js/components/global/ConfirmModal";
+import ConfirmModal from "../../../js/components/global/ConfirmModal";
 const confirmModal = new ConfirmModal();
 
 beforeEach(() => {

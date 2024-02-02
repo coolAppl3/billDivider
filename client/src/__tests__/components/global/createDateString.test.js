@@ -1,4 +1,4 @@
-import createDateString from "../js/components/global/createDateString";
+import createDateString from "../../../js/components/global/createDateString";
 
 describe('createDateString(timestampMilliseconds)', () => {
   it('should be a function', () => {

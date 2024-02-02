@@ -1,10 +1,12 @@
 Frontend:
 
-  - messagePopup.js:
+  - redirectAfterDelayMillisecond.js:
 
-    - The function now checks if the message argument passed in is of type string. If not, it will turn it into an empty string.
-  
+    - The function will now call messagePopup('Something went wrong', 'danger') if the target argument is falsy or not a type of string.
 
-  - Unit testing:
 
-    - messagePopup.js passed unit testing.
+Unit testing:
+
+  - Navbar.js passed unit testing.
+  - redirectAfterDelayMillisecond.js passed unit testing.
+  - All global components passed unit testing.

@@ -24,7 +24,7 @@ function messagePopup(message, type = 'cta') {
   }
 
   popup.appendChild(popupMessage);
-  document.querySelector('body').appendChild(popup);
+  document.body.appendChild(popup);
 
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {

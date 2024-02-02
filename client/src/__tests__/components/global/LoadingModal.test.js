@@ -1,4 +1,4 @@
-import LoadingModal from "../js/components/global/LoadingModal";
+import LoadingModal from "../../../js/components/global/LoadingModal";
 
 afterEach(() => {
   document.body.innerHTML = '';

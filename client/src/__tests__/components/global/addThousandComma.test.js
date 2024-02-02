@@ -1,4 +1,4 @@
-import addThousandComma from '../js/components/global/addThousandComma';
+import addThousandComma from '../../../js/components/global/addThousandComma';
 
 describe('addThousandComma', () => {
   it('should be a function', () => {

@@ -1,4 +1,4 @@
-import messagePopup from "../js/components/global/messagePopup";
+import messagePopup from "../../../js/components/global/messagePopup";
 
 beforeEach(() => {
   document.body.innerHTML = '';

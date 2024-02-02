@@ -7,6 +7,12 @@ function redirectAfterDelayMillisecond(
   popupColor = 'danger'
 ) {
 
+  if(!target || typeof target !== 'string') {
+    messagePopup('Something went wrong', 'danger');
+    setTimeout(() => window.location.href = 'index.html', delay);
+    return ;
+  };
+
   if(sessionStorage.getItem('unsavedSessionChanges')) {
     sessionStorage.removeItem('unsavedSessionChanges');
   };

@@ -1,4 +1,4 @@
-import ErrorSpan from "../js/components/global/ErrorSpan";
+import ErrorSpan from "../../../js/components/global/ErrorSpan";
 const errorSpan = new ErrorSpan();
 
 beforeEach(() => {
