@@ -2,4 +2,4 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/coolappl/www.billdivider.fun/
-    - /bin/cp -R public $DEPLOYPATH
+    - /bin/cp -R public/ $DEPLOYPATH
