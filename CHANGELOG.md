@@ -8,3 +8,7 @@ All notable changes to this project will be documented in this file. See [standa
 ### Features
 
 * add standard-version to generate changelog ([57c67a0](https://github.com/coolAppl3/billDivider/commit/57c67a0288db68b5ff8642d24cc882fa826ec1da))
+
+### Code Refactoring
+
+* remove JSON response for endpoints not specified in API ([57c67a0](https://github.com/coolAppl3/billDivider/commit/57c67a0288db68b5ff8642d24cc882fa826ec1da))
