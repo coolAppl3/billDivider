@@ -41,14 +41,14 @@ server.use('/api/users', userRouter);
 // ---
 
 // Homepage path
-server.use('/', (req, res) => {
-  res.json({ success: true, message: 'Homepage' });
-});
+// server.use('/', (req, res) => {
+//   res.json({ success: true, message: 'Homepage' });
+// });
 
 // Default path
-server.use('*', (req, res) => {
-  res.status(404).json({ success: false, message: 'Invalid path' });
-});
+// server.use('*', (req, res) => {
+//   res.status(404).json({ success: false, message: 'Invalid path' });
+// });
 
 
 // Initialization
