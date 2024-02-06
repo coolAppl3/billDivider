@@ -1,4 +1,4 @@
-function disableBFCache() {
+function disableFBCache() {
   window.onpageshow = function(e) {
     if(e.persisted) {
       window.location.reload();
@@ -6,4 +6,4 @@ function disableBFCache() {
   };
 };
 
-export default disableBFCache;
+export default disableFBCache;

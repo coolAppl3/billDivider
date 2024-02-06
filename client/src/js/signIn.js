@@ -1,4 +1,7 @@
 import '../scss/main.scss';
+import disableFBCache from './components/global/disableFBCache';
+disableFBCache();
+
 import SignInAPI from './components/services/SignInAPI';
 import Cookies from './components/global/Cookies';
 
