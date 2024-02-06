@@ -9,11 +9,13 @@
 * add disableBFCache.js
   * it should reload the page if the pageshow event is persisted
 
+* import disableBFCache.js to session.js
+  * it should prevent the page from just hanging if the user goes back to it using the browser
+
 
 ### Bug Fixes
 
-* import disableBFCache.js to session.js
-  * it should prevent the page from just hanging if the user goes back to it using the browser
+* fix forward/back cache causing pages to hang
 
 
 ### Code Refactoring
