@@ -1,7 +1,7 @@
-import disableBFCache from './components/global/disableBFCache';
-disableBFCache();
-
 import '../scss/main.scss';
+import disableFBCache from './components/global/disableFBCache';
+disableFBCache();
+
 import Navbar from './components/global/Navbar';
 import SessionReference from './components/session/SessionReference';
 

@@ -1,4 +1,7 @@
 import '../scss/main.scss';
+import disableFBCache from './components/global/disableFBCache';
+disableFBCache();
+
 import Navbar from './components/global/Navbar';
 import HistoryHeader from './components/history/HistoryHeader';
 import HistoryContent from './components/history/HistoryContent';

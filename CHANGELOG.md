@@ -1,4 +1,20 @@
 # Changelog
+---
+
+
+### [0.27.0] (2024-02-06)
+
+
+### Code Refactoring
+
+* change disableBFCache.js to disableFBCache.js
+
+
+### Bug Fixes
+
+* fixed forward/back cache in browsers causing pages to hang when the user navigates back to them
+  * this was done by importing disableFBCache.js into every main JS file
+
 
 
 ### [0.26.20] (2024-02-06)
