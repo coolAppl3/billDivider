@@ -1,6 +1,27 @@
 # Changelog
 
 
+### [0.26.20] (2024-02-06)
+
+
+### Features
+
+* add disableBFCache.js
+  * it should reload the page if the pageshow event is persisted
+
+
+### Bug Fixes
+
+* import disableBFCache.js to session.js
+  * it should prevent the page from just hanging if the user goes back to it using the browser
+
+
+### Code Refactoring
+
+* remove meta tag that prevented browser caching
+
+
+
 ### [0.26.19] (2024-02-06)
 
 

@@ -1,3 +1,6 @@
+import disableBFCache from './components/global/disableBFCache';
+disableBFCache();
+
 import '../scss/main.scss';
 import Navbar from './components/global/Navbar';
 import SessionReference from './components/session/SessionReference';
@@ -6,6 +9,7 @@ import SessionReference from './components/session/SessionReference';
 import InitSession from './components/session/InitSession';
 import SessionHeader from './components/session/SessionHeader';
 import SessionContent from './components/session/SessionContent';
+
 
 // Initializing imports
 new Navbar();
