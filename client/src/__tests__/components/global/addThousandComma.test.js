@@ -1,6 +1,6 @@
 import addThousandComma from '../../../js/components/global/addThousandComma';
 
-describe('addThousandComma', () => {
+describe('addThousandComma(number)', () => {
   it('should be a function', () => {
     expect(typeof addThousandComma).toEqual('function');;
   });
@@ -9,13 +9,18 @@ describe('addThousandComma', () => {
     expect(addThousandComma()).toEqual(undefined);
   });
 
-  it('should return undefined if the value passed in is not a number', () => {
+  it('should return undefined if the value passed in is falsy or not a type of number, unless 0 is passed in', () => {
     expect(addThousandComma('string')).toEqual(undefined);
     expect(addThousandComma({})).toEqual(undefined);
     expect(addThousandComma(null)).toEqual(undefined);
+    expect(addThousandComma(undefined)).toEqual(undefined);
   });
 
-  it('should return a string', () => {
+  it(`should return a string of '0.00' if 0 is passed in`, () => {
+    expect(addThousandComma(0)).toEqual('0.00');
+  });
+
+  it('should return a string if a valid number is passed in', () => {
     expect(typeof addThousandComma(1)).toEqual('string');
     expect(typeof addThousandComma(0.5)).toEqual('string');
     expect(typeof addThousandComma(-244)).toEqual('string');

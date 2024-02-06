@@ -2,6 +2,21 @@
 ---
 
 
+### [0.27.1] (2024-02-06)
+
+
+### Bug Fixes
+
+* fix spans in session header displaying an empty string, instead of 0.00 when needed
+  * issue was with addThousandComma.js and the fact that 0 is falsy
+
+
+### Test Changes
+
+* update addThousandComma.test.js to reflect the above bug fix
+
+
+
 ### [0.27.0] (2024-02-06)
 
 
