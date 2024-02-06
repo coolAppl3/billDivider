@@ -1,6 +1,18 @@
 # Changelog
 
 
+### [0.26.19] (2024-02-06)
+
+
+### Bug Fixes
+
+* disable browser caching
+  * experimental change
+
+
+---
+
+
 ### [0.26.18] (2024-02-05)
 
 
