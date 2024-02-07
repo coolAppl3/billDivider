@@ -63,7 +63,6 @@ class SessionContent {
   };
 
   _loadBills() {
-    
     if(sessionInfo.billsPaid[0]) {
       sessionInfo.billsPaid.forEach((bill) => {
         const billDiv = billElement.create(bill);

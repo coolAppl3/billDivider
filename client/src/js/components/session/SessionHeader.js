@@ -41,7 +41,7 @@ class SessionHeader {
     this._updateSharedWithBtn.addEventListener('click', this._updateSharedWith.bind(this));
     this._sessionHeaderControls.addEventListener('click', this._handleSessionHeaderControlsClickEvents.bind(this));
   };
-c
+
   _render() {
     this._updateTotals();
     this._updateDebtResult();

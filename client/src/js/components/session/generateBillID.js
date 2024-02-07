@@ -7,7 +7,6 @@ function generateBillID() {
   };
 
   return billID;
-  
 };
 
 export default generateBillID;
