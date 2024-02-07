@@ -207,14 +207,12 @@ class BillModal {
     this._billModalForm.setAttribute('data-bill-owner', billOwner);
 
     this._directlyOwedBySpan.textContent = billOwner === 'main' ? sessionInfo.sharedWith : 'you';
-
+    this._billModal.style.display = 'block';
+    
     if(editingBillID) {
       this._billModalForm.setAttribute('data-editing', editingBillID);
       this._startEditMode();
-    };
-
-    this._billModal.style.display = 'block';
-    if(!editingBillID) {
+    } else {
       this._billNameInput.focus();
     };
 
@@ -230,7 +228,6 @@ class BillModal {
     this._billModalForm.removeAttribute('data-editing');
 
     this._billModal.style.opacity = '0';
-    this._directlyOwedCheckbox.classList.remove('checked');
     this._clearForm();
 
     setTimeout(() => {
@@ -244,6 +241,8 @@ class BillModal {
     this._billNameInput.value = '';
     this._billValueInput.value = '';
     this._billUnsharedInput.value = 0;
+    this._directlyOwedCheckbox.classList.remove('checked');
+    this._enableUnsharedInput();
 
     errorSpan.hide(this._billNameInput.parentElement);
     errorSpan.hide(this._billValueInput.parentElement);
@@ -278,6 +277,7 @@ class BillModal {
 
     if(selectedBill.directlyOwed) {
       this._directlyOwedCheckbox.classList.add('checked');
+      this._disableUnsharedInput();
     };
   };
 

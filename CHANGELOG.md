@@ -2,6 +2,16 @@
 ---
 
 
+### [0.28.0] (2024-02-07)
+
+
+### Bug Fixes
+
+* fix hardcoded latest session date flickering before data is displayed
+* fix chevron in session containers being clipped when rotate downwards
+* fix bill modal not displaying the accurate disabled/enabled state for the unshared input
+
+
 ### [0.27.1] (2024-02-06)
 
 
