@@ -7,7 +7,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 process.env.NODE_ENV = 'production'
 
 module.exports = {
-  mode: 'production',
+  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
 
   entry: {
     index: './src/js/index.js',
