@@ -2,6 +2,16 @@
 ---
 
 
+### [0.29.2] (2024-02-08)
+
+
+### Code Refactoring
+
+* remove ```disableFBCache``` module from ```index.js```
+  * forward/back caching is useful on the homepage, and won't cause any problems
+
+
+---
 ### [0.29.1] (2024-02-08)
 
 
