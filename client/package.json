@@ -1,7 +1,7 @@
 {
-  "name": "webpack-starter",
-  "version": "0.26.15",
-  "description": "_____INSERT DESCRIPTION_____",
+  "name": "billdivider",
+  "version": "0.29.0",
+  "description": "A simple bill splitting application, mainly for practice purposes.",
   "main": "index.js",
   "scripts": {
     "build": "webpack",

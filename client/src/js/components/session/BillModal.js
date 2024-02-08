@@ -212,6 +212,7 @@ class BillModal {
     if(editingBillID) {
       this._billModalForm.setAttribute('data-editing', editingBillID);
       this._startEditMode();
+      this._populate(billOwner, editingBillID);
     } else {
       this._billNameInput.focus();
     };
@@ -263,7 +264,7 @@ class BillModal {
     billModalFormTitle.firstChild.textContent = 'Adding a bill paid by ';
   };
 
-  populate(billOwner, billID) {
+  _populate(billOwner, billID) {
     let selectedBill;
     if(billOwner === 'main') {
       selectedBill = sessionInfo.billsPaid.find(({ id }) => id === billID);

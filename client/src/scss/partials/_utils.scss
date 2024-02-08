@@ -11,7 +11,8 @@ html {
 }
 
 body {
-  font-family: $main-font;
+  font-family: $main-font !important;
+  font-weight: 400;
   font-size: 1.6rem;
   font-weight: 400;
   line-height: 1.4;
@@ -36,11 +37,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 button, input, textarea {
+  font-family: $main-font !important;
   background: transparent;
   border: 1px solid $light;
   font-size: 1.6rem;
   font-weight: 400;
   color: $light;
+}
+
+input[type='password'] {
+  &::-ms-reveal, &::-ms-clear {
+    display: none;
+  }
 }
 
 ul, li {

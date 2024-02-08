@@ -2,16 +2,41 @@
 ---
 
 
+### [0.29.0] (2024-02-08)
+
+
+### Code Refactoring
+
+* refactor ```BillModal.js```
+  * change ```populate()``` to now be a private method under the ```billModal``` module
+  * change ```display()``` to now call ```_populate()``` if a valid bill ID is passed in
+<br>
+
+* refactor ```SessionContent.js```
+  * ```_editBill()``` will now only call ```billModal.display()``` thanks to the above changes
+<br>
+
+* change html files to only request the in-use robot-fonts from google fonts
+
+
+### Bug Fixes
+
+* fix Firefox falling back to the default font family for input and button elements
+  *  needed to specify the font family for both elements globally
+* fix password reveal icon (eye) showing in password inputs elements next to the one by the app
+
+---
 ### [0.28.0] (2024-02-07)
 
 
 ### Bug Fixes
 
 * fix hardcoded latest session date flickering before data is displayed
-* fix chevron in session containers being clipped when rotate downwards
+* fix chevron in session containers being clipped when rotated downwards
 * fix bill modal not displaying the accurate disabled/enabled state for the unshared input
 
 
+---
 ### [0.27.1] (2024-02-06)
 
 
@@ -26,7 +51,7 @@
 * update addThousandComma.test.js to reflect the above bug fix
 
 
-
+---
 ### [0.27.0] (2024-02-06)
 
 
@@ -42,6 +67,7 @@
 
 
 
+---
 ### [0.26.20] (2024-02-06)
 
 
@@ -62,7 +88,7 @@
 * remove meta tag that prevented browser caching
 
 
-
+---
 ### [0.26.19] (2024-02-06)
 
 
@@ -73,8 +99,6 @@
 
 
 ---
-
-
 ### [0.26.18] (2024-02-05)
 
 
@@ -85,8 +109,6 @@
 
 
 ---
-
-
 ### [0.26.17] (2024-02-05)
 
 
@@ -97,8 +119,6 @@
 
 
 ---
-
-
 ### [0.26.16] (2024-02-05)
 
 
