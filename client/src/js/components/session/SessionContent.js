@@ -93,7 +93,6 @@ class SessionContent {
     const billOwner = contentList.getAttribute('data-list');
 
     billModal.display(billOwner, billID);
-    billModal.populate(billOwner, billID);
   };
 
   _deleteBill(e) {
