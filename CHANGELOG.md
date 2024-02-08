@@ -2,6 +2,15 @@
 ---
 
 
+### [0.29.1] (2024-02-08)
+
+
+### Bug Fixes
+
+* fix webpack build command not being ran in the last update
+
+
+---
 ### [0.29.0] (2024-02-08)
 
 
@@ -16,7 +25,7 @@
   * ```_editBill()``` will now only call ```billModal.display()``` thanks to the above changes
 <br>
 
-* change html files to only request the in-use robot-fonts from google fonts
+* change html files to only request the in-use robot-fonts from Google Fonts
 
 
 ### Bug Fixes
