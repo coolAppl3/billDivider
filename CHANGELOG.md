@@ -1,7 +1,16 @@
 # Changelog
 ---
 
+### [0.29.3] (2024-02-09)
 
+
+### Code Refactoring
+
+* change the Font Awesome CDN across all HTML files
+  * this is an experimental change for the sake of enhancing load time, and might be reverted
+
+
+---
 ### [0.29.2] (2024-02-08)
 
 
