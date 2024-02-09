@@ -2,7 +2,7 @@ const path = require('path');
 
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-// const CopyPlugin = require("copy-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
 process.env.NODE_ENV = 'production'
 
@@ -64,18 +64,22 @@ module.exports = {
           },
         },
       },
-
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: 'asset/resource',
+      },
     ],
+    
   },
 
   plugins: [
     new MiniCssExtractPlugin(),
 
-    // new CopyPlugin({
-    //   patterns: [
-    //     { from: "src/assets/", to: "assets/" },
-    //   ],
-    // }),
+    new CopyPlugin({
+      patterns: [
+        { from: "src/assets/", to: "assets/" },
+      ],
+    }),
 
     // index.html
     new HtmlWebpackPlugin({

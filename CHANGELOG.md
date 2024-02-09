@@ -1,6 +1,25 @@
 # Changelog
 ---
 
+
+### [0.29.4] (2024-02-09)
+
+
+### Code Refactoring
+
+* discontinue the use of Google Fonts API
+* implement Roboto font locally to improve performance and loading time
+  * create font folder in assets
+
+
+### Build Changes
+
+* update build process for ```webpack.config.js```
+  * add ```CopyPlugin``` to bundle assets into production
+  * add support rule for loading font files
+
+
+---
 ### [0.29.3] (2024-02-09)
 
 
