@@ -11,4 +11,23 @@ $edit: #0062cc;
 // --- ---
 
 // Fonts
-$main-font:'Roboto', sans-serif;
+@font-face {
+  font-family: 'AdjustedRoboto';
+  src: url('../assets/fonts/roboto/Roboto-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'AdjustedRoboto';
+  src: url('../assets/fonts/roboto/Roboto-Medium.ttf') format('truetype');
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'AdjustedRoboto';
+  src: url('../assets/fonts/roboto/Roboto-Bold.ttf') format('truetype');
+  font-weight: bold;
+}
+
+
+$main-font: 'AdjustedRoboto', sans-serif;
