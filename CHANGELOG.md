@@ -2,6 +2,15 @@
 ---
 
 
+### [0.30.1] (2024-02-09)
+
+
+### Bug Fixes
+
+* fix Font Awesome CDN not being removed in a few pages in the last PR
+
+
+---
 ### [0.30.0] (2024-02-09)
 
 ### Code Refactoring
