@@ -21,6 +21,7 @@ class Navbar {
   _loadEventListeners() {
     window.addEventListener('DOMContentLoaded', this._displayUserMenuBtn.bind(this));
     this._userMenuBtn.addEventListener('click', this._displayUserMenu.bind(this));
+    this._userMenuBtn.addEventListener('keyup', this._handleUserMenuKeyEvents.bind(this));
     this._logoutBtn.addEventListener('click', this._logout.bind(this));
   };
   
@@ -35,6 +36,14 @@ class Navbar {
     
     this._linksContainer.style.display = 'none';
     this._userMenuBtn.style.display = 'grid';
+  };
+
+  _handleUserMenuKeyEvents(e) {
+    const pressedKey = e.key;
+
+    if(pressedKey === 'Enter') {
+      this._displayUserMenu();
+    };
   };
 
   _displayUserMenu() {
