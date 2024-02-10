@@ -240,6 +240,16 @@ a {
   height: fit-content;
 }
 
+.svg-icon {
+  object-fit: contain;
+  height: 1.4rem;
+  width: auto;
+
+  &:focus:not(:focus-visible) {
+    outline: none; // Hide outline when focused but not by keyboard navigation 
+  }
+}
+
 .nav-push-div {
   display: block;
   height: 6rem;
@@ -399,11 +409,17 @@ a {
     bottom: 1px;
     line-height: 40px;
     cursor: pointer;
-    transition: color 200ms;
+    transition: fill 200ms;
+
+    fill: $light;
+    height: 40px;
+    width: 18px;
+    overflow: visible;
 
     &:hover {
-      color: $cta;
+      fill: $cta;
     }
+    
   }
 
   .error-span {

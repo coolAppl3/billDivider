@@ -2,6 +2,25 @@
 ---
 
 
+### [0.30.0] (2024-02-09)
+
+### Code Refactoring
+
+* replace Font Awesome icons with local SVGs and discontinued the use of Font Awesome CDN
+  * refactor ```revealPassword.js``` to accommodate the use of Font Awesome SVGs
+<br>
+* refactor ```_createIconContainer``` in ```billElement.js``` to accommodate the use of Font Awesome SVGs
+  * it now creates a div's instead of ```<i>``` elements, and appends the SVGs created by the newly added ```_createDeleteIconSVG()``` and ```_createEditIconSVG()```
+
+
+### Features
+
+* add keyboard navigation support for the navbar user menu button
+* add ```_createDeleteIconSVG``` in ```billElement.js``` to create the Font Awesome trash-can icon
+* add ```_createEditIconSVG``` in ```billElement.js``` to create the Font Awesome pen-to-square icon
+
+
+---
 ### [0.29.4] (2024-02-09)
 
 
