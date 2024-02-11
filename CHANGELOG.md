@@ -2,6 +2,16 @@
 ---
 
 
+### [0.30.4] (2024-02-11)
+
+
+### Features
+
+* add ```<meta>``` tag to ```index.html``` to help with registering the application with google
+  * this is meant to help drive SEO and track visitor performance
+
+
+---
 ### [0.30.3] (2024-02-11)
 
 
@@ -13,9 +23,6 @@
 ### Features
 
 * add description ```<meta>``` tags to optimize SEO
-
-
-
 
 
 ### Code Refactoring
