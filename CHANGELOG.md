@@ -2,6 +2,15 @@
 ---
 
 
+### [0.30.2] (2024-02-11)
+
+
+### Bug Fixes
+
+* fix font files being copied into two different locations due to a webpack misconfiguration
+
+
+---
 ### [0.30.1] (2024-02-09)
 
 
