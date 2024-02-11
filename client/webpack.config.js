@@ -21,7 +21,19 @@ module.exports = {
     path: path.resolve(__dirname, '../public'),
     filename: 'js/[name]-[contenthash].js',
     clean: true,
-    assetModuleFilename: 'images/[name][ext]',
+    assetModuleFilename: (pathData) => {
+      const { filename } = pathData;
+
+      if (filename.endsWith('.woff') || filename.endsWith('.woff2') || filename.endsWith('.eot') || filename.endsWith('.ttf') || filename.endsWith('.otf')|| filename.endsWith('.otf'))  {
+        return 'assets/fonts/[name][ext]';
+      };
+
+      if (filename.endsWith('.png') || filename.endsWith('.jpg') || filename.endsWith('.jpeg') || filename.endsWith('.gif') || filename.endsWith('.svg')) {
+        return 'assets/images/[name][ext]';
+      };
+
+      return 'assets/[name][ext]';
+    },
   },
 
   devServer: {
@@ -64,10 +76,13 @@ module.exports = {
           },
         },
       },
+
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        exclude: /node_modules/,
         type: 'asset/resource',
       },
+
     ],
     
   },
@@ -77,7 +92,7 @@ module.exports = {
 
     new CopyPlugin({
       patterns: [
-        { from: "src/assets/", to: "assets/" },
+        { from: "src/assets/font-licenses", to: "assets/LICENSES/font-licenses" },
       ],
     }),
 
