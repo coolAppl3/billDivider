@@ -2,6 +2,33 @@
 ---
 
 
+### [0.30.3] (2024-02-11)
+
+
+### Documentation Changes
+
+* update ```README.md``` with a little more information about the application
+
+
+### Features
+
+* add description ```<meta>``` tags to optimize SEO
+
+
+
+
+
+### Code Refactoring
+
+* remove any trace of Font Awesome ```<i>``` element styling
+* refactor user feedback messages to use sign in/sign out terminology, not log in/log out, to ensure consistency
+* change the background of the sign out popup message to be green to reflect a successful operation
+* add ```title``` attribute to the ```<a>``` element surrounding the title in the navbar
+
+
+
+
+---
 ### [0.30.2] (2024-02-11)
 
 

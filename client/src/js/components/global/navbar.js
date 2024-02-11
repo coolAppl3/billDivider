@@ -71,7 +71,7 @@ class Navbar {
         confirmModal.remove();
         LoadingModal.display();
         cookies.remove('loginToken');
-        redirectAfterDelayMillisecond('index.html', 1000, 'Logged out successfully', 'cta');
+        redirectAfterDelayMillisecond('index.html', 1000, 'Signed out successfully', 'success');
       };
     });
 

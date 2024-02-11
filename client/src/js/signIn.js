@@ -70,7 +70,7 @@ class SignIn {
         cookies.set('loginToken', loginToken);
       };
 
-      redirectAfterDelayMillisecond('history.html', 1000, 'Login successful!', 'success');
+      redirectAfterDelayMillisecond('history.html', 1000, 'Signed in successfully!', 'success');
       
     } catch (err) {
       console.log(err)
