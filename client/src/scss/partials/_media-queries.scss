@@ -31,16 +31,6 @@
             &:hover {
               filter: none;
             }
-         
-            i {
-  
-              &::after {
-                // Making the button slightly easier to press for mobile phones
-                padding: 1rem;
-                top: -1rem;
-                left: -1rem;
-              }
-            }
           }
         }
         
