@@ -2,6 +2,37 @@
 ---
 
 
+
+### [0.31.0] (2024-02-12)
+
+### Features
+
+* add favicon to all HTML pages
+* add ```_scrollIntoView()``` to ```SessionContent.js``` to ensure the browser scrolls the first add-bill button into view
+  * this will help with making the next step clearer for the user
+  * the function will not continue if a user is **viewing a bill from their history**
+  * the function will not continue if the user's screen width is larger than **500 pixels**
+
+
+### Code Refactoring
+
+* reword description ```<meta>``` tag in ```index.html```
+* change the order of bills in sessions to always display the most recently-added bill on top
+* change mobile phone media queries to now start at widths equal to 450px or below
+
+
+### Bug Fixes
+
+* fix title values in the history header not having a height when empty
+  * this will help prevent the title from moving around while the data loads for first-time visitors
+
+
+### Build Changes
+
+* add contenthash to css file names in production to help with cache busting new releases
+
+
+---
 ### [0.30.4] (2024-02-11)
 
 
@@ -31,8 +62,6 @@
 * refactor user feedback messages to use sign in/sign out terminology, not log in/log out, to ensure consistency
 * change the background of the sign out popup message to be green to reflect a successful operation
 * add ```title``` attribute to the ```<a>``` element surrounding the title in the navbar
-
-
 
 
 ---

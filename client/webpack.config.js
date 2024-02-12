@@ -58,9 +58,7 @@ module.exports = {
       {
         test: /\.scss$/,
         use: [
-          process.env.NODE_ENV === 'development'
-          ? "style-loader"
-          : MiniCssExtractPlugin.loader,
+          process.env.NODE_ENV === 'development' ? "style-loader" : MiniCssExtractPlugin.loader,
           'css-loader',
           'sass-loader',
         ],
@@ -88,7 +86,7 @@ module.exports = {
   },
 
   plugins: [
-    new MiniCssExtractPlugin(),
+    new MiniCssExtractPlugin({ filename: '[name]-[contenthash].css' }),
 
     new CopyPlugin({
       patterns: [
