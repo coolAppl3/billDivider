@@ -59,11 +59,11 @@ class SessionInfo {
     this.sharedWithTotal = session.sharedWithTotal;
 
     for(let bill of session.billsPaid) {
-      this.billsPaid.push(bill);
+      this.billsPaid.unshift(bill);
     };
 
     for(let bill of session.billsToPay) {
-      this.billsToPay.push(bill);
+      this.billsToPay.unshift(bill);
     };
 
     this.sessionID = session.sessionID;

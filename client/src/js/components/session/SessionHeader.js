@@ -45,7 +45,7 @@ class SessionHeader {
   _render() {
     this._updateTotals();
     this._updateDebtResult();
-
+    
     this._enableResetButton();
     this._handleSaveButtonEnabling();
   };
@@ -125,10 +125,7 @@ class SessionHeader {
   async _saveSession() {
     LoadingModal.display();
 
-    if(!sessionInfo.sharedWith) { // To protect against potential element manipulation.
-      return redirectAfterDelayMillisecond('session.html');
-    };
-
+    // The save button shouldn't be enabled if there aren't any unsaved changes. The code below redirects the user and stops the function if the user tries to manually manipulate the DOM and enable the save button, when there aren't any unsaved changes.
     const unsavedSessionChanges = JSON.parse(sessionStorage.getItem('unsavedSessionChanges'));
     if(!unsavedSessionChanges) {
       return SessionReference.referenceExists()
@@ -137,7 +134,6 @@ class SessionHeader {
       ;
     };
     
-
     const loginToken = locateLoginToken();
     if(!loginToken) {
       return redirectAfterDelayMillisecond('session.html');
@@ -198,11 +194,10 @@ class SessionHeader {
 
       return this._disableSaveButton();
     };
-
+    
     // User not logged in:
     this._saveSessionBtn.setAttribute('title', 'Available when logged in');
     this._disableSaveButton();
-    
   };
 
   _enableSaveButton() {

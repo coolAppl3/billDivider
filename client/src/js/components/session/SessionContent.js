@@ -4,6 +4,7 @@ import BillModal from "./BillModal";
 import BillElement from "./BillElement";
 import ConfirmModal from "../global/ConfirmModal";
 import messagePopup from "../global/messagePopup";
+import SessionReference from "./SessionReference";
 
 // Initializing imports
 const billElement = new BillElement();
@@ -21,6 +22,7 @@ class SessionContent {
 
   _loadEventListeners() {
     window.addEventListener('render', this._render.bind(this));
+    window.addEventListener('sessionStarted', this._scrollIntoView.bind(this));
     
     this._sessionContent.addEventListener('click', this._handleSessionContentClickEvents.bind(this));
   };
@@ -252,6 +254,20 @@ class SessionContent {
     }
   };
 
+  _scrollIntoView() {
+    if(screen.width > 500) {
+      return ;
+    };
+    
+    if(!SessionReference.referenceExists()) {
+      const firstAddBillBtn = document.querySelector('.addBillBtn');
+      
+      firstAddBillBtn.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end'
+      });
+    };
+  };
 };
 
 export default SessionContent;

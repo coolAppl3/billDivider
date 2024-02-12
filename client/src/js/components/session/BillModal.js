@@ -88,9 +88,9 @@ class BillModal {
     };
 
     if(billOwner === 'main') {
-      sessionInfo.billsPaid.push(newBill);
+      sessionInfo.billsPaid.unshift(newBill);
     } else if(billOwner === 'secondary') {
-      sessionInfo.billsToPay.push(newBill);
+      sessionInfo.billsToPay.unshift(newBill);
     };
 
     this.hide();
