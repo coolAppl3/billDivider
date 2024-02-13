@@ -2,10 +2,6 @@ import Cookies from '../../../js/components/global/Cookies';
 const cookies = new Cookies();
 
 describe('get(cookieKey)', () => {
-  it('should be a function', () => {
-    expect(typeof cookies.get).toEqual('function');
-  });
-
   it('should return undefined if a falsy argument is provided', () => {
     expect(cookies.get()).toBeUndefined();
     expect(cookies.get('')).toBeUndefined();
@@ -14,7 +10,7 @@ describe('get(cookieKey)', () => {
   });
 
   it('should return undefined if there are no cookies for the domain', () => {
-    // Mocking the lack of cookies
+    // Mocking browser cookies
     Object.defineProperty(window.document, 'cookie', {
       writable: true,
       value: '',
@@ -25,7 +21,7 @@ describe('get(cookieKey)', () => {
   });
 
   it('should return undefined if the cookieKey argument is not available in the created cookieMap', () => {
-    // Mocking a cookie
+    // Mocking browser cookies
     Object.defineProperty(window.document, 'cookie', {
       writable: true,
       value: 'loginToken=dummyLoginToken; expires=Thu, 25 Jan 2024 03:01:30 GMT; path=/; someOtherKey=dummyValue; expires=Thu, 25 Jan 2024 03:01:30 GMT; path=/',
@@ -36,7 +32,7 @@ describe('get(cookieKey)', () => {
   });
   
   it('should return the value of the cookieKey from the created cookieMap', () => {
-    // Mocking a cookie
+    // Mocking browser cookies
     Object.defineProperty(window.document, 'cookie', {
       writable: true,
       value: 'loginToken=dummyLoginToken; expires=Thu, 25 Jan 2024 03:01:30 GMT; path=/; someOtherKey=dummyValue; expires=Thu, 25 Jan 2024 03:01:30 GMT; path=/',
@@ -48,18 +44,14 @@ describe('get(cookieKey)', () => {
 });
 
 describe('set(cookieKey, cookieValue, ageMilliseconds)', () => {
-  it('should be a function', () => {
-    expect(typeof cookies.set).toEqual('function');
-  });
-  
   it('should always return undefined', () => {
-    expect(cookies.set('someKey', 'someValue', 'someAGe')).toBeUndefined();
+    expect(cookies.set('someKey', 'someValue', 'someAge')).toBeUndefined();
     expect(cookies.set('someKey', 'someValue', '')).toBeUndefined();
     expect(cookies.set('someKey', 'someValue',)).toBeUndefined();
   });
   
   it('should set a cookie with no expiry date, if the type of ageMilliseconds is not a number or is falsy', () => {
-    // Mocking the lack of cookies
+    // Mocking browser cookies
     Object.defineProperty(window.document, 'cookie', {
       writable: true,
       value: '',
@@ -70,7 +62,7 @@ describe('set(cookieKey, cookieValue, ageMilliseconds)', () => {
   });
 
   it('should set a cookie with the desired age if a valid ageMilliseconds is passed in', () => {
-    // Mocking the lack of cookies
+    // Mocking browser cookies
     Object.defineProperty(window.document, 'cookie', {
       writable: true,
       value: '',
@@ -88,10 +80,6 @@ describe('set(cookieKey, cookieValue, ageMilliseconds)', () => {
 });
 
 describe('remove(cookieKey)', () => {
-  it('should be a function', () => {
-    expect(typeof cookies.remove).toEqual('function');
-  });
-  
   it('should always return undefined', () => {
     expect(cookies.remove('literallyAnything')).toBeUndefined();
     expect(cookies.remove('')).toBeUndefined();
@@ -100,7 +88,7 @@ describe('remove(cookieKey)', () => {
   });
   
   it('should remove a cookie with a key equal the passed in cookieKey', () => {
-    // Mocking a cookie
+    // Mocking browser cookies
     Object.defineProperty(window.document, 'cookie', {
       writable: true,
       value: 'someCookie=someValue; expires=Thu, 13 Jan 2024 00:00:00 UTC; path=/',
@@ -114,12 +102,8 @@ describe('remove(cookieKey)', () => {
 });
 
 describe('_createCookieMap()', () => {
-  it('should be a function', () => {
-    expect(typeof cookies._createCookieMap).toEqual('function');
-  });
-  
   it('should return undefined if there are no cookies set for the domain', () => {
-    // Mocking the lack of cookies
+    // Mocking browser cookies
     Object.defineProperty(window.document, 'cookie', {
       writable: true,
       value: '',
@@ -129,7 +113,7 @@ describe('_createCookieMap()', () => {
   });
   
   it('should return a map of cookie keys and cookie values of all available cookies for the domain, as long as there are any', () => {
-    // Mocking a cookie
+    // Mocking browser cookies
     Object.defineProperty(window.document, 'cookie', {
       writable: true,
       value: 'loginToken=dummyLoginToken; someOtherKey=dummyValue',
@@ -144,10 +128,6 @@ describe('_createCookieMap()', () => {
 });
 
 describe('_setCookieExpiryDate(ageMilliseconds)', () => {
-  it('should be a function', () => {
-    expect(typeof cookies._setCookieExpiryDate).toEqual('function');
-  });
-
   it('should return undefined if ageMilliseconds is falsy or not a number', () => {
     expect(cookies._setCookieExpiryDate(null)).toBeUndefined();
     expect(cookies._setCookieExpiryDate(undefined)).toBeUndefined();

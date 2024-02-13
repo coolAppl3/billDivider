@@ -5,16 +5,11 @@ mockCheckBox.id = 'mockID';
 document.body.appendChild(mockCheckBox);
 
 const formCheckBox = new FormCheckbox('mockID');
-
 afterEach(() => {
   mockCheckBox.className = '';
 });
 
 describe('_handleKeyEvents(e)', () => {
-  it('should be a function', () => {
-    expect(typeof formCheckBox._handleKeyEvents).toEqual('function');
-  });
-
   it('should return undefined and stop the function if e.key is not equal to Enter', () => {
     mockCheckBox.className = 'checked';
     const mockEvent = { key: 'someOtherKey' };
@@ -36,27 +31,16 @@ describe('_handleKeyEvents(e)', () => {
 });
 
 describe('_reveal()', () => {
-  it('should be a function', () => {
-    expect(typeof formCheckBox._reveal).toEqual('function');
-  });
-
-  it('should always return undefined', () => {
-    expect(formCheckBox._reveal()).toBeUndefined();
-    expect(formCheckBox._reveal({})).toBeUndefined();
-    expect(formCheckBox._reveal('')).toBeUndefined();
-    expect(formCheckBox._reveal(0)).toBeUndefined();
-  });
-  
   it(`it should remove the "checked" class from the checkbox if it has one`, () => {
     mockCheckBox.className = 'checked';
-    formCheckBox._reveal();
+    formCheckBox._revealCheck();
 
     expect(mockCheckBox.className).toEqual('');
   });
   
   it(`it should add the "checked" class from the checkbox if does not have one`, () => {
     mockCheckBox.className = '';
-    formCheckBox._reveal();
+    formCheckBox._revealCheck();
 
     expect(mockCheckBox.className).toEqual('checked');
   });

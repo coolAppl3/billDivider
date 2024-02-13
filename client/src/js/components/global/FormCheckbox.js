@@ -6,7 +6,7 @@ class FormCheckbox {
   };
 
   _loadEventListeners() {
-    this._checkbox.addEventListener('click', this._reveal.bind(this));
+    this._checkbox.addEventListener('click', this._revealCheck.bind(this));
     this._checkbox.addEventListener('keyup', this._handleKeyEvents.bind(this));
   };
   
@@ -14,11 +14,11 @@ class FormCheckbox {
     const pressedKey = e.key;
 
     if(pressedKey === 'Enter') {
-      this._reveal();
+      this._revealCheck();
     };
   };
 
-  _reveal() {
+  _revealCheck() {
     if(this._checkbox.classList.contains('checked')) {
       this._checkbox.classList.remove('checked');
       return ;
