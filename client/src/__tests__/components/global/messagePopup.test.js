@@ -5,10 +5,6 @@ beforeEach(() => {
 });
 
 describe(`messagePopup(message, type = 'cta')`, () => {
-  it('should be a function', () => {
-    expect(typeof messagePopup).toEqual('function');
-  });
-  
   it('should always return undefined', () => {
     expect(messagePopup()).toBeUndefined();
     expect(messagePopup(0)).toBeUndefined();
@@ -27,6 +23,7 @@ describe(`messagePopup(message, type = 'cta')`, () => {
   it('should create a message popup with the message that is passed in ', () => {
     messagePopup('Some message');
     const messagePopupElement1 = document.querySelector('.popup');
+
     expect(messagePopupElement1.textContent).toEqual('Some message');
   });
 

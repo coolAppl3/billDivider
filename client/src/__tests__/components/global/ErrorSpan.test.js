@@ -6,10 +6,6 @@ beforeEach(() => {
 });
 
 describe('display(formGroup, message)', () => {
-  it('should be a function', () => {
-    expect(typeof errorSpan.display).toEqual('function');
-  });
-
   it('should always return undefined', () => {
     expect(errorSpan.display()).toBeUndefined();
     expect(errorSpan.display('')).toBeUndefined();
@@ -47,10 +43,6 @@ describe('display(formGroup, message)', () => {
 });
 
 describe('hide(formGroup)', () => {
-  it('should be a function', () => {
-    expect(typeof errorSpan.hide).toEqual('function');
-  });
-  
   it('should always return undefined', () => {
     expect(errorSpan.hide()).toBeUndefined();
     expect(errorSpan.hide('')).toBeUndefined();

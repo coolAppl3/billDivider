@@ -50,6 +50,10 @@
       display: flex;
       align-items: center;
 
+      &.hidden {
+        display: none;
+      }
+
       .btn-div {
 
         &:last-child {
@@ -70,8 +74,10 @@
       place-items: center;
       cursor: pointer;
       transition: border-color 200ms;
-      
-      display: none; // controlled with JavaSCript
+
+      &.hidden {
+        display: none;
+      }
 
       &:hover {
         border-color: $cta;

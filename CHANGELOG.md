@@ -2,7 +2,25 @@
 ---
 
 
+### [0.32.0] (2024-02-13)
 
+
+### Code Refactoring
+
+* rename ```_reveal()``` in ```FormCheckbox.js``` to ```_revealCheck()```
+* add "hidden" class to links-container in the navbar
+* change ```__displayUserMenuBtn``` in ```Navbar.js``` to now display either the links-container or user-menu-btn depending on whether the user is logged in
+  * this change should take care of the CSS flickering for first-time users, which was caused by the links-container always being visible by default
+
+### Test Changes
+
+* remove redundant tests from existing unit tests
+* refactor the logic behind some of the existing unit tests
+* refactor the testing logic in ```Navbar.test.js``` to make better use of jest mocks to cover previously untested code
+  * ```Navbar.js``` has now passed unit testing
+
+
+---
 ### [0.31.0] (2024-02-12)
 
 ### Features

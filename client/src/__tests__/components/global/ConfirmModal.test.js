@@ -6,10 +6,6 @@ beforeEach(() => {
 });
 
 describe(`display(message, btnColor = 'cta')`, () => {
-  it('should be a function', () => {
-    expect(typeof confirmModal.display).toEqual('function');
-  });
-  
   it('should always return undefined', () => {
     expect(confirmModal.display()).toBeUndefined();
     expect(confirmModal.display('Some confirmation message')).toBeUndefined();
@@ -17,7 +13,7 @@ describe(`display(message, btnColor = 'cta')`, () => {
     expect(confirmModal.display({}, 'some color')).toBeUndefined();
   });
   
-  it('should check and not create a confirm modal element if one already exists', () => {
+  it('should check and not create another confirm modal element if one already exists', () => {
     // Mocking a dummy confirm modal in the DOM
     const confirmModalElement = document.createElement('div');
     confirmModalElement.className = 'confirm-modal';
@@ -39,37 +35,20 @@ describe(`display(message, btnColor = 'cta')`, () => {
 });
 
 describe('remove()', () => {
-  it('should be a function', () => {
-    expect(typeof confirmModal.remove).toEqual('function');
-  });
-  
-  it('should always return undefined', () => {
-    expect(confirmModal.remove()).toBeUndefined();
-    expect(confirmModal.remove(0)).toBeUndefined();
-    expect(confirmModal.remove('')).toBeUndefined();
-    expect(confirmModal.remove('string')).toBeUndefined();
-    expect(confirmModal.remove([])).toBeUndefined();
-    expect(confirmModal.remove({})).toBeUndefined();
-  });
-  
   it('should not do anything if there is no confirm modal in the DOM', () => {
-    // Mocking a DOM with some div elements
+    // Mocking a DOM with a random div element
     const someDiv = document.createElement('div');
     someDiv.className = 'some-class';
     document.body.appendChild(someDiv);
 
-    const someOtherDiv = document.createElement('div');
-    someOtherDiv.className = 'some-other-class';
-    document.body.appendChild(someOtherDiv);
-
     confirmModal.remove();
-    const divList = document.querySelectorAll('div');
+    const confirmModalElement = document.querySelector('.confirm-modal');
 
-    expect(divList.length).toEqual(2);
+    expect(confirmModalElement).toBeNull();
   });
 
   it('should remove the confirm modal if it is in the DOM', () => {
-    // Mocking a DOM with a confirm modal
+    // Mocking a DOM with a confirm modal and other random div's
     const someDiv = document.createElement('div');
     someDiv.className = 'some-class';
     document.body.appendChild(someDiv);
@@ -91,10 +70,6 @@ describe('remove()', () => {
 });
 
 describe('_create(message, btnColor)', () => {
-  it('should be a function', () => {
-    expect(typeof confirmModal._create).toEqual('function');
-  });
-  
   it('should always return an HTML element', () => {
     expect(confirmModal._create() instanceof HTMLElement).toBeTruthy();
     expect(confirmModal._create('Some confirmation message') instanceof HTMLElement).toBeTruthy();
@@ -115,10 +90,6 @@ describe('_create(message, btnColor)', () => {
 });
 
 describe('_createContainer(btnColor)', () => {
-  it('should be a function', () => {
-    expect(typeof confirmModal._createBtnContainer).toEqual('function');
-  });
-  
   it('should always return an HTML element', () => {
     expect(confirmModal._createBtnContainer() instanceof HTMLElement).toBeTruthy();
     expect(confirmModal._createBtnContainer('Some confirmation message') instanceof HTMLElement).toBeTruthy();
@@ -153,10 +124,6 @@ describe('_createContainer(btnColor)', () => {
 });
 
 describe('_createConfirmMessage(message)', () => {
-  it('should be a function', () => {
-    expect(typeof confirmModal._createConfirmMessage).toEqual('function');
-  });
-  
   it('should always return an HTML element', () => {
     expect(confirmModal._createConfirmMessage() instanceof HTMLElement).toBeTruthy();
     expect(confirmModal._createConfirmMessage('Some confirmation message') instanceof HTMLElement).toBeTruthy();
@@ -174,7 +141,7 @@ describe('_createConfirmMessage(message)', () => {
     expect(confirmModal._createConfirmMessage('Confirm some action?')).toEqual(expectedMessageElement);
   });
   
-  it(`it should fallback to "Are you sure?" as the confirmation message if a falsy message argument is passed in`, () => {
+  it(`it should fallback to "Are you sure?" as the confirmation message if the passed in argument is falsy`, () => {
     // Mocking a confirm message being added to the DOM
     document.body.appendChild(confirmModal._createConfirmMessage());
     const confirmMessage = document.querySelector('p');

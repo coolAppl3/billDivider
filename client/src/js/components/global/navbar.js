@@ -29,13 +29,13 @@ class Navbar {
     const loginToken = locateLoginToken();
 
     if(!loginToken) {
-      this._linksContainer.style.display = 'flex';
-      this._userMenuBtn.style.display = 'none';
+      this._linksContainer.classList.remove('hidden');
+      this._userMenuBtn.classList.add('hidden');
       return ;
     }
     
-    this._linksContainer.style.display = 'none';
-    this._userMenuBtn.style.display = 'grid';
+    this._linksContainer.classList.add('hidden');
+    this._userMenuBtn.classList.remove('hidden');
   };
 
   _handleUserMenuKeyEvents(e) {
