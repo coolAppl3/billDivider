@@ -2,6 +2,26 @@
 ---
 
 
+### [0.33.1] (2024-02-14)
+
+
+### Code Refactoring
+
+* Refactored ```LinksContainer.js``` to now always set ```this._linksContainerElement``` to a div with a 'links-container' class
+  * There's no point in making it reusable, as it's only meant for the ```signIn.html``` and ```signUp.html``` pages
+* Refactored ```signIn.js``` and ```signUp.js``` to now create an instance of ```LinksContainer``` without passing in a class
+
+
+### Test Changes
+
+* Completed ```LinksContainer.test.js``` 
+* ```LinksContainer.js``` passed unit testing 
+
+
+
+
+
+---
 ### [0.33.0] (2024-02-14)
 
 
