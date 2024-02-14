@@ -1,13 +1,13 @@
 class LinksContainer {
-  constructor(linksContainerClass) {
-    this._linksContainer = document.querySelector(`.${linksContainerClass}`);
+  constructor() {
+    this._linksContainerElement = document.querySelector('.links-container');
 
     this._loadEventListeners();
   };
 
   _loadEventListeners() {
-    this._linksContainer.addEventListener('click', this._handleClickEvents.bind(this));
-    this._linksContainer.addEventListener('keyup', this._handleKeyEvents.bind(this));
+    this._linksContainerElement.addEventListener('click', this._handleClickEvents.bind(this));
+    this._linksContainerElement.addEventListener('keyup', this._handleKeyEvents.bind(this));
   };
 
   _handleKeyEvents(e) {
@@ -20,11 +20,13 @@ class LinksContainer {
 
   _handleClickEvents(e) {
     if(e.target.id === 'returnToPreviousPage') {
-      return history.back();
+      history.back();
+      return ;
     }
     
     if(e.target.id === 'returnToHomepage') {
-      return window.location.href = 'index.html';
+      window.location.href = 'index.html';
+      return ;
     };
   };
 };

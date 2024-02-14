@@ -23,7 +23,7 @@ const errorSpan = new ErrorSpan();
 
 new FormCheckbox('keepMeSignedIn');
 new RevealPassword('password');
-new LinksContainer('links-container');
+new LinksContainer();
 
 class SignUp {
   constructor() {
