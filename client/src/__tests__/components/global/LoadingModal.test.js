@@ -5,6 +5,17 @@ beforeEach(() => {
 });
 
 describe('display()', () => {
+  it('should always return undefined', () => {
+    expect(LoadingModal.display()).toBeUndefined();
+    expect(LoadingModal.display(null)).toBeUndefined();
+    expect(LoadingModal.display(0)).toBeUndefined();
+    expect(LoadingModal.display('')).toBeUndefined();
+    expect(LoadingModal.display({})).toBeUndefined();
+    expect(LoadingModal.display([])).toBeUndefined();
+    expect(LoadingModal.display('some value')).toBeUndefined();
+    expect(LoadingModal.display(5)).toBeUndefined();
+  });
+  
   it('should not create a loading modal and append it if one already exists in the DOM', () => {
     const mockLoadingModal = document.createElement('div');
     mockLoadingModal.className = 'loading-modal';
@@ -32,6 +43,17 @@ describe('display()', () => {
 });
 
 describe('remove()', () => {
+  it('should always return undefined', () => {
+    expect(LoadingModal.remove()).toBeUndefined();
+    expect(LoadingModal.remove(null)).toBeUndefined();
+    expect(LoadingModal.remove(0)).toBeUndefined();
+    expect(LoadingModal.remove('')).toBeUndefined();
+    expect(LoadingModal.remove({})).toBeUndefined();
+    expect(LoadingModal.remove([])).toBeUndefined();
+    expect(LoadingModal.remove('some value')).toBeUndefined();
+    expect(LoadingModal.remove(5)).toBeUndefined();
+  });
+  
   it('should not do anything if there is no loading modal in the DOM', () => {
     LoadingModal.remove();
     expect(document.body.firstElementChild).toBeNull();

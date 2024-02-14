@@ -2,21 +2,59 @@
 ---
 
 
+### [0.33.0] (2024-02-14)
+
+
+### Features
+
+* Added edge case protection for 'type' parameter in ```messagePopup.js```
+  * It now includes logic to ensure that the 'type' parameter is always a **non-empty** string. If the user passes it as anything else, it will default back to 'cta' to prevent unexpected behavior
+<br>
+
+* Added edge case protection for ```redirectAfterDelayMillisecond.js``` to ensure a valid 'target' parameter is passed in
+  * 'target' will now also default back to 'index.html' if includes whitespace or doesn't end with '.html'
+
+
+### Code Refactoring
+
+* Removed the default export in ```index.js``` as it served no purpose
+
+
+
+
+
+### Test Changes
+
+* Rewrote ```redirectAfterDelayMillisecond.test.js``` from the grounds up
+  * It now properly uses Jest mock functions to ensure appropriate coverage
+* ```redirectAfterDelayMillisecond.js``` passed unit testing
+* Refactored a few tests to better test for when functions should always return ```undefined```
+* All modules under ```js/components/global/``` have passed unit testing 
+
+
+### Documentation Changes
+
+* Moved away from imperative grammar in the changelog
+  * This change also includes capitalizing the first letter in every sentence. This change should make the changelog better to read
+* Slight changes to the overall structure of the changelog
+
+
+---
 ### [0.32.0] (2024-02-13)
 
 
 ### Code Refactoring
 
-* rename ```_reveal()``` in ```FormCheckbox.js``` to ```_revealCheck()```
-* add "hidden" class to links-container in the navbar
-* change ```__displayUserMenuBtn``` in ```Navbar.js``` to now display either the links-container or user-menu-btn depending on whether the user is logged in
-  * this change should take care of the CSS flickering for first-time users, which was caused by the links-container always being visible by default
+* Renamed ```_reveal()``` in ```FormCheckbox.js``` to ```_revealCheck()```
+* Added "hidden" class to links-container in the navbar
+* Changed ```__displayUserMenuBtn``` in ```Navbar.js``` to now display either the links-container or user-menu-btn depending on whether the user is logged in
+  * This change should take care of the CSS flickering for first-time users, which was caused by the links-container always being visible by default
 
 ### Test Changes
 
-* remove redundant tests from existing unit tests
-* refactor the logic behind some of the existing unit tests
-* refactor the testing logic in ```Navbar.test.js``` to make better use of jest mocks to cover previously untested code
+* Removed redundant tests from existing unit tests
+* Refactored the logic behind some of the existing unit tests
+* Refactored the testing logic in ```Navbar.Test.js``` to make better use of jest mocks to cover previously untested code
   * ```Navbar.js``` has now passed unit testing
 
 
@@ -25,29 +63,29 @@
 
 ### Features
 
-* add favicon to all HTML pages
-* add ```_scrollIntoView()``` to ```SessionContent.js``` to ensure the browser scrolls the first add-bill button into view
-  * this will help with making the next step clearer for the user
-  * the function will not continue if a user is **viewing a bill from their history**
-  * the function will not continue if the user's screen width is larger than **500 pixels**
+* Added favicon to all HTML pages
+* Added ```_scrollIntoView()``` to ```SessionContent.js``` to ensure the browser scrolls the first add-bill button into view
+  * This will help with making the next step clearer for the user
+  * The function will not continue if a user is **viewing a bill from their history**
+  * The function will not continue if the user's screen width is larger than **500 pixels**
 
 
 ### Code Refactoring
 
-* reword description ```<meta>``` tag in ```index.html```
-* change the order of bills in sessions to always display the most recently-added bill on top
-* change mobile phone media queries to now start at widths equal to 450px or below
+* Reworded description ```<meta>``` tag in ```index.html```
+* Changed the order of bills in sessions to always display the most recently-added bill on top
+* Changed mobile phone media queries to now start at widths equal to 450px or below
 
 
 ### Bug Fixes
 
-* fix title values in the history header not having a height when empty
-  * this will help prevent the title from moving around while the data loads for first-time visitors
+* Fixed title values in the history header not having a height when empty
+  * This will help prevent the title from moving around while the data loads for first-time visitors
 
 
 ### Build Changes
 
-* add contenthash to css file names in production to help with cache busting new releases
+* Added hashing to css file names in production to help with cache busting new releases
 
 
 ---
@@ -56,8 +94,8 @@
 
 ### Features
 
-* add ```<meta>``` tag to ```index.html``` to help with registering the application with google
-  * this is meant to help drive SEO and track visitor performance
+* Added ```<meta>``` tag to ```index.html``` to help with registering the application with Google
+  * This is meant to help drive SEO and track visitor performance
 
 
 ---
@@ -66,20 +104,20 @@
 
 ### Documentation Changes
 
-* update ```README.md``` with a little more information about the application
+* Updated ```README.md``` with a little more information about the application
 
 
 ### Features
 
-* add description ```<meta>``` tags to optimize SEO
+* Added description ```<meta>``` tags to optimize SEO
 
 
 ### Code Refactoring
 
-* remove any trace of Font Awesome ```<i>``` element styling
-* refactor user feedback messages to use sign in/sign out terminology, not log in/log out, to ensure consistency
-* change the background of the sign out popup message to be green to reflect a successful operation
-* add ```title``` attribute to the ```<a>``` element surrounding the title in the navbar
+* Removed any trace of Font Awesome ```<i>``` element styling
+* Refactored user feedback messages to use sign in/sign out terminology, not log in/log out, to ensure consistency
+* Changed the background of the sign out popup message to be green to reflect a successful operation
+* Added ```title``` attribute to the ```<a>``` element surrounding the title in the navbar
 
 
 ---
@@ -88,7 +126,7 @@
 
 ### Bug Fixes
 
-* fix font files being copied into two different locations due to a webpack misconfiguration
+* Fixed font files being copied into two different locations due to a webpack misconfiguration
 
 
 ---
@@ -97,7 +135,7 @@
 
 ### Bug Fixes
 
-* fix Font Awesome CDN not being removed in a few pages in the last PR
+* Fixed Font Awesome CDN not being removed in a few pages in the last PR
 
 
 ---
@@ -105,18 +143,18 @@
 
 ### Code Refactoring
 
-* replace Font Awesome icons with local SVGs and discontinued the use of Font Awesome CDN
-  * refactor ```revealPassword.js``` to accommodate the use of Font Awesome SVGs
+* Replaced Font Awesome icons with local SVGs and discontinued the use of Font Awesome CDN
+  * Refactored ```revealPassword.js``` to accommodate the use of Font Awesome SVGs
 <br>
-* refactor ```_createIconContainer``` in ```billElement.js``` to accommodate the use of Font Awesome SVGs
-  * it now creates a div's instead of ```<i>``` elements, and appends the SVGs created by the newly added ```_createDeleteIconSVG()``` and ```_createEditIconSVG()```
+* Refactored ```_createIconContainer``` in ```billElement.js``` to accommodate the use of Font Awesome SVGs
+  * It now creates a div's instead of ```<i>``` elements, and appends the SVGs created by the newly added ```_createDeleteIconSVG()``` and ```_createEditIconSVG()```
 
 
 ### Features
 
-* add keyboard navigation support for the navbar user menu button
-* add ```_createDeleteIconSVG``` in ```billElement.js``` to create the Font Awesome trash-can icon
-* add ```_createEditIconSVG``` in ```billElement.js``` to create the Font Awesome pen-to-square icon
+* Added keyboard navigation support for the navbar user menu button
+* Added ```_createDeleteIconSVG``` in ```billElement.js``` to create the Font Awesome trash-can icon
+* Added ```_createEditIconSVG``` in ```billElement.js``` to create the Font Awesome pen-to-square icon
 
 
 ---
@@ -125,16 +163,16 @@
 
 ### Code Refactoring
 
-* discontinue the use of Google Fonts API
-* implement Roboto font locally to improve performance and loading time
-  * create font folder in assets
+* Discontinued the use of Google Fonts API
+* Implemented the Roboto font locally to improve performance and loading time for first-time users
+  * Created font folder in ```/assets/fonts/```
 
 
 ### Build Changes
 
-* update build process for ```webpack.config.js```
-  * add ```CopyPlugin``` to bundle assets into production
-  * add support rule for loading font files
+* Updated build process for ```webpack.config.js```
+  * Added ```CopyPlugin``` to bundle assets into production
+  * Added support rule for loading font files
 
 
 ---
@@ -143,8 +181,8 @@
 
 ### Code Refactoring
 
-* change the Font Awesome CDN across all HTML files
-  * this is an experimental change for the sake of enhancing load time, and might be reverted
+* Changed the Font Awesome CDN across all HTML files
+  * This is an experimental change for the sake of enhancing load time, and might be reverted
 
 
 ---
@@ -153,8 +191,8 @@
 
 ### Code Refactoring
 
-* remove ```disableFBCache``` module from ```index.js```
-  * forward/back caching is useful on the homepage, and won't cause any problems
+* Removed ```disableFBCache``` module from ```index.js```
+  * Forward/back caching is useful on the homepage, and won't cause any problems
 
 
 ---
@@ -163,7 +201,7 @@
 
 ### Bug Fixes
 
-* fix webpack build command not being ran in the last update
+* Fixed webpack build command not being ran in the last update
 
 
 ---
@@ -172,23 +210,23 @@
 
 ### Code Refactoring
 
-* refactor ```BillModal.js```
-  * change ```populate()``` to now be a private method under the ```billModal``` module
-  * change ```display()``` to now call ```_populate()``` if a valid bill ID is passed in
+* Refactored ```BillModal.js```
+  * Changed ```populate()``` to now be a private method under the ```billModal``` module
+  * Changed ```display()``` to now call ```_populate()``` if a valid bill ID is passed in
 <br>
 
-* refactor ```SessionContent.js```
+* Refactored ```SessionContent.js```
   * ```_editBill()``` will now only call ```billModal.display()``` thanks to the above changes
 <br>
 
-* change html files to only request the in-use robot-fonts from Google Fonts
+* Changed html files to only request the in-use robot-fonts from Google Fonts
 
 
 ### Bug Fixes
 
-* fix Firefox falling back to the default font family for input and button elements
-  *  needed to specify the font family for both elements globally
-* fix password reveal icon (eye) showing in password inputs elements next to the one by the app
+* Fixed Firefox falling back to the default font family for input and button elements
+  *  Needed to specify the font family for both elements globally
+* Fixed password reveal icon (eye) showing in password inputs elements next to the one by the app
 
 ---
 ### [0.28.0] (2024-02-07)
@@ -196,9 +234,9 @@
 
 ### Bug Fixes
 
-* fix hardcoded latest session date flickering before data is displayed
-* fix chevron in session containers being clipped when rotated downwards
-* fix bill modal not displaying the accurate disabled/enabled state for the unshared input
+* Fixed hardcoded laTest session date flickering before data is displayed
+* Fixed chevron in session containers being clipped when rotated downwards
+* Fixed bill modal not displaying the accurate disabled/enabled state for the unshared input
 
 
 ---
@@ -207,13 +245,13 @@
 
 ### Bug Fixes
 
-* fix spans in session header displaying an empty string, instead of 0.00 when needed
-  * issue was with addThousandComma.js and the fact that 0 is falsy
+* Fixed spans in session header displaying an empty string, instead of 0.00 when needed
+  * Issue was with AddThousandComma.js and the fact that 0 is falsy
 
 
 ### Test Changes
 
-* update addThousandComma.test.js to reflect the above bug fix
+* Updated ```AddThousandComma.Test.js``` to reflect the above bug fix
 
 
 ---
@@ -222,13 +260,13 @@
 
 ### Code Refactoring
 
-* change disableBFCache.js to disableFBCache.js
+* Changed ```disableBFCache.js``` to ```disableFBCache.js```
 
 
 ### Bug Fixes
 
-* fixed forward/back cache in browsers causing pages to hang when the user navigates back to them
-  * this was done by importing disableFBCache.js into every main JS file
+* Fixed forward/back cache in browsers causing pages to hang when the user navigates back to them
+  * This was done by importing disableFBCache.js into every main JS file
 
 
 
@@ -238,19 +276,19 @@
 
 ### Features
 
-* add disableBFCache.js
-  * it should reload the page if the pageshow event is persisted
+* Added ```disableBFCache.js```
+  * It should reload the page if the pageshow event is persisted
 
 
 ### Bug Fixes
 
-* import disableBFCache.js to session.js
-  * it should prevent the page from just hanging if the user goes back to it using the browser
+* Imported ```disableBFCache.js``` to ```session.js```
+  * It should prevent the page from just hanging if the user goes back to it using the browser
 
 
 ### Code Refactoring
 
-* remove meta tag that prevented browser caching
+* Removed meta tag that prevented browser caching
 
 
 ---
@@ -259,8 +297,8 @@
 
 ### Bug Fixes
 
-* disable browser caching
-  * experimental change
+* Disabled browser caching
+  * Experimental change
 
 
 ---
@@ -269,8 +307,8 @@
 
 ### Test Changes
 
-* test changelog
-  * testing how the changelog will display ths contents.
+* Test changelog
+  * Testing how the changelog will display ths contents.
 
 
 ---
@@ -279,8 +317,8 @@
 
 ### Code Refactoring
 
-* remove standard-version
-  * will manually write the changelog file moving forward
+* Remove standard-version
+  * Will manually write the changelog file moving forward
 
 
 ---
@@ -289,9 +327,9 @@
 
 ### Features
 
-* add standard-version to generate changelog
+* Added standard-version to generate changelog
 
 
 ### Code Refactoring
 
-* remove JSON response for endpoints not specified in API
+* Removed JSON response for endpoints not specified in API
