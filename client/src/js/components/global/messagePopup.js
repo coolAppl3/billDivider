@@ -2,6 +2,10 @@ function messagePopup(message, type = 'cta') {
   if(typeof message !== 'string') {
     message = '';
   };
+
+  if(typeof type !== 'string' || type === '') {
+    type = 'cta';
+  };
   
   const popup = document.createElement('div');
   popup.className = 'popup';

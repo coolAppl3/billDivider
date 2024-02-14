@@ -126,6 +126,17 @@ afterEach(() => {
 });
 
 describe('_displayUserMenuBtn()', () => {
+  it('should always return undefined', () => {
+    expect(navbar._displayUserMenuBtn()).toBeUndefined();
+    expect(navbar._displayUserMenuBtn(null)).toBeUndefined();
+    expect(navbar._displayUserMenuBtn(0)).toBeUndefined();
+    expect(navbar._displayUserMenuBtn('')).toBeUndefined();
+    expect(navbar._displayUserMenuBtn({})).toBeUndefined();
+    expect(navbar._displayUserMenuBtn([])).toBeUndefined();
+    expect(navbar._displayUserMenuBtn('some value')).toBeUndefined();
+    expect(navbar._displayUserMenuBtn(5)).toBeUndefined();
+  });
+  
   it('should keep the _userMenuBtn hidden if there is no loginToken in the browser', () => {
     // Mocking the lack of a loginToken cookie in the browser
     locateLoginToken.mockReturnValueOnce(false);
@@ -146,6 +157,17 @@ describe('_displayUserMenuBtn()', () => {
 });
 
 describe('_displayUserMenu()', () => {
+  it('should always return undefined', () => {
+    expect(navbar._displayUserMenu()).toBeUndefined();
+    expect(navbar._displayUserMenu(null)).toBeUndefined();
+    expect(navbar._displayUserMenu(0)).toBeUndefined();
+    expect(navbar._displayUserMenu('')).toBeUndefined();
+    expect(navbar._displayUserMenu({})).toBeUndefined();
+    expect(navbar._displayUserMenu([])).toBeUndefined();
+    expect(navbar._displayUserMenu('some value')).toBeUndefined();
+    expect(navbar._displayUserMenu(5)).toBeUndefined();
+  });
+  
   it('should remove the hidden class from _userMenuOptions if the element has it', () => {
     navbar._displayUserMenu();
     expect(navbar._userMenuOptions.classList.contains('hidden')).toBeFalsy();
@@ -172,7 +194,11 @@ describe('_logout(e)', () => {
     confirmModalElement = null;
   });
 
-  // --
+  it('should always return undefined, as long as an event is passed in', () => {
+    const mockEvent = { preventDefault: jest.fn() };
+    navbar._logout(mockEvent);
+    expect(navbar._logout(mockEvent)).toBeUndefined();
+  });
 
   it(`should always call confirmModal.display with "Are you sure you want to log out?"`, () => {
     const mockEvent = { preventDefault: jest.fn() };

@@ -7,9 +7,12 @@ beforeEach(() => {
 describe(`messagePopup(message, type = 'cta')`, () => {
   it('should always return undefined', () => {
     expect(messagePopup()).toBeUndefined();
+    expect(messagePopup(null)).toBeUndefined();
     expect(messagePopup(0)).toBeUndefined();
+    expect(messagePopup('')).toBeUndefined();
     expect(messagePopup({})).toBeUndefined();
     expect(messagePopup([])).toBeUndefined();
+    expect(messagePopup('some value')).toBeUndefined();
     expect(messagePopup('', 'someValue')).toBeUndefined();
   });
 

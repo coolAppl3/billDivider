@@ -18,7 +18,7 @@ describe('_handleKeyEvents(e)', () => {
     expect(mockCheckBox.className).toEqual('checked'); // class not removed
   });
 
-  it('should always return undefined', () => {
+  it('should always return undefined if a valid event is passed in', () => {
     // Function can only be called by the attached event listener, so there's no point in adding falsy values
     const mockEvent1 = { key: 'Shift' };
     const mockEvent2 = { key: 'G' };
@@ -30,7 +30,18 @@ describe('_handleKeyEvents(e)', () => {
   });
 });
 
-describe('_reveal()', () => {
+describe('_revealCheck()', () => {
+  it('should always return undefined', () => {
+    expect(formCheckBox._revealCheck()).toBeUndefined();
+    expect(formCheckBox._revealCheck(null)).toBeUndefined();
+    expect(formCheckBox._revealCheck(0)).toBeUndefined();
+    expect(formCheckBox._revealCheck('')).toBeUndefined();
+    expect(formCheckBox._revealCheck({})).toBeUndefined();
+    expect(formCheckBox._revealCheck([])).toBeUndefined();
+    expect(formCheckBox._revealCheck('some value')).toBeUndefined();
+    expect(formCheckBox._revealCheck(5)).toBeUndefined();
+  });
+  
   it(`it should remove the "checked" class from the checkbox if it has one`, () => {
     mockCheckBox.className = 'checked';
     formCheckBox._revealCheck();
