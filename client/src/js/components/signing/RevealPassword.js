@@ -37,15 +37,11 @@ class RevealPassword {
 
     if(inputType === 'password') {
       this._input.setAttribute('type', 'text');
-      // this._revealPasswordIcon.className = 'fa-solid fa-eye-slash';
       this._revealPasswordIcon.innerHTML = this._eyeSlashIconSVG;
-
-      
       return ;
     }
 
     this._input.setAttribute('type', 'password');
-    // this._revealPasswordIcon.className = 'fa-solid fa-eye';
     this._revealPasswordIcon.innerHTML = this._eyeIconSVG;
   };
 };
