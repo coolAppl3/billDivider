@@ -2,6 +2,23 @@
 ---
 
 
+### [0.33.2] (2024-02-15)
+
+
+### Test Changes
+
+* Added ```RevealPassword.test.js```
+  * ```RevealPassword.js``` passed unit testing
+<br>
+* Added ```SignUpAPI.test.js```
+  * ```SignUpAPI.js``` passed unit testing
+<br>
+* Added ```SignInAPI.test.js```
+  * ```SignInAPI.js``` passed unit testing
+<br>
+* All modules under ```js/components/services/``` have passed unit testing
+
+---
 ### [0.33.1] (2024-02-14)
 
 

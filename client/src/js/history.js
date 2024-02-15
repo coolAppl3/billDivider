@@ -16,7 +16,6 @@ new HistoryContent();
 
 class History {
   constructor() {
-    
     this._loadEventListeners();
   };
 
