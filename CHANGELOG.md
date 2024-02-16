@@ -2,6 +2,40 @@
 ---
 
 
+### [0.33.3] (2024-02-16)
+
+
+### Code Refactoring
+
+* Refactored ```deleteSession.js```, ```fetchUserHistory.js```, and ```fetchUsername.js``` to now use ```redirectAfterDelayMillisecond()``` if there's no loginToken, instead of just redirecting the user without any feedback
+
+
+### Test Changes
+
+* Added ```SessionAPI.test.js```
+  * ```SessionAPI.js``` passed unit testing
+<br>
+* Added ```HistoryAPI.test.js```
+  * ```HistoryAPI.js``` passed unit testing
+<br>
+* Added ```deleteSession.test.js```
+  * ```deleteSession.js``` passed unit testing
+<br>
+* Added ```fetchUserHistory.test.js```
+  * ```fetchUserHistory.js``` passed unit testing
+<br>
+* Added ```fetchUsername.test.js```
+  * ```fetchUsername.js``` passed unit testing
+<br>
+* Added ```SessionElement.test.js```
+  * ```SessionElement.js``` passed unit testing
+<br>
+* Fixed a flaw in the logic for ```SignInAPI.test.js``` and ```SignUpAPI.test.js```
+* Fixed some unit tests using ```jest.clearAllMocks()``` instead of ```jest.resetAllMocks()```
+* All modules under ```js/components/services/``` have passed unit testing
+
+
+---
 ### [0.33.2] (2024-02-15)
 
 
@@ -16,7 +50,8 @@
 * Added ```SignInAPI.test.js```
   * ```SignInAPI.js``` passed unit testing
 <br>
-* All modules under ```js/components/services/``` have passed unit testing
+* All modules under ```js/components/signing/``` have passed unit testing
+
 
 ---
 ### [0.33.1] (2024-02-14)
@@ -33,9 +68,6 @@
 
 * Completed ```LinksContainer.test.js``` 
 * ```LinksContainer.js``` passed unit testing 
-
-
-
 
 
 ---
@@ -55,9 +87,6 @@
 ### Code Refactoring
 
 * Removed the default export in ```index.js``` as it served no purpose
-
-
-
 
 
 ### Test Changes
@@ -97,6 +126,7 @@
 
 ---
 ### [0.31.0] (2024-02-12)
+
 
 ### Features
 
@@ -177,6 +207,7 @@
 
 ---
 ### [0.30.0] (2024-02-09)
+
 
 ### Code Refactoring
 

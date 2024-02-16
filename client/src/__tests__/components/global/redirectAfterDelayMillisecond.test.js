@@ -15,7 +15,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  jest.clearAllMocks();
+  jest.resetAllMocks();
   jest.now();
 });
 

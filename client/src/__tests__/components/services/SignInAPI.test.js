@@ -5,7 +5,14 @@ jest.mock('axios');
 let signInAPI;
 
 beforeEach(() => {
-  window.location.hostname = 'billdivider.fun';
+  delete window.location
+  Object.defineProperty(window, 'location', {
+    writable: true,
+    value: {
+      hostname: 'billdivider.fun'
+    },
+  });
+
   signInAPI = new SignInAPI();
 });
 
@@ -15,12 +22,12 @@ afterEach(() => {
 });
 
 describe('signIn(user)', () => {
-  it('should call axios.post()', async () => {
+  it('should call axios.post() with the appropriate parameters', async () => {
     axios.post.mockImplementationOnce(() => { return { success: true, data: { loginToken: 'SomeToken' } } });
     const user = { username: 'someUsername', password: 'somePassword' };
 
     await signInAPI.signIn(user);
-    expect(axios.post).toHaveBeenCalledWith(`http://${window.location.hostname}:5000/api/users/signin`, user);
+    expect(axios.post).toHaveBeenCalledWith(`https://${window.location.hostname}/api/users/signin`, user);
   });
 });
 

@@ -2,7 +2,6 @@ import createDateString from "../global/createDateString";
 import addThousandComma from '../global/addThousandComma';
 
 class SessionElement {
-
   create(session) {
     const totals  = {
       yourTotal: session.yourTotal,
