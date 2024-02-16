@@ -122,7 +122,7 @@ afterEach(() => {
   document.body.innerHTML = '';
   navbar = null;
 
-  jest.restoreAllMocks();
+  jest.resetAllMocks();
 });
 
 describe('_displayUserMenuBtn()', () => {
@@ -203,7 +203,7 @@ describe('_logout(e)', () => {
   it(`should always call confirmModal.display with "Are you sure you want to log out?"`, () => {
     const mockEvent = { preventDefault: jest.fn() };
     navbar._logout(mockEvent);
-    expect(ConfirmModal.mock.instances[0].display).toHaveBeenCalledWith('Are you sure you want to log out?');
+    expect(ConfirmModal.prototype.display).toHaveBeenCalledWith('Are you sure you want to log out?');
   });
 
   it(`should always call confirmModal.display with "Are you sure you want to log out?"`, () => {

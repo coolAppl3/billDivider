@@ -1,6 +1,5 @@
 import HistoryAPI from "../services/HistoryAPI";
 import locateLoginToken from "../global/locateLoginToken";
-
 import Cookies from "../global/Cookies";
 import redirectAfterDelayMillisecond from "../global/redirectAfterDelayMillisecond";
 
@@ -12,8 +11,7 @@ async function fetchUserHistory() {
   const loginToken = locateLoginToken();
 
   if(!loginToken) { // Not logged in - Redirecting...
-    window.location.href = 'signIn.html';
-    return ;
+    return redirectAfterDelayMillisecond('signIn.html');
   };
 
   try {
@@ -35,7 +33,7 @@ async function fetchUserHistory() {
       cookies.remove('loginToken');
       return redirectAfterDelayMillisecond('signIn.html', 1000, 'Not logged in');
 
-    } else { // Most likely 500
+    } else { // 500
       cookies.remove('loginToken');
       return redirectAfterDelayMillisecond('signIn.html');
     };
