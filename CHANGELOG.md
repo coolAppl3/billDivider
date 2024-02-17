@@ -2,6 +2,25 @@
 ---
 
 
+### [0.33.4] (2024-02-17)
+
+
+### Bug Fixes
+
+* Fixed ```_createSessionDisplayBtn()``` and ```_createSessionRemoveBtn()``` in ```SessionElement.js``` incorrectly setting the class
+  * This seems to have not caused a bug thanks to webpack compiling
+
+
+### Test Changes
+
+* Added ```SessionElement.test.js```
+  * ```SessionElement.js``` passed unit testing
+
+
+
+
+
+---
 ### [0.33.3] (2024-02-16)
 
 

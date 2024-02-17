@@ -64,9 +64,7 @@ class SessionElement {
   };
 
   _createSessionTotalBills(billsPaid, billsToPay) {
-    let totalBills = 0;
-    totalBills += billsPaid.length;
-    totalBills += billsToPay.length;
+    const totalBills = billsPaid.length + billsToPay.length;
 
     const sessionTotalBills = this._createSessionItem();
     sessionTotalBills.appendChild(this._createTextElement('Total bills:'));
@@ -105,7 +103,7 @@ class SessionElement {
   _createSessionDisplayBtn(sessionID) {
     const btn = document.createElement('a');
     btn.href = `session.html?${sessionID}`;
-    btn.classList = 'btn btn-border-cta displaySessionBtn';
+    btn.className = 'btn btn-border-cta displaySessionBtn';
     btn.appendChild(document.createTextNode('Display session'));
     return btn;
   };
@@ -113,7 +111,7 @@ class SessionElement {
   _createSessionRemoveBtn() {
     const btn = document.createElement('p');
     btn.setAttribute('tabindex', 0);
-    btn.classList = 'delete-session text-danger removeSessionBtn';
+    btn.className = 'delete-session text-danger removeSessionBtn';
     btn.appendChild(document.createTextNode('Remove session'));
     return btn;
   };
