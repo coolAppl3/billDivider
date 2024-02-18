@@ -1,7 +1,6 @@
 import fetchUserHistory from "./fetchUserHistory";
 import deleteSession from "./deleteSession";
 import SessionElement from "./SessionElement";
-
 import messagePopup from '../global/messagePopup';
 import ConfirmModal from '../global/ConfirmModal';
 
@@ -12,7 +11,6 @@ const confirmModal = new ConfirmModal();
 class HistoryContent {
   constructor() {
     this._historyContentElement = document.querySelector('.history-content');
-    
     this._loadEventListeners();
   };
 
@@ -38,14 +36,9 @@ class HistoryContent {
   };
 
   _handleHistoryContentClickEvents(e) {
-    e.preventDefault();
-    
-    if(e.target.classList.contains('displaySessionBtn')) {
-      this._displaySession(e);
-    };
-
     if(e.target.classList.contains('removeSessionBtn')) {
-      return this._removeSession(e);
+      this._removeSession(e);
+      return ;
     };
   };
 
@@ -53,7 +46,7 @@ class HistoryContent {
     const sessions = await fetchUserHistory();
 
     if(!sessions) {
-      return dispatchEvent(new Event('sessionsLoaded'));
+      return ;
     };
 
     if(sessions.length === 0) {
@@ -100,18 +93,8 @@ class HistoryContent {
     
   };
 
-  _displaySession(e) {
-    const link = e.target.href;
-    window.location.href = link;
-  };
-
   _clearSessions() {
     const sessionElementsArray = Array.from(this._historyContentElement.childNodes);
-
-    // Not really needed, but here for safety if more functionality is added in the future.
-    if(sessionElementsArray.length === 0) { 
-      return ;
-    };
     
     for(let session of sessionElementsArray) {
       session.remove();

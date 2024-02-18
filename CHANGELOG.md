@@ -2,6 +2,21 @@
 ---
 
 
+### [0.33.5] (2024-02-18)
+
+
+### Code Refactoring
+
+* Removed ```_displaySession()``` from ```HistoryContent.js``` as it was redundant
+* Slightly refactored the code in ```HistoryContent.js``` to remove further small redundancies and improve readability
+
+
+### Test Changes
+
+* Added ```HistoryContent.test.js```
+  * ```HistoryContent.js``` passed unit testing
+
+
 ### [0.33.4] (2024-02-17)
 
 
@@ -15,9 +30,6 @@
 
 * Added ```SessionElement.test.js```
   * ```SessionElement.js``` passed unit testing
-
-
-
 
 
 ---

@@ -11,7 +11,8 @@ async function fetchUserHistory() {
   const loginToken = locateLoginToken();
 
   if(!loginToken) { // Not logged in - Redirecting...
-    return redirectAfterDelayMillisecond('signIn.html');
+    redirectAfterDelayMillisecond('signIn.html');
+    return ;
   };
 
   try {
@@ -24,18 +25,21 @@ async function fetchUserHistory() {
 
     if(!err.response) {
       cookies.remove('loginToken');
-      return redirectAfterDelayMillisecond('signIn.html');
+      redirectAfterDelayMillisecond('signIn.html');
+      return ;
     };
     
     const status = err.response.status;
 
     if(status === 404) { // Invalid loginToken
       cookies.remove('loginToken');
-      return redirectAfterDelayMillisecond('signIn.html', 1000, 'Not logged in');
+      redirectAfterDelayMillisecond('signIn.html', 1000, 'Not logged in');
+      return ;
 
     } else { // 500
       cookies.remove('loginToken');
-      return redirectAfterDelayMillisecond('signIn.html');
+      redirectAfterDelayMillisecond('signIn.html');
+      return ;
     };
   }
 };
