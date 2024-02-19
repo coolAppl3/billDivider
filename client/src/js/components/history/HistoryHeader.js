@@ -7,7 +7,6 @@ class HistoryHeader {
     this._usernameElement = document.querySelector('#username');
     this._totalSessionsElement = document.querySelector('#totalSessions');
     this._latestSessionDateElement = document.querySelector('#latestSessionDate');
-    
     this._loadEventListeners();
   };
 
@@ -46,16 +45,19 @@ class HistoryHeader {
   };
 
   _getTotalSessions(sessions) {
-    let total = 0;
-
-    for(let session of sessions) {
-      total++;
+    if(!sessions || !Array.isArray(sessions)) {
+      return ;
     };
-
+    
+    let total = sessions.length;
     return total;
   };
   
   _getLatestSessionDate(sessions) {
+    if(!sessions || !Array.isArray(sessions)) {
+      return ;
+    };
+    
     if(sessions.length === 0) {
       const latestSessionDate = '-';
       return latestSessionDate;
@@ -73,7 +75,6 @@ class HistoryHeader {
     const latestSessionDate = createDateString(latestTimestamp);
     return latestSessionDate;
   };
-
 };
 
 export default HistoryHeader;

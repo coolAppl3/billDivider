@@ -2,6 +2,27 @@
 ---
 
 
+### [0.33.6] (2024-02-19)
+
+
+### Features
+
+* ```_getTotalSessions(sessions)``` under ```HistoryHeader.js``` now ensures that the sessions argument is not falsy or not a type of array.
+* ```_getLatestSessionDate(sessions)``` under ```HistoryHeader.js``` now ensures that the sessions argument is not falsy or not a type of array.
+
+
+### Code Refactoring
+
+* Refactored how the total is calculated in ```_getTotalSessions(sessions)``` under ```HistoryHeader.js```
+
+
+### Test Changes
+
+* Added ```HistoryHeader.test.js```
+  * ```HistoryHeader.js``` passed unit testing
+
+
+---
 ### [0.33.5] (2024-02-18)
 
 
