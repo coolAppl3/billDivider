@@ -3,3 +3,5 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home/coolappl/billdivider.fun/
     - /bin/cp -R * $DEPLOYPATH
+    # Remove outdated files from the deployment directory
+    - rm -rf $DEPLOYPATH/*
