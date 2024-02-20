@@ -2,6 +2,23 @@
 ---
 
 
+### [0.34.0] (2024-02-20)
+
+
+### Bug Fixes
+
+* Fixed a bug where the order of stored bills was always flipped, despite the data not changing, leading to the save button being activated.
+  * The bug was due to how ```BillModal.js```, ```SessionContent.js```, and ```SessionInfo.js``` handled rendering bills in a given session. All 3 modules have been adjusted and should now work fine.
+* Fixed the edit icon in bill elements incorrectly having a title of "remove bill"
+
+
+### Test Changes
+
+* Added ```BillElement.test.js```
+  * ```BillElement.js``` passed unit testing
+
+
+---
 ### [0.33.6] (2024-02-19)
 
 
@@ -20,6 +37,8 @@
 
 * Added ```HistoryHeader.test.js```
   * ```HistoryHeader.js``` passed unit testing
+<br>
+* All modules under ```js/components/history/``` have passed unit testing
 
 
 ---

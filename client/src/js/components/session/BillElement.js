@@ -78,16 +78,15 @@ class BillElement {
     const iconContainer = document.createElement('div');
     iconContainer.className = 'icon-container';
 
-    const deleteIconDiv =document.createElement('div');
+    const deleteIconDiv = document.createElement('div');
     deleteIconDiv.className = 'svg-div removeBillIcon';
     deleteIconDiv.setAttribute('title', 'Remove bill');
     deleteIconDiv.appendChild(this._createDeleteIconSVG());
 
-    const editIconDiv =document.createElement('div');
+    const editIconDiv = document.createElement('div');
     editIconDiv.className = 'svg-div editBillIcon';
-    editIconDiv.setAttribute('title', 'Remove bill');
+    editIconDiv.setAttribute('title', 'Edit bill');
     editIconDiv.appendChild(this._createEditIconSVG());
-   
 
     iconContainer.appendChild(deleteIconDiv);
     iconContainer.appendChild(editIconDiv);
