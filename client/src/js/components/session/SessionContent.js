@@ -65,8 +65,8 @@ class SessionContent {
   };
 
   _loadBills() {
-    if(sessionInfo.billsPaid[0]) {
-      sessionInfo.billsPaid.forEach((bill) => {
+    if(sessionInfo.billsPaid.length > 0) {
+      sessionInfo.billsPaid.toReversed().forEach((bill) => {
         const billDiv = billElement.create(bill);
         this._mainContentList.appendChild(billDiv);
       });
@@ -74,8 +74,8 @@ class SessionContent {
       this._expandContentList(this._mainContentList);
     };
 
-    if(sessionInfo.billsToPay[0]) {
-      sessionInfo.billsToPay.forEach((bill) => {
+    if(sessionInfo.billsToPay.length > 0) {
+      sessionInfo.billsToPay.toReversed().forEach((bill) => {
         const billDiv = billElement.create(bill);
         this._secondaryContentList.appendChild(billDiv);
       });
