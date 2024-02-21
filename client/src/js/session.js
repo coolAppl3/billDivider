@@ -47,4 +47,4 @@ class Session {
 };
 
 new Session();
-console.log(true)
+console.log(false)
