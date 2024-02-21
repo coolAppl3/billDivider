@@ -47,3 +47,4 @@ class Session {
 };
 
 new Session();
+console.log(true)
