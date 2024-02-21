@@ -1,4 +1,6 @@
+---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/coolappl/repositories/billDivider
+    - export DEPLOYPATH=/home/coolappl/billdivider.fun/
+    - rm -rf $DEPLOYPATH/*
     - /bin/cp -R * $DEPLOYPATH
