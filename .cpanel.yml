@@ -1,6 +1,6 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/example/public_html/
-    - git pull origin master
+    - git pull origin main
     - git clean -df
     - /bin/cp -R * $DEPLOYPATH
