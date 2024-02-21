@@ -1,7 +1,6 @@
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/coolappl/billdivider.fun/
-    - cd $DEPLOYPATH || exit
-    - git reset --hard
+    - export DEPLOYPATH=/home/example/public_html/
     - git pull origin master
     - git clean -df
+    - /bin/cp -R * $DEPLOYPATH
