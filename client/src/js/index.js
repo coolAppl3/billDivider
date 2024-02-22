@@ -35,4 +35,3 @@ class Index {
 };
 
 new Index();
-console.log('test')
