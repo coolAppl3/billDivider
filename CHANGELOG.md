@@ -8,9 +8,7 @@
 ### Code Refactoring
 
 * Slightly refactored ```BillModal.js``` to make it more readable
-
-
-
+* Renamed server.js to app.js
 
 
 ### Bug Fixes
