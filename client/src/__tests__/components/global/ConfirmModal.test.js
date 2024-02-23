@@ -22,7 +22,7 @@ describe(`display(message, btnColor = 'cta')`, () => {
     confirmModal.display('Some confirmation message');
     const confirmModalList = document.querySelectorAll('.confirm-modal');
 
-    expect(confirmModalList.length).toEqual(1);
+    expect(confirmModalList.length).toBe(1);
   });
 
   it('should create a confirm modal element if one does not exist and append it to the body', () => {
@@ -64,7 +64,7 @@ describe('remove()', () => {
     confirmModal.remove();
     const divList = document.querySelectorAll('div');
 
-    expect(divList.length).toEqual(2);
+    expect(divList.length).toBe(2);
   });
   
 });
@@ -110,7 +110,7 @@ describe('_createContainer(btnColor)', () => {
     const confirmModalConfirmBtn = document.querySelector('#confirmModalConfirmBtn');
     
     expect(confirmModal._createBtnContainer('danger')).toEqual(expectedBtnContainer);
-    expect(confirmModalConfirmBtn.className).toEqual('btn btn-danger');
+    expect(confirmModalConfirmBtn.className).toBe('btn btn-danger');
   });
 
   it('should fallback to cta color for the confirm button if btnColor is not passed in', () => {
@@ -119,7 +119,7 @@ describe('_createContainer(btnColor)', () => {
     document.body.appendChild(btnContainer);
     const confirmModalConfirmBtn = document.querySelector('#confirmModalConfirmBtn');
 
-    expect(confirmModalConfirmBtn.className).toEqual('btn btn-cta');
+    expect(confirmModalConfirmBtn.className).toBe('btn btn-cta');
   });
 });
 
@@ -146,6 +146,6 @@ describe('_createConfirmMessage(message)', () => {
     document.body.appendChild(confirmModal._createConfirmMessage());
     const confirmMessage = document.querySelector('p');
 
-    expect(confirmMessage.textContent).toEqual('Are you sure?');
+    expect(confirmMessage.textContent).toBe('Are you sure?');
   });
 });

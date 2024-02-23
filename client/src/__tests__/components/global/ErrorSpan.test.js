@@ -38,7 +38,7 @@ describe('display(formGroup, message)', () => {
     mockFormGroup.innerHTML = '<label for="sharingWith">Some label</label><input type="text" id="sharingWith" autocomplete="off" autofocus /><span class="error-span"></span>';
     
     errorSpan.display(mockFormGroup, 'Some error message.');
-    expect(mockFormGroup.lastElementChild.textContent).toEqual('Some error message.');
+    expect(mockFormGroup.lastElementChild.textContent).toBe('Some error message.');
   });
 });
 
@@ -75,7 +75,7 @@ describe('hide(formGroup)', () => {
     mockFormGroup.innerHTML = '<label for="sharingWith">Some label</label><input type="text" id="sharingWith" autocomplete="off" autofocus /><span class="error-span">Some error message</span>';
 
     errorSpan.hide(mockFormGroup);
-    expect(mockFormGroup.lastElementChild.textContent).toEqual('');
+    expect(mockFormGroup.lastElementChild.textContent).toBe('');
   });
   
 });

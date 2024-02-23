@@ -174,18 +174,18 @@ describe('_createSpanElement(spanContent)', () => {
 describe('_createIconContainer()', () => {
   it('should create a div element, with two child div elements, both of which contain an svg element representing an icon. _createDeleteIconSVG() and _createEditIconSVG() should both be called once', () => {
     const iconContainer = billElement._createIconContainer();
-    expect(iconContainer.className).toEqual('icon-container');
+    expect(iconContainer.className).toBe('icon-container');
     
     const firstChild = iconContainer.firstElementChild;
-    expect(firstChild.className).toEqual('svg-div removeBillIcon');
-    expect(firstChild.getAttribute('title')).toEqual('Remove bill');
-    expect(firstChild.firstElementChild.nodeName).toEqual('svg');
+    expect(firstChild.className).toBe('svg-div removeBillIcon');
+    expect(firstChild.getAttribute('title')).toBe('Remove bill');
+    expect(firstChild.firstElementChild.nodeName).toBe('svg');
     expect(_createDeleteIconSVGSpy).toHaveBeenCalled();
     
     const secondChild = iconContainer.lastElementChild;
-    expect(secondChild.className).toEqual('svg-div editBillIcon');
-    expect(secondChild.getAttribute('title')).toEqual('Edit bill');
-    expect(secondChild.firstElementChild.nodeName).toEqual('svg');
+    expect(secondChild.className).toBe('svg-div editBillIcon');
+    expect(secondChild.getAttribute('title')).toBe('Edit bill');
+    expect(secondChild.firstElementChild.nodeName).toBe('svg');
     expect(_createEditIconSVGSpy).toHaveBeenCalled();
   });
 });

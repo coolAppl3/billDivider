@@ -20,14 +20,14 @@ describe(`messagePopup(message, type = 'cta')`, () => {
     messagePopup({});
     const messagePopupElement = document.querySelector('.popup');
 
-    expect(messagePopupElement.textContent).toEqual('');
+    expect(messagePopupElement.textContent).toBe('');
   });
   
   it('should create a message popup with the message that is passed in ', () => {
     messagePopup('Some message');
     const messagePopupElement1 = document.querySelector('.popup');
 
-    expect(messagePopupElement1.textContent).toEqual('Some message');
+    expect(messagePopupElement1.textContent).toBe('Some message');
   });
 
   it('should remove any existing message popup and append the latest one', () => {
@@ -35,7 +35,7 @@ describe(`messagePopup(message, type = 'cta')`, () => {
     messagePopup('Some other message');
     const messagePopupElement = document.querySelector('.popup');
 
-    expect(messagePopupElement.textContent).toEqual('Some other message');
+    expect(messagePopupElement.textContent).toBe('Some other message');
   });
   
   it('should remove the message popup after 2.2 seconds', () => {

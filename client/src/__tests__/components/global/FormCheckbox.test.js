@@ -15,7 +15,7 @@ describe('_handleKeyEvents(e)', () => {
     const mockEvent = { key: 'someOtherKey' };
     
     formCheckBox._handleKeyEvents(mockEvent);
-    expect(mockCheckBox.className).toEqual('checked'); // class not removed
+    expect(mockCheckBox.className).toBe('checked'); // class not removed
   });
 
   it('should always return undefined if a valid event is passed in', () => {
@@ -46,14 +46,14 @@ describe('_revealCheck()', () => {
     mockCheckBox.className = 'checked';
     formCheckBox._revealCheck();
 
-    expect(mockCheckBox.className).toEqual('');
+    expect(mockCheckBox.className).toBe('');
   });
   
   it(`it should add the "checked" class from the checkbox if does not have one`, () => {
     mockCheckBox.className = '';
     formCheckBox._revealCheck();
 
-    expect(mockCheckBox.className).toEqual('checked');
+    expect(mockCheckBox.className).toBe('checked');
   });
 });
 

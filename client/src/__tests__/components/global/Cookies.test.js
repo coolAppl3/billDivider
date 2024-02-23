@@ -38,8 +38,8 @@ describe('get(cookieKey)', () => {
       value: 'loginToken=dummyLoginToken; expires=Thu, 25 Jan 2024 03:01:30 GMT; path=/; someOtherKey=dummyValue; expires=Thu, 25 Jan 2024 03:01:30 GMT; path=/',
     });
 
-    expect(cookies.get('loginToken')).toEqual('dummyLoginToken');
-    expect(cookies.get('someOtherKey')).toEqual('dummyValue');
+    expect(cookies.get('loginToken')).toBe('dummyLoginToken');
+    expect(cookies.get('someOtherKey')).toBe('dummyValue');
   });
 });
 

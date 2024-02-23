@@ -23,14 +23,14 @@ describe('display()', () => {
     LoadingModal.display();
     const loadingModalsList = document.querySelectorAll('.loading-modal');
 
-    expect(loadingModalsList.length).toEqual(1);
+    expect(loadingModalsList.length).toBe(1);
   });
   
   it('should create a loading modal and append it to the DOM if one does not exist', () => {
     LoadingModal.display();
 
     const loadingModalsList = document.querySelectorAll('.loading-modal');
-    expect(loadingModalsList.length).toEqual(1);
+    expect(loadingModalsList.length).toBe(1);
 
     const loadingModalElement = document.querySelector('.loading-modal');
     expect(loadingModalElement).not.toBeNull();

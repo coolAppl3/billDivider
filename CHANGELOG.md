@@ -2,6 +2,28 @@
 ---
 
 
+### [0.35.0] (2024-02-22)
+
+
+### Code Refactoring
+
+* Slightly refactored ```BillModal.js``` to make it more readable
+
+
+
+
+
+### Bug Fixes
+
+* Fixed a bug with how production files are being pushed, causing issues with caching JS files
+  * A few test PRs were made while working on this fix
+
+
+### Test Changes
+
+* Refactored the improper use of toEqual() throughout all unit tests, and implemented the use of toBe() to ensure tests also check for data types where needed
+
+
 ### [0.34.0] (2024-02-20)
 
 

@@ -65,7 +65,7 @@ describe('_renderUsername()', () => {
     
     expect(await historyHeader._renderUsername()).toBeUndefined();
     expect(fetchUsername).toHaveBeenCalled();
-    expect(historyHeader._usernameElement.textContent).toEqual('some value');
+    expect(historyHeader._usernameElement.textContent).toBe('some value');
   });
 
   it('should return undefined, call fetchUsername(), and if the API request is successful, and change the username Element textContent to the value return from the API call', async () => {
@@ -74,7 +74,7 @@ describe('_renderUsername()', () => {
     
     expect(await historyHeader._renderUsername()).toBeUndefined();
     expect(fetchUsername).toHaveBeenCalled();
-    expect(historyHeader._usernameElement.textContent).toEqual('new mock value');
+    expect(historyHeader._usernameElement.textContent).toBe('new mock value');
   });
 });
 
@@ -104,8 +104,8 @@ describe('_renderHeaderInfo(sessions)', () => {
     expect(await historyHeader._renderHeaderInfo()).toBeUndefined();
     expect(_getTotalSessionsSpy).not.toHaveBeenCalled();
     expect(_getLatestSessionDateSpy).not.toHaveBeenCalled();
-    expect(historyHeader._totalSessionsElement.textContent).toEqual('some value');
-    expect(historyHeader._latestSessionDateElement.textContent).toEqual('some value');
+    expect(historyHeader._totalSessionsElement.textContent).toBe('some value');
+    expect(historyHeader._latestSessionDateElement.textContent).toBe('some value');
   });
 
   it('it should call fetchUserHistory(), and if the API call is successful, call _getTotalSessions() and getLatestSessionDate(), update the totalSessions and latestSessionDate elements with the data received from the API call, and return undefined', async () => {
@@ -122,8 +122,8 @@ describe('_renderHeaderInfo(sessions)', () => {
     expect(_getTotalSessionsSpy).toHaveBeenCalledWith(mockSessions);
     expect(_getLatestSessionDateSpy).toHaveBeenCalledWith(mockSessions);
 
-    expect(historyHeader._totalSessionsElement.textContent).toEqual('1');
-    expect(historyHeader._latestSessionDateElement.textContent).toEqual('20 Jan 2023');
+    expect(historyHeader._totalSessionsElement.textContent).toBe('1');
+    expect(historyHeader._latestSessionDateElement.textContent).toBe('20 Jan 2023');
   });
 });
 
@@ -140,10 +140,10 @@ describe('_getTotalSessions(sessions)', () => {
 
   it('should return the total number of sessions, by taking the length of the array', () => {
     let mockSessions = [{ mockProperty: 'mockValue' }, { mockProperty: 'mockValue' }];
-    expect(historyHeader._getTotalSessions(mockSessions)).toEqual(2);
+    expect(historyHeader._getTotalSessions(mockSessions)).toBe(2);
 
     mockSessions = [];
-    expect(historyHeader._getTotalSessions(mockSessions)).toEqual(0);
+    expect(historyHeader._getTotalSessions(mockSessions)).toBe(0);
   });
 });
 
@@ -160,7 +160,7 @@ describe('_getLatestSessionDate(sessions)', () => {
 
   it(`should return "-" and stop the function, if the sessions array's length is 0 (no previous sessions)`, () => {
     const mockSessions = [];
-    expect(historyHeader._getLatestSessionDate(mockSessions)).toEqual('-');
+    expect(historyHeader._getLatestSessionDate(mockSessions)).toBe('-');
   });
   
   it(`should call createDateString() and return the latest session date in the user's session history in this format: 20 Jun 2023`, () => {
@@ -172,7 +172,7 @@ describe('_getLatestSessionDate(sessions)', () => {
 
     createDateString.mockImplementationOnce(() => { return '19 Feb 2024'; });
 
-    expect(historyHeader._getLatestSessionDate(mockSessions)).toEqual('19 Feb 2024');
+    expect(historyHeader._getLatestSessionDate(mockSessions)).toBe('19 Feb 2024');
     expect(createDateString).toHaveBeenCalledWith(1708302522383);
   });
 });

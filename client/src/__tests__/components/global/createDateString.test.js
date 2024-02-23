@@ -9,8 +9,8 @@ describe('createDateString(timestampMilliseconds)', () => {
   });
   
   it('should return a date string in the following format: 6 Aug 2024', () => {
-    expect(createDateString(1705576574000)).toEqual('18 Jan 2024');
-    expect(createDateString(1703330174000)).toEqual('23 Dec 2023');
-    expect(createDateString(0)).toEqual('1 Jan 1970');
+    expect(createDateString(1705576574000)).toBe('18 Jan 2024');
+    expect(createDateString(1703330174000)).toBe('23 Dec 2023');
+    expect(createDateString(0)).toBe('1 Jan 1970');
   });
 });
