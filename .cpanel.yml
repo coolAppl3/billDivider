@@ -1,7 +1,7 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/coolappl/billdivider.fun/
-    - rm -rf $DEPLOYPATH/*.js
-    - rm -rf $DEPLOYPATH/*.css
-    - rm -rf *.txt
+    - find $DEPLOYPATH -type f -name "*.js" -delete
+    - find $DEPLOYPATH -type f -name "*.css" -delete
+    - find $DEPLOYPATH -type f -name "*.txt" -delete
     - /bin/cp -R * $DEPLOYPATH
