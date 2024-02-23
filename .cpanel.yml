@@ -3,3 +3,4 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home/coolappl/billdivider.fun
     - /bin/cp -R * $DEPLOYPATH
+    - /usr/bin/rsync -av --delete $HOME/repositories/billDivider/public/ $HOME/billdivider.fun/public/
