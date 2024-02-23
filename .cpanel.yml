@@ -1,4 +1,7 @@
 deployment:
   tasks:
-    # Synchronize files using rsync
-    - /usr/bin/rsync -av --delete --exclude='.git' $HOME/repositories/billDivider-production/ $HOME/billdivider.fun/
+    - export DEPLOYPATH=/home/coolappl/billdivider.fun/
+    - rm -rf $DEPLOYPATH/*.js
+    - rm -rf $DEPLOYPATH/*.css
+    - rm -rf *.txt
+    - /bin/cp -R * $DEPLOYPATH
