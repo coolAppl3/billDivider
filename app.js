@@ -9,18 +9,18 @@ connectDB();
 // ---
 
 const port = process.env.PORT || 5000;
-const server = express();
+const app = express();
 
 // Middleware
-server.use(express.json());
-server.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 // CORS
 const cors = require('cors');
 if(process.env.NODE_ENV !== 'production') {
   const whitelist = ['http://localhost:3000', 'http://localhost:5000', 'http://46.240.183.31:3000', '46.240.183.31:3000', 'http://46.240.183.31:5000', '46.240.183.31:5000'];
   
-  server.use(
+  app.use(
     cors({
       origin: whitelist,
       credentials: true,
@@ -30,15 +30,15 @@ if(process.env.NODE_ENV !== 'production') {
 };
 
 // Static Files
-server.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Importing Routers
 const userRouter = require('./routes/users');
 
 // routes
-server.use('/api/users', userRouter);
+app.use('/api/users', userRouter);
 
 // Initialization
-server.listen(port, () => {
+app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
