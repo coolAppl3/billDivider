@@ -1,5 +1,4 @@
 import sessionInfo from "./SessionInfo";
-
 import ErrorSpan from "../global/ErrorSpan";
 import messagePopup from "../global/messagePopup";
 import generateBillID from "./generateBillID";
@@ -37,10 +36,12 @@ class BillModal {
 
     const editingBillID = this._billModalForm.getAttribute('data-editing');
     if(!editingBillID) {
-      return this._addNewBill();
+      this._addNewBill();
+      return ;
     };
 
-    return this._updateBill(editingBillID);
+    this._updateBill(editingBillID);
+    return ;
   };
 
   _handleClickEvents(e) {
@@ -51,7 +52,8 @@ class BillModal {
       e.target.className === 'container' ||
       e.target.classList.contains('cancelBtn')
     ) {
-      return this.hide();
+      this.hide();
+      return ;
     };
   };
 
@@ -68,13 +70,7 @@ class BillModal {
       return ;
     };
 
-    let directlyOwed;
-    if(this._directlyOwedCheckboxChecked()) {
-      directlyOwed = true;
-    } else {
-      directlyOwed = false;
-    };
-
+    const directlyOwed = this._directlyOwedCheckboxChecked(); // Boolean
     const billOwner = this._billModalForm.getAttribute('data-bill-owner');
 
     const newBill = {
@@ -95,6 +91,7 @@ class BillModal {
 
     this.hide();
     messagePopup('New bill added', 'success');
+    
     dispatchEvent(new Event('updateSessionInfo'));
     dispatchEvent(new Event('render'));
   };

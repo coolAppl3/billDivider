@@ -119,7 +119,7 @@ describe('create(session)', () => {
 describe('_CreateSessionDiv(sessionID)', () => {
   it('should return a sessionDiv element with data-sessionID attribute equal to the sessionID', () => {
     const sessionDiv = sessionElement._createSessionDiv(mockSessionData.sessionID);
-    expect(sessionDiv.getAttribute('data-sessionID')).toEqual(mockSessionData.sessionID);
+    expect(sessionDiv.getAttribute('data-sessionID')).toBe(mockSessionData.sessionID);
   });
 });
 
@@ -128,8 +128,8 @@ describe('_createSessionDate(createdOn)', () => {
     createDateString.mockImplementationOnce(() => { return '6 Feb 2024' });
     const sessionDateElement = sessionElement._createSessionDate(mockSessionData.createdOn);
 
-    expect(sessionDateElement.firstElementChild.textContent).toEqual('Created on:');
-    expect(sessionDateElement.lastElementChild.textContent).toEqual('6 Feb 2024');
+    expect(sessionDateElement.firstElementChild.textContent).toBe('Created on:');
+    expect(sessionDateElement.lastElementChild.textContent).toBe('6 Feb 2024');
 
     expect(createDateString).toHaveBeenCalledWith(mockSessionData.createdOn);
     expect(_createTextElementSpy).toHaveBeenCalledTimes(2);
@@ -140,8 +140,8 @@ describe('_createSessionSharedWith(sharedWith)', () => {
   it('should create a sessionSharedWith element with two <p> child elements, call createTextElement() twice, and call _createSessionItem()', () => {
     const sessionSharedWithElement = sessionElement._createSessionSharedWith(mockSessionData.sharedWith);
 
-    expect(sessionSharedWithElement.firstElementChild.textContent).toEqual('Shared with:');
-    expect(sessionSharedWithElement.lastElementChild.textContent).toEqual(mockSessionData.sharedWith);
+    expect(sessionSharedWithElement.firstElementChild.textContent).toBe('Shared with:');
+    expect(sessionSharedWithElement.lastElementChild.textContent).toBe(mockSessionData.sharedWith);
 
     expect(_createSessionItemSpy).toHaveBeenCalled();
     expect(_createTextElementSpy).toHaveBeenCalledTimes(2);
@@ -155,8 +155,8 @@ describe('_createSessionResult(totals, currency)', () => {
     
     const sessionResultElement = sessionElement._createSessionResult(totals, mockSessionData.currency);
     
-    expect(sessionResultElement.firstElementChild.textContent).toEqual('You owe:');
-    expect(sessionResultElement.lastElementChild.textContent).toEqual(`100.00 ${mockSessionData.currency}`);
+    expect(sessionResultElement.firstElementChild.textContent).toBe('You owe:');
+    expect(sessionResultElement.lastElementChild.textContent).toBe(`100.00 ${mockSessionData.currency}`);
 
     expect(_createSessionItemSpy).toHaveBeenCalled();
     expect(addThousandComma).toHaveBeenCalledWith(Math.abs(-100));
@@ -169,8 +169,8 @@ describe('_createSessionResult(totals, currency)', () => {
     
     const sessionResultElement = sessionElement._createSessionResult(totals, mockSessionData.currency);
     
-    expect(sessionResultElement.firstElementChild.textContent).toEqual(`You're owed:`);
-    expect(sessionResultElement.lastElementChild.textContent).toEqual(`100.00 ${mockSessionData.currency}`);
+    expect(sessionResultElement.firstElementChild.textContent).toBe(`You're owed:`);
+    expect(sessionResultElement.lastElementChild.textContent).toBe(`100.00 ${mockSessionData.currency}`);
 
     expect(_createSessionItemSpy).toHaveBeenCalled();
     expect(addThousandComma).toHaveBeenCalledWith(100);
@@ -184,8 +184,8 @@ describe('_createSessionTotalBills(billsPaid, billsToPay)', () => {
     const expectedNumberOfTotalBills = mockSessionData.billsPaid.length + mockSessionData.billsToPay.length;
     const sessionTotalBillsElement = sessionElement._createSessionTotalBills(mockSessionData.billsPaid, mockSessionData.billsToPay);
 
-    expect(sessionTotalBillsElement.firstElementChild.textContent).toEqual('Total bills:');
-    expect(sessionTotalBillsElement.lastElementChild.textContent).toEqual(expectedNumberOfTotalBills.toString());
+    expect(sessionTotalBillsElement.firstElementChild.textContent).toBe('Total bills:');
+    expect(sessionTotalBillsElement.lastElementChild.textContent).toBe(expectedNumberOfTotalBills.toString());
     
     expect(_createSessionItemSpy).toHaveBeenCalled();
     expect(_createTextElementSpy).toHaveBeenCalledTimes(2);
@@ -196,10 +196,10 @@ describe('_createSessionBtnContainer(sessionID)', () => {
   it('should create a sessionBtnContainer element with two button, the first being an <a> tag, and the second being a <p> tag. It should also call _createSessionDisplayBtn(sessionID), _createSessionRemoveBtn(), and _createSessionItem()', () => {
     const sessionBtnContainer = sessionElement._createSessionBtnContainer(mockSessionData.sessionID);
 
-    expect(sessionBtnContainer.firstElementChild.tagName).toEqual('A');
-    expect(sessionBtnContainer.firstElementChild.textContent).toEqual('Display session');
-    expect(sessionBtnContainer.lastElementChild.tagName).toEqual('P');
-    expect(sessionBtnContainer.lastElementChild.textContent).toEqual('Remove session');
+    expect(sessionBtnContainer.firstElementChild.tagName).toBe('A');
+    expect(sessionBtnContainer.firstElementChild.textContent).toBe('Display session');
+    expect(sessionBtnContainer.lastElementChild.tagName).toBe('P');
+    expect(sessionBtnContainer.lastElementChild.textContent).toBe('Remove session');
     
     expect(_createSessionItemSpy).toHaveBeenCalled();
     expect(_createSessionDisplayBtnSpy).toHaveBeenCalled();
@@ -216,20 +216,20 @@ describe('_createSessionItem()', () => {
     const createdSessionItemElement = sessionElement._createSessionItem();
 
     expect(createdSessionItemElement).toEqual(expectedSessionItemElement);
-    expect(createdSessionItemElement.className).toEqual(expectedSessionItemElement.className);
+    expect(createdSessionItemElement.className).toBe(expectedSessionItemElement.className);
   });
 });
 
 describe('_createTextElement(text)', () => {
   it('should return a <p> element containing the passed in text', () => {
     const textElement1 = sessionElement._createTextElement('some text');
-    expect(textElement1.textContent).toEqual('some text');
+    expect(textElement1.textContent).toBe('some text');
 
     const textElement2 = sessionElement._createTextElement('some other text');
-    expect(textElement2.textContent).toEqual('some other text');
+    expect(textElement2.textContent).toBe('some other text');
 
     const textElement3 = sessionElement._createTextElement('');
-    expect(textElement3.textContent).toEqual('');
+    expect(textElement3.textContent).toBe('');
   });
 });
 
@@ -237,10 +237,10 @@ describe('_createSessionDisplayBtn(sessionID)', () => {
   it(`should create an <a> element with a href equal to "session.html?[sessionID]", a class of "btn btn-border-cta displaySessionBtn", and a textContent of "Display session"`, () => {
     const createdBtn = sessionElement._createSessionDisplayBtn(mockSessionData.sessionID);
 
-    expect(createdBtn.tagName).toEqual('A');
-    expect(createdBtn.getAttribute('href')).toEqual(`session.html?${mockSessionData.sessionID}`);
-    expect(createdBtn.className).toEqual('btn btn-border-cta displaySessionBtn');
-    expect(createdBtn.textContent).toEqual('Display session');
+    expect(createdBtn.tagName).toBe('A');
+    expect(createdBtn.getAttribute('href')).toBe(`session.html?${mockSessionData.sessionID}`);
+    expect(createdBtn.className).toBe('btn btn-border-cta displaySessionBtn');
+    expect(createdBtn.textContent).toBe('Display session');
   });
 });
 
@@ -248,9 +248,9 @@ describe('_createSessionRemoveBtn()', () => {
   it(`should create a <p> element with tabindex attribute equal to 9, a class of "delete-session text-danger removeSessionBtn", and a textContent of "Remove session"`, () => {
     const createdBtn = sessionElement._createSessionRemoveBtn();
 
-    expect(createdBtn.tagName).toEqual('P');
-    expect(createdBtn.getAttribute('tabindex')).toEqual('0');
-    expect(createdBtn.className).toEqual('delete-session text-danger removeSessionBtn');
-    expect(createdBtn.textContent).toEqual('Remove session');
+    expect(createdBtn.tagName).toBe('P');
+    expect(createdBtn.getAttribute('tabindex')).toBe('0');
+    expect(createdBtn.className).toBe('delete-session text-danger removeSessionBtn');
+    expect(createdBtn.textContent).toBe('Remove session');
   });
 });

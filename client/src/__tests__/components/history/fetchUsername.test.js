@@ -35,7 +35,7 @@ describe('fetchUsername()', () => {
     HistoryAPI.prototype.getUsername.mockResolvedValueOnce(mockResponse);
     locateLoginToken.mockReturnValueOnce('mockLoginToken');
 
-    expect(await fetchUsername()).toEqual('mockUsername');
+    expect(await fetchUsername()).toBe('mockUsername');
     expect(locateLoginToken).toHaveBeenCalled();
     expect(HistoryAPI.prototype.getUsername).toHaveBeenCalledWith('mockLoginToken');
   });

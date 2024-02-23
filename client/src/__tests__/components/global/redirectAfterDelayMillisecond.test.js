@@ -44,7 +44,7 @@ describe(`redirectAfterDelayMillisecond(
       jest.advanceTimersByTime(1000);
   
       expect(messagePopup).toHaveBeenCalledWith('Something went wrong', 'danger');
-      expect(window.location.href).toEqual('index.html');
+      expect(window.location.href).toBe('index.html');
     });
   
     it(`should call messagePopup('Something went wrong', 'danger') and redirect the user to index.html if the target argument is not a type of string`, () => {
@@ -53,7 +53,7 @@ describe(`redirectAfterDelayMillisecond(
       jest.advanceTimersByTime(1000);
   
       expect(messagePopup).toHaveBeenCalledWith('Something went wrong', 'danger');
-      expect(window.location.href).toEqual('index.html');
+      expect(window.location.href).toBe('index.html');
     });
   
     it(`should call messagePopup('Something went wrong', 'danger') and redirect the user to index.html if the target argument does not end with ".html"`, () => {
@@ -62,7 +62,7 @@ describe(`redirectAfterDelayMillisecond(
       jest.advanceTimersByTime(1000);
   
       expect(messagePopup).toHaveBeenCalledWith('Something went wrong', 'danger');
-      expect(window.location.href).toEqual('index.html');
+      expect(window.location.href).toBe('index.html');
     });
   
     it(`should call messagePopup('Something went wrong', 'danger') and redirect the user to index.html if the target argument contains a space`, () => {
@@ -71,7 +71,7 @@ describe(`redirectAfterDelayMillisecond(
       jest.advanceTimersByTime(1000);
   
       expect(messagePopup).toHaveBeenCalledWith('Something went wrong', 'danger');
-      expect(window.location.href).toEqual('index.html');
+      expect(window.location.href).toBe('index.html');
     });
   
     it(`should call messagePopup with the default pre-set values, and redirect the user accordingly, if only a valid target argument is passed in`, () => {
@@ -80,7 +80,7 @@ describe(`redirectAfterDelayMillisecond(
       jest.advanceTimersByTime(1000);
   
       expect(messagePopup).toHaveBeenCalledWith('Something went wrong', 'danger');
-      expect(window.location.href).toEqual('redirect.html');
+      expect(window.location.href).toBe('redirect.html');
     });
     
     it(`should call messagePopup with the passed in arguments, and redirect the user accordingly, if the target argument is valid`, () => {
@@ -89,7 +89,7 @@ describe(`redirectAfterDelayMillisecond(
       jest.advanceTimersByTime(1000);
   
       expect(messagePopup).toHaveBeenCalledWith('Some message', 'cta');
-      expect(window.location.href).toEqual('redirect.html');
+      expect(window.location.href).toBe('redirect.html');
     });
   })
   
@@ -98,42 +98,42 @@ describe(`redirectAfterDelayMillisecond(
       jest.useFakeTimers();
   
       redirectAfterDelayMillisecond('redirect.html', 0);
-      expect(window.location.href).not.toEqual('redirect.html');
+      expect(window.location.href).not.toBe('redirect.html');
   
       jest.advanceTimersByTime(500);
-      expect(window.location.href).not.toEqual('redirect.html');
+      expect(window.location.href).not.toBe('redirect.html');
   
       jest.advanceTimersByTime(500); // marks 1000 milliseconds since the function was called
       expect(messagePopup).toHaveBeenCalledWith('Something went wrong', 'danger');
-      expect(window.location.href).toEqual('redirect.html');
+      expect(window.location.href).toBe('redirect.html');
     });
   
     it(`should reassign the delay argument to 1000 and continue normally, if the delay passed in is less than 0`, () => {
       jest.useFakeTimers();
   
       redirectAfterDelayMillisecond('redirect.html', -500);
-      expect(window.location.href).not.toEqual('redirect.html');
+      expect(window.location.href).not.toBe('redirect.html');
   
       jest.advanceTimersByTime(500);
-      expect(window.location.href).not.toEqual('redirect.html');
+      expect(window.location.href).not.toBe('redirect.html');
   
       jest.advanceTimersByTime(500); // marks 1000 milliseconds since the function was called
       expect(messagePopup).toHaveBeenCalledWith('Something went wrong', 'danger');
-      expect(window.location.href).toEqual('redirect.html');
+      expect(window.location.href).toBe('redirect.html');
     });
   
     it(`should reassign the delay argument to 1000 and continue normally, if the delay passed in is not a type of number`, () => {
       jest.useFakeTimers();
   
       redirectAfterDelayMillisecond('redirect.html', '500');
-      expect(window.location.href).not.toEqual('redirect.html');
+      expect(window.location.href).not.toBe('redirect.html');
   
       jest.advanceTimersByTime(500);
-      expect(window.location.href).not.toEqual('redirect.html');
+      expect(window.location.href).not.toBe('redirect.html');
   
       jest.advanceTimersByTime(500); // marks 1000 milliseconds since the function was called
       expect(messagePopup).toHaveBeenCalledWith('Something went wrong', 'danger');
-      expect(window.location.href).toEqual('redirect.html');
+      expect(window.location.href).toBe('redirect.html');
     });
     
   })
@@ -147,6 +147,6 @@ describe(`redirectAfterDelayMillisecond(
 
     expect(sessionStorage.getItem('unsavedSessionChanges')).toBeNull();
     expect(messagePopup).toHaveBeenCalledWith('Something went wrong', 'danger');
-    expect(window.location.href).toEqual('redirect.html');
+    expect(window.location.href).toBe('redirect.html');
   });
 });

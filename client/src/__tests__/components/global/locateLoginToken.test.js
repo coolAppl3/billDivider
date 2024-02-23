@@ -29,6 +29,6 @@ describe('locateLoginToken()', () => {
       value: 'loginToken=dummyLoginToken; expires=Thu, 25 Jan 2024 03:01:30 GMT; path=/; someOtherKey=dummyValue; expires=Thu, 25 Jan 2050 03:01:30 GMT; path=/',
     });
     
-    expect(locateLoginToken()).toEqual('dummyLoginToken');
+    expect(locateLoginToken()).toBe('dummyLoginToken');
   });
 });

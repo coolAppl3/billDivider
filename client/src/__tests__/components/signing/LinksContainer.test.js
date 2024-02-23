@@ -176,7 +176,7 @@ describe('_handleClickEvents(e)', () => {
     });
 
     linksContainer._linksContainerElement.dispatchEvent(mockMouseClickEvent);
-    expect(window.location.href).toEqual('index.html');
+    expect(window.location.href).toBe('index.html');
   });
   
 });

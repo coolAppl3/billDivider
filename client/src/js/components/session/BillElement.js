@@ -85,7 +85,7 @@ class BillElement {
 
     const editIconDiv = document.createElement('div');
     editIconDiv.className = 'svg-div editBillIcon';
-    editIconDiv.setAttribute('title', 'Edit bill -');
+    editIconDiv.setAttribute('title', 'Edit bill');
     editIconDiv.appendChild(this._createEditIconSVG());
 
     iconContainer.appendChild(deleteIconDiv);

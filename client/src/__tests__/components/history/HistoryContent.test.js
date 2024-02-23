@@ -216,8 +216,8 @@ describe('_renderSessions()', () => {
     expect(SessionElement.prototype.create).toHaveBeenCalledTimes(2);
     expect(dispatchEventSpy).toHaveBeenCalledWith(expectedDispatchedEvent);
 
-    expect(historyContent._historyContentElement.firstElementChild.textContent).toEqual('mockValue2');
-    expect(historyContent._historyContentElement.lastElementChild.textContent).toEqual('mockValue1');
+    expect(historyContent._historyContentElement.firstElementChild.textContent).toBe('mockValue2');
+    expect(historyContent._historyContentElement.lastElementChild.textContent).toBe('mockValue1');
   });
 });
 
@@ -330,6 +330,6 @@ describe('_clearSessions()', () => {
     };
 
     historyContent._clearSessions();
-    expect(historyContentElement.childNodes.length).toEqual(0);
+    expect(historyContentElement.childNodes.length).toBe(0);
   });
 });

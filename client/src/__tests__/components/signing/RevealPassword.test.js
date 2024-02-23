@@ -80,10 +80,10 @@ describe('_reveal()', () => {
   it('should change switch the input type between text and password', () => {
     // Input is a type of password by default
     revealPassword._reveal();
-    expect(revealPassword._input.getAttribute('type')).toEqual('text');
+    expect(revealPassword._input.getAttribute('type')).toBe('text');
 
     // Input is now a type of text
     revealPassword._reveal();
-    expect(revealPassword._input.getAttribute('type')).toEqual('password');
+    expect(revealPassword._input.getAttribute('type')).toBe('password');
   });
 });
