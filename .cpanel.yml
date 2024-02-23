@@ -1,7 +1,4 @@
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/coolappl/billdivider.fun/
-    - find $DEPLOYPATH -type f -name "*.js" -delete
-    - find $DEPLOYPATH -type f -name "*.css" -delete
-    - find $DEPLOYPATH -type f -name "*.txt" -delete
-    - /bin/cp -R * $DEPLOYPATH
+    # Synchronize files using rsync
+    - /usr/bin/rsync -av --delete --exclude='.git' --exclude='.htaccess' $HOME/repositories/billDivider-production/ $HOME/billdivider.fun/
