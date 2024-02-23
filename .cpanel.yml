@@ -1,4 +1,4 @@
 deployment:
   tasks:
     # Synchronize files using rsync
-    - /usr/bin/rsync -av --delete --exclude='.git' --exclude='.htaccess' --exclude='node_modules/' $HOME/repositories/billDivider/ $HOME/billdivider.fun/
+    - /usr/bin/rsync -av --delete --exclude='.git' --exclude='.htaccess' --exclude='*/node_modules/' --exclude='node_modules' $HOME/repositories/billDivider/ $HOME/billdivider.fun/
