@@ -232,7 +232,6 @@ class BillModal {
       this._billModal.style.display = 'none'
       this._endEditMode();
     }, 200);
-    
   };
 
   _clearForm() {
@@ -267,6 +266,8 @@ class BillModal {
       selectedBill = sessionInfo.billsPaid.find(({ id }) => id === billID);
     } else if(billOwner === 'secondary') {
       selectedBill = sessionInfo.billsToPay.find(({ id }) => id === billID);
+    } else {
+      return;
     };
 
     this._billNameInput.value = selectedBill.name;
@@ -283,13 +284,11 @@ class BillModal {
     const pressedKey = e.key;
 
     if(pressedKey === 'Enter') {
-      this._displayCheckBox(e);
+      this._displayCheckBox();
     };
   };
   
-  _displayCheckBox(e) {
-    e.stopImmediatePropagation();
-    
+  _displayCheckBox() {
     if(this._directlyOwedCheckbox.classList.contains('checked')) {
       this._directlyOwedCheckbox.classList.remove('checked');
       this._enableUnsharedInput();
