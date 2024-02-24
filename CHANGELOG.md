@@ -2,6 +2,15 @@
 ---
 
 
+### [0.35.1] (2024-02-24)
+
+
+### Test Changes
+
+* Added ```BillModal.test.js```
+  * ```BillModal.js``` passed unit testing
+
+
 ### [0.35.0] (2024-02-22)
 
 
