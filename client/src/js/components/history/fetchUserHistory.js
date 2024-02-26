@@ -35,13 +35,11 @@ async function fetchUserHistory() {
       cookies.remove('loginToken');
       redirectAfterDelayMillisecond('signIn.html', 1000, 'Not logged in');
       return ;
+    }
 
-    } else { // 500
-      cookies.remove('loginToken');
-      redirectAfterDelayMillisecond('signIn.html');
-      return ;
-    };
-  }
+    cookies.remove('loginToken');
+    redirectAfterDelayMillisecond('signIn.html');
+  };
 };
 
 export default fetchUserHistory;

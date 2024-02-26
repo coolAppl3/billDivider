@@ -1,7 +1,29 @@
 # Changelog
+
+
 ---
+### [0.35.2] (2024-02-25)
 
 
+### Code Refactoring
+
+* Slightly refactored ```deleteSession.js```, ```fetchUserHistory.js```, and ```fetchUsername.js``` for better readability.
+* Slightly refactored ```InitSession.js``` for better readability.
+* Refactored ```_changeCurrency()``` in ```InitSession.js``` to make it simpler and less needlessly complicated
+* Refactored ```_getSelectedCurrency()``` in ```InitSession.js``` to make it simpler and less needlessly complicated
+
+
+### Test Changes
+
+* Added ```generateBillID.test.js```
+  * ```generateBillID.js``` passed unit testing
+<br>
+
+* Added ```InitSession.test.js```
+  * ```InitSession.js``` passed unit testing
+
+
+---
 ### [0.35.1] (2024-02-24)
 
 
@@ -11,6 +33,8 @@
   * ```BillModal.js``` passed unit testing
 
 
+
+---
 ### [0.35.0] (2024-02-22)
 
 
@@ -31,6 +55,7 @@
 * Refactored the improper use of toEqual() throughout all unit tests, and implemented the use of toBe() to ensure tests also check for data types where needed
 
 
+---
 ### [0.34.0] (2024-02-20)
 
 
@@ -86,6 +111,7 @@
   * ```HistoryContent.js``` passed unit testing
 
 
+---
 ### [0.33.4] (2024-02-17)
 
 

@@ -1,7 +1,6 @@
 import SessionAPI from "../services/SessionAPI";
 import sessionInfo from "./SessionInfo";
 import Cookies from "../global/Cookies";
-
 import ErrorSpan from "../global/ErrorSpan";
 import LoadingModal from '../global/LoadingModal';
 import locateLoginToken from "../global/locateLoginToken";
@@ -14,7 +13,6 @@ const cookies = new Cookies();
 const errorSpan = new ErrorSpan();
 
 class InitSession {
-
   constructor() {
     this._startModal = document.querySelector('.start-modal');
     this._startModalForm = document.querySelector('.start-modal-form');
@@ -46,7 +44,8 @@ class InitSession {
 
     const loginToken = locateLoginToken();
     if(!loginToken) {
-      return redirectAfterDelayMillisecond('session.html', 1000, 'Session not found');
+      redirectAfterDelayMillisecond('session.html', 1000, 'Session not found');
+      return ;
     };
     
     try {
@@ -68,21 +67,25 @@ class InitSession {
       
       if(!err.response) {
         cookies.remove('loginToken');
-        return redirectAfterDelayMillisecond('signIn.html');
+        redirectAfterDelayMillisecond('signIn.html');
+        return ;
       };
       
       const status = err.response.status;
       
       if(status === 403) { // Invalid loginToken
         cookies.remove('loginToken');
-        return redirectAfterDelayMillisecond('signIn.html', 1000, 'Not logged in');
+        redirectAfterDelayMillisecond('signIn.html', 1000, 'Not logged in');
+        return ;
 
       } else if(status === 404) { // Session ID not found
-        return redirectAfterDelayMillisecond('session.html', 1000, 'Session not found');
+        redirectAfterDelayMillisecond('session.html', 1000, 'Session not found');
+        return ;
         
       } else { // Most likely 500
         cookies.remove('loginToken');
-        return redirectAfterDelayMillisecond('session.html', 1000, 'Something went wrong');
+        redirectAfterDelayMillisecond('session.html', 1000, 'Something went wrong');
+        return ;
       };
     }
   };
@@ -113,16 +116,15 @@ class InitSession {
     if(inputValue.length === 0) {
       errorSpan.display(inputFormGroup, 'This field is required.');
       return false;
-
-    } else if(!re.test(inputValue)) {
+    }
+    
+    if(!re.test(inputValue)) {
       errorSpan.display(inputFormGroup, 'This field must contain at least 1 letter, and must not contain special characters.');
       return false;
-
-    } else {
-      errorSpan.hide(inputFormGroup);
-      return true;
     };
-    
+
+    errorSpan.hide(inputFormGroup);
+    return true;
   };
 
   _editSharedWith() {
@@ -131,22 +133,18 @@ class InitSession {
   };
 
   _changeCurrency(e) {
-    if(e.target.classList.contains('options-container-item') && !e.target.classList.contains('selected')) {
-      this._optionsContainerItems.forEach((item) => item.classList.remove('selected'));
+    if(e.target.classList.contains('selected')) {
+      return ;
     };
-
+    
+    this._optionsContainerItems.forEach((item) => item.classList.remove('selected'));
     e.target.classList.add('selected');
   };
 
   _getSelectedCurrency() {
-    let currency;
+    const optionItem = document.querySelector('.options-container .selected');
+    const currency = optionItem.getAttribute('data-currency');
     
-    this._optionsContainerItems.forEach((item) => {
-      if(item.classList.contains('selected')) {
-        currency = item.getAttribute('data-currency');
-      }
-    });
-
     return currency;
   };
 
@@ -178,8 +176,7 @@ class InitSession {
   _displayMainSessionElement() {
     const sessionElement = document.querySelector('.session');
     sessionElement.style.display = 'block';
-    setTimeout(() => sessionElement.style.display = 'block', 210);
-
+    
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         sessionElement.style.opacity = '1';

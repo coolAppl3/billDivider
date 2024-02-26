@@ -24,20 +24,21 @@ async function deleteSession(sessionID) {
 
     if(!err.response) {
       cookies.remove('loginToken');
-      return redirectAfterDelayMillisecond('signIn.html');
+      redirectAfterDelayMillisecond('signIn.html');
+      return ;
     };
     
     const status = err.response.status;
 
     if(status === 403) { // Invalid loginToken
       cookies.remove('loginToken');
-      return redirectAfterDelayMillisecond('signIn.html', 1000, 'Not logged in');
-
-    } else { // 500
-      cookies.remove('loginToken');
-      return redirectAfterDelayMillisecond('signIn.html');
+      redirectAfterDelayMillisecond('signIn.html', 1000, 'Not logged in');
+      return ;
     };
-  }
+
+    cookies.remove('loginToken');
+    redirectAfterDelayMillisecond('signIn.html');
+  };
 };
 
 export default deleteSession;
