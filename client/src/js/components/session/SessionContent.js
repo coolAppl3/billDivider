@@ -1,6 +1,5 @@
 import sessionInfo from "./SessionInfo";
 import BillModal from "./BillModal";
-
 import BillElement from "./BillElement";
 import ConfirmModal from "../global/ConfirmModal";
 import messagePopup from "../global/messagePopup";
@@ -31,23 +30,28 @@ class SessionContent {
     e.stopImmediatePropagation();
     
     if(e.target.classList.contains('expandList')) {
-      return this._resizeList(e);
+      this._resizeList(e);
+      return ;
     };
 
     if(e.target.classList.contains('addBillBtn')) {
-      return this._startNewBill(e);
+      this._startNewBill(e);
+      return ;
     };
 
     if(e.target.classList.contains('editBillIcon')) {
-      return this._editBill(e);
+      this._editBill(e);
+      return ;
     };
 
     if(e.target.classList.contains('removeBillIcon')) {
-      return this._deleteBill(e);
+      this._deleteBill(e);
+      return ;
     };
 
     if(e.target.classList.contains('clearListBtn')) {
-      return this._startClearContentList(e);
+      this._startClearContentList(e);
+      return ;
     };
   };
 
@@ -55,7 +59,6 @@ class SessionContent {
     this._emptyContentList(this._mainContentList);
     this._emptyContentList(this._secondaryContentList);
     this._loadBills();
-
     this._enableClearButtons();
   };
 
