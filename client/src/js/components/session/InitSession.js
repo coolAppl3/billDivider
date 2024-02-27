@@ -107,9 +107,6 @@ class InitSession {
   };
 
   _validateSharedWithInput() {
-    // Ensuring at least 1 letter is present, and that special characters are not present.
-    const re = /^[a-zA-Z0-9\s]*[a-zA-Z][a-zA-Z0-9\s]*$/;
-
     const inputValue = this._sharedWithInput.value;
     const inputFormGroup = this._sharedWithInput.parentElement;
     
@@ -117,7 +114,14 @@ class InitSession {
       errorSpan.display(inputFormGroup, 'This field is required.');
       return false;
     }
+
+    if(inputValue.length > 20) {
+      errorSpan.display(inputFormGroup, 'Bill name can not contain more than 20 characters.');
+      return false;
+    };
     
+    // Ensuring at least 1 letter is present, and that special characters are not present.
+    const re = /^[a-zA-Z0-9\s]*[a-zA-Z][a-zA-Z0-9\s]*$/;
     if(!re.test(inputValue)) {
       errorSpan.display(inputFormGroup, 'This field must contain at least 1 letter, and must not contain special characters.');
       return false;

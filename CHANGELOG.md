@@ -1,5 +1,13 @@
 # Changelog
 
+---
+### [0.35.3] (2024-02-27)
+
+
+### Bug Fixes
+
+* Hot fix implemented for longer shared-with and bill name values breaking the page structure in ```session.html```
+
 
 ---
 ### [0.35.2] (2024-02-25)

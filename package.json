@@ -1,6 +1,6 @@
 {
   "name": "billdivider",
-  "version": "0.35.2",
+  "version": "0.35.3",
   "description": "A simple bill splitting application, mainly for practice purposes.",
   "main": "app.js",
   "scripts": {

@@ -144,8 +144,12 @@ class BillModal {
     const value = input.value;
     const inputFormGroup = input.parentElement;
 
-    const re = /.*[a-zA-Z].*/; // ensuring at least 1 letter is passed anywhere within the string.
+    if(value.length > 20) {
+      errorSpan.display(inputFormGroup, 'Bill name can not contain more than 20 characters.');
+      return false;
+    };
     
+    const re = /.*[a-zA-Z].*/; // ensuring at least 1 letter is passed anywhere within the string.
     if(!re.test(value)) {
       errorSpan.display(inputFormGroup, 'Bill name must contain at least 1 letter.');
       return false;
