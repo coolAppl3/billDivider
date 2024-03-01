@@ -118,6 +118,10 @@ afterEach(() => {
   document.body.innerHTML = '';
   sessionContent = null;
   jest.resetAllMocks();
+
+  sessionInfo.sharedWith = undefined;
+  sessionInfo.billsPaid = [];
+  sessionInfo.billsToPay = [];
 });
 
 describe('_handleSessionContentClickEvents()', () => {
@@ -371,4 +375,476 @@ describe('_startNewNill(e)', () => {
   });
 });
 
-// continue here...
+describe('_editBill(e)', () => {
+  it('should fetch the billOwner and billID from the data-attributes of surrounding elements, call BillModal.prototype.display(billOwner, billID), then return undefined ', () => {
+    const mockBillElement = document.createElement('div');
+    mockBillElement.setAttribute('data-id', 'mockBillID');
+
+    const mockContentListElement = document.createElement('div');
+    mockContentListElement.setAttribute('data-list', 'mockBillOwner');
+
+    const mockEvent = {
+      target: {
+        closest: () => { return mockContentListElement; },
+        parentElement: {
+          parentElement: mockBillElement,
+        },
+      },
+    };
+
+    expect(sessionContent._editBill(mockEvent)).toBeUndefined();
+    expect(BillModal.prototype.display).toHaveBeenCalledWith('mockBillOwner', 'mockBillID');
+  });
+});
+
+describe('_deleteBill(e)', () => {
+  function addMockBillElement(id, billOwner) {
+    const billElement = document.createElement('div');
+    billElement.setAttribute('data-id', id);
+    billElement.setAttribute('data-bill-owner', billOwner);
+
+    const mainContentList = document.querySelector('.list-main');
+    const secondaryContentList = document.querySelector('.list-secondary');
+
+    if(billOwner === 'main') {
+      mainContentList.appendChild(billElement);
+      return billElement;
+    };
+
+    secondaryContentList.appendChild(billElement);
+    return billElement;
+  };
+
+  beforeEach(() => {
+    sessionInfo.billsPaid = [];
+    sessionInfo.billsToPay = [];
+  });
+
+  it('should return undefined and end the function if the billID obtained from the billElement is not found in sessionInfo', () => {
+    const mockBillElement = addMockBillElement('mockBillID', 'main');
+
+    const _slideAndRemoveBillSpy = jest.spyOn(sessionContent, '_slideAndRemoveBill').mockImplementationOnce(() => {});
+    const mockEvent = {
+      target: {
+        parentElement: {
+          parentElement: mockBillElement,
+        },
+      },
+    };
+
+    expect(sessionContent._deleteBill(mockEvent)).toBeUndefined();
+    expect(_slideAndRemoveBillSpy).not.toHaveBeenCalled();
+  });
+  
+  it(`should, if the billID obtained is found in sessionInfo, remove it from sessionInfo, call _slideAndRemoveBill, and after 250 milliseconds, call a number of function and dispatch teh following events: "updateSessionInfo" and "render". It should also return undefined`, () => {
+    const mockBillElement = addMockBillElement('mockBillID', 'main');
+
+    const mockBillObject = { id: 'mockBillID' };
+    sessionInfo.billsPaid.push(mockBillObject);
+
+    const dispatchEventSpy = jest.spyOn(window, 'dispatchEvent').mockImplementationOnce(() => {});
+    const mockUpdateSessionInfoEvent = new Event('updateSessionInfo');
+    const mockRenderEvent = new Event('render');
+
+    const _slideAndRemoveBillSpy = jest.spyOn(sessionContent, '_slideAndRemoveBill').mockImplementationOnce(() => {});
+    jest.spyOn(sessionContent, '_retractContentList').mockImplementationOnce(() => {});
+    
+    const mockEvent = {
+      target: {
+        parentElement: {
+          parentElement: mockBillElement,
+        },
+      },
+    };
+
+    jest.useFakeTimers();
+    expect(sessionContent._deleteBill(mockEvent)).toBeUndefined();
+    expect(_slideAndRemoveBillSpy).toHaveBeenCalledWith(mockBillElement);
+
+    jest.advanceTimersByTime(250);
+    expect(dispatchEventSpy).toHaveBeenCalledTimes(2);
+    expect(dispatchEventSpy).toHaveBeenCalledWith(mockUpdateSessionInfoEvent);
+    expect(dispatchEventSpy).toHaveBeenCalledWith(mockRenderEvent);
+
+    expect(messagePopup).toHaveBeenCalledWith('Bill deleted', 'danger');
+    jest.now();
+  });
+  
+  it('should call _retractContentList() with the respective content list, if the bill being deleted is the last one in its respective array', () => {
+    const mockBillElement = addMockBillElement('mockBillID', 'secondary');
+    
+    const mockBillObject = { id: 'mockBillID' };
+    sessionInfo.billsToPay.push(mockBillObject);
+    
+    jest.spyOn(sessionContent, '_slideAndRemoveBill').mockImplementationOnce(() => {});
+    const mockEvent = {
+      target: {
+        parentElement: {
+          parentElement: mockBillElement,
+        },
+      },
+    };
+    
+    const _retractContentListSpy = jest.spyOn(sessionContent, '_retractContentList').mockImplementationOnce(() => {});
+
+    jest.useFakeTimers();
+    sessionContent._deleteBill(mockEvent);
+
+    jest.advanceTimersByTime(250);
+    expect(_retractContentListSpy).toHaveBeenCalledWith(mockBillElement.parentElement);
+    jest.now();
+  });
+  
+
+  it('should not call _retractContentList() if the bill being deleted is not the last one in its respective array', () => {
+    addMockBillElement('mockBillID1', 'secondary');
+    const mockBillElement2 = addMockBillElement('mockBillID2', 'secondary');
+    
+    const mockBillObject1 = { id: 'mockBillID1' };
+    const mockBillObject2 = { id: 'mockBillID2' };
+
+    sessionInfo.billsToPay.push(mockBillObject1);
+    sessionInfo.billsToPay.push(mockBillObject2);
+    
+    jest.spyOn(sessionContent, '_slideAndRemoveBill').mockImplementationOnce(() => {});
+    const mockEvent = {
+      target: {
+        parentElement: {
+          parentElement: mockBillElement2,
+        },
+      },
+    };
+    
+    const _retractContentListSpy = jest.spyOn(sessionContent, '_retractContentList').mockImplementationOnce(() => {});
+
+    jest.useFakeTimers();
+    sessionContent._deleteBill(mockEvent);
+
+    jest.advanceTimersByTime(250);
+    expect(_retractContentListSpy).not.toHaveBeenCalledWith();
+    jest.now();
+  });
+});
+
+describe('_startClearContentList(e)', () => {
+  let mockConfirmModal;
+
+  beforeEach(() => {
+    mockConfirmModal = document.createElement('div');
+    mockConfirmModal.className = 'confirm-modal';
+    document.body.appendChild(mockConfirmModal);
+  });
+
+  afterEach(() => {
+    mockConfirmModal = null;
+    sessionInfo.sharedWith = undefined;
+  });
+
+  it(`should obtain the listOwner value through the "data-list" attribute, call ConfirmModal.prototype.display(), and return undefined`, () => {
+    const mockEvent1 = {
+      target: {
+        parentElement: {
+          getAttribute: () => { return 'main'; },
+        },
+      },
+    };
+
+    sessionInfo.sharedWith = 'mockValue';
+    const mockEvent2 = {
+      target: {
+        parentElement: {
+          getAttribute: () => { return 'secondary'; },
+        },
+      },
+    };
+
+    expect(sessionContent._startClearContentList(mockEvent1)).toBeUndefined();
+    expect(ConfirmModal.prototype.display).toHaveBeenCalledWith('Are you sure you want to delete all the bills paid by you?', 'danger');
+
+    expect(sessionContent._startClearContentList(mockEvent2)).toBeUndefined();
+    expect(ConfirmModal.prototype.display).toHaveBeenCalledWith('Are you sure you want to delete all the bills paid by mockValue?', 'danger');
+  });
+  
+  it(`should add an eventListener to the confirmModal element, and if the user generates an "exit click" call ConfirmModal.prototype.remove()`, () => {
+    const mainMockEvent = {
+      target: {
+        parentElement: {
+          getAttribute: () => { return 'main'; },
+        },
+      },
+    };
+
+    expect(sessionContent._startClearContentList(mainMockEvent)).toBeUndefined();
+    expect(ConfirmModal.prototype.display).toHaveBeenCalledWith('Are you sure you want to delete all the bills paid by you?', 'danger');
+
+    ConfirmModal.prototype.isExitClick.mockImplementationOnce(() => { return true; });
+    const mockExitClickEvent = new MouseEvent('click');
+
+    mockConfirmModal.dispatchEvent(mockExitClickEvent);
+
+    expect(ConfirmModal.prototype.isExitClick).toHaveBeenCalledWith(mockExitClickEvent);
+    expect(ConfirmModal.prototype.remove).toHaveBeenCalled();
+  });
+
+  it(`should add an eventListener to the confirmModal element, and if the user clicks the confirmModalConfirmBtn, call _clearContentList(listOwner) and ConfirmModal.prototype.remove(). The function will still call ConfirmModal.prototype.isExitClick() to check if an "exit click" was made`, () => {
+    sessionInfo.sharedWith = 'mockValue';
+    const mainMockEvent = {
+      target: {
+        parentElement: {
+          getAttribute: () => { return 'secondary'; },
+        },
+      },
+    };
+
+    expect(sessionContent._startClearContentList(mainMockEvent)).toBeUndefined();
+    expect(ConfirmModal.prototype.display).toHaveBeenCalledWith('Are you sure you want to delete all the bills paid by mockValue?', 'danger');
+
+    ConfirmModal.prototype.isExitClick.mockImplementationOnce(() => { return false; });
+    const _clearContentListSpy = jest.spyOn(sessionContent, '_clearContentList').mockImplementationOnce(() => {});
+
+    const mockExitClickEvent = new MouseEvent('click');
+    Object.defineProperty(mockExitClickEvent, 'target', {
+      writable: false,
+      value: {
+        id: 'confirmModalConfirmBtn',
+      },
+    });
+
+    mockConfirmModal.dispatchEvent(mockExitClickEvent);
+
+    expect(ConfirmModal.prototype.isExitClick).toHaveBeenCalledWith(mockExitClickEvent);
+    expect(_clearContentListSpy).toHaveBeenCalledWith('secondary');
+    expect(ConfirmModal.prototype.remove).toHaveBeenCalled();
+  });
+});
+
+describe('_clearContentList(listOwner)', () => {
+  let dispatchEventSpy;
+
+  beforeEach(() => {
+    dispatchEventSpy = jest.spyOn(window, 'dispatchEvent').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    dispatchEventSpy = null;
+  });
+  
+  it('should always return undefined', () => {
+    expect(sessionContent._clearContentList()).toBeUndefined();
+    expect(sessionContent._clearContentList(null)).toBeUndefined();
+    expect(sessionContent._clearContentList(0)).toBeUndefined();
+    expect(sessionContent._clearContentList('')).toBeUndefined();
+    expect(sessionContent._clearContentList({})).toBeUndefined();
+    expect(sessionContent._clearContentList([])).toBeUndefined();
+    expect(sessionContent._clearContentList('some value')).toBeUndefined();
+    expect(sessionContent._clearContentList(5)).toBeUndefined();
+  });
+
+  it(`should, if the listOwner is equal to "main", empty the sessionInfo.billsPaid array, call messagePopup(), call _retractContentList() with _mainContentList, and dispatch the following events: "updateSessionInfo" and "render"`, () => {
+    const _retractContentListSpy = jest.spyOn(sessionContent, '_retractContentList').mockImplementationOnce(() => {});
+
+    const mockBillItem = { mockProperty: 'mockValue' };
+    sessionInfo.billsPaid.push(mockBillItem);
+    sessionInfo.billsPaid.push(mockBillItem);
+
+    const mockUpdateSessionInfoEvent = new Event('updateSessionInfo');
+    const mockRenderEvent = new Event('render');
+    
+    sessionContent._clearContentList('main');
+
+    expect(sessionInfo.billsPaid).toEqual([]);
+    expect(messagePopup).toHaveBeenCalledWith('Cleared bills paid by you', 'success');
+    expect(_retractContentListSpy).toHaveBeenCalledWith(sessionContent._mainContentList);
+
+    expect(dispatchEventSpy).toHaveBeenCalledTimes(2);
+    expect(dispatchEventSpy).toHaveBeenCalledWith(mockUpdateSessionInfoEvent);
+    expect(dispatchEventSpy).toHaveBeenCalledWith(mockRenderEvent);
+  });
+  
+  it(`should, if the listOwner is equal to "secondary", empty the sessionInfo.billsToPay array, call messagePopup(), call _retractContentList() with _secondaryContentList, and dispatch the following events: "updateSessionInfo" and "render"`, () => {
+    const _retractContentListSpy = jest.spyOn(sessionContent, '_retractContentList').mockImplementationOnce(() => {});
+
+    const mockBillItem = { mockProperty: 'mockValue' };
+    sessionInfo.billsToPay.push(mockBillItem);
+    sessionInfo.billsToPay.push(mockBillItem);
+    sessionInfo.sharedWith = 'mockSharedWith';
+
+    const mockUpdateSessionInfoEvent = new Event('updateSessionInfo');
+    const mockRenderEvent = new Event('render');
+    
+    sessionContent._clearContentList('secondary');
+
+    expect(sessionInfo.billsToPay).toEqual([]);
+    expect(messagePopup).toHaveBeenCalledWith('Cleared bills paid by mockSharedWith', 'success');
+    expect(_retractContentListSpy).toHaveBeenCalledWith(sessionContent._secondaryContentList);
+
+    expect(dispatchEventSpy).toHaveBeenCalledTimes(2);
+    expect(dispatchEventSpy).toHaveBeenCalledWith(mockUpdateSessionInfoEvent);
+    expect(dispatchEventSpy).toHaveBeenCalledWith(mockRenderEvent);
+  });
+
+  it(`should, if the listOwner is not equal to "main" or "secondary",call messagePopup, stop the function, return undefined, and not dispatch any events`, () => {
+    const _retractContentListSpy = jest.spyOn(sessionContent, '_retractContentList').mockImplementationOnce(() => {});
+
+    expect(sessionContent._clearContentList('someOTherValue')).toBeUndefined();
+    expect(messagePopup).toHaveBeenCalledWith('Something went wrong', 'danger');
+
+    expect(_retractContentListSpy).not.toHaveBeenCalled();
+    expect(dispatchEventSpy).not.toHaveBeenCalled();
+  });
+});
+
+describe('_slideAndRemoveBill(billElement)', () => {
+  function addMockBillElement(id, billOwner) {
+    const billElement = document.createElement('div');
+    billElement.setAttribute('data-id', id);
+    billElement.setAttribute('data-bill-owner', billOwner);
+
+    const mainContentList = document.querySelector('.list-main');
+    const secondaryContentList = document.querySelector('.list-secondary');
+
+    if(billOwner === 'main') {
+      mainContentList.appendChild(billElement);
+      return billElement;
+    };
+
+    secondaryContentList.appendChild(billElement);
+    return billElement;
+  };
+
+  afterEach(() => {
+    delete window.innerWidth;
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      value: 1200,
+    });
+  });
+
+  it('should slide and fade out the element visually, and after 250 milliseconds, remove the billElement from the DOM then return undefined', () => {
+    const mockBillElement = addMockBillElement('mockBillID', 'main');
+
+    jest.useFakeTimers();
+    expect(sessionContent._slideAndRemoveBill(mockBillElement)).toBeUndefined();
+
+    jest.advanceTimersByTime(250);
+    expect(sessionContent._mainContentList.firstElementChild).toBeNull();
+
+    jest.now();
+  });
+
+  it('should stop the function and return undefined if the billElement passed in is falsy or not an instance of HTMLElement', () => {
+    const mockBillElement = addMockBillElement('mockBillID', 'main');
+
+    jest.useFakeTimers();
+    expect(sessionContent._slideAndRemoveBill('notAnHtmlElement')).toBeUndefined();
+
+    jest.advanceTimersByTime(250);
+    expect(sessionContent._mainContentList.firstElementChild).toEqual(mockBillElement);
+
+    jest.now();
+  });
+  
+});
+
+describe('_resizeList(e)', () => {
+  it(`should call _retractContentList() with the respective contentList, if the contentList contains a class of "expanded", then return undefined`, () => {
+    const contentMainElement = document.querySelector('#content-main');
+    const mockEVent = {
+      target: {
+        closest: () => { return contentMainElement; },
+      },
+    };
+
+    const contentList = contentMainElement.lastElementChild;
+    contentList.classList.add('expanded');
+    
+    const _retractContentListSpy = jest.spyOn(sessionContent, '_retractContentList').mockImplementationOnce(() => {});
+    
+    expect(sessionContent._resizeList(mockEVent)).toBeUndefined();
+    expect(_retractContentListSpy).toHaveBeenCalledWith(contentList);
+  });
+
+  it(`should call _expandContentList() with the respective contentList, if the contentList does not contain a class of "expanded", then return undefined`, () => {
+    const contentMainElement = document.querySelector('#content-main');
+    const mockEVent = {
+      target: {
+        closest: () => { return contentMainElement; },
+      },
+    };
+
+    const contentList = contentMainElement.lastElementChild;
+    contentList.classList.remove('expanded');
+    
+    const _expandContentListSpy = jest.spyOn(sessionContent, '_expandContentList').mockImplementationOnce(() => {});
+    
+    expect(sessionContent._resizeList(mockEVent)).toBeUndefined();
+    expect(_expandContentListSpy).toHaveBeenCalledWith(contentList);
+  });
+});
+
+describe('_enableClearButtons()', () => {
+  function addMockBillElement(id, billOwner) {
+    const billElement = document.createElement('div');
+    billElement.setAttribute('data-id', id);
+    billElement.setAttribute('data-bill-owner', billOwner);
+
+    const mainContentList = document.querySelector('.list-main');
+    const secondaryContentList = document.querySelector('.list-secondary');
+
+    if(billOwner === 'main') {
+      mainContentList.appendChild(billElement);
+      return billElement;
+    };
+
+    secondaryContentList.appendChild(billElement);
+    return billElement;
+  };
+  
+  let mainClearListBtn;
+  let secondaryClearListBtn;
+
+  beforeEach(() => {
+    mainClearListBtn = document.querySelector('#content-main .clearListBtn');
+    secondaryClearListBtn = document.querySelector('#content-secondary .clearListBtn');
+  });
+  
+  afterEach(() => {
+    mainClearListBtn = null;
+    secondaryClearListBtn = null;
+  });
+
+  it('should always return undefined', () => {
+    expect(sessionContent._enableClearButtons()).toBeUndefined();
+    expect(sessionContent._enableClearButtons(null)).toBeUndefined();
+    expect(sessionContent._enableClearButtons(0)).toBeUndefined();
+    expect(sessionContent._enableClearButtons('')).toBeUndefined();
+    expect(sessionContent._enableClearButtons({})).toBeUndefined();
+    expect(sessionContent._enableClearButtons([])).toBeUndefined();
+    expect(sessionContent._enableClearButtons('some value')).toBeUndefined();
+    expect(sessionContent._enableClearButtons(5)).toBeUndefined();
+  });
+
+  it(`should disable the clear buttons in both sessionContent elements by adding a "disabled" class and attribute to them, if their respective contentList has no bills`, () => {
+    // Content lists have no bills by default in this testing environment
+    sessionContent._enableClearButtons();
+
+    expect(mainClearListBtn.getAttribute('disabled')).toBe('');
+    expect(secondaryClearListBtn.getAttribute('disabled')).toBe('');
+
+    expect(mainClearListBtn.classList.contains('disabled')).toBeTruthy();
+    expect(secondaryClearListBtn.classList.contains('disabled')).toBeTruthy();
+  });
+
+  it(`should enable the clear buttons in any sessionContent element by removing the "disabled" class and attribute from them them, if their respective contentList does have bills`, () => {
+    addMockBillElement('mockBillID', 'main');
+    addMockBillElement('mockBillID', 'secondary');
+    
+    sessionContent._enableClearButtons();
+
+    expect(mainClearListBtn.getAttribute('disabled')).toBeNull();
+    expect(secondaryClearListBtn.getAttribute('disabled')).toBeNull();
+
+    expect(mainClearListBtn.classList.contains('disabled')).toBeFalsy();
+    expect(secondaryClearListBtn.classList.contains('disabled')).toBeFalsy();
+  });
+});

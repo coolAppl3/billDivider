@@ -310,7 +310,7 @@ describe('_validateSharedWithInput()', () => {
   it('should call ErrorSpan.prototype.display() with the parent element of the sharedWithInput, if its value does not pass the regex noted below, then return false', () => {
     // regex: /^[a-zA-Z0-9\s]*[a-zA-Z][a-zA-Z0-9\s]*$/ - must contain at least 1 letter, and must not contain any special characters
 
-    initSession._sharedWithInput.value = 'invalid_shared_with_value'; // contains special characters
+    initSession._sharedWithInput.value = 'invalid_value'; // contains special characters
     const parentFormGroup = initSession._sharedWithInput.parentElement;
 
     expect(initSession._validateSharedWithInput()).toBe(false);
