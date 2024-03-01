@@ -1,6 +1,27 @@
 # Changelog
 
 ---
+### [0.35.4] (2024-03-01)
+
+### Features
+
+* ```_clearContentList()``` in ```SessionContent.js``` now returns undefined and displays an error message, if an invalid listOwner is passed in
+* ```_slideAndRemoveBill()``` in ```SessionContent.js``` now returns undefined and stops the function, if a falsy value is passed in, or it's not an instance of HTMLElement
+
+
+### Code Refactoring
+
+* Slightly refactored the readability of ```SessionContent.js```
+* renamed ```_scrollIntoView()``` to ```_scrollContentIntoView()``` to avoid confusion and potential errors
+
+### Test Changes
+
+* Added ```SessionContent.test.js```
+  * ```SessionContent.js``` passed unit testing
+<br>
+
+
+---
 ### [0.35.3] (2024-02-27)
 
 

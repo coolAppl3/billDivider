@@ -21,7 +21,7 @@ class SessionContent {
 
   _loadEventListeners() {
     window.addEventListener('render', this._render.bind(this));
-    window.addEventListener('sessionStarted', this._scrollIntoView.bind(this));
+    window.addEventListener('sessionStarted', this._scrollContentIntoView.bind(this));
     
     this._sessionContent.addEventListener('click', this._handleSessionContentClickEvents.bind(this));
   };
@@ -139,7 +139,7 @@ class SessionContent {
       if(isOnlyBillInList) {
         this._retractContentList(contentList);
       };
-    }, 250); // ensuring the animation has time to take place.
+    }, 250);
   };
 
   _startClearContentList(e) {
@@ -172,6 +172,10 @@ class SessionContent {
       sessionInfo.billsToPay = [];
       messagePopup(`Cleared bills paid by ${sessionInfo.sharedWith}`, 'success');
       this._retractContentList(this._secondaryContentList);
+      
+    } else {
+      messagePopup('Something went wrong', 'danger');
+      return ;
     };
     
     dispatchEvent(new Event('updateSessionInfo'));
@@ -181,6 +185,10 @@ class SessionContent {
   // Utility
   
   _slideAndRemoveBill(billElement) {
+    if(!billElement || !(billElement instanceof HTMLElement)) {
+      return ;
+    };
+    
     if(window.innerWidth < 500) {
       billElement.style.transform = 'translate3d(-30rem, 0, 0)';
     } else {
@@ -198,16 +206,17 @@ class SessionContent {
     
     if(contentList.classList.contains('expanded')) {
       this._retractContentList(contentList);
-    } else {
-      this._expandContentList(contentList);
+      return ;
     };
-    
+
+    this._expandContentList(contentList);
   };
 
   _expandContentList(contentList) {
     contentList.classList.add('expanded');
 
-    const chevronIcon = contentList.parentElement.firstElementChild.firstElementChild.firstElementChild;
+    const chevronIcon = contentList.parentElement.querySelector('.chevron-icon');
+    console.log(chevronIcon)
     chevronIcon.classList.add('rotate');
     
     let listHeight = 0;
@@ -226,7 +235,8 @@ class SessionContent {
   _retractContentList(contentList) {
     contentList.classList.remove('expanded');
     
-    const chevronIcon = contentList.parentElement.firstElementChild.firstElementChild.firstElementChild;
+    const chevronIcon = contentList.parentElement.querySelector('.chevron-icon');
+    console.log(chevronIcon)
     chevronIcon.classList.remove('rotate');
 
     requestAnimationFrame(() => {
@@ -245,7 +255,7 @@ class SessionContent {
     } else {
       mainClearListBtn.setAttribute('disabled', '');
       mainClearListBtn.classList.add('disabled');
-    }
+    };
 
     const secondaryClearListBtn = document.querySelector('#content-secondary .clearListBtn');
     if(this._secondaryContentList.hasChildNodes()) {
@@ -254,10 +264,10 @@ class SessionContent {
     } else {
       secondaryClearListBtn.setAttribute('disabled', '');
       secondaryClearListBtn.classList.add('disabled');
-    }
+    };
   };
 
-  _scrollIntoView() {
+  _scrollContentIntoView() {
     if(screen.width > 500) {
       return ;
     };
