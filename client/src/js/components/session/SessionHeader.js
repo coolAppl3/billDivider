@@ -1,6 +1,5 @@
 import sessionInfo from "./SessionInfo";
 import SessionAPI from "../services/SessionAPI";
-
 import ConfirmModal from "../global/ConfirmModal";
 import addThousandComma from '../global/addThousandComma';
 import messagePopup from "../global/messagePopup";
@@ -45,15 +44,14 @@ class SessionHeader {
   _render() {
     this._updateTotals();
     this._updateDebtResult();
-    
     this._enableResetButton();
-    this._handleSaveButtonEnabling();
+    this._handleSaveButtonStatus();
   };
 
   _handleSessionStartedEvents() {
     this._setSharedWith();
     this._setCurrency();
-    this._handleSaveButtonEnabling();
+    this._handleSaveButtonStatus();
   };
 
   _updateTotals() {
@@ -64,22 +62,22 @@ class SessionHeader {
   _updateDebtResult() {
     const difference = sessionInfo.yourTotal - sessionInfo.sharedWithTotal;
 
-    if(difference < 0) { // You owe something
+    if(difference < 0) {
       this._debtResult.textContent = 'You owe';
       this._debtResultValue.textContent = addThousandComma(Math.abs(difference));
-    } else { // Either equal or are owed
-      this._debtResult.textContent = `You're owed`;
-      this._debtResultValue.textContent = addThousandComma(difference);
+      return ;
     };
+
+    this._debtResult.textContent = `You're owed`;
+    this._debtResultValue.textContent = addThousandComma(difference);
   };
 
   _setSharedWith() {
     const sharedWithSpans = document.querySelectorAll('.sharedWithSpan');
-    const sharedWithSpansArr = Array.from(sharedWithSpans);
-
-    sharedWithSpansArr.forEach((span) => {
+    
+    for(const span of sharedWithSpans) {
       span.textContent = sessionInfo.sharedWith;
-    });
+    };
   };
 
   _updateSharedWith() {
@@ -89,16 +87,20 @@ class SessionHeader {
 
   _setCurrency() {
     // This will set the currency throughout the page if they exist, not just the header.
-    this._currencySpans.forEach((span) => span.textContent = sessionInfo.currency);
+    for(const span of this._currencySpans) {
+      span.textContent = sessionInfo.currency
+    };
   };
 
   _handleSessionHeaderControlsClickEvents(e) {
     if(e.target.id === 'resetSessionBtn') {
-      return this._resetSession();
+      this._resetSession();
+      return ;
     };
 
     if(e.target.id === 'saveSessionBtn') {
-      return this._saveSession();
+      this._saveSession();
+      return ;
     };
   };
 
@@ -125,18 +127,21 @@ class SessionHeader {
   async _saveSession() {
     LoadingModal.display();
 
-    // The save button shouldn't be enabled if there aren't any unsaved changes. The code below redirects the user and stops the function if the user tries to manually manipulate the DOM and enable the save button, when there aren't any unsaved changes.
+    // If the save button was somehow clicked despite not having any unsaved changes, then it was enabled by DOM manipulation. The code below protects against that situation
     const unsavedSessionChanges = JSON.parse(sessionStorage.getItem('unsavedSessionChanges'));
     if(!unsavedSessionChanges) {
-      return SessionReference.referenceExists()
+      SessionReference.referenceExists()
         ? redirectAfterDelayMillisecond('history.html')
         : redirectAfterDelayMillisecond('session.html')
       ;
+
+      return ;
     };
     
     const loginToken = locateLoginToken();
     if(!loginToken) {
-      return redirectAfterDelayMillisecond('session.html');
+      redirectAfterDelayMillisecond('session.html');
+      return ;
     };
     
     if(SessionReference.referenceExists() && SessionReference.changesMade()) {
@@ -147,7 +152,7 @@ class SessionHeader {
       } catch (err) {
         console.log(err);
         redirectAfterDelayMillisecond('history.html');
-      }
+      };
 
       return ;
     };
@@ -163,7 +168,7 @@ class SessionHeader {
     } catch (err) {
       console.log(err);
       redirectAfterDelayMillisecond('session.html');
-    }
+    };
   };
 
   _enableResetButton() {
@@ -177,37 +182,41 @@ class SessionHeader {
     this._resetSessionBtn.classList.remove('disabled');
   };
   
-  _handleSaveButtonEnabling() {
-    if(SessionReference.referenceExists()) {
-      if(SessionReference.changesMade()) {
-        return this._enableSaveButton(true);
-      };
-
-      return this._disableSaveButton(true);
-    };
-
+  _handleSaveButtonStatus() {
     const loginToken = locateLoginToken();
-    if(loginToken) {
-      if(!sessionInfo.isEmpty()) {
-        return this._enableSaveButton();
-      };
-
-      return this._disableSaveButton();
+    
+    if(!loginToken) {
+      this._saveSessionBtn.setAttribute('title', 'Available when logged in');
+      this._disableSaveBtn();
+      return ;
     };
     
-    // User not logged in:
-    this._saveSessionBtn.setAttribute('title', 'Available when logged in');
-    this._disableSaveButton();
+    if(SessionReference.referenceExists()) {
+      if(SessionReference.changesMade()) {
+        this._enableSaveBtn();
+        return ;
+      };
+
+      this._disableSaveBtn();
+      return ;
+    };
+    
+    if(sessionInfo.isEmpty()) {
+      this._disableSaveBtn();
+      return ;
+    };
+
+    this._enableSaveBtn();
   };
 
-  _enableSaveButton() {
+  _enableSaveBtn() {
     sessionStorage.setItem('unsavedSessionChanges', true);
     
     this._saveSessionBtn.removeAttribute('disabled');
     this._saveSessionBtn.classList.remove('disabled');
   };
 
-  _disableSaveButton() {
+  _disableSaveBtn() {
     sessionStorage.setItem('unsavedSessionChanges', false);
     
     this._saveSessionBtn.setAttribute('disabled', 'true');

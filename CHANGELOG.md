@@ -1,7 +1,27 @@
 # Changelog
 
 ---
+### [0.35.5] (2024-03-04)
+
+
+### Code Refactoring
+
+* Renamed ```_handleSaveButtonEnabling()```  in ```SessionHeader.js``` to ```_handleSaveButtonStatus()```
+* Renamed ```_enableSaveButton()```  in ```SessionHeader.js``` to ```_enableSaveBtn()```
+* Renamed ```_disableSaveButton()```  in ```SessionHeader.js``` to ```_disableSaveBtn()```
+* Slightly refactored the readability of ```SessionHeader.js```
+
+
+### Test Changes
+
+* Added ```SessionHeader.test.js```
+  * ```SessionHeader.js``` passed unit testing
+<br>
+
+
+---
 ### [0.35.4] (2024-03-01)
+
 
 ### Features
 
@@ -13,6 +33,7 @@
 
 * Slightly refactored the readability of ```SessionContent.js```
 * renamed ```_scrollIntoView()``` to ```_scrollContentIntoView()``` to avoid confusion and potential errors
+
 
 ### Test Changes
 
