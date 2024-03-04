@@ -83,18 +83,18 @@ let billModal;
 beforeEach(() => {
   document.body.innerHTML = billModalHTML;
   billModal = new BillModal();
-
-  sessionInfo.sharedWith = undefined;
-  sessionInfo.yourTotal = 0;
-  sessionInfo.sharedWithTotal = 0;
-  sessionInfo.billsPaid = [];
-  sessionInfo.billsToPay = [];
 });
 
 afterEach(() => {
   document.body.innerHTML = '';
   billModal = null;
   jest.resetAllMocks();
+
+  sessionInfo.sharedWith = undefined;
+  sessionInfo.yourTotal = 0;
+  sessionInfo.sharedWithTotal = 0;
+  sessionInfo.billsPaid = [];
+  sessionInfo.billsToPay = [];
 });
 
 describe('_handleFormSubmission(e)', () => {
