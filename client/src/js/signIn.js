@@ -4,10 +4,8 @@ disableFBCache();
 
 import SignInAPI from './components/services/SignInAPI';
 import Cookies from './components/global/Cookies';
-
 import RevealPassword from './components/signing/RevealPassword';
 import LinksContainer from './components/signing/LinksContainer';
-
 import LoadingModal from './components/global/LoadingModal';
 import locateLoginToken from './components/global/locateLoginToken';
 import redirectAfterDelayMillisecond from './components/global/redirectAfterDelayMillisecond';
@@ -45,11 +43,10 @@ class SignIn {
     e.preventDefault();
     LoadingModal.display();
 
-    // Ensuring neither inputs is empty
-    this._usernameInputIsEmpty();
-    this._passwordInputIsEmpty();
+    const emptyUsername = this._usernameInputIsEmpty();
+    const emptyPassword = this._passwordInputIsEmpty();
     
-    if(this._usernameInputIsEmpty() || this._passwordInputIsEmpty()) {
+    if(emptyPassword || emptyUsername) {
       LoadingModal.remove();
       return ; // At least one field is empty - function will not continue.
     };
@@ -131,7 +128,8 @@ class SignIn {
       window.location.href = 'index.html';
     };
   };
-
 };
 
 new SignIn();
+
+export default SignIn;

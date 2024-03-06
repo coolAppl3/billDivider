@@ -4,8 +4,6 @@ disableFBCache();
 
 import Navbar from './components/global/Navbar';
 import SessionReference from './components/session/SessionReference';
-
-// session-specific components
 import InitSession from './components/session/InitSession';
 import SessionHeader from './components/session/SessionHeader';
 import SessionContent from './components/session/SessionContent';
@@ -37,13 +35,11 @@ class Session {
   };
 
   _handlePageHideEvents() {
-    this._removeSessionReference();
-    sessionStorage.removeItem('unsavedSessionChanges');
-  };
-  
-  _removeSessionReference() {
     SessionReference.remove();
+    sessionStorage.removeItem('unsavedSessionChanges');
   };
 };
 
 new Session();
+
+export default Session;

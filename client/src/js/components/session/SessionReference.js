@@ -1,7 +1,6 @@
 import sessionInfo from "./SessionInfo";
 
 class SessionReference {
-
   static set(session) {
     const sessionJSONString = JSON.stringify(session);
     const originalSessionReference = JSON.parse(sessionJSONString);
