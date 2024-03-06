@@ -5,7 +5,6 @@ disableFBCache();
 import Navbar from './components/global/Navbar';
 import HistoryHeader from './components/history/HistoryHeader';
 import HistoryContent from './components/history/HistoryContent';
-
 import LoadingModal from './components/global/LoadingModal';
 
 // Initializing imports
@@ -20,18 +19,11 @@ class History {
   };
 
   _loadEventListeners() {
-    window.addEventListener('DOMContentLoaded', this._displayLoadingModal.bind(this));
-    window.addEventListener('sessionsLoaded', this._removeLoadingModal.bind(this));
+    window.addEventListener('DOMContentLoaded', LoadingModal.display);
+    window.addEventListener('sessionsLoaded', LoadingModal.remove);
   };
-
-  _displayLoadingModal() {
-    LoadingModal.display();
-  };
-
-  _removeLoadingModal() {
-    LoadingModal.remove();
-  };
-
 };
 
 new History();
+
+export default History;

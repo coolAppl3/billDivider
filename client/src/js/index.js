@@ -24,14 +24,20 @@ class Index {
     if(loginToken) {
       this._heroSignUpBtn.style.display = 'none';
 
+      const btnDiv = document.createElement('div');
+      btnDiv.className = 'btn-div';
+
       const historyBtn = document.createElement('a');
       historyBtn.className = 'btn btn-light';
       historyBtn.href = 'history.html';
-      historyBtn.appendChild(document.createTextNode('History'));
 
-      this._heroBtnContainer.appendChild(historyBtn);
+      historyBtn.appendChild(document.createTextNode('History'));
+      btnDiv.appendChild(historyBtn);
+      this._heroBtnContainer.appendChild(btnDiv);
     };
   };
 };
 
 new Index();
+
+export default Index;

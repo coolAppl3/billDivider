@@ -1,6 +1,39 @@
 # Changelog
 
 ---
+### [0.36.0] (2024-03-06)
+
+
+### Bug Fixes
+
+* Fixed ```_displayHeroButtons()``` adding a button without a parent btn-div element
+
+
+### Code Refactoring
+
+* Refactored ```History.js``` to directly call ```LoadingModal.display()``` and ```LoadingModal.remove()``` instead of going through an extra step of calling a class function
+* Refactored ```signIn.js``` to not unnecessarily call ```_usernameInputIsEmpty()``` and ```_passwordInputIsEmpty()``` twice every time
+
+
+### Test Changes
+
+* Added ```index.test.js```
+  * ```index.js``` passed unit testing
+<br>
+* Added ```session.test.js```
+  * ```session.js``` passed unit testing
+<br>
+* Added ```SessionInfo.test.js```
+  * ```SessionInfo.js``` passed unit testing
+<br>
+* Added ```SessionReference.test.js```
+  * ```SessionReference.js``` passed unit testing
+<br>
+* All modules under ```js/components/session/``` have passed unit testing
+
+
+
+---
 ### [0.35.5] (2024-03-04)
 
 
