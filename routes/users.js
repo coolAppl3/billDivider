@@ -54,7 +54,6 @@ router.post('/signup', async (req, res) => {
     return ;
   };
 
-
   // Checking if the username is taken
   const usernameExists = await User.findOne({ username: username });
   if(usernameExists) {
@@ -62,17 +61,6 @@ router.post('/signup', async (req, res) => {
     return ;
   };
 
-  // Validation - only letters and numbers are allowed
-  const allowedUsernameChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  
-  for(let char of username) {
-    if(allowedUsernameChars.indexOf(char) === -1) {
-      res.status(406).json({ success: false, message: 'Invalid username. Username can only contain letters and numbers' });
-      return ;
-    };
-  };
-
-  // Continuing...
   const user = new User({
     username,
     password: hash,
