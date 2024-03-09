@@ -34,6 +34,8 @@ class BillElement {
   _createBillNameElement(name) {
     const billName = document.createElement('p');
     billName.className = 'bill-name';
+    billName.setAttribute('title', name);
+    
     billName.appendChild(document.createTextNode('Name: '));
     billName.appendChild(this._createSpanElement(name));
 
@@ -43,6 +45,8 @@ class BillElement {
   _createBillValueElement(value) {
     const billValue = document.createElement('p');
     billValue.className = 'bill-value';
+    billValue.setAttribute('title', value);
+    
     billValue.appendChild(document.createTextNode('Total value: '));
     billValue.appendChild(this._createSpanElement(addThousandComma(value)));
 
@@ -52,6 +56,8 @@ class BillElement {
   _createBillUnsharedElement(unshared) {
     const billUnshared = document.createElement('p');
     billUnshared.className = 'bill-unshared';
+    billUnshared.setAttribute('title', unshared);
+    
     billUnshared.appendChild(document.createTextNode('Unshared: '));
     billUnshared.appendChild(this._createSpanElement(addThousandComma(unshared)));
 
@@ -61,6 +67,8 @@ class BillElement {
   _createBillSplitValueElement(splitValue) {
     const billSplitValue = document.createElement('p');
     billSplitValue.className = 'bill-splitValue';
+    billSplitValue.setAttribute('title', splitValue);
+    
     billSplitValue.appendChild(document.createTextNode('Split value: '));
     billSplitValue.appendChild(this._createSpanElement(addThousandComma(splitValue)));
 

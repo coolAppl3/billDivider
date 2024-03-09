@@ -116,6 +116,7 @@ describe('_createBillNameElement(name)', () => {
   it(`should create and return a <o> element, assign it a class of "bill-name", then create and append a span by calling _createSpanElement(name)`, () => {
     const expectedBillNameElement = document.createElement('p');
     expectedBillNameElement.className = 'bill-name';
+    expectedBillNameElement.setAttribute('title', 'mock bill');
     expectedBillNameElement.innerHTML = 'Name: <span>mock bill</span>';
     
     expect(billElement._createBillNameElement(mockBillItem.name)).toEqual(expectedBillNameElement);
@@ -127,6 +128,7 @@ describe('_createBillValueElement(value)', () => {
   it(`should create and return a <o> element, assign it a class of "bill-value", then create and append a span by calling _createSpanElement(addThousandComma(value))`, () => {
     const expectedBillValueElement = document.createElement('p');
     expectedBillValueElement.className = 'bill-value';
+    expectedBillValueElement.setAttribute('title', 500);
     expectedBillValueElement.innerHTML = 'Total value: <span>500.00</span>';
     
     addThousandComma.mockImplementation(() => { return '500.00'; });
@@ -140,6 +142,7 @@ describe('_createBillUnsharedElement(unshared)', () => {
   it(`should create and return a <o> element, assign it a class of "bill-unshared", then create and append a span by calling _createSpanElement(addThousandComma(unshared))`, () => {
     const expectedBillUnsharedElement = document.createElement('p');
     expectedBillUnsharedElement.className = 'bill-unshared';
+    expectedBillUnsharedElement.setAttribute('title', 100);
     expectedBillUnsharedElement.innerHTML = 'Unshared: <span>100.00</span>';
     
     addThousandComma.mockImplementation(() => { return '100.00'; });
@@ -153,6 +156,7 @@ describe('_createBillSplitValueElement(splitValue)', () => {
   it(`should create and return a <o> element, assign it a class of "bill-unshared", then create and append a span by calling _createSpanElement(addThousandComma(unshared))`, () => {
     const expectedBillSplitValueElement = document.createElement('p');
     expectedBillSplitValueElement.className = 'bill-splitValue';
+    expectedBillSplitValueElement.setAttribute('title', 200);
     expectedBillSplitValueElement.innerHTML = 'Split value: <span>200.00</span>';
     
     addThousandComma.mockImplementation(() => { return '200.00'; });

@@ -77,6 +77,7 @@ class SessionHeader {
     
     for(const span of sharedWithSpans) {
       span.textContent = sessionInfo.sharedWith;
+      span.setAttribute('title', sessionInfo.sharedWith);
     };
   };
 

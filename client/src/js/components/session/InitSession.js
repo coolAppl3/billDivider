@@ -115,8 +115,8 @@ class InitSession {
       return false;
     }
 
-    if(inputValue.length > 20) {
-      errorSpan.display(inputFormGroup, 'Bill name can not contain more than 20 characters.');
+    if(inputValue.length > 50) {
+      errorSpan.display(inputFormGroup, 'This field can not contain more than 50 characters');
       return false;
     };
     

@@ -8,7 +8,7 @@ import addThousandComma from "../../../js/components/global/addThousandComma";
 jest.mock('../../../js/components/global/createDateString');
 jest.mock('../../../js/components/global/addThousandComma');
 
-const mockSessionHTML = `<div class="history-content-session" data-sessionid="nG05Mdzf0tmCYWuc"><div class="history-content-session-item"><p>Created on:</p><p>6 Feb 2024</p></div><div class="history-content-session-item"><p>Shared with:</p><p>person</p></div><div class="history-content-session-item"><p>You're owed:</p><p>0.00 RSD</p></div><div class="history-content-session-item"><p>Total bills:</p><p>2</p></div><div class="history-content-session-item"><a href="session.html?nG05Mdzf0tmCYWuc" class="btn btn-border-cta displaySessionBtn">Display session</a><p tabindex="0" class="delete-session text-danger removeSessionBtn">Remove session</p></div></div>`;
+const mockSessionHTML = `<div class="history-content-session" data-sessionid="nG05Mdzf0tmCYWuc"><div class="history-content-session-item"><p>Created on:</p><p>6 Feb 2024</p></div><div class="history-content-session-item"title="person"><p>Shared with:</p><p>person</p></div><div class="history-content-session-item"><p>You're owed:</p><p>0.00 RSD</p></div><div class="history-content-session-item"><p>Total bills:</p><p>2</p></div><div class="history-content-session-item"><a href="session.html?nG05Mdzf0tmCYWuc" class="btn btn-border-cta displaySessionBtn">Display session</a><p tabindex="0" class="delete-session text-danger removeSessionBtn">Remove session</p></div></div>`;
 
 let mockSessionData;
 let sessionElement;

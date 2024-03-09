@@ -216,7 +216,6 @@ class SessionContent {
     contentList.classList.add('expanded');
 
     const chevronIcon = contentList.parentElement.querySelector('.chevron-icon');
-    console.log(chevronIcon)
     chevronIcon.classList.add('rotate');
     
     let listHeight = 0;
@@ -236,7 +235,6 @@ class SessionContent {
     contentList.classList.remove('expanded');
     
     const chevronIcon = contentList.parentElement.querySelector('.chevron-icon');
-    console.log(chevronIcon)
     chevronIcon.classList.remove('rotate');
 
     requestAnimationFrame(() => {

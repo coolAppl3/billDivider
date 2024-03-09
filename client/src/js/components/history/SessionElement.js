@@ -43,6 +43,7 @@ class SessionElement {
 
   _createSessionSharedWith(sharedWith) {
     const sessionSharedWith = this._createSessionItem();
+    sessionSharedWith.setAttribute('title', sharedWith);
     sessionSharedWith.appendChild(this._createTextElement('Shared with:'));
     sessionSharedWith.appendChild(this._createTextElement(sharedWith));
     return sessionSharedWith;

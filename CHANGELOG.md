@@ -1,6 +1,35 @@
 # Changelog
 
 ---
+### [0.38.0] (2024-03-08)
+
+
+### Bug Fixes
+
+* Fixed very long bill names breaking the structure of `session.html`
+* Fixed very long sharedWith names breaking the structure of `session.html`
+* Fixed very long bill total/split values causing line wraps in `session.html` 
+* Fixed very long sharedWith names breaking the structure of `history.html`
+* Fixed a leftover console log in `SessionContent.js`
+* Fixed the bill's value and unshared value being evaluated against each other, before all inputs are evaluated separately first
+* Fixed the "No previous sessions" text having a full height on browsers other than Chrome
+* Potential fix to browsers suggesting credit card autocomplete for the log in and sign in forms
+
+
+### Features
+
+* Increased the character limit for bill names from 24 to 50
+* Increased the character limit for sharedWith names from 20 to 50
+* All dynamically input names and values can now be hovered and have their content fully displayed
+  * This will help with any long values that are overflowing and not fully visible to the user
+
+
+### Test Changes
+
+* Updated the unit tests in `SessionElement.test.js`, `BillElement.test.js`, and `BillModal.test.js` to accommodate the changes in this patch
+
+
+---
 ### [0.37.0] (2024-03-07)
 
 
