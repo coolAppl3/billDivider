@@ -196,62 +196,77 @@ describe('_addNewBill()', () => {
     expect(billModal._addNewBill(5)).toBeUndefined();
   });
 
-  it('should return undefined and stop the function if the bill value is less than 0', () => {
-    const _validateBillNameSpy = jest.spyOn(billModal, '_validateBillName');
-    billModal._billValueInput.value = '-1';
-
-    expect(billModal._addNewBill()).toBeUndefined();
-    expect(_validateBillNameSpy).not.toHaveBeenCalled();
-    // if the value is valid, _validateBillName() will run. It not running means the function stopped as expected.
-  });
-  
-  it('should return undefined and stop the function if the bill value is equal to 0', () => {
-    const _validateBillNameSpy = jest.spyOn(billModal, '_validateBillName');
-    billModal._billValueInput.value = '0';
-
-    expect(billModal._addNewBill()).toBeUndefined();
-    expect(_validateBillNameSpy).not.toHaveBeenCalled();
-    // if the value is valid, _validateBillName() will run. It not running means the function stopped as expected.
-  });
-
-  it('should return undefined and stop the function if the unshared value is less than 0', () => {
-    const _validateBillNameSpy = jest.spyOn(billModal, '_validateBillName');
-    billModal._billValueInput.value = '100';
-    billModal._billUnsharedInput.value = '-50';
-    
-    expect(billModal._addNewBill()).toBeUndefined();
-    expect(_validateBillNameSpy).not.toHaveBeenCalled();
-    // if the value is valid, _validateBillName() is called. It not being called means the function stopped as expected.
-  });
-
-  it('should return undefined and stop the function if the unshared value is greater than the bill value', () => {
-    const _validateBillNameSpy = jest.spyOn(billModal, '_validateBillName');
-    billModal._billValueInput.value = '100';
-    billModal._billUnsharedInput.value = '200';
-
-    expect(billModal._addNewBill()).toBeUndefined();
-    expect(_validateBillNameSpy).not.toHaveBeenCalled();
-    // if the value is valid, _validateBillName() is called next. It not being called means the function stopped as expected.
-  });
-  
   it('should return undefined and stop the function if the bill name does not at least contain a single letter', () => {
     const _validateBillNameSpy = jest.spyOn(billModal, '_validateBillName');
     const _isNumberSpy = jest.spyOn(billModal, '_isNumber');
-    const _directlyOwedCheckboxCheckedSpy = jest.spyOn(billModal, '_directlyOwedCheckboxChecked');
-
     const _validValueAndUnsharedSpy = jest.spyOn(billModal, '_validValueAndUnshared');
-    _validValueAndUnsharedSpy.mockImplementation(() => { return true; });
     
     billModal._billNameInput.value = '200';
+
     expect(billModal._addNewBill()).toBeUndefined();
-    
     expect(_validateBillNameSpy).toHaveBeenCalledWith(billModal._billNameInput);
     expect(_isNumberSpy).toHaveBeenCalledTimes(2);
 
-    expect(_directlyOwedCheckboxCheckedSpy).not.toHaveBeenCalled();
-    // if the value is valid, _directlyOwedCheckboxCheckedSpy() is called next. It not being called means the function stopped as expected.
+    expect(_validValueAndUnsharedSpy).not.toHaveBeenCalled();
+    // the function above is next. It not being called proves the function stopped.
+  });
+  
+  it('should return undefined and stop the function if the bill value contains anything but a number', () => {
+    const _validateBillNameSpy = jest.spyOn(billModal, '_validateBillName');
+    const _isNumberSpy = jest.spyOn(billModal, '_isNumber');
+    const _validValueAndUnsharedSpy = jest.spyOn(billModal, '_validValueAndUnshared');
+    
+    billModal._billNameInput.value = 'mock name';
+    billModal._billValueInput.value = 'invalid_number_100';
+
+    expect(billModal._addNewBill()).toBeUndefined();
+    expect(_validateBillNameSpy).toHaveBeenCalledWith(billModal._billNameInput);
+    expect(_isNumberSpy).toHaveBeenCalledTimes(2);
+    
+    expect(_validValueAndUnsharedSpy).not.toHaveBeenCalled();
+    // the function above is next. It not being called proves the function stopped.
   });
 
+  it('should return undefined and stop the function if the bill value is less than 0', () => {
+    const _directlyOwedCheckboxCheckedSpy = jest.spyOn(billModal, '_directlyOwedCheckboxChecked');
+    billModal._billValueInput.value = '-1';
+  
+    expect(billModal._addNewBill()).toBeUndefined();
+    expect(_directlyOwedCheckboxCheckedSpy).not.toHaveBeenCalled();
+    // the function above is next. It not being called proves the function stopped.
+  });
+
+  it('should return undefined and stop the function if the bill value is equal to 0', () => {
+    const _directlyOwedCheckboxCheckedSpy = jest.spyOn(billModal, '_directlyOwedCheckboxChecked');
+    billModal._billValueInput.value = '0';
+  
+    expect(billModal._addNewBill()).toBeUndefined();
+    expect(_directlyOwedCheckboxCheckedSpy).not.toHaveBeenCalled();
+    // the function above is next. It not being called proves the function stopped.
+  });
+
+  it('should return undefined and stop the function if the unshared value is less than 0', () => {
+    const _directlyOwedCheckboxCheckedSpy = jest.spyOn(billModal, '_directlyOwedCheckboxChecked');
+    
+    billModal._billValueInput.value = '100';
+    billModal._billUnsharedInput.value = '-50';
+  
+    expect(billModal._addNewBill()).toBeUndefined();
+    expect(_directlyOwedCheckboxCheckedSpy).not.toHaveBeenCalled();
+    // the function above is next. It not being called proves the function stopped.
+  });
+
+  it('should return undefined and stop the function if the unshared value is greater than the bill value', () => {
+    const _directlyOwedCheckboxCheckedSpy = jest.spyOn(billModal, '_directlyOwedCheckboxChecked');
+    
+    billModal._billValueInput.value = '100';
+    billModal._billUnsharedInput.value = '200';
+  
+    expect(billModal._addNewBill()).toBeUndefined();
+    expect(_directlyOwedCheckboxCheckedSpy).not.toHaveBeenCalled();
+    // the function above is next. It not being called proves the function stopped.
+  });
+  
   it(`should call _directlyOwedCheckboxChecked() if all input values are valid, and set the directlyOwed property to true if _directlyOwedCheckbox contains a class of "checked"`, () => {
     billModal._directlyOwedCheckbox.classList.add('checked');
     billModal._billModalForm.setAttribute('data-bill-owner', 'main');
@@ -427,60 +442,75 @@ describe('_updateBill()', () => {
     expect(billModal._updateBill(5)).toBeUndefined();
   });
 
-  it('should return undefined and stop the function if the bill value is less than 0', () => {
-    const _validateBillNameSpy = jest.spyOn(billModal, '_validateBillName');
-    billModal._billValueInput.value = '-1';
-
-    expect(billModal._updateBill()).toBeUndefined();
-    expect(_validateBillNameSpy).not.toHaveBeenCalled();
-    // if the value is valid, _validateBillName() will run. It not running means the function stopped as expected.
-  });
-  
-  it('should return undefined and stop the function if the bill value is equal to 0', () => {
-    const _validateBillNameSpy = jest.spyOn(billModal, '_validateBillName');
-    billModal._billValueInput.value = '0';
-
-    expect(billModal._updateBill()).toBeUndefined();
-    expect(_validateBillNameSpy).not.toHaveBeenCalled();
-    // if the value is valid, _validateBillName() will run. It not running means the function stopped as expected.
-  });
-
-  it('should return undefined and stop the function if the unshared value is less than 0', () => {
-    const _validateBillNameSpy = jest.spyOn(billModal, '_validateBillName');
-    billModal._billValueInput.value = '100';
-    billModal._billUnsharedInput.value = '-50';
-    
-    expect(billModal._updateBill()).toBeUndefined();
-    expect(_validateBillNameSpy).not.toHaveBeenCalled();
-    // if the value is valid, _validateBillName() is called. It not being called means the function stopped as expected.
-  });
-
-  it('should return undefined and stop the function if the unshared value is greater than the bill value', () => {
-    const _validateBillNameSpy = jest.spyOn(billModal, '_validateBillName');
-    billModal._billValueInput.value = '100';
-    billModal._billUnsharedInput.value = '200';
-
-    expect(billModal._updateBill()).toBeUndefined();
-    expect(_validateBillNameSpy).not.toHaveBeenCalled();
-    // if the value is valid, _validateBillName() is called next. It not being called means the function stopped as expected.
-  });
-  
   it('should return undefined and stop the function if the bill name does not at least contain a single letter', () => {
     const _validateBillNameSpy = jest.spyOn(billModal, '_validateBillName');
     const _isNumberSpy = jest.spyOn(billModal, '_isNumber');
-    const _directlyOwedCheckboxCheckedSpy = jest.spyOn(billModal, '_directlyOwedCheckboxChecked');
-
     const _validValueAndUnsharedSpy = jest.spyOn(billModal, '_validValueAndUnshared');
-    _validValueAndUnsharedSpy.mockImplementation(() => { return true; });
     
     billModal._billNameInput.value = '200';
+  
     expect(billModal._updateBill()).toBeUndefined();
-    
     expect(_validateBillNameSpy).toHaveBeenCalledWith(billModal._billNameInput);
     expect(_isNumberSpy).toHaveBeenCalledTimes(2);
-
+  
+    expect(_validValueAndUnsharedSpy).not.toHaveBeenCalled();
+    // the function above is next. It not being called proves the function stopped.
+  });
+  
+  it('should return undefined and stop the function if the bill value contains anything but a number', () => {
+    const _validateBillNameSpy = jest.spyOn(billModal, '_validateBillName');
+    const _isNumberSpy = jest.spyOn(billModal, '_isNumber');
+    const _validValueAndUnsharedSpy = jest.spyOn(billModal, '_validValueAndUnshared');
+    
+    billModal._billNameInput.value = 'mock name';
+    billModal._billValueInput.value = 'invalid_number_100';
+  
+    expect(billModal._updateBill()).toBeUndefined();
+    expect(_validateBillNameSpy).toHaveBeenCalledWith(billModal._billNameInput);
+    expect(_isNumberSpy).toHaveBeenCalledTimes(2);
+    
+    expect(_validValueAndUnsharedSpy).not.toHaveBeenCalled();
+    // the function above is next. It not being called proves the function stopped.
+  });
+  
+  it('should return undefined and stop the function if the bill value is less than 0', () => {
+    const _directlyOwedCheckboxCheckedSpy = jest.spyOn(billModal, '_directlyOwedCheckboxChecked');
+    billModal._billValueInput.value = '-1';
+  
+    expect(billModal._updateBill()).toBeUndefined();
     expect(_directlyOwedCheckboxCheckedSpy).not.toHaveBeenCalled();
-    // if the value is valid, _directlyOwedCheckboxCheckedSpy() is called next. It not being called means the function stopped as expected.
+    // the function above is next. It not being called proves the function stopped.
+  });
+  
+  it('should return undefined and stop the function if the bill value is equal to 0', () => {
+    const _directlyOwedCheckboxCheckedSpy = jest.spyOn(billModal, '_directlyOwedCheckboxChecked');
+    billModal._billValueInput.value = '0';
+  
+    expect(billModal._updateBill()).toBeUndefined();
+    expect(_directlyOwedCheckboxCheckedSpy).not.toHaveBeenCalled();
+    // the function above is next. It not being called proves the function stopped.
+  });
+  
+  it('should return undefined and stop the function if the unshared value is less than 0', () => {
+    const _directlyOwedCheckboxCheckedSpy = jest.spyOn(billModal, '_directlyOwedCheckboxChecked');
+    
+    billModal._billValueInput.value = '100';
+    billModal._billUnsharedInput.value = '-50';
+  
+    expect(billModal._updateBill()).toBeUndefined();
+    expect(_directlyOwedCheckboxCheckedSpy).not.toHaveBeenCalled();
+    // the function above is next. It not being called proves the function stopped.
+  });
+  
+  it('should return undefined and stop the function if the unshared value is greater than the bill value', () => {
+    const _directlyOwedCheckboxCheckedSpy = jest.spyOn(billModal, '_directlyOwedCheckboxChecked');
+    
+    billModal._billValueInput.value = '100';
+    billModal._billUnsharedInput.value = '200';
+  
+    expect(billModal._updateBill()).toBeUndefined();
+    expect(_directlyOwedCheckboxCheckedSpy).not.toHaveBeenCalled();
+    // the function above is next. It not being called proves the function stopped.
   });
 
   it(`should call _directlyOwedCheckboxChecked() if all input values are valid, and update the directlyOwed property to true if _directlyOwedCheckbox contains a class of "checked"`, () => {
@@ -627,17 +657,23 @@ describe('_validateBillName(input)', () => {
     expect(typeof billModal._validateBillName(mockInputElement)).toBe('boolean');
   });
 
+  it('should check if the input value is longer than 50 characters, and return false if it is', () => {
+    mockInputElement.value = 'Unbelievably long bill name for no reason whatsoever';
+    expect(billModal._validateBillName(mockInputElement)).toBe(false);
+    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(mockFormGroupDiv, 'Bill name can not contain more than 50 characters.');
+  });
+
   it('should test the input value against a specific regex. If the value is valid, true is returned and ErrorSpan.prototype.hide() is called with the input parent element', () => {
     // regex: /.*[a-zA-Z].*/ - ensuring at least 1 letter is passed anywhere within the string
     mockInputElement.value = 'mock bill'; // valid value
-    expect(billModal._validateBillName(mockInputElement)).toBeTruthy();
+    expect(billModal._validateBillName(mockInputElement)).toBe(true);
     expect(ErrorSpan.prototype.hide).toHaveBeenCalledWith(mockFormGroupDiv);
   });
   
   it('should test the input value against a specific regex. If the value is invalid, false is returned and ErrorSpan.prototype.display() is called with the input parent element and an error message', () => {
     // regex: /.*[a-zA-Z].*/ - ensuring at least 1 letter is passed anywhere within the string
     mockInputElement.value = '2500'; // invalid value
-    expect(billModal._validateBillName(mockInputElement)).toBeFalsy();
+    expect(billModal._validateBillName(mockInputElement)).toBe(false);
     expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(mockFormGroupDiv, 'Bill name must contain at least 1 letter.');
   });
 });

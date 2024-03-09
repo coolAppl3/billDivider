@@ -58,15 +58,15 @@ class BillModal {
   };
 
   _addNewBill() {
-    if(!this._validValueAndUnshared()) {
-      return ;
-    };
-
     const validBillName = this._validateBillName(this._billNameInput);
     const validBillValue = this._isNumber(this._billValueInput);
     const validUnsharedValue = this._isNumber(this._billUnsharedInput);
 
     if(!validBillName || !validBillValue || !validUnsharedValue) {
+      return ;
+    };
+
+    if(!this._validValueAndUnshared()) {
       return ;
     };
 
@@ -97,10 +97,6 @@ class BillModal {
   };
 
   _updateBill(billID) {
-    if(!this._validValueAndUnshared()) {
-      return ;
-    };
-
     const validBillName = this._validateBillName(this._billNameInput);
     const validBillValue = this._isNumber(this._billValueInput);
     const validUnsharedValue = this._isNumber(this._billUnsharedInput);
@@ -109,6 +105,9 @@ class BillModal {
       return ;
     };
 
+    if(!this._validValueAndUnshared()) {
+      return ;
+    };
 
     const directlyOwed = this._directlyOwedCheckboxChecked(); // Boolean
     const billOwner = this._billModalForm.getAttribute('data-bill-owner');
@@ -144,8 +143,8 @@ class BillModal {
     const value = input.value;
     const inputFormGroup = input.parentElement;
 
-    if(value.length > 20) {
-      errorSpan.display(inputFormGroup, 'Bill name can not contain more than 20 characters.');
+    if(value.length > 50) {
+      errorSpan.display(inputFormGroup, 'Bill name can not contain more than 50 characters.');
       return false;
     };
     
@@ -166,7 +165,7 @@ class BillModal {
     const re = /^\d+(\.\d+)?$/;
 
     if(!re.test(value)) {
-      errorSpan.display(inputFormGroup, 'Please enter a valid number.')
+      errorSpan.display(inputFormGroup, 'Please enter a valid number.');
       return false;
     };
 
@@ -190,7 +189,6 @@ class BillModal {
       errorSpan.display(this._billUnsharedInput.parentElement, 'Unshared value can not be a negative value.');
       return false;
     };
-
 
     if(+billValue < +unsharedValue) {
       errorSpan.display(this._billUnsharedInput.parentElement, `Unshared value can not exceed the bill's value.`);

@@ -445,7 +445,7 @@
   display: none; // Is shown once the session is started using InitSession.js
   opacity: 0;
   transition: opacity 200ms;
-  
+
   &-header {
     box-shadow: 0 0 10px 0 inset rgba(134, 133, 239, 0.45);
     background: $secondary;
@@ -466,6 +466,7 @@
         width: 100%;
         position: relative;
         height: 100%;
+        overflow: hidden;
 
         display: flex;
         flex-direction: column;
@@ -512,6 +513,9 @@
           margin-bottom: 1rem;
           color: #CECCD5;
           font-weight: bold;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 100%;
         }
   
         &-value {
@@ -543,12 +547,13 @@
     gap: 2rem;
     margin-top: 5rem;
 
+    overflow: hidden;
 
     &-container {
       background: $secondary;
       padding: 2rem;
       border-radius: 5px;
-      max-width: 100%;
+      overflow: hidden;
 
       &-header {
         display: flex;
@@ -559,13 +564,20 @@
           position: relative;
           cursor: pointer;
           transition: filter 200ms;
-
           white-space: nowrap;
+
           text-overflow: ellipsis;
           margin-right: 1rem;
 
           display: flex;
           align-items: center;
+          overflow: hidden;
+
+          span {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+          }
 
 
           &:after {
@@ -583,10 +595,11 @@
 
           .svg-icon {
             margin-right: 1rem; 
+            margin-left: 3px;
             transition: transform 200ms;
             height: 1.4rem;
-            // background: red;
             fill: $light;
+            overflow: visible;
             
             &.rotate {
               transform: rotate(450deg);
@@ -645,16 +658,19 @@
             padding: 1.4rem;
             display: flex;
             justify-content: space-between;
+            max-width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
 
 
             span {
               color: $light;
               width: fit-content;
               max-width: 70%;
-              // overflow-wrap: break-word;
-              // word-break: break-all;
+              text-overflow: ellipsis;
+              overflow: hidden;
               text-align: end;
-              margin-left: 5px;
+              margin-left: 1rem;
             }
 
             &.directlyOwedTag {
@@ -846,6 +862,15 @@
 
     .form-group {
 
+      &-title {
+
+        .content-p {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+      }
+
       &-inner {
         display: grid;
         grid-template-columns: repeat(8, 1fr);
@@ -980,7 +1005,9 @@
       background: $main;
       padding: 2rem;
       border-radius: 5px;
-      // height: fit-content;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
       
 
       &:last-child {
@@ -993,10 +1020,15 @@
         grid-template-columns: repeat(12, 1fr);
         font-size: 1.4rem;
         font-weight: 500;
+        overflow: hidden;
+
+        display: flex;
 
         &:last-child {
           padding: 3rem 0 0;
           display: block;
+
+          margin-top: auto;
 
           .btn {
             margin-bottom: 1rem;
@@ -1024,14 +1056,15 @@
           &:first-child {
             color: #ceccd5;
             min-width: fit-content;
-            grid-column: span 5;
-            margin-right: 1rem;
+            margin-right: 2rem;
           }
 
           &:last-child {
-            grid-column: span 7;
             margin-left: auto;
             text-align: end;
+            overflow: hidden;
+            white-space: normal;
+            text-overflow: ellipsis;
           }
         }
         
@@ -1052,6 +1085,7 @@
       border-radius: 3px;
       font-size: 1.4rem;
       font-weight: bold;
+      height: fit-content;
     }
   }
 }
