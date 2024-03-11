@@ -38,6 +38,7 @@ class SessionHeader {
     window.addEventListener('render', this._render.bind(this));
 
     this._updateSharedWithBtn.addEventListener('click', this._updateSharedWith.bind(this));
+    this._updateSharedWithBtn.addEventListener('keyup', this._handleUnsharedWithBtnKeyEvents.bind(this));
     this._sessionHeaderControls.addEventListener('click', this._handleSessionHeaderControlsClickEvents.bind(this));
   };
 
@@ -81,6 +82,12 @@ class SessionHeader {
     };
   };
 
+  _handleUnsharedWithBtnKeyEvents(e) {
+    if(e.key === 'Enter') {
+      this._updateSharedWith();
+    };
+  };
+  
   _updateSharedWith() {
     // InitSession will listen for this event, and call _displayStartModal()
     window.dispatchEvent(new Event('editSharedWith')); 

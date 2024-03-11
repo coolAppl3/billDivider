@@ -24,6 +24,28 @@ class SessionContent {
     window.addEventListener('sessionStarted', this._scrollContentIntoView.bind(this));
     
     this._sessionContent.addEventListener('click', this._handleSessionContentClickEvents.bind(this));
+    this._sessionContent.addEventListener('keyup', this._handleSessionContentKeyEvents.bind(this));
+  };
+
+  _handleSessionContentKeyEvents(e) {
+    if(e.key !== 'Enter') {
+      return ;
+    };
+
+    if(e.target.classList.contains('expandList')) {
+      this._resizeList(e);
+      return ;
+    };
+
+    if(e.target.classList.contains('editBillIcon')) {
+      this._editBill(e);
+      return ;
+    };
+
+    if(e.target.classList.contains('removeBillIcon')) {
+      this._deleteBill(e);
+      return ;
+    };
   };
 
   _handleSessionContentClickEvents(e) {

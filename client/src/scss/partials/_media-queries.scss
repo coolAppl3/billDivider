@@ -42,9 +42,6 @@
 // Tablets
 @media(max-width: 830px) {
 
-  // Utilities --- --- ---
-  
-
   // index.html --- --- ---
 
   // Hero
@@ -65,14 +62,6 @@
     
   }
   
-  
-
-  
-}
-
-// In Between
-@media(max-width: 680px) {
-  
   // session.html --- --- ---
   .session {
 
@@ -87,6 +76,12 @@
           justify-content: space-between;
           align-items: center;
           padding: 3rem 2rem;
+
+
+          #updateSharedWith {
+            padding: 5px;
+
+          }
   
           &-title {
             margin-bottom: 0;
@@ -126,7 +121,12 @@
       }
     }
   }
+  
+}
 
+// In Between
+@media(max-width: 680px) {
+  
   // history.html --- --- ---
   .history {
 

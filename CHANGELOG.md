@@ -1,7 +1,33 @@
 # Changelog
 
 ---
-### [0.38.0] (2024-03-08)
+### [0.39.0] (2024-03-11)
+
+
+### Features
+
+* Checking the "directly owed by" checkbox now doesn't reset the unshared value to 0
+  * This will help avoid negative user experience if the user accidentally checks the box
+  * `BillModal.js` has been updated to set the unshared value to 0 if the bill if the form is submitted while the checkbox is checked
+<br>
+* Full keyboard navigation support implemented to `session.html`
+* App should now have full keyboard navigation support
+* Added a little animation to the bill modal form when it's shown
+
+### Bug Fixes
+
+* Fixed the ability to set a bill's unshared value to be equal to the bill's value itself
+* Fixed a minor bug in the addition of "selected" class to the currency options in the start modal
+
+
+### Code Refactoring
+
+* Improved the look and styling for the "update shared with" button in the session header
+* Updated the media queries for `session.html` to improve responsiveness
+
+
+---
+### [0.38.0] (2024-03-09)
 
 
 ### Bug Fixes

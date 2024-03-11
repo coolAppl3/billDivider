@@ -5,7 +5,6 @@ import BillModal from "../../../js/components/session/BillModal";
 import BillElement from "../../../js/components/session/BillElement";
 import ConfirmModal from "../../../js/components/global/ConfirmModal";
 import messagePopup from "../../../js/components/global/messagePopup";
-import SessionReference from "../../../js/components/session/SessionReference";
 
 
 jest.mock('../../../js/components/session/SessionInfo');
@@ -124,7 +123,79 @@ afterEach(() => {
   sessionInfo.billsToPay = [];
 });
 
-describe('_handleSessionContentClickEvents()', () => {
+describe('_handleSessionContentKeyEvents(e)', () => {
+  it('should return undefined if the pressed key is not Enter', () => {
+    const mockEvent = { key: 'G' };
+    expect(sessionContent._handleSessionContentKeyEvents(mockEvent)).toBeUndefined();
+  });
+  
+  it(`should call _resizeList() with the event object if Enter is pressed while the outlined element contains a class of "expandList", then return undefined`, () => {
+    const mockEvent = {
+      key: 'Enter',
+      target: {
+        classList: {
+          contains: (className) => {
+            if(className === 'expandList') {
+              return true;
+            };
+
+            return false;
+          },
+        },
+      },
+    };
+
+    const _resizeListSpy = jest.spyOn(sessionContent, '_resizeList').mockImplementationOnce(() => {});
+    expect(sessionContent._handleSessionContentKeyEvents(mockEvent)).toBeUndefined();
+    expect(_resizeListSpy).toHaveBeenCalledWith(mockEvent);
+  });
+
+
+  it(`should call _editBill() with the event object if Enter is pressed while the outlined element contains a class of "editBillIcon", then return undefined`, () => {
+    const mockEvent = {
+      key: 'Enter',
+      target: {
+        classList: {
+          contains: (className) => {
+            if(className === 'editBillIcon') {
+              return true;
+            };
+
+            return false;
+          },
+        },
+      },
+    };
+
+    const _editBillSpy = jest.spyOn(sessionContent, '_editBill').mockImplementationOnce(() => {});
+    expect(sessionContent._handleSessionContentKeyEvents(mockEvent)).toBeUndefined();
+    expect(_editBillSpy).toHaveBeenCalledWith(mockEvent);
+  });
+  
+  it(`should call _deleteBill() with the event object if Enter is pressed while the outlined element contains a class of "removeBillIcon", then return undefined`, () => {
+    const mockEvent = {
+      key: 'Enter',
+      target: {
+        classList: {
+          contains: (className) => {
+            if(className === 'removeBillIcon') {
+              return true;
+            };
+
+            return false;
+          },
+        },
+      },
+    };
+
+    const _deleteBillSpy = jest.spyOn(sessionContent, '_deleteBill').mockImplementationOnce(() => {});
+    expect(sessionContent._handleSessionContentKeyEvents(mockEvent)).toBeUndefined();
+    expect(_deleteBillSpy).toHaveBeenCalledWith(mockEvent);
+  });
+});
+
+
+describe('_handleSessionContentClickEvents(e)', () => {
   let mockEvent;
 
   beforeEach(() => {
