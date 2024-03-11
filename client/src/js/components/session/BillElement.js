@@ -89,11 +89,13 @@ class BillElement {
     const deleteIconDiv = document.createElement('div');
     deleteIconDiv.className = 'svg-div removeBillIcon';
     deleteIconDiv.setAttribute('title', 'Remove bill');
+    deleteIconDiv.setAttribute('tabindex', 0);
     deleteIconDiv.appendChild(this._createDeleteIconSVG());
 
     const editIconDiv = document.createElement('div');
     editIconDiv.className = 'svg-div editBillIcon';
     editIconDiv.setAttribute('title', 'Edit bill');
+    editIconDiv.setAttribute('tabindex', 0);
     editIconDiv.appendChild(this._createEditIconSVG());
 
     iconContainer.appendChild(deleteIconDiv);

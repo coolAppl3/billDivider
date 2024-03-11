@@ -758,12 +758,12 @@ describe('_validValueAndUnshared()', () => {
     expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(billModal._billUnsharedInput.parentElement, 'Unshared value can not be a negative value.');
   });
 
-  it('should return false and call Error.prototype.display() with the parent element of _billUnsharedInput if its value is greater than the bill value', () => {
+  it('should return false and call Error.prototype.display() with the parent element of _billUnsharedInput if its value is greater than or equal to the bill value', () => {
     billModal._billValueInput.value = '300';
     billModal._billUnsharedInput.value = '500';
 
     expect(billModal._validValueAndUnshared()).toBe(false);
-    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(billModal._billUnsharedInput.parentElement, `Unshared value can not exceed the bill's value.`);
+    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(billModal._billUnsharedInput.parentElement, `Unshared value can not exceed or be equal to the bill's value.`);
   });
 
   it('should return true if both the bill value and unshared value are valid', () => {
@@ -1016,7 +1016,7 @@ describe('_populate(billOwner, billID)', () => {
     expect(_disableUnsharedInputSpy).not.toHaveBeenCalled();
   });
 
-  it(`should, if directlyOwed for the bill in question is set to true, call _disableUnsharedInput() and add a "checked" class to _directlyOwedCheckBox. Calling _disableUnsharedInput populates the unshared input as 0.`, () => {
+  it(`should, if directlyOwed for the bill in question is set to true, call _disableUnsharedInput() and add a "checked" class to _directlyOwedCheckBox`, () => {
     mockBillSecondary.directlyOwed = true;
     
     const _disableUnsharedInputSpy = jest.spyOn(billModal, '_disableUnsharedInput');
@@ -1024,7 +1024,6 @@ describe('_populate(billOwner, billID)', () => {
 
     expect(billModal._billNameInput.value).toBe('mock bill');
     expect(billModal._billValueInput.value).toBe('200');
-    expect(billModal._billUnsharedInput.value).toBe('0');
 
     expect(billModal._directlyOwedCheckbox.classList.contains('checked')).toBeTruthy();
     expect(_disableUnsharedInputSpy).toHaveBeenCalled();
@@ -1126,14 +1125,12 @@ describe('_disableUnsharedInput()', () => {
     expect(billModal._disableUnsharedInput(5)).toBeUndefined();
   });
 
-  it(`should set the value of the unshared input to 0, add to it a "disabled" attribute and set it to true, and also add a class of "disabled" to its form-group parent element`, () => {
-    billModal._billUnsharedInput.value = '200';
+  it(`should add a "disabled" attribute to the unshared input, set it to true, and also add a class of "disabled" to its form-group parent element`, () => {
     billModal._billUnsharedInput.removeAttribute('disabled');
     billModal._billUnsharedInput.parentElement.classList.remove('disabled');
 
     billModal._disableUnsharedInput();
 
-    expect(billModal._billUnsharedInput.value).toBe('0');
     expect(billModal._billUnsharedInput.getAttribute('disabled')).toBe('true');
     expect(billModal._billUnsharedInput.parentElement.classList.contains('disabled')).toBeTruthy();
   });

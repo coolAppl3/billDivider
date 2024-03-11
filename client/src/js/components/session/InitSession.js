@@ -26,7 +26,9 @@ class InitSession {
 
   _loadEventListeners() {
     this._startModalForm.addEventListener('submit', this._start.bind(this));
+
     this._optionsContainer.addEventListener('click', this._changeCurrency.bind(this));
+    this._optionsContainer.addEventListener('keyup', this._handleOptionsContainerKeyEvents.bind(this));
 
     window.addEventListener('editSharedWith', this._editSharedWith.bind(this));
     window.addEventListener('DOMContentLoaded', this._checkUrlForSessionID.bind(this));
@@ -136,8 +138,15 @@ class InitSession {
     this._startModalStartBtn.textContent = 'Update';
   };
 
+  _handleOptionsContainerKeyEvents(e) {
+    if(e.key === 'Enter') {
+      this._changeCurrency(e);
+      return ;
+    };
+  };
+
   _changeCurrency(e) {
-    if(e.target.classList.contains('selected')) {
+    if(e.target.classList.contains('selected') || !e.target.classList.contains('options-container-item')) {
       return ;
     };
     

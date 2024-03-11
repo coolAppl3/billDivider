@@ -352,6 +352,25 @@ describe('_editSharedWith()', () => {
   });
 });
 
+describe('_handleOptionsContainerKeyEvents(e)', () => {
+  it('should return undefined and not call _changeCurrency() if the key pressed is not Enter', () => {
+    const mockEvent = { key: 'G' };
+    const _changeCurrencySpy = jest.spyOn(initSession, '_changeCurrency');
+
+    expect(initSession._handleOptionsContainerKeyEvents(mockEvent)).toBeUndefined();
+    expect(_changeCurrencySpy).not.toHaveBeenCalled();
+  });
+  
+  it('should call _changeCurrency() with the event object if Enter is pressed', () => {
+    const mockEvent = { key: 'Enter' };
+    const _changeCurrencySpy = jest.spyOn(initSession, '_changeCurrency').mockImplementationOnce(() => {});
+
+    expect(initSession._handleOptionsContainerKeyEvents(mockEvent)).toBeUndefined();
+    expect(_changeCurrencySpy).toHaveBeenCalledWith(mockEvent);
+  });
+});
+
+
 describe('_changeCurrency(e)', () => {
   it('should always return undefined', () => {
     
@@ -396,7 +415,12 @@ describe('_changeCurrency(e)', () => {
     const mockEvent = {
       target: {
         classList: {
-          contains: () => { return false; },
+          contains: (className) => {
+            if(className === 'options-container-item') {
+              return true;
+            };
+            return false;
+          },
           add: () => {},
         },
       },

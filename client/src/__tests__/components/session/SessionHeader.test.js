@@ -339,6 +339,24 @@ describe('_setSharedWith()', () => {
   });
 });
 
+describe('_handleUnsharedWithBtnKeyEvents(e)', () => {
+  it('should return undefined and not call _updateSharedWith() if the key pressed is not Enter', () => {
+    const mockEvent = { key: 'G' };
+    const _updateSharedWithSpy = jest.spyOn(sessionHeader, '_updateSharedWith');
+
+    expect(sessionHeader._handleUnsharedWithBtnKeyEvents(mockEvent)).toBeUndefined();
+    expect(_updateSharedWithSpy).not.toHaveBeenCalled();
+  });
+  
+  it('should call _updateSharedWith() with the event object if Enter is pressed', () => {
+    const mockEvent = { key: 'Enter' };
+    const _updateSharedWithSpy = jest.spyOn(sessionHeader, '_updateSharedWith').mockImplementationOnce(() => {});
+
+    expect(sessionHeader._handleUnsharedWithBtnKeyEvents(mockEvent)).toBeUndefined();
+    expect(_updateSharedWithSpy).toHaveBeenCalled();
+  });
+});
+
 describe('_updateSharedWith()', () => {
   it(`should dispatch a "editSharedWith" event then return undefined`, () => {
     const dispatchEventSpy = jest.spyOn(window, 'dispatchEvent').mockImplementationOnce(() => {});

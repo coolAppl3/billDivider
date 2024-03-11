@@ -77,7 +77,7 @@ class BillModal {
       id: generateBillID(),
       name: this._billNameInput.value,
       value: +this._billValueInput.value,
-      unshared: +this._billUnsharedInput.value,
+      unshared: !this._directlyOwedCheckboxChecked() ? +this._billUnsharedInput.value : 0,
       splitValue: (+this._billValueInput.value - +this._billUnsharedInput.value) / 2,
       directlyOwed,
       billOwner,
@@ -94,6 +94,8 @@ class BillModal {
     
     dispatchEvent(new Event('updateSessionInfo'));
     dispatchEvent(new Event('render'));
+
+    console.log(sessionInfo)
   };
 
   _updateBill(billID) {
@@ -116,7 +118,7 @@ class BillModal {
       id: billID,
       name: this._billNameInput.value,
       value: +this._billValueInput.value,
-      unshared: +this._billUnsharedInput.value,
+      unshared: !this._directlyOwedCheckboxChecked() ? +this._billUnsharedInput.value : 0,
       splitValue: (+this._billValueInput.value - +this._billUnsharedInput.value) / 2,
       directlyOwed,
       billOwner,
@@ -135,6 +137,8 @@ class BillModal {
 
     dispatchEvent(new Event('updateSessionInfo'));
     dispatchEvent(new Event('render'));
+
+    console.log(sessionInfo)
   };
 
 
@@ -190,8 +194,8 @@ class BillModal {
       return false;
     };
 
-    if(+billValue < +unsharedValue) {
-      errorSpan.display(this._billUnsharedInput.parentElement, `Unshared value can not exceed the bill's value.`);
+    if(+billValue <= +unsharedValue) {
+      errorSpan.display(this._billUnsharedInput.parentElement, `Unshared value can not exceed or be equal to the bill's value.`);
       return false;
     };
 
@@ -219,6 +223,7 @@ class BillModal {
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         this._billModal.style.opacity = '1';
+        this._billModal.style.transform = 'translate3d(0, 0, 0)';
       });
     });
   };
@@ -231,7 +236,8 @@ class BillModal {
     this._clearForm();
 
     setTimeout(() => {
-      this._billModal.style.display = 'none'
+      this._billModal.style.display = 'none';
+      this._billModal.style.transform = 'translate3d(0, -20px, 0)';
       this._endEditMode();
     }, 200);
   };
@@ -306,13 +312,11 @@ class BillModal {
   };
 
   _disableUnsharedInput() {
-    this._billUnsharedInput.value = 0;
     this._billUnsharedInput.setAttribute('disabled', 'true');
     this._billUnsharedInput.parentElement.classList.add('disabled');
   };
 
   _enableUnsharedInput() {
-    this._billUnsharedInput.value = 0;
     this._billUnsharedInput.removeAttribute('disabled');
     this._billUnsharedInput.parentElement.classList.remove('disabled');
   };
