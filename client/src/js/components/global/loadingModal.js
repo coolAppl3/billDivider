@@ -1,5 +1,4 @@
 class LoadingModal {
-  
   static display() {
     if(document.querySelector('.loading-modal')) {
       return ;
@@ -16,8 +15,10 @@ class LoadingModal {
   };
 
   static remove() {
-    if(document.querySelector('.loading-modal')) {
-      document.querySelector('.loading-modal').remove();
+    const loadingModalElement = document.querySelector('.loading-modal');
+    
+    if(loadingModalElement) {
+      loadingModalElement.remove();
     };
   };
 

@@ -170,18 +170,20 @@ class SessionContent {
     confirmModal.display(`Are you sure you want to delete all the bills paid by ${listOwnerName}?`, 'danger');
 
     const confirmModalElement = document.querySelector('.confirm-modal');
-    confirmModalElement.addEventListener('click', (e) => {
+    confirmModalElement.addEventListener('click', function eventHandler(e) {
       if(confirmModal.isExitClick(e)) {
+        confirmModalElement.removeEventListener('click', eventHandler);
         confirmModal.remove();
         return ;
       };
   
       if(e.target.id === 'confirmModalConfirmBtn') {
         this._clearContentList(listOwner);
+        confirmModalElement.removeEventListener('click', eventHandler);
         confirmModal.remove();
         return ;
       };
-    });
+    }.bind(this));
   };
 
   _clearContentList(listOwner) {

@@ -107,7 +107,7 @@ class SessionHeader {
     };
 
     if(e.target.id === 'saveSessionBtn') {
-      this._saveSession();
+      this._handleSaveSession();
       return ;
     };
   };
@@ -116,8 +116,9 @@ class SessionHeader {
     confirmModal.display('Are you sure you want to clear all the bills in this session?', 'danger');
 
     const confirmModalElement = document.querySelector('.confirm-modal');
-    confirmModalElement.addEventListener('click', (e) => {
+    confirmModalElement.addEventListener('click', function eventHandler(e) {
       if(confirmModal.isExitClick(e)) {
+        confirmModalElement.removeEventListener('click', eventHandler);
         confirmModal.remove();
         return ;
       };
@@ -126,13 +127,14 @@ class SessionHeader {
         sessionInfo.reset();
         messagePopup('Session reset', 'success');
         window.dispatchEvent(new Event('render'));
+        confirmModalElement.removeEventListener('click', eventHandler);
         confirmModal.remove();
         return ;
       };
     });
   };
 
-  async _saveSession() {
+  async _handleSaveSession() {
     LoadingModal.display();
 
     // If the save button was somehow clicked despite not having any unsaved changes, then it was enabled by DOM manipulation. The code below protects against that situation
@@ -153,19 +155,87 @@ class SessionHeader {
     };
     
     if(SessionReference.referenceExists() && SessionReference.changesMade()) {
-      try {
-        await sessionAPI.updateSession(loginToken, sessionInfo.sessionID, sessionInfo);
-        redirectAfterDelayMillisecond('history.html', 1000, 'Session successfully updated', 'success');
-
-      } catch (err) {
-        console.log(err);
-        redirectAfterDelayMillisecond('history.html');
+      if(sessionInfo.isEmpty()) {
+        await this._deleteSession(loginToken, sessionInfo.sessionID);
+        return ;
       };
-
+      
+      await this._updateSession(loginToken, sessionInfo.sessionID);
       return ;
     };
 
-    // User logged in, but not editing a session
+    await this._addSession(loginToken);
+  };
+
+  async _deleteSession(loginToken, sessionID) {
+    LoadingModal.remove();
+    confirmModal.display('Saving this session with no bills will delete it. Are you sure you want to continue?', 'danger');
+    const confirmModalElement = document.querySelector('.confirm-modal');
+
+    confirmModalElement.addEventListener('click', async function eventHandler(e) {
+      if(confirmModal.isExitClick(e)) {
+        confirmModalElement.removeEventListener('click', eventHandler);
+        confirmModal.remove();
+        return ;
+      };
+
+      if(e.target.id === 'confirmModalConfirmBtn') {
+        LoadingModal.display();
+        confirmModalElement.removeEventListener('click', eventHandler);
+        confirmModal.remove();
+
+        try {
+          await sessionAPI.deleteSession(loginToken, sessionID);
+          redirectAfterDelayMillisecond('history.html', 1000, 'Session deleted', 'success');
+
+        } catch (err) {
+          console.log(err);
+          redirectAfterDelayMillisecond('history.html');
+        };
+      };
+    }.bind(this));
+  };
+
+  async _updateSession(loginToken, sessionID) {
+    LoadingModal.remove();
+    const extraOption = { btnName: 'Save as a new session', btnID: 'saveAsNewSession', };
+    
+    confirmModal.display('Are you sure you want to override this session with the new updates?', 'cta', extraOption);
+    const confirmModalElement = document.querySelector('.confirm-modal');
+
+    confirmModalElement.addEventListener('click', async function eventHandler(e) {
+      if(confirmModal.isExitClick(e)) {
+        confirmModalElement.removeEventListener('click', eventHandler);
+        confirmModal.remove();
+        return ;
+      };
+
+      if(e.target.id === 'confirmModalConfirmBtn') {
+        LoadingModal.display();
+        confirmModalElement.removeEventListener('click', eventHandler);
+        confirmModal.remove();
+
+        try {
+          await sessionAPI.updateSession(loginToken, sessionID, sessionInfo);
+          redirectAfterDelayMillisecond('history.html', 1000, 'Session updated', 'success');
+    
+        } catch (err) {
+          console.log(err);
+          redirectAfterDelayMillisecond('history.html');
+        };
+      };
+
+      if(e.target.id === extraOption.btnID) {
+        LoadingModal.display();
+        confirmModalElement.removeEventListener('click', eventHandler);
+        confirmModal.remove();
+
+        await this._addSession(loginToken);
+      };
+    }.bind(this));
+  };
+
+  async _addSession(loginToken) {
     try {
       const timestamp = Date.now();
       sessionInfo.createdOn = timestamp;

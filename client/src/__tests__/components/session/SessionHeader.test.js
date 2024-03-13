@@ -397,17 +397,17 @@ describe('_handleSessionHeaderControlsClickEvents(e)', () => {
     expect(_resetSessionSpy).toHaveBeenCalled();
   });
 
-  it(`it should call _saveSession() if the click event targets an element inside the sessionHeaderControls that contains an ID of "saveSessionBtn"`, () => {
+  it(`it should call _handleSaveSession() if the click event targets an element inside the sessionHeaderControls that contains an ID of "saveSessionBtn"`, () => {
     const mockEvent = {
       target: {
         id: 'saveSessionBtn',
       },
     };
 
-    const _saveSessionSpy= jest.spyOn(sessionHeader, '_saveSession').mockImplementationOnce(() => {});
+    const _handleSaveSessionSpy= jest.spyOn(sessionHeader, '_handleSaveSession').mockImplementationOnce(() => {});
     
     expect(sessionHeader._handleSessionHeaderControlsClickEvents(mockEvent)).toBeUndefined();
-    expect(_saveSessionSpy).toHaveBeenCalled();
+    expect(_handleSaveSessionSpy).toHaveBeenCalled();
   });
 });
 
@@ -477,123 +477,344 @@ describe('_resetSession(', () => {
   });
 });
 
-describe('_saveSession()', () => {
+describe('_handleSaveSession', () => {
   beforeEach(() => {
     delete window.sessionStorage;
     Object.defineProperty(window, 'sessionStorage', {
       writable: true,
       value: {
-        getItem: () => {},
+        getItem: () => { return true; },
       },
     });
+
+    redirectAfterDelayMillisecond.mockImplementation(() => {});
   });
 
   it('should always call LoadingModal.display()', async () => {
-    jest.spyOn(window.sessionStorage, 'getItem').mockImplementationOnce(() => { return false; });
-    SessionReference.referenceExists.mockImplementationOnce(() => { return false; });
+    redirectAfterDelayMillisecond.mockImplementationOnce(() => {});
     
-    await sessionHeader._saveSession();
+    await sessionHeader._handleSaveSession();
     expect(LoadingModal.display).toHaveBeenCalled();
   });
   
-  
-  it('should stop the function, redirect the user, and return undefined, if despite there being no unsaved changes, the function is forcefully called. If there is a session reference, the user should be redirected to history.html', async () => {
-    const sessionStorageGetItemSpy = jest.spyOn(window.sessionStorage, 'getItem').mockImplementationOnce(() => { return null; });
-    SessionReference.referenceExists.mockImplementationOnce(() => { return true; });
-    
-    expect(await sessionHeader._saveSession()).toBeUndefined();
-    expect(sessionStorageGetItemSpy).toHaveBeenCalledWith('unsavedSessionChanges');
-    expect(SessionReference.referenceExists).toHaveBeenCalled();
-    expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('history.html');
-  });
+  it('should check sessionStorage for an unsavedSessionChanges item. If one is not found but a session reference exists, it should redirect the user to history.html then return undefined', async () => {
+    const sessionStorageSpy = jest.spyOn(window.sessionStorage, 'getItem').mockImplementationOnce(() => { return null; });
+    SessionReference.mockImplementationOnce(() => { return true; });
 
-  it('should stop the function, redirect the user, and return undefined, if despite there being no unsaved changes, the function is forcefully called. If there is no session reference, the user should be redirected to session.html', async () => {
-    const sessionStorageGetItemSpy = jest.spyOn(window.sessionStorage, 'getItem').mockImplementationOnce(() => { return null; });
-    SessionReference.referenceExists.mockImplementationOnce(() => { return false; });
-    
-    expect(await sessionHeader._saveSession()).toBeUndefined();
-    expect(sessionStorageGetItemSpy).toHaveBeenCalledWith('unsavedSessionChanges');
-    expect(SessionReference.referenceExists).toHaveBeenCalled();
+    expect(await sessionHeader._handleSaveSession()).toBeUndefined();
+    expect(sessionStorageSpy).toHaveBeenCalledWith('unsavedSessionChanges');
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('session.html');
   });
 
-  it('should stop the function, redirect the user to session.html, and return undefined, if there is no loginToken', async () => {
-    jest.spyOn(window.sessionStorage, 'getItem').mockImplementation(() => { return true; });
+  it('should check sessionStorage for an unsavedSessionChanges item. If one is not found but a session reference does not exist, it should redirect the user to session.html then return undefined', async () => {
+    const sessionStorageSpy = jest.spyOn(window.sessionStorage, 'getItem').mockImplementationOnce(() => { return null; });
+    SessionReference.mockImplementationOnce(() => { return false; });
+
+    expect(await sessionHeader._handleSaveSession()).toBeUndefined();
+    expect(sessionStorageSpy).toHaveBeenCalledWith('unsavedSessionChanges');
+    expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('session.html');
+  });
+  
+  it('should redirect the user to session.html then return undefined if there is no loginToken', async () => {
     locateLoginToken.mockImplementationOnce(() => { return false; });
-    
-    expect(await sessionHeader._saveSession()).toBeUndefined();
-    expect(locateLoginToken).toHaveBeenCalled();
+
+    expect(await sessionHeader._handleSaveSession()).toBeUndefined();
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('session.html');
   });
-  
-  it('should, if a session reference exists and changes have been made, call SessionAPI.prototype.updateSession() to update the session, then redirect the user to history.html with a successful message. It should also return undefined', async () => {
-    jest.spyOn(window.sessionStorage, 'getItem').mockImplementation(() => { return true; });
-    locateLoginToken.mockImplementationOnce(() => { return 'mockLoginToken'; });
 
+  it('should, if a loginToken is located, call SessionReference.referenceExists() and SessionReference.changesMade(). If both are true, but the session contains no bills, it should call _deleteSession(loginToken, sessionInfo.sessionID) then return undefined', async () => {
+    locateLoginToken.mockImplementationOnce(() => { return 'mockLoginToken'; });
     SessionReference.referenceExists.mockImplementationOnce(() => { return true; });
     SessionReference.changesMade.mockImplementationOnce(() => { return true; });
-    
-    SessionAPI.prototype.updateSession.mockResolvedValueOnce('mockResolvedValue');
-    sessionInfo.sessionID = 'mockSessionID';
+    sessionInfo.isEmpty.mockImplementationOnce(() => { return true; });
 
-    expect(await sessionHeader._saveSession()).toBeUndefined();
-    expect(SessionAPI.prototype.updateSession).toHaveBeenCalledWith('mockLoginToken', 'mockSessionID', sessionInfo);
-    expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('history.html', 1000, 'Session successfully updated', 'success');
+    const _deleteSessionSpy = jest.spyOn(sessionHeader, '_deleteSession').mockImplementationOnce(() => {});
+    sessionInfo.sessionID = 'mockSessionID';
+    
+    expect(await sessionHeader._handleSaveSession()).toBeUndefined();
+    expect(_deleteSessionSpy).toHaveBeenCalledWith('mockLoginToken', 'mockSessionID');
+  });
+
+  it('should, if a loginToken is located, call SessionReference.referenceExists() and SessionReference.changesMade(). If both are true, and the session contains at least one bill, it should call _updateSession(loginToken, sessionInfo.sessionID) then return undefined', async () => {
+    locateLoginToken.mockImplementationOnce(() => { return 'mockLoginToken'; });
+    SessionReference.referenceExists.mockImplementationOnce(() => { return true; });
+    SessionReference.changesMade.mockImplementationOnce(() => { return true; });
+    sessionInfo.isEmpty.mockImplementationOnce(() => { return false; });
+
+    const _updateSessionSpy = jest.spyOn(sessionHeader, '_updateSession').mockImplementationOnce(() => {});
+    sessionInfo.sessionID = 'mockSessionID';
+    
+    expect(await sessionHeader._handleSaveSession()).toBeUndefined();
+    expect(_updateSessionSpy).toHaveBeenCalledWith('mockLoginToken', 'mockSessionID');
+  });
+
+  it('should, if a loginToken is located, call SessionReference.referenceExists() and SessionReference.changesMade(). If either is false, it should call _addSession(loginToken)', async () => {
+    locateLoginToken.mockImplementationOnce(() => { return 'mockLoginToken'; });
+    SessionReference.referenceExists.mockImplementationOnce(() => { return false; });
+    SessionReference.changesMade.mockImplementationOnce(() => { return false; });
+
+    const _addSessionSpy = jest.spyOn(sessionHeader, '_addSession').mockImplementationOnce(() => {});
+    
+    expect(await sessionHeader._handleSaveSession()).toBeUndefined();
+    expect(_addSessionSpy).toHaveBeenCalledWith('mockLoginToken');
+  });
+});
+
+describe('_deleteSession(loginToken, sessionID)', () => {
+  beforeEach(() => {
+    redirectAfterDelayMillisecond.mockImplementation(() => {});
+    
+    ConfirmModal.prototype.display.mockImplementation(() => {
+      if(document.querySelector('.confirm-modal')) {
+        return ;
+      };
+      
+      const mockConfirmModalElement = document.createElement('div');
+      mockConfirmModalElement.className = 'confirm-modal';
+      document.body.appendChild(mockConfirmModalElement);
+    });
+
+    ConfirmModal.prototype.remove.mockImplementation(() => {
+      const confirmModalElement = document.querySelector('.confirm-modal');
+
+      if(confirmModalElement) {
+        confirmModalElement.remove();
+      };
+    });
+  });
+
+  it('should always call LoadingModal.remove(), ConfirmModal.prototype.display(), then return undefined', async () => {
+    expect(await sessionHeader._deleteSession('mockLoginToken', 'mockSessionID')).toBeUndefined();
+    expect(LoadingModal.remove).toHaveBeenCalled();
+    expect(ConfirmModal.prototype.display).toHaveBeenCalledWith('Saving this session with no bills will delete it. Are you sure you want to continue?', 'danger');
+    
+    const confirmModalElement = document.querySelector('.confirm-modal');
+    expect(confirmModalElement).not.toBeNull();
   });
   
-  it('should, if a session reference exists and changes have been made, call SessionAPI.prototype.updateSession() to update the session. If the API request fails, the error should be logged, the user should be redirect to history.html, and the function should return undefined', async () => {
-    jest.spyOn(window.sessionStorage, 'getItem').mockImplementation(() => { return true; });
-    locateLoginToken.mockImplementationOnce(() => { return 'mockLoginToken'; });
-
-    SessionReference.referenceExists.mockImplementationOnce(() => { return true; });
-    SessionReference.changesMade.mockImplementationOnce(() => { return true; });
+  it(`should attach a "click" eventListener to the confirm modal. If an "exit click" is made by the user, it should remove the eventListener and the confirm modal element.`, async () => {
+    await sessionHeader._deleteSession('mockLoginToken', 'mockSessionID');
     
-    const mockError = { value: 'mockErrorValue' };
-    const consoleSpy = jest.spyOn(window.console, 'log');
+    const confirmModalElement = document.querySelector('.confirm-modal');
+    const removeEventListenerSpy = jest.spyOn(confirmModalElement, 'removeEventListener').mockImplementationOnce(() => {});
 
+    ConfirmModal.prototype.isExitClick.mockImplementationOnce(() => { return true; });
+    
+    const mockEvent = new MouseEvent('click');
+    confirmModalElement.dispatchEvent(mockEvent);
+
+    expect(ConfirmModal.prototype.isExitClick).toHaveBeenCalled();
+    expect(removeEventListenerSpy).toHaveBeenCalled();
+    expect(document.querySelector('.confirm-modal')).toBeNull();
+  });
+  
+
+  it(`should attach a "click" eventListener to the confirm modal. If the user clicks the confirm button with the ID of "confirmModalConfirmBtn", it should call LoadingModal.display(), remove the eventListener from the confirm modal, remove the confirm modal element, then call SessionAPI.prototype.deleteSession(loginToken, sessionID). If the HTTP request is successful, it should redirect the user to history.html with a successful message`, async () => {
+    await sessionHeader._deleteSession('mockLoginToken', 'mockSessionID');
+    
+    const confirmModalElement = document.querySelector('.confirm-modal');
+    const removeEventListenerSpy = jest.spyOn(confirmModalElement, 'removeEventListener').mockImplementationOnce(() => {});
+
+    SessionAPI.prototype.deleteSession.mockResolvedValueOnce(true);
+    
+    const mockEvent = new MouseEvent('click');
+    Object.defineProperty(mockEvent, 'target', {
+      writable: false,
+      value: {
+        id: 'confirmModalConfirmBtn',
+      },
+    });
+    
+    confirmModalElement.dispatchEvent(mockEvent);
+
+    expect(removeEventListenerSpy).toHaveBeenCalled();
+    expect(document.querySelector('.confirm-modal')).toBeNull();
+    expect(await SessionAPI.prototype.deleteSession).toHaveBeenCalledWith('mockLoginToken', 'mockSessionID');
+    expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('history.html', 1000, 'Session deleted', 'success');
+  });
+
+  it(`should attach a "click" eventListener to the confirm modal. If the user clicks the confirm button with the ID of "confirmModalConfirmBtn", it should call LoadingModal.display(), remove the eventListener from the confirm modal, remove the confirm modal element, then call SessionAPI.prototype.deleteSession(loginToken, sessionID). If the HTTP request fails, it should redirect the user to history.html with an error message`, async () => {
+    await sessionHeader._deleteSession('mockLoginToken', 'mockSessionID');
+    
+    const confirmModalElement = document.querySelector('.confirm-modal');
+    const removeEventListenerSpy = jest.spyOn(confirmModalElement, 'removeEventListener').mockImplementationOnce(() => {});
+
+    const mockError = { mockProperty: 'mockValue' };
+    SessionAPI.prototype.deleteSession.mockRejectedValueOnce(mockError);
+    
+    const mockEvent = new MouseEvent('click');
+    Object.defineProperty(mockEvent, 'target', {
+      writable: false,
+      value: {
+        id: 'confirmModalConfirmBtn',
+      },
+    });
+    
+    confirmModalElement.dispatchEvent(mockEvent);
+
+    expect(removeEventListenerSpy).toHaveBeenCalled();
+    expect(document.querySelector('.confirm-modal')).toBeNull();
+    expect(await SessionAPI.prototype.deleteSession).toHaveBeenCalledWith('mockLoginToken', 'mockSessionID');
+    expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('history.html');
+  });
+});
+
+describe('_updateSession(loginToken, sessionID)', () => {
+  let extraOption;
+  
+  beforeEach(() => {
+    extraOption = { btnName: 'Save as a new session', btnID: 'saveAsNewSession', };
+    redirectAfterDelayMillisecond.mockImplementation(() => {});
+    
+    ConfirmModal.prototype.display.mockImplementation(() => {
+      if(document.querySelector('.confirm-modal')) {
+        return ;
+      };
+      
+      const mockConfirmModalElement = document.createElement('div');
+      mockConfirmModalElement.className = 'confirm-modal';
+      document.body.appendChild(mockConfirmModalElement);
+    });
+
+    ConfirmModal.prototype.remove.mockImplementation(() => {
+      const confirmModalElement = document.querySelector('.confirm-modal');
+
+      if(confirmModalElement) {
+        confirmModalElement.remove();
+      };
+    });
+  });
+
+  afterEach(() => {
+    extraOption = null;
+  });
+
+  it('should always call LoadingModal.remove(), ConfirmModal.prototype.display(), then return undefined', async () => {
+    expect(await sessionHeader._updateSession('mockLoginToken', 'mockSessionID')).toBeUndefined();
+    expect(LoadingModal.remove).toHaveBeenCalled();
+    expect(ConfirmModal.prototype.display).toHaveBeenCalledWith('Are you sure you want to override this session with the new updates?', 'cta', extraOption);
+    
+    const confirmModalElement = document.querySelector('.confirm-modal');
+    expect(confirmModalElement).not.toBeNull();
+  });
+
+  it(`should attach a "click" eventListener to the confirm modal. If an "exit click" is made by the user, it should remove the eventListener and the confirm modal element.`, async () => {
+    await sessionHeader._updateSession('mockLoginToken', 'mockSessionID');
+    
+    const confirmModalElement = document.querySelector('.confirm-modal');
+    const removeEventListenerSpy = jest.spyOn(confirmModalElement, 'removeEventListener').mockImplementationOnce(() => {});
+
+    ConfirmModal.prototype.isExitClick.mockImplementationOnce(() => { return true; });
+    
+    const mockEvent = new MouseEvent('click');
+    confirmModalElement.dispatchEvent(mockEvent);
+
+    expect(ConfirmModal.prototype.isExitClick).toHaveBeenCalled();
+    expect(removeEventListenerSpy).toHaveBeenCalled();
+    expect(document.querySelector('.confirm-modal')).toBeNull();
+  });
+
+  it(`should attach a "click" eventListener to the confirm modal. If the user clicks the confirm button with the ID of "confirmModalConfirmBtn", it should call LoadingModal.display(), remove the eventListener from the confirm modal, remove the confirm modal element, then call SessionAPI.prototype.updateSession(loginToken, sessionID, sessionInfo). If the HTTP request is successful, it should redirect the user to history.html with a successful message`, async () => {
+    await sessionHeader._updateSession('mockLoginToken', 'mockSessionID');
+    
+    const confirmModalElement = document.querySelector('.confirm-modal');
+    const removeEventListenerSpy = jest.spyOn(confirmModalElement, 'removeEventListener').mockImplementationOnce(() => {});
+
+    SessionAPI.prototype.updateSession.mockResolvedValueOnce(true);
+    
+    const mockEvent = new MouseEvent('click');
+    Object.defineProperty(mockEvent, 'target', {
+      writable: false,
+      value: {
+        id: 'confirmModalConfirmBtn',
+      },
+    });
+    
+    confirmModalElement.dispatchEvent(mockEvent);
+
+    expect(removeEventListenerSpy).toHaveBeenCalled();
+    expect(document.querySelector('.confirm-modal')).toBeNull();
+    expect(await SessionAPI.prototype.updateSession).toHaveBeenCalledWith('mockLoginToken', 'mockSessionID', sessionInfo);
+    expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('history.html', 1000, 'Session updated', 'success');
+  });
+
+  it(`should attach a "click" eventListener to the confirm modal. If the user clicks the confirm button with the ID of "confirmModalConfirmBtn", it should call LoadingModal.display(), remove the eventListener from the confirm modal, remove the confirm modal element, then call SessionAPI.prototype.updateSession(loginToken, sessionID, sessionInfo). If the HTTP request fails, it should redirect the user to history.html with an error message`, async () => {
+    await sessionHeader._updateSession('mockLoginToken', 'mockSessionID');
+    
+    const confirmModalElement = document.querySelector('.confirm-modal');
+    const removeEventListenerSpy = jest.spyOn(confirmModalElement, 'removeEventListener').mockImplementationOnce(() => {});
+
+    const mockError = { mockProperty: 'mockValue' };
     SessionAPI.prototype.updateSession.mockRejectedValueOnce(mockError);
-    sessionInfo.sessionID = 'mockSessionID';
+    
+    const mockEvent = new MouseEvent('click');
+    Object.defineProperty(mockEvent, 'target', {
+      writable: false,
+      value: {
+        id: 'confirmModalConfirmBtn',
+      },
+    });
+    
+    confirmModalElement.dispatchEvent(mockEvent);
 
-    expect(await sessionHeader._saveSession()).toBeUndefined();
-    expect(SessionAPI.prototype.updateSession).toHaveBeenCalledWith('mockLoginToken', 'mockSessionID', sessionInfo);
-    expect(consoleSpy).toHaveBeenCalledWith(mockError);
+    expect(removeEventListenerSpy).toHaveBeenCalled();
+    expect(document.querySelector('.confirm-modal')).toBeNull();
+    expect(await SessionAPI.prototype.updateSession).toHaveBeenCalledWith('mockLoginToken', 'mockSessionID', sessionInfo);
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('history.html');
   });
 
-  it('should, if the user is logged in but not editing a session, set sessionInfo.createdOn to Date.now(), call SessionAPI.addSession(), redirect the user to history.html, then return undefined', async () => {
-    jest.spyOn(window.sessionStorage, 'getItem').mockImplementation(() => { return true; });
-    locateLoginToken.mockImplementationOnce(() => { return 'mockLoginToken'; });
+  it(`should attach a "click" eventListener to the confirm modal. If the user clicks the confirm button with the ID of "saveAsNewSession", it should call LoadingModal.display(), remove the eventListener from the confirm modal, remove the confirm modal element, then call _addSession(loginToken)`, async () => {
+    await sessionHeader._updateSession('mockLoginToken', 'mockSessionID');
+    
+    const confirmModalElement = document.querySelector('.confirm-modal');
+    const removeEventListenerSpy = jest.spyOn(confirmModalElement, 'removeEventListener').mockImplementationOnce(() => {});
 
-    SessionReference.referenceExists.mockImplementationOnce(() => { return false; }); // not editing a session
+    const _addSessionSpy = jest.spyOn(sessionHeader, '_addSession').mockImplementationOnce(() => {});
+    
+    const mockEvent = new MouseEvent('click');
+    Object.defineProperty(mockEvent, 'target', {
+      writable: false,
+      value: {
+        id: 'saveAsNewSession',
+      },
+    });
+    
+    confirmModalElement.dispatchEvent(mockEvent);
 
-    const dateNowSpy = jest.spyOn(Date, 'now').mockImplementationOnce(() => { return 'mockTimeStamp'; });
-    SessionAPI.prototype.addSession.mockResolvedValueOnce('mockResolvedValue');
+    expect(removeEventListenerSpy).toHaveBeenCalled();
+    expect(document.querySelector('.confirm-modal')).toBeNull();
+    expect(_addSessionSpy).toHaveBeenCalledWith('mockLoginToken');
+  });
+});
 
-    expect(await sessionHeader._saveSession()).toBeUndefined();
-    expect(dateNowSpy).toHaveBeenCalled();
-    expect(SessionAPI.prototype.addSession).toHaveBeenCalledWith('mockLoginToken', sessionInfo);
+describe('_addSession(loginToken)', () => {
+  beforeEach(() => {
+    redirectAfterDelayMillisecond.mockImplementation(() => {});
+  });
+  
+  it('should  set sessionInfo.createdOn to Date.now(), call SessionAPI.prototype.addSession(loginToken, sessionInfo). If the HTTP request is successful, it should redirect the user to history.html with a successful message, then return undefined', async () => {
+    SessionAPI.prototype.addSession.mockResolvedValueOnce(true);
+    const dateSpy = jest.spyOn(Date, 'now').mockImplementationOnce(() => { return 'mockTimeStamp'; });
+
+    expect(await sessionHeader._addSession('mockLoginToken')).toBeUndefined();
+    expect(dateSpy).toHaveBeenCalled();
+    expect(sessionInfo.createdOn).toBe('mockTimeStamp');
+    expect(await SessionAPI.prototype.addSession).toHaveBeenCalledWith('mockLoginToken', sessionInfo);
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('history.html', 1000, 'Session saved', 'success');
   });
 
-  it('should, if the user is logged in but not editing a session, set sessionInfo.createdOn to Date.now(), and call SessionAPI.addSession(). If the API request fails, it should log the error, redirect the user to session.html, the return undefined', async () => {
-    jest.spyOn(window.sessionStorage, 'getItem').mockImplementation(() => { return true; });
-    locateLoginToken.mockImplementationOnce(() => { return 'mockLoginToken'; });
-
-    SessionReference.referenceExists.mockImplementationOnce(() => { return false; }); // not editing a session
-
-    const mockError = { value: 'mockErrorValue' };
-    const consoleSpy = jest.spyOn(window.console, 'log');
-    
-    const dateNowSpy = jest.spyOn(Date, 'now').mockImplementationOnce(() => { return 'mockTimeStamp'; });
+  it('should  set sessionInfo.createdOn to Date.now(), call SessionAPI.prototype.addSession(loginToken, sessionInfo). If the HTTP request fails, it should redirect the user to session.html with an error message, then return undefined', async () => {
+    const mockError = { mockProperty: 'mockValue' };
     SessionAPI.prototype.addSession.mockRejectedValueOnce(mockError);
 
-    expect(await sessionHeader._saveSession()).toBeUndefined();
-    expect(dateNowSpy).toHaveBeenCalled();
-    expect(SessionAPI.prototype.addSession).toHaveBeenCalledWith('mockLoginToken', sessionInfo);
-    expect(consoleSpy).toHaveBeenCalledWith(mockError);
+    const dateSpy = jest.spyOn(Date, 'now').mockImplementationOnce(() => { return 'mockTimeStamp'; });
+
+    expect(await sessionHeader._addSession('mockLoginToken')).toBeUndefined();
+    expect(dateSpy).toHaveBeenCalled();
+    expect(sessionInfo.createdOn).toBe('mockTimeStamp');
+    expect(await SessionAPI.prototype.addSession).toHaveBeenCalledWith('mockLoginToken', sessionInfo);
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('session.html');
   });
-  
 });
 
 describe('_enableResetButton()', () => {

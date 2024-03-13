@@ -1,11 +1,10 @@
 class ConfirmModal {
-  
-  display(message, btnColor = 'cta') {
+  display(message, btnColor = 'cta', extraOption) {
     if(document.querySelector('.confirm-modal')) {
       return ;
     };
     
-    const confirmModal = this._create(message, btnColor);
+    const confirmModal = this._create(message, btnColor, extraOption);
     document.body.appendChild(confirmModal);
 
     confirmModal.style.display = 'block';
@@ -17,8 +16,10 @@ class ConfirmModal {
   };
   
   remove() {
-    if(document.querySelector('.confirm-modal')) {
-      document.querySelector('.confirm-modal').remove();
+    const confirmModalElement = document.querySelector('.confirm-modal');
+
+    if(confirmModalElement) {
+      confirmModalElement.remove();
     };
   };
 
@@ -34,7 +35,7 @@ class ConfirmModal {
     return false;
   };
   
-  _create(message, btnColor) {
+  _create(message, btnColor, extraOption) {
     const confirmModalElement = document.createElement('div');
     confirmModalElement.className = 'confirm-modal';
 
@@ -45,7 +46,7 @@ class ConfirmModal {
     confirmModalElementContainer.className = 'confirm-modal-container';
 
     const confirmMessage = this._createConfirmMessage(message);
-    const btnContainer = this._createBtnContainer(btnColor);
+    const btnContainer = this._createBtnContainer(btnColor, extraOption);
 
     confirmModalElementContainer.appendChild(confirmMessage);
     confirmModalElementContainer.appendChild(btnContainer);
@@ -56,22 +57,33 @@ class ConfirmModal {
     return confirmModalElement;
   };
 
-  _createBtnContainer(btnColor) {
+  _createBtnContainer(btnColor, extraOption) {
     const btnContainer = document.createElement('div');
     btnContainer.className = 'btn-container';
-
-    const cancelBtn = document.createElement('button');
-    cancelBtn.className = 'btn btn-border-light';
-    cancelBtn.id = 'confirmModalCancelBtn';
-    cancelBtn.appendChild(document.createTextNode('Cancel'));
 
     const confirmBtn = document.createElement('button');
     confirmBtn.className = `btn btn-${btnColor || 'cta'}`;
     confirmBtn.id = 'confirmModalConfirmBtn';
     confirmBtn.appendChild(document.createTextNode('Confirm'));
 
-    btnContainer.appendChild(cancelBtn);
+    const cancelBtn = document.createElement('button');
+    cancelBtn.className = 'btn btn-border-light';
+    cancelBtn.id = 'confirmModalCancelBtn';
+    cancelBtn.appendChild(document.createTextNode('Cancel'));
+
     btnContainer.appendChild(confirmBtn);
+    btnContainer.appendChild(cancelBtn);
+
+    if(extraOption) {
+      const { btnName, btnID } = extraOption
+      
+      const extraOptionBtn = document.createElement('button');
+      extraOptionBtn.className = `btn btn-light`;
+      extraOptionBtn.id = btnID;
+      extraOptionBtn.appendChild(document.createTextNode(btnName));
+
+      confirmBtn.insertAdjacentElement('afterend', extraOptionBtn);
+    };
 
     return btnContainer;
   };

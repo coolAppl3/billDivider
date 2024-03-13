@@ -74,10 +74,11 @@ class HistoryContent {
     sessionElement.style.boxShadow = '0px 0px 5px #bd2130 inset';
     
     const confirmModalElement = document.querySelector('.confirm-modal');
-    confirmModalElement.addEventListener('click', async (e) => {
+    confirmModalElement.addEventListener('click', async function eventHandler(e) {
 
       if(confirmModal.isExitClick(e)) {
         sessionElement.style.boxShadow = 'none';
+        confirmModalElement.removeEventListener('click', eventHandler);
         confirmModal.remove();
         return ;
       };
@@ -85,11 +86,12 @@ class HistoryContent {
       if(e.target.id === 'confirmModalConfirmBtn') {
         await deleteSession(sessionID);
         messagePopup('Session removed', 'success');
+        confirmModalElement.removeEventListener('click', eventHandler);
         confirmModal.remove();
         
         dispatchEvent(new Event('render'));
       };
-    });
+    }.bind(this));
     
   };
 
