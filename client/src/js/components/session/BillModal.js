@@ -77,7 +77,7 @@ class BillModal {
       id: generateBillID(),
       name: this._billNameInput.value,
       value: +this._billValueInput.value,
-      unshared: !this._directlyOwedCheckboxChecked() ? +this._billUnsharedInput.value : 0,
+      unshared: this._directlyOwedCheckboxChecked() ? 0 : +this._billUnsharedInput.value,
       splitValue: (+this._billValueInput.value - +this._billUnsharedInput.value) / 2,
       directlyOwed,
       billOwner,
@@ -94,8 +94,6 @@ class BillModal {
     
     dispatchEvent(new Event('updateSessionInfo'));
     dispatchEvent(new Event('render'));
-
-    console.log(sessionInfo)
   };
 
   _updateBill(billID) {
@@ -118,7 +116,7 @@ class BillModal {
       id: billID,
       name: this._billNameInput.value,
       value: +this._billValueInput.value,
-      unshared: !this._directlyOwedCheckboxChecked() ? +this._billUnsharedInput.value : 0,
+      unshared: this._directlyOwedCheckboxChecked() ? 0 : +this._billUnsharedInput.value,
       splitValue: (+this._billValueInput.value - +this._billUnsharedInput.value) / 2,
       directlyOwed,
       billOwner,
@@ -137,8 +135,6 @@ class BillModal {
 
     dispatchEvent(new Event('updateSessionInfo'));
     dispatchEvent(new Event('render'));
-
-    console.log(sessionInfo)
   };
 
 
@@ -163,7 +159,11 @@ class BillModal {
   };
   
   _isNumber(input) {
-    const value = input.value;
+    if(input.id === 'unshared' && this._directlyOwedCheckboxChecked()) {
+      return true;
+    };
+    
+    const value = input.value.trim();
     const inputFormGroup = input.parentElement;
 
     const re = /^\d+(\.\d+)?$/;
@@ -182,7 +182,7 @@ class BillModal {
     errorSpan.hide(this._billUnsharedInput.parentElement);
     
     const billValue = this._billValueInput.value;
-    const unsharedValue = this._billUnsharedInput.value;
+    const unsharedValue = this._directlyOwedCheckboxChecked() ? 0 : this._billUnsharedInput.value;
 
     if(+billValue <= 0) {
       errorSpan.display(this._billValueInput.parentElement, 'Bill value can not be equal to or below 0.');

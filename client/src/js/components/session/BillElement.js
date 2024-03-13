@@ -10,14 +10,13 @@ class BillElement {
 
     if(billItem.directlyOwed) {
       billDiv.appendChild(this._createDirectlyOwedTag(billItem.billOwner));
-      billDiv.appendChild(this._createIconContainer());
-      return billDiv;
+
+    } else {
+      billDiv.appendChild(this._createBillUnsharedElement(billItem.unshared));
+      billDiv.appendChild(this._createBillSplitValueElement(billItem.splitValue));
     };
     
-    billDiv.appendChild(this._createBillUnsharedElement(billItem.unshared));
-    billDiv.appendChild(this._createBillSplitValueElement(billItem.splitValue));
     billDiv.appendChild(this._createIconContainer());
-
     return billDiv;
   };
 

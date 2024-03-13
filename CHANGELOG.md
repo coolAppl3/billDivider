@@ -1,6 +1,26 @@
 # Changelog
 
 ---
+### [0.40.1] (2024-03-13)
+
+
+### Features
+
+* If a user is editing a session, the session's reset button will now also give the user an option to revert all the changes made in relation to the original session, in addition to the two existing options of canceling the action or proceeding with clearing all the bills
+  * This feature doesn't make a lot of sense when a session that has been cleared is fully emptied. Further improvements coming in the next patch
+
+
+
+
+### Bug Fixes
+
+* Removed a leftover console log in `BillModal.js`
+* Fixed the session's two clear buttons relying on DOM elements, instead of the sessionInfo object 
+* Fixed input validation for a bill's unshared value displaying an error message despite the directly owed checkbox being checked
+  * The unshared input value, if the directly owed checkbox is checked, is omitted and replaced with 0, so validating it is unnecessary
+
+
+---
 ### [0.40.0] (2024-03-13)
 
 ### Features

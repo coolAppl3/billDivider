@@ -854,68 +854,97 @@ describe('_resizeList(e)', () => {
 });
 
 describe('_enableClearButtons()', () => {
-  function addMockBillElement(id, billOwner) {
-    const billElement = document.createElement('div');
-    billElement.setAttribute('data-id', id);
-    billElement.setAttribute('data-bill-owner', billOwner);
+  it(`it should add a "disabled" class and a "disabled" attribute equal to "" for mainClearListBtn if sessionInfo.billsPaid is empty, then return undefined`, () => {
+    const mainClearListBtn = document.querySelector('#content-main .clearListBtn');
+    mainClearListBtn.removeAttribute('disabled');
+    mainClearListBtn.classList.remove('disabled');
+    
+    sessionInfo.billsPaid = [];
+    sessionInfo.billsToPay = [{ mockProperty: 'mockValue' }];
 
-    const mainContentList = document.querySelector('.list-main');
-    const secondaryContentList = document.querySelector('.list-secondary');
-
-    if(billOwner === 'main') {
-      mainContentList.appendChild(billElement);
-      return billElement;
-    };
-
-    secondaryContentList.appendChild(billElement);
-    return billElement;
-  };
-  
-  let mainClearListBtn;
-  let secondaryClearListBtn;
-
-  beforeEach(() => {
-    mainClearListBtn = document.querySelector('#content-main .clearListBtn');
-    secondaryClearListBtn = document.querySelector('#content-secondary .clearListBtn');
-  });
-  
-  afterEach(() => {
-    mainClearListBtn = null;
-    secondaryClearListBtn = null;
-  });
-
-  it('should always return undefined', () => {
     expect(sessionContent._enableClearButtons()).toBeUndefined();
-    expect(sessionContent._enableClearButtons(null)).toBeUndefined();
-    expect(sessionContent._enableClearButtons(0)).toBeUndefined();
-    expect(sessionContent._enableClearButtons('')).toBeUndefined();
-    expect(sessionContent._enableClearButtons({})).toBeUndefined();
-    expect(sessionContent._enableClearButtons([])).toBeUndefined();
-    expect(sessionContent._enableClearButtons('some value')).toBeUndefined();
-    expect(sessionContent._enableClearButtons(5)).toBeUndefined();
+    expect(mainClearListBtn.getAttribute('disabled')).toBe('');
+    expect(mainClearListBtn.classList.contains('disabled')).toBe(true);
+  });
+  
+  it(`it should add a "disabled" class and a "disabled" attribute equal to "" for secondaryClearListBtn if sessionInfo.billsToPay is empty, then return undefined`, () => {
+    const secondaryClearListBtn = document.querySelector('#content-secondary .clearListBtn');
+    secondaryClearListBtn.removeAttribute('disabled');
+    secondaryClearListBtn.classList.remove('disabled');
+    
+    sessionInfo.billsPaid = [{ mockProperty: 'mockValue' }];
+    sessionInfo.billsToPay = [];
+
+    expect(sessionContent._enableClearButtons()).toBeUndefined();
+    expect(secondaryClearListBtn.getAttribute('disabled')).toBe('');
+    expect(secondaryClearListBtn.classList.contains('disabled')).toBe(true);
   });
 
-  it(`should disable the clear buttons in both sessionContent elements by adding a "disabled" class and attribute to them, if their respective contentList has no bills`, () => {
-    // Content lists have no bills by default in this testing environment
-    sessionContent._enableClearButtons();
+  it(`it should add a "disabled" class and a "disabled" attribute equal to "" for both mainClearListBtn and secondaryClearListBtn if sessioninfo.billsPaid and sessionInfo.billsToPay are both empty, then return undefined`, () => {
+    const mainClearListBtn = document.querySelector('#content-main .clearListBtn');
+    mainClearListBtn.removeAttribute('disabled');
+    mainClearListBtn.classList.remove('disabled');
+
+    const secondaryClearListBtn = document.querySelector('#content-secondary .clearListBtn');
+    secondaryClearListBtn.removeAttribute('disabled');
+    secondaryClearListBtn.classList.remove('disabled');
+    
+    sessionInfo.billsPaid = [];
+    sessionInfo.billsToPay = [];
+
+    expect(sessionContent._enableClearButtons()).toBeUndefined();
 
     expect(mainClearListBtn.getAttribute('disabled')).toBe('');
+    expect(mainClearListBtn.classList.contains('disabled')).toBe(true);
+    
     expect(secondaryClearListBtn.getAttribute('disabled')).toBe('');
-
-    expect(mainClearListBtn.classList.contains('disabled')).toBeTruthy();
-    expect(secondaryClearListBtn.classList.contains('disabled')).toBeTruthy();
+    expect(secondaryClearListBtn.classList.contains('disabled')).toBe(true);
   });
 
-  it(`should enable the clear buttons in any sessionContent element by removing the "disabled" class and attribute from them them, if their respective contentList does have bills`, () => {
-    addMockBillElement('mockBillID', 'main');
-    addMockBillElement('mockBillID', 'secondary');
+  it(`it should remove the "disabled" class and attribute from mainClearListBtn if sessionInfo.billsPaid is not empty, then return undefined`, () => {
+    const mainClearListBtn = document.querySelector('#content-main .clearListBtn');
+    mainClearListBtn.setAttribute('disabled', '');
+    mainClearListBtn.classList.add('disabled');
     
-    sessionContent._enableClearButtons();
+    sessionInfo.billsPaid = [{ mockProperty: 'mockValue' }];
+    sessionInfo.billsToPay = [];
 
-    expect(mainClearListBtn.getAttribute('disabled')).toBeNull();
-    expect(secondaryClearListBtn.getAttribute('disabled')).toBeNull();
+    expect(sessionContent._enableClearButtons()).toBeUndefined();
+    expect(mainClearListBtn.getAttribute('disabled')).toBe(null);
+    expect(mainClearListBtn.classList.contains('disabled')).toBe(false);
+  });
 
-    expect(mainClearListBtn.classList.contains('disabled')).toBeFalsy();
-    expect(secondaryClearListBtn.classList.contains('disabled')).toBeFalsy();
+  it(`it should remove the "disabled" class and attribute from secondaryClearListBtn if sessionInfo.billsToPay is not empty, then return undefined`, () => {
+    const secondaryClearListBtn = document.querySelector('#content-secondary .clearListBtn');
+    secondaryClearListBtn.setAttribute('disabled', '');
+    secondaryClearListBtn.classList.add('disabled');
+    
+    sessionInfo.billsPaid = [];
+    sessionInfo.billsToPay = [{ mockProperty: 'mockValue' }];
+
+    expect(sessionContent._enableClearButtons()).toBeUndefined();
+    expect(secondaryClearListBtn.getAttribute('disabled')).toBe(null);
+    expect(secondaryClearListBtn.classList.contains('disabled')).toBe(false);
+  });
+
+  it(`it should remove the "disabled" class and attribute from both mainClearListBtn and secondaryClearListBtn if both sessionInfo.billsPaid and sessionInfo.billsToPay are not empty, then return undefined`, () => {
+    const mainClearListBtn = document.querySelector('#content-main .clearListBtn');
+    mainClearListBtn.setAttribute('disabled', '');
+    mainClearListBtn.classList.add('disabled');
+
+    const secondaryClearListBtn = document.querySelector('#content-secondary .clearListBtn');
+    secondaryClearListBtn.setAttribute('disabled', '');
+    secondaryClearListBtn.classList.add('disabled');
+    
+    sessionInfo.billsPaid = [{ mockProperty: 'mockValue' }];
+    sessionInfo.billsToPay = [{ mockProperty: 'mockValue' }];
+
+    expect(sessionContent._enableClearButtons()).toBeUndefined();
+
+    expect(mainClearListBtn.getAttribute('disabled')).toBe(null);
+    expect(mainClearListBtn.classList.contains('disabled')).toBe(false);
+    
+    expect(secondaryClearListBtn.getAttribute('disabled')).toBe(null);
+    expect(secondaryClearListBtn.classList.contains('disabled')).toBe(false);
   });
 });
