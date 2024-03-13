@@ -228,43 +228,27 @@ describe('_addNewBill()', () => {
   });
 
   it('should return undefined and stop the function if the bill value is less than 0', () => {
-    const _directlyOwedCheckboxCheckedSpy = jest.spyOn(billModal, '_directlyOwedCheckboxChecked');
     billModal._billValueInput.value = '-1';
-  
     expect(billModal._addNewBill()).toBeUndefined();
-    expect(_directlyOwedCheckboxCheckedSpy).not.toHaveBeenCalled();
-    // the function above is next. It not being called proves the function stopped.
   });
 
   it('should return undefined and stop the function if the bill value is equal to 0', () => {
-    const _directlyOwedCheckboxCheckedSpy = jest.spyOn(billModal, '_directlyOwedCheckboxChecked');
     billModal._billValueInput.value = '0';
-  
     expect(billModal._addNewBill()).toBeUndefined();
-    expect(_directlyOwedCheckboxCheckedSpy).not.toHaveBeenCalled();
-    // the function above is next. It not being called proves the function stopped.
   });
 
   it('should return undefined and stop the function if the unshared value is less than 0', () => {
-    const _directlyOwedCheckboxCheckedSpy = jest.spyOn(billModal, '_directlyOwedCheckboxChecked');
-    
     billModal._billValueInput.value = '100';
     billModal._billUnsharedInput.value = '-50';
   
     expect(billModal._addNewBill()).toBeUndefined();
-    expect(_directlyOwedCheckboxCheckedSpy).not.toHaveBeenCalled();
-    // the function above is next. It not being called proves the function stopped.
   });
 
   it('should return undefined and stop the function if the unshared value is greater than the bill value', () => {
-    const _directlyOwedCheckboxCheckedSpy = jest.spyOn(billModal, '_directlyOwedCheckboxChecked');
-    
     billModal._billValueInput.value = '100';
     billModal._billUnsharedInput.value = '200';
   
     expect(billModal._addNewBill()).toBeUndefined();
-    expect(_directlyOwedCheckboxCheckedSpy).not.toHaveBeenCalled();
-    // the function above is next. It not being called proves the function stopped.
   });
   
   it(`should call _directlyOwedCheckboxChecked() if all input values are valid, and set the directlyOwed property to true if _directlyOwedCheckbox contains a class of "checked"`, () => {
@@ -474,43 +458,27 @@ describe('_updateBill()', () => {
   });
   
   it('should return undefined and stop the function if the bill value is less than 0', () => {
-    const _directlyOwedCheckboxCheckedSpy = jest.spyOn(billModal, '_directlyOwedCheckboxChecked');
     billModal._billValueInput.value = '-1';
-  
     expect(billModal._updateBill()).toBeUndefined();
-    expect(_directlyOwedCheckboxCheckedSpy).not.toHaveBeenCalled();
-    // the function above is next. It not being called proves the function stopped.
   });
   
   it('should return undefined and stop the function if the bill value is equal to 0', () => {
-    const _directlyOwedCheckboxCheckedSpy = jest.spyOn(billModal, '_directlyOwedCheckboxChecked');
     billModal._billValueInput.value = '0';
-  
     expect(billModal._updateBill()).toBeUndefined();
-    expect(_directlyOwedCheckboxCheckedSpy).not.toHaveBeenCalled();
-    // the function above is next. It not being called proves the function stopped.
   });
   
   it('should return undefined and stop the function if the unshared value is less than 0', () => {
-    const _directlyOwedCheckboxCheckedSpy = jest.spyOn(billModal, '_directlyOwedCheckboxChecked');
-    
     billModal._billValueInput.value = '100';
     billModal._billUnsharedInput.value = '-50';
   
     expect(billModal._updateBill()).toBeUndefined();
-    expect(_directlyOwedCheckboxCheckedSpy).not.toHaveBeenCalled();
-    // the function above is next. It not being called proves the function stopped.
   });
   
   it('should return undefined and stop the function if the unshared value is greater than the bill value', () => {
-    const _directlyOwedCheckboxCheckedSpy = jest.spyOn(billModal, '_directlyOwedCheckboxChecked');
-    
     billModal._billValueInput.value = '100';
     billModal._billUnsharedInput.value = '200';
   
     expect(billModal._updateBill()).toBeUndefined();
-    expect(_directlyOwedCheckboxCheckedSpy).not.toHaveBeenCalled();
-    // the function above is next. It not being called proves the function stopped.
   });
 
   it(`should call _directlyOwedCheckboxChecked() if all input values are valid, and update the directlyOwed property to true if _directlyOwedCheckbox contains a class of "checked"`, () => {

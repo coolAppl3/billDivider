@@ -70,6 +70,13 @@ class SessionInfo {
     this.createdOn = session.createdOn;
   };
 
+  revert(sessionReference) {
+    this.billsPaid = [];
+    this.billsToPay = [];
+
+    this.set(sessionReference);
+  };
+
   reset() {
     this.yourTotal = 0;
     this.sharedWithTotal = 0;

@@ -645,7 +645,7 @@
           grid-template-columns: repeat(2, 1fr);
           column-gap: 2rem;
           row-gap: 1rem;
-
+          
           transition: transform 300ms, opacity 300ms, filter 200ms;
 
           &:last-child {

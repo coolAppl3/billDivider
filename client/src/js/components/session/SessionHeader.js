@@ -113,7 +113,14 @@ class SessionHeader {
   };
 
   _resetSession() {
-    confirmModal.display('Are you sure you want to clear all the bills in this session?', 'danger');
+    const extraOption = { btnName: 'Revert changes instead', btnID: 'revertChanges' };
+    
+    if(SessionReference.referenceExists() && SessionReference.changesMade()) {
+      confirmModal.display('Are you sure you want to clear all the bills in this session?', 'danger', extraOption);
+      
+    } else {
+      confirmModal.display('Are you sure you want to clear all the bills in this session?', 'danger');
+    };
 
     const confirmModalElement = document.querySelector('.confirm-modal');
     confirmModalElement.addEventListener('click', function eventHandler(e) {
@@ -127,6 +134,20 @@ class SessionHeader {
         sessionInfo.reset();
         messagePopup('Session reset', 'success');
         window.dispatchEvent(new Event('render'));
+        
+        confirmModalElement.removeEventListener('click', eventHandler);
+        confirmModal.remove();
+        return ;
+      };
+
+      if(e.target.id === 'revertChanges') {
+        const originalSessionReferenceJSON = sessionStorage.getItem('originalSessionReference');
+        const originalSessionReference = JSON.parse(originalSessionReferenceJSON);
+        
+        sessionInfo.revert(originalSessionReference);
+        messagePopup('Changes reverted', 'success');
+        window.dispatchEvent(new Event('render'));
+
         confirmModalElement.removeEventListener('click', eventHandler);
         confirmModal.remove();
         return ;
@@ -250,6 +271,12 @@ class SessionHeader {
   };
 
   _enableResetButton() {
+    if(SessionReference.referenceExists() && SessionReference.changesMade()) {
+      this._resetSessionBtn.removeAttribute('disabled');
+      this._resetSessionBtn.classList.remove('disabled');
+      return ;
+    };
+    
     if(sessionInfo.billsPaid.length === 0 && sessionInfo.billsToPay.length === 0) {
       this._resetSessionBtn.setAttribute('disabled', '');
       this._resetSessionBtn.classList.add('disabled');

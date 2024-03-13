@@ -157,7 +157,6 @@ class SessionContent {
       dispatchEvent(new Event('render'));
       messagePopup('Bill deleted', 'danger');
 
-      // Retracting the contentList if the user is deleting the only element in the list.
       if(isOnlyBillInList) {
         this._retractContentList(contentList);
       };
@@ -271,21 +270,23 @@ class SessionContent {
 
   _enableClearButtons() {
     const mainClearListBtn = document.querySelector('#content-main .clearListBtn');
-    if(this._mainContentList.hasChildNodes()) {
-      mainClearListBtn.removeAttribute('disabled');
-      mainClearListBtn.classList.remove('disabled');
-    } else {
+    if(sessionInfo.billsPaid.length === 0) {
       mainClearListBtn.setAttribute('disabled', '');
       mainClearListBtn.classList.add('disabled');
+
+    } else {
+      mainClearListBtn.removeAttribute('disabled');
+      mainClearListBtn.classList.remove('disabled');
     };
 
     const secondaryClearListBtn = document.querySelector('#content-secondary .clearListBtn');
-    if(this._secondaryContentList.hasChildNodes()) {
-      secondaryClearListBtn.removeAttribute('disabled');
-      secondaryClearListBtn.classList.remove('disabled');
-    } else {
+    if(sessionInfo.billsToPay.length === 0) {
       secondaryClearListBtn.setAttribute('disabled', '');
       secondaryClearListBtn.classList.add('disabled');
+
+    } else {
+      secondaryClearListBtn.removeAttribute('disabled');
+      secondaryClearListBtn.classList.remove('disabled');
     };
   };
 
