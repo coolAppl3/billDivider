@@ -1,6 +1,27 @@
 # Changelog
 
 ---
+### [0.40.0] (2024-03-13)
+
+### Features
+
+* Reworked how the save button in `session.html` works
+  * If the user is logged in and is not editing a session, it will simply save the session
+  * If the user is editing a session and attempts to save it with no bills, they are advised that saving the session with no bills will result in it being deleted, and are asked to confirm or cancel the action
+  * If the user is editing a bill and has made changes before clicking the save button (assuming there are still bills in the session), they will be prompted to confirm if they want to override the existing bill, opt to save the current session as a new session, or cancel the action
+<br>
+
+* Renamed `_saveSession()` to `_handleSaveSession()`. It will now handle the save logic instead, and call other functions accordingly
+* Added `_deleteSession()`, `_updateSession()`, and `_addSession()` to `SessionHeader.js` to handle deleting, updating, and adding sessions respectively
+  * These functions will be primarily called through `_handleSaveSession()`
+
+
+### Code Refactoring
+
+* Ensured that event listeners are removed before the confirm modal element is removed from the DOM, to prevent any potential circular reference issues
+
+
+---
 ### [0.39.0] (2024-03-11)
 
 

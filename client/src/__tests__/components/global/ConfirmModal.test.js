@@ -1,23 +1,28 @@
 import ConfirmModal from "../../../js/components/global/ConfirmModal";
-const confirmModal = new ConfirmModal();
+
+let confirmModal; 
 
 beforeEach(() => {
-  document.body.innerHTML = '';
+  confirmModal = new ConfirmModal();
 });
 
-describe(`display(message, btnColor = 'cta')`, () => {
+afterEach(() => {
+  document.body.innerHTML = '';
+  confirmModal = null;
+});
+
+describe(`display(message, btnColor = 'cta', extraOption)`, () => {
   it('should always return undefined', () => {
     expect(confirmModal.display()).toBeUndefined();
     expect(confirmModal.display('Some confirmation message')).toBeUndefined();
-    expect(confirmModal.display('Some confirmation message', 'some color')).toBeUndefined();
+    expect(confirmModal.display('Some confirmation message', 'some color', {})).toBeUndefined();
     expect(confirmModal.display({}, 'some color')).toBeUndefined();
   });
   
   it('should check and not create another confirm modal element if one already exists', () => {
-    // Mocking a dummy confirm modal in the DOM
-    const confirmModalElement = document.createElement('div');
-    confirmModalElement.className = 'confirm-modal';
-    document.body.appendChild(confirmModalElement);
+    const mockConfirmModalElement = document.createElement('div');
+    mockConfirmModalElement.className = 'confirm-modal';
+    document.body.appendChild(mockConfirmModalElement);
 
     confirmModal.display('Some confirmation message');
     const confirmModalList = document.querySelectorAll('.confirm-modal');
@@ -83,17 +88,16 @@ describe('_create(message, btnColor)', () => {
     // Mocking the expected confirm modal HTML element
     const expectedConfirmModal = document.createElement('div');
     expectedConfirmModal.className = 'confirm-modal';
-    expectedConfirmModal.innerHTML = '<div class="container"><div class="confirm-modal-container"><p>Are you sure you want to continue with this action?</p><div class="btn-container"><button class="btn btn-border-light" id="confirmModalCancelBtn">Cancel</button><button class="btn btn-danger" id="confirmModalConfirmBtn">Confirm</button></div></div></div>';
+    expectedConfirmModal.innerHTML = '<div class="container"><div class="confirm-modal-container"><p>Are you sure you want to continue with this action?</p><div class="btn-container"><button class="btn btn-danger" id="confirmModalConfirmBtn">Confirm</button><button class="btn btn-border-light" id="confirmModalCancelBtn">Cancel</button></div></div></div>';
 
     expect(confirmModal._create('Are you sure you want to continue with this action?', 'danger')).toEqual(expectedConfirmModal);
   });
 });
 
-describe('_createContainer(btnColor)', () => {
+describe('_createBtnContainer(btnColor)', () => {
   it('should always return an HTML element', () => {
     expect(confirmModal._createBtnContainer() instanceof HTMLElement).toBeTruthy();
     expect(confirmModal._createBtnContainer('Some confirmation message') instanceof HTMLElement).toBeTruthy();
-    expect(confirmModal._createBtnContainer('Some confirmation message', 'someColor') instanceof HTMLElement).toBeTruthy();
     expect(confirmModal._createBtnContainer([]) instanceof HTMLElement).toBeTruthy();
     expect(confirmModal._createBtnContainer({}) instanceof HTMLElement).toBeTruthy();
     expect(confirmModal._createBtnContainer(0) instanceof HTMLElement).toBeTruthy();
@@ -103,7 +107,7 @@ describe('_createContainer(btnColor)', () => {
     // Mocking the expected button container HTML element
     const expectedBtnContainer = document.createElement('div');
     expectedBtnContainer.className = 'btn-container';
-    expectedBtnContainer.innerHTML = '<button class="btn btn-border-light" id="confirmModalCancelBtn">Cancel</button><button class="btn btn-danger" id="confirmModalConfirmBtn">Confirm</button>';
+    expectedBtnContainer.innerHTML = '<button class="btn btn-danger" id="confirmModalConfirmBtn">Confirm</button><button class="btn btn-border-light" id="confirmModalCancelBtn">Cancel</button>';
     
     // Mocking a btnContainer element and selecting the confirm button to check for the color used
     document.body.appendChild(confirmModal._createBtnContainer('danger'));
