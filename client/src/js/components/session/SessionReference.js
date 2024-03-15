@@ -2,6 +2,10 @@ import sessionInfo from "./SessionInfo";
 
 class SessionReference {
   static set(session) {
+    if(!session.billLimit) {
+      session.billLimit = sessionInfo.billLimit;
+    };
+
     const sessionJSONString = JSON.stringify(session);
     const originalSessionReference = JSON.parse(sessionJSONString);
 

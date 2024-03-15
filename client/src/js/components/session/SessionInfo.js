@@ -10,6 +10,8 @@ class SessionInfo {
     this.createdOn = undefined;
     this.sessionID = undefined;
 
+    this.billLimit = 100;
+
     this._loadEventListeners();
   }
 
@@ -86,6 +88,16 @@ class SessionInfo {
 
   isEmpty() {
     if(this.billsPaid.length === 0 && this.billsToPay.length === 0) {
+      return true;
+    };
+
+    return false;
+  };
+
+  billLimitReached() {
+    const totalBills = this.billsPaid.length + this.billsToPay.length;
+
+    if(totalBills >= this.billLimit) {
       return true;
     };
 

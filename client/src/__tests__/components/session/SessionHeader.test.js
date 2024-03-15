@@ -95,6 +95,12 @@ const sessionHeaderHTML = `
             </button>
           </div>
         </div>
+
+        <div class="session-header-message hidden">
+          <p class="content-p">
+            Bill limit of <span id="billLimitSpan"></span> reached.
+          </p>
+        </div>
       </div>
 
       <!-- Session Content -->
@@ -207,12 +213,14 @@ afterEach(() => {
   sessionInfo.billsToPay = [];
   sessionInfo.yourTotal = 0;
   sessionInfo.sharedWithTotal = 0;
+  sessionInfo.billLimit = 100;
 
   sessionInfo.sharedWith = undefined;
   sessionInfo.currency = undefined;
 
   sessionInfo.createdOn = undefined;
   sessionInfo.sessionID = undefined;
+
 });
 
 describe('_render()', () => {
@@ -221,6 +229,7 @@ describe('_render()', () => {
     const _updateDebtResultSpy = jest.spyOn(sessionHeader, '_updateDebtResult').mockImplementationOnce(() => {});
     const _enableResetButtonSpy = jest.spyOn(sessionHeader, '_enableResetButton').mockImplementationOnce(() => {});
     const _handleSaveButtonStatusSpy = jest.spyOn(sessionHeader, '_handleSaveButtonStatus').mockImplementationOnce(() => {});
+    const _displayBillLimitWarningSpy = jest.spyOn(sessionHeader, '_displayBillLimitWarning').mockImplementationOnce(() => {});
     
     expect(sessionHeader._render()).toBeUndefined();
 
@@ -228,20 +237,25 @@ describe('_render()', () => {
     expect(_updateDebtResultSpy).toHaveBeenCalled();
     expect(_enableResetButtonSpy).toHaveBeenCalled();
     expect(_handleSaveButtonStatusSpy).toHaveBeenCalled();
+    expect(_displayBillLimitWarningSpy).toHaveBeenCalled();
   });
 });
 
 describe('_handleSessionStartedEvents()', () => {
-  it('should call a number of functions and return undefined', () => {
+  it('should call a number of functions, set the textContent of _billLimitSpan to sessionInfo.billLimit, then return undefined', () => {
     const _setSharedWithSpy = jest.spyOn(sessionHeader, '_setSharedWith').mockImplementationOnce(() => {});
     const _setCurrencySpy = jest.spyOn(sessionHeader, '_setCurrency').mockImplementationOnce(() => {});
     const _handleSaveButtonStatusSpy = jest.spyOn(sessionHeader, '_handleSaveButtonStatus').mockImplementationOnce(() => {});
 
+    sessionHeader._billLimitSpan.textContent = '';
+    
     expect(sessionHeader._handleSessionStartedEvents()).toBeUndefined();
     
     expect(_setSharedWithSpy).toHaveBeenCalled();
     expect(_setCurrencySpy).toHaveBeenCalled();
     expect(_handleSaveButtonStatusSpy).toHaveBeenCalled();
+
+    expect(sessionHeader._billLimitSpan.textContent).toBe('100');
   });
 });
 
@@ -384,17 +398,17 @@ describe('_setCurrency()', () => {
 });
 
 describe('_handleSessionHeaderControlsClickEvents(e)', () => {
-  it(`it should call _resetSession() if the click event targets an element inside the sessionHeaderControls that contains an ID of "resetSessionBtn"`, () => {
+  it(`it should call _handleResetSession() if the click event targets an element inside the sessionHeaderControls that contains an ID of "resetSessionBtn"`, () => {
     const mockEvent = {
       target: {
         id: 'resetSessionBtn',
       },
     };
 
-    const _resetSessionSpy = jest.spyOn(sessionHeader, '_resetSession').mockImplementationOnce(() => {});
+    const _handleResetSessionSpy = jest.spyOn(sessionHeader, '_handleResetSession').mockImplementationOnce(() => {});
     
     expect(sessionHeader._handleSessionHeaderControlsClickEvents(mockEvent)).toBeUndefined();
-    expect(_resetSessionSpy).toHaveBeenCalled();
+    expect(_handleResetSessionSpy).toHaveBeenCalled();
   });
 
   it(`it should call _handleSaveSession() if the click event targets an element inside the sessionHeaderControls that contains an ID of "saveSessionBtn"`, () => {
@@ -411,7 +425,7 @@ describe('_handleSessionHeaderControlsClickEvents(e)', () => {
   });
 });
 
-describe('_resetSession(', () => {
+describe('_handleResetSession(', () => {
   let mockConfirmModalElement;
 
   beforeEach(() => {
@@ -423,57 +437,127 @@ describe('_resetSession(', () => {
   afterEach(() => {
     mockConfirmModalElement = null;
   });
-  
-  it('should always return undefined', () => {
-    expect(sessionHeader._resetSession()).toBeUndefined();
-    expect(sessionHeader._resetSession(null)).toBeUndefined();
-    expect(sessionHeader._resetSession(0)).toBeUndefined();
-    expect(sessionHeader._resetSession('')).toBeUndefined();
-    expect(sessionHeader._resetSession({})).toBeUndefined();
-    expect(sessionHeader._resetSession([])).toBeUndefined();
-    expect(sessionHeader._resetSession('some value')).toBeUndefined();
-    expect(sessionHeader._resetSession(5)).toBeUndefined();
-  });
 
-  it('should call ConfirmModal.prototype.display(), add an event listener to the confirmModalElement, then return undefined', () => {
-    expect(sessionHeader._resetSession()).toBeUndefined();
+  it('should, if a session reference exists and changes have been made, call ConfirmModal.prototype.display(), then return undefined', () => {
+    SessionReference.referenceExists.mockImplementationOnce(() => { return true; });
+    SessionReference.changesMade.mockImplementationOnce(() => { return true; });
+
+    expect(sessionHeader._handleResetSession()).toBeUndefined();
+    expect(ConfirmModal.prototype.display).toHaveBeenCalledWith(`Are you sure you want to revert all the changes you've made?`, 'danger');
+  });
+  
+  it('should, if a session reference does not exist, then return undefined', () => {
+    SessionReference.referenceExists.mockImplementationOnce(() => { return false; });
+    SessionReference.changesMade.mockImplementationOnce(() => { return false; });
+
+    expect(sessionHeader._handleResetSession()).toBeUndefined();
     expect(ConfirmModal.prototype.display).toHaveBeenCalledWith('Are you sure you want to clear all the bills in this session?', 'danger');
   });
-  
-  it(`should, once an even listener has been added to the confirmModalElement, call ConfirmModal.prototype.remove() if the user makes an "exitClick"`, () => {
-    ConfirmModal.prototype.isExitClick.mockImplementation(() => { return true; });
-    const mockClickEvent = new MouseEvent('click');
 
-    sessionHeader._resetSession();
-    mockConfirmModalElement.dispatchEvent(mockClickEvent);
+  it(`should call ConfirmModal.prototype.display() and attach an eventListener to the confirm modal element. If an "exit click" is made by the user, it should remove the confirm modal element`, () => {
+    expect(sessionHeader._handleResetSession()).toBeUndefined();
+    expect(ConfirmModal.prototype.display).toHaveBeenCalledWith('Are you sure you want to clear all the bills in this session?', 'danger');
 
-    expect(ConfirmModal.prototype.isExitClick).toHaveBeenCalledWith(mockClickEvent);
+    const mockEvent = new MouseEvent('click');
+    ConfirmModal.prototype.isExitClick.mockImplementationOnce(() => { return true; });
+
+    mockConfirmModalElement.dispatchEvent(mockEvent);
     expect(ConfirmModal.prototype.remove).toHaveBeenCalled();
   });
 
-  it(`should, once an even listener has been added to the confirmModalElement, call a number of functions if the targeted element has an ID of "confirmModalConfirmBtn"`, () => {
-    ConfirmModal.prototype.isExitClick.mockImplementation(() => { return false; });
-    sessionInfo.reset.mockImplementationOnce(() => {});
+  it(`should call ConfirmModal.prototype.display() and attach an eventListener to the confirm modal element. If the user clicks the confirmModalConfirmBtn and a session reference exists, it should call _revertSession() and remove the confirm modal element`, () => {
+    SessionReference.referenceExists.mockImplementation(() => { return true; });
+    
+    expect(sessionHeader._handleResetSession()).toBeUndefined();
+    expect(ConfirmModal.prototype.display).toHaveBeenCalledWith('Are you sure you want to clear all the bills in this session?', 'danger');
 
-    const mockClickEvent = new MouseEvent('click');
-    Object.defineProperty(mockClickEvent, 'target', {
+    const mockEvent = new MouseEvent('click');
+    Object.defineProperty(mockEvent, 'target', {
       writable: false,
       value: {
         id: 'confirmModalConfirmBtn',
       },
     });
 
+    const _revertSessionSpy = jest.spyOn(sessionHeader, '_revertSession').mockImplementationOnce(() => {});
+
+    mockConfirmModalElement.dispatchEvent(mockEvent);
+    expect(_revertSessionSpy).toHaveBeenCalled();
+    expect(ConfirmModal.prototype.remove).toHaveBeenCalled();
+  });
+
+  it(`should call ConfirmModal.prototype.display() and attach an eventListener to the confirm modal element. If the user clicks the confirmModalConfirmBtn and a session reference does not exist, it should call _resetSession() and remove the confirm modal element`, () => {
+    SessionReference.referenceExists.mockImplementation(() => { return false; });
+    
+    expect(sessionHeader._handleResetSession()).toBeUndefined();
+    expect(ConfirmModal.prototype.display).toHaveBeenCalledWith('Are you sure you want to clear all the bills in this session?', 'danger');
+
+    const mockEvent = new MouseEvent('click');
+    Object.defineProperty(mockEvent, 'target', {
+      writable: false,
+      value: {
+        id: 'confirmModalConfirmBtn',
+      },
+    });
+
+    const _resetSessionSpy = jest.spyOn(sessionHeader, '_resetSession').mockImplementationOnce(() => {});
+
+    mockConfirmModalElement.dispatchEvent(mockEvent);
+    expect(_resetSessionSpy).toHaveBeenCalled();
+    expect(ConfirmModal.prototype.remove).toHaveBeenCalled();
+  });
+});
+
+describe('_revertSession()', () => {
+  beforeEach(() => {
+    delete window.sessionStorage;
+    Object.defineProperty(window, 'sessionStorage', {
+      writable: true,
+      value: {
+        getItem: () => { return JSON.stringify({ mockProperty: 'mockValue' }); },
+      },
+    });
+  });
+
+  afterEach(() => {
+    delete window.sessionStorage;
+    Object.defineProperty(window, 'sessionStorage', {
+      writable: true,
+      value: {},
+    });
+  });
+
+  it(`should fetch "originalSessionReference" from sessionStorage, parse it, call sessionInfo.revert() with the parsed object, call messagePopup(), dispatch a "render" event, dispatch a "sessionStarted" event, then return undefined`, () => {
+    const sessionStorageSpy = jest.spyOn(window.sessionStorage, 'getItem');
+    sessionInfo.revert.mockImplementationOnce(() => {});
+
+    const dispatchEventSpy = jest.spyOn(window, 'dispatchEvent').mockImplementation(() => {});
+    const mockRenderEvent = new Event('render');
+    const mockSessionStartedEvent = new Event('sessionStarted');
+    
+    expect(sessionHeader._revertSession()).toBeUndefined();
+    expect(sessionStorageSpy).toHaveBeenCalledWith('originalSessionReference');
+
+    expect(sessionInfo.revert).toHaveBeenCalledWith(JSON.parse(window.sessionStorage.getItem()));
+    expect(messagePopup).toHaveBeenCalledWith('Changes reverted', 'success');
+
+    expect(dispatchEventSpy).toHaveBeenCalledTimes(2);
+    expect(dispatchEventSpy).toHaveBeenCalledWith(mockRenderEvent);
+    expect(dispatchEventSpy).toHaveBeenCalledWith(mockSessionStartedEvent);
+  });
+});
+
+describe('_resetSession()', () => {
+  it(`should call sessionInfo.reset() and messagePopup(), dispatch a "render" event, then return undefined`, () => {
+    sessionInfo.reset.mockImplementationOnce(() => {});
+
     const dispatchEventSpy = jest.spyOn(window, 'dispatchEvent').mockImplementationOnce(() => {});
     const mockRenderEvent = new Event('render');
 
-    sessionHeader._resetSession();
-    mockConfirmModalElement.dispatchEvent(mockClickEvent);
-
-    expect(ConfirmModal.prototype.isExitClick).toHaveBeenCalledWith(mockClickEvent);
+    expect(sessionHeader._resetSession()).toBeUndefined();
     expect(sessionInfo.reset).toHaveBeenCalled();
     expect(messagePopup).toHaveBeenCalledWith('Session reset', 'success');
     expect(dispatchEventSpy).toHaveBeenCalledWith(mockRenderEvent);
-    expect(ConfirmModal.prototype.remove).toHaveBeenCalled();
   });
 });
 
@@ -817,44 +901,7 @@ describe('_addSession(loginToken)', () => {
   });
 });
 
-describe('_enableResetButton()', () => {
-  it('should always return undefined', () => {
-    expect(sessionHeader._enableResetButton()).toBeUndefined();
-    expect(sessionHeader._enableResetButton(null)).toBeUndefined();
-    expect(sessionHeader._enableResetButton(0)).toBeUndefined();
-    expect(sessionHeader._enableResetButton('')).toBeUndefined();
-    expect(sessionHeader._enableResetButton({})).toBeUndefined();
-    expect(sessionHeader._enableResetButton([])).toBeUndefined();
-    expect(sessionHeader._enableResetButton('some value')).toBeUndefined();
-    expect(sessionHeader._enableResetButton(5)).toBeUndefined();
-  });
 
-  it(`should add a "disabled" attribute and class to _resetSessionBtn if the session contains no bills`, () => {
-    sessionInfo.billsPaid = [];
-    sessionInfo.billsToPay = [];
-
-    sessionHeader._resetSessionBtn.removeAttribute('disabled');
-    sessionHeader._resetSessionBtn.classList.remove('disabled');
-
-    sessionHeader._enableResetButton();
-
-    expect(sessionHeader._resetSessionBtn.getAttribute('disabled')).toBe('');
-    expect(sessionHeader._resetSessionBtn.classList.contains('disabled')).toBe(true);
-  });
-  
-  it(`should remove the "disabled" attribute and class from _resetSessionBtn if the session contains one or more bills`, () => {
-    const mockBill = { mockProperty: 'mockValue' };
-    sessionInfo.billsPaid.push(mockBill);
-
-    sessionHeader._resetSessionBtn.setAttribute('disabled', '');
-    sessionHeader._resetSessionBtn.classList.add('disabled');
-
-    sessionHeader._enableResetButton();
-
-    expect(sessionHeader._resetSessionBtn.getAttribute('disabled')).toBeNull();
-    expect(sessionHeader._resetSessionBtn.classList.contains('disabled')).toBe(false);
-  });
-});
 
 describe('_handleSaveButtonStatus()', () => {
   it(`should try to locate a loginToken, and if there isn't one, it should set an attribute of "title" with a value of "Available when logged in" to _saveSessionBtn, disabled the button, stop the function, and return undefined`, () => {
@@ -949,5 +996,25 @@ describe('_disableSaveBtn()', () => {
     
     expect(sessionHeader._saveSessionBtn.getAttribute('disabled')).toBe('true');
     expect(sessionHeader._saveSessionBtn.classList.contains('disabled')).toBe(true);
+  });
+});
+
+describe('_displayBillLimitWarning()', () => {
+  it(`should remove the "hidden" class from _sessionHeaderMessage if the bill limit has been reached, then return undefined`, () => {
+    sessionInfo.billLimitReached.mockImplementationOnce(() => { return true; });
+    sessionHeader._sessionHeaderMessage.classList.add('hidden');
+
+    expect(sessionHeader._displayBillLimitWarning()).toBeUndefined();
+    expect(sessionHeader._sessionHeaderMessage.classList.contains('hidden')).toBe(false);
+    expect(sessionInfo.billLimitReached).toHaveBeenCalled();
+  });
+  
+  it(`should add a "hidden" class to _sessionHeaderMessage if the bill limit has not been reached, then return undefined`, () => {
+    sessionInfo.billLimitReached.mockImplementationOnce(() => { return false; });
+    sessionHeader._sessionHeaderMessage.classList.remove('hidden');
+
+    expect(sessionHeader._displayBillLimitWarning()).toBeUndefined();
+    expect(sessionHeader._sessionHeaderMessage.classList.contains('hidden')).toBe(true);
+    expect(sessionInfo.billLimitReached).toHaveBeenCalled();
   });
 });
