@@ -30,6 +30,9 @@ class SessionHeader {
     this._resetSessionBtn = document.querySelector('#resetSessionBtn');
     this._saveSessionBtn = document.querySelector('#saveSessionBtn');
     
+    this._sessionHeaderMessage = document.querySelector('.session-header-message');
+    this._billLimitSpan = document.querySelector('#billLimitSpan');
+    
     this._loadEventListeners();
   };
 
@@ -45,14 +48,18 @@ class SessionHeader {
   _render() {
     this._updateTotals();
     this._updateDebtResult();
-    this._enableResetButton();
+    this._handleResetButtonStatus();
     this._handleSaveButtonStatus();
+    this._displayBillLimitWarning();
   };
 
   _handleSessionStartedEvents() {
     this._setSharedWith();
     this._setCurrency();
     this._handleSaveButtonStatus();
+    this._handleResetButtonStatus();
+
+    this._billLimitSpan.textContent = sessionInfo.billLimit;
   };
 
   _updateTotals() {
@@ -94,7 +101,6 @@ class SessionHeader {
   };
 
   _setCurrency() {
-    // This will set the currency throughout the page if they exist, not just the header.
     for(const span of this._currencySpans) {
       span.textContent = sessionInfo.currency
     };
@@ -102,7 +108,7 @@ class SessionHeader {
 
   _handleSessionHeaderControlsClickEvents(e) {
     if(e.target.id === 'resetSessionBtn') {
-      this._resetSession();
+      this._handleResetSession();
       return ;
     };
 
@@ -112,11 +118,9 @@ class SessionHeader {
     };
   };
 
-  _resetSession() {
-    const extraOption = { btnName: 'Revert changes instead', btnID: 'revertChanges' };
-    
+  _handleResetSession() {
     if(SessionReference.referenceExists() && SessionReference.changesMade()) {
-      confirmModal.display('Are you sure you want to clear all the bills in this session?', 'danger', extraOption);
+      confirmModal.display(`Are you sure you want to revert all the changes you've made?`, 'danger');
       
     } else {
       confirmModal.display('Are you sure you want to clear all the bills in this session?', 'danger');
@@ -131,28 +135,37 @@ class SessionHeader {
       };
 
       if(e.target.id === 'confirmModalConfirmBtn') {
-        sessionInfo.reset();
-        messagePopup('Session reset', 'success');
-        window.dispatchEvent(new Event('render'));
+        if(SessionReference.referenceExists()) {
+          this._revertSession();
+          confirmModalElement.removeEventListener('click', eventHandler);
+          confirmModal.remove();
+          return ;
+        };
         
+        this._resetSession();
         confirmModalElement.removeEventListener('click', eventHandler);
         confirmModal.remove();
         return ;
       };
+    
+    }.bind(this));
+  };
 
-      if(e.target.id === 'revertChanges') {
-        const originalSessionReferenceJSON = sessionStorage.getItem('originalSessionReference');
-        const originalSessionReference = JSON.parse(originalSessionReferenceJSON);
-        
-        sessionInfo.revert(originalSessionReference);
-        messagePopup('Changes reverted', 'success');
-        window.dispatchEvent(new Event('render'));
+  _revertSession() {
+    const originalSessionReferenceJSON = sessionStorage.getItem('originalSessionReference');
+    const originalSessionReference = JSON.parse(originalSessionReferenceJSON);
+    
+    sessionInfo.revert(originalSessionReference);
+    messagePopup('Changes reverted', 'success');
 
-        confirmModalElement.removeEventListener('click', eventHandler);
-        confirmModal.remove();
-        return ;
-      };
-    });
+    window.dispatchEvent(new Event('render'));
+    window.dispatchEvent(new Event('sessionStarted'));
+  };
+
+  _resetSession() {
+    sessionInfo.reset();
+    messagePopup('Session reset', 'success');
+    window.dispatchEvent(new Event('render'));
   };
 
   async _handleSaveSession() {
@@ -270,21 +283,37 @@ class SessionHeader {
     };
   };
 
-  _enableResetButton() {
-    if(SessionReference.referenceExists() && SessionReference.changesMade()) {
-      this._resetSessionBtn.removeAttribute('disabled');
-      this._resetSessionBtn.classList.remove('disabled');
-      return ;
-    };
-    
-    if(sessionInfo.billsPaid.length === 0 && sessionInfo.billsToPay.length === 0) {
-      this._resetSessionBtn.setAttribute('disabled', '');
-      this._resetSessionBtn.classList.add('disabled');
+  _handleResetButtonStatus() {
+    if(SessionReference.referenceExists()) {
+      this._resetSessionBtn.classList.add('revert');
+      
+      if(SessionReference.changesMade()) {
+        this._enableResetButton('Revert');
+        return ;
+      };
+
+      this._disableResetButton('Revert');
       return ;
     };
 
+    if(sessionInfo.isEmpty()) {
+      this._disableResetButton();
+      return ;
+    };
+
+    this._enableResetButton();
+  };
+
+  _enableResetButton(textContent = 'Reset') {
     this._resetSessionBtn.removeAttribute('disabled');
     this._resetSessionBtn.classList.remove('disabled');
+    this._resetSessionBtn.textContent = textContent;
+  };
+
+  _disableResetButton(textContent = 'Reset') {
+    this._resetSessionBtn.setAttribute('disabled', '');
+    this._resetSessionBtn.classList.add('disabled');
+    this._resetSessionBtn.textContent = textContent;
   };
   
   _handleSaveButtonStatus() {
@@ -326,6 +355,15 @@ class SessionHeader {
     
     this._saveSessionBtn.setAttribute('disabled', 'true');
     this._saveSessionBtn.classList.add('disabled');
+  };
+
+  _displayBillLimitWarning() {
+    if(sessionInfo.billLimitReached()) {
+      this._sessionHeaderMessage.classList.remove('hidden');
+      return ;
+    };
+
+    this._sessionHeaderMessage.classList.add('hidden');
   };
 };
 

@@ -948,3 +948,51 @@ describe('_enableClearButtons()', () => {
     expect(secondaryClearListBtn.classList.contains('disabled')).toBe(false);
   });
 });
+
+describe('_enableAddBillButtons()', () => {
+  let addBillButtons;
+
+  beforeEach(() => {
+    addBillButtons = document.querySelectorAll('.addBillBtn');
+  });
+
+  afterEach(() => {
+    addBillButtons = null;
+  });
+  
+  it(`should, if the bill limit has been reached, add to the addBill buttons a class of "disabled", an attribute of "disabled", and an attribute of "title" equal to "Bill limit reached", then return undefined`, () => {
+    sessionInfo.billLimitReached.mockImplementationOnce(() => { return true; });
+    
+    for(const btn of addBillButtons) {
+      btn.removeAttribute('disabled');
+      btn.removeAttribute('title');
+      btn.classList.remove('disabled');
+    };
+
+    expect(sessionContent._enableAddBillButtons()).toBeUndefined();
+
+    for(const btn of addBillButtons) {
+      expect(btn.getAttribute('disabled')).toBe('');
+      expect(btn.getAttribute('title')).toBe('Bill limit reached');
+      expect(btn.classList.contains('disabled')).toBe(true);
+    };
+  });
+
+  it(`should, if the bill limit has not been reached, remove from the addBill buttons the class of "disabled", the attribute of "disabled", and the attribute of "title", then return undefined`, () => {
+    sessionInfo.billLimitReached.mockImplementationOnce(() => { return false; });
+    
+    for(const btn of addBillButtons) {
+      btn.setAttribute('disabled', '');
+      btn.setAttribute('title', 'Bill limit reached');
+      btn.classList.add('disabled');
+    };
+
+    expect(sessionContent._enableAddBillButtons()).toBeUndefined();
+
+    for(const btn of addBillButtons) {
+      expect(btn.getAttribute('disabled')).toBeNull();
+      expect(btn.getAttribute('title')).toBeNull();
+      expect(btn.classList.contains('disabled')).toBe(false);
+    };
+  });
+});

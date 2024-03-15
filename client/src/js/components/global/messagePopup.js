@@ -1,4 +1,4 @@
-function messagePopup(message, type = 'cta') {
+function messagePopup(message, type = 'cta', durationMilliseconds = 200) {
   if(typeof message !== 'string') {
     message = '';
   };
@@ -25,7 +25,7 @@ function messagePopup(message, type = 'cta') {
 
   if(document.querySelector('.popup')) {
     document.querySelector('.popup').remove();
-  }
+  };
 
   popup.appendChild(popupMessage);
   document.body.appendChild(popup);
@@ -38,7 +38,7 @@ function messagePopup(message, type = 'cta') {
 
   setTimeout(() => {
     popup.style.transform = 'translateY(-10rem)';
-    setTimeout(() => popup.remove(), 200);
+    setTimeout(() => popup.remove(), durationMilliseconds);
   }, 2000);
 };
 

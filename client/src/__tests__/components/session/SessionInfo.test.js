@@ -9,6 +9,7 @@ afterEach(() => {
   sessionInfo.sharedWithTotal = 0;
   sessionInfo.billsPaid = [];
   sessionInfo.billsToPay = [];
+  sessionInfo.billLimit = 100;
 
   sessionInfo.createdOn = undefined;
   sessionInfo.sessionID = undefined;
@@ -140,6 +141,23 @@ describe('set(session)', () => {
   });
 });
 
+describe('revert(sessionReference)', () => {
+  it('should set billsPaid and billsToPay to empty arrays, call set() with the sessionReference, then return undefined', () => {
+    const mockSessionReference = { mockProperty: 'mockValue' };
+    const setSpy = jest.spyOn(sessionInfo, 'set').mockImplementationOnce(() => {});
+
+    const mockBill = { mockProperty: 'mockValue' };
+    sessionInfo.billsPaid.push(mockBill);
+    sessionInfo.billsToPay.push(mockBill);
+
+    expect(sessionInfo.revert(mockSessionReference)).toBeUndefined();
+    expect(sessionInfo.billsPaid.length).toBe(0);
+    expect(sessionInfo.billsToPay.length).toBe(0);
+    expect(setSpy).toHaveBeenCalledWith(mockSessionReference);
+  });
+});
+
+
 describe('reset()', () => {
   it('should reset set both totals to 0 and clear all the bills', () => {
     const mockBill = { splitValue: 200 };
@@ -173,5 +191,25 @@ describe('isEmpty()', () => {
     sessionInfo.billsPaid.push(mockBill);
 
     expect(sessionInfo.isEmpty()).toBe(false);
+  });
+});
+
+describe('billLimitReached()', () => {
+  it('should combine the total amount of bills, and if the total is equal to or higher than _billLimit, return true', () => {
+    const mockBill = { mockProperty: 'mockValue' };
+    sessionInfo.billsPaid.push(mockBill);
+    sessionInfo.billsToPay.push(mockBill);
+    sessionInfo.billLimit = 2;
+
+    expect(sessionInfo.billLimitReached()).toBe(true);
+  });
+
+  it('should combine the total amount of bills, and if the total is less than _billLimit, return false', () => {
+    const mockBill = { mockProperty: 'mockValue' };
+    sessionInfo.billsPaid.push(mockBill);
+    sessionInfo.billsToPay.push(mockBill);
+    sessionInfo.billLimit = 5;
+
+    expect(sessionInfo.billLimitReached()).toBe(false);
   });
 });

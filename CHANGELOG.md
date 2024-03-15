@@ -1,5 +1,32 @@
 # Changelog
 
+
+---
+### [0.40.2] (2024-03-15)
+
+
+### Features
+
+* Reworked the reset button in the session header
+  * If a user is editing a session, the button will be renamed to "Revert", and will only function as a way of reverting any changes made in relation to the original session that is being edited
+    * Reverting a session will affect the sharedWith value as well
+<br>
+  * If a user is not editing a session, regardless of whether or not they're logged in, the button will be named "Reset", and will function as a way of clearing all the bills in the session
+    * Resetting a session has no affect on the sharedWith value, as there's no stored value to reset to
+<br>
+<bv>
+* `messagePopup()` now accepts a third parameter called `durationMilliseconds`, which is set to 200 by default
+  * This will help give the function more utility
+<br>
+* Added a total bill limit of 100 bills per session
+  * The user will be notified when the limit is reached through a message in the header, and the add-bill buttons will be disabled
+
+
+### Bug Fixes
+
+* Fixed reverting a session not revering the sharedWith value
+
+
 ---
 ### [0.40.1] (2024-03-13)
 
@@ -8,8 +35,6 @@
 
 * If a user is editing a session, the session's reset button will now also give the user an option to revert all the changes made in relation to the original session, in addition to the two existing options of canceling the action or proceeding with clearing all the bills
   * This feature doesn't make a lot of sense when a session that has been cleared is fully emptied. Further improvements coming in the next patch
-
-
 
 
 ### Bug Fixes

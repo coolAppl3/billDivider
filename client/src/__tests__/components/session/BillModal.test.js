@@ -358,7 +358,7 @@ describe('_addNewBill()', () => {
     expect(secondAddedBill.directlyOwed).toBeTruthy();
   });
 
-  it(`should, if all input values are valid, call hide() and messagePopup(), as well as dispatch two events: "updateSessionInfo" and "render"`, () => {
+  it(`should, if all input values are valid, call _hide() and messagePopup(), as well as dispatch two events: "updateSessionInfo" and "render"`, () => {
     billModal._billModalForm.setAttribute('data-bill-owner', 'main');
     billModal._directlyOwedCheckbox.classList.remove('checked');
 

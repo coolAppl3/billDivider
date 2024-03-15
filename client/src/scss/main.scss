@@ -545,6 +545,25 @@
         }
       }
     }
+
+    &-message {
+      padding: 1rem 2rem;
+      display: block;
+
+      &.hidden {
+        display: none;
+      }
+
+      .content-p {
+        background: $main;
+        color: $danger;
+        margin: 0;
+        padding: 1rem;
+        font-size: 1.6rem;
+        border-radius: 3px;
+        text-align: center;
+      }
+    }
   }
 
   &-content {

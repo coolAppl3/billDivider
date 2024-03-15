@@ -22,6 +22,7 @@ class SessionContent {
   _loadEventListeners() {
     window.addEventListener('render', this._render.bind(this));
     window.addEventListener('sessionStarted', this._scrollContentIntoView.bind(this));
+    window.addEventListener('sessionStarted', this._enableAddBillButtons.bind(this));
     
     this._sessionContent.addEventListener('click', this._handleSessionContentClickEvents.bind(this));
     this._sessionContent.addEventListener('keyup', this._handleSessionContentKeyEvents.bind(this));
@@ -82,6 +83,7 @@ class SessionContent {
     this._emptyContentList(this._secondaryContentList);
     this._loadBills();
     this._enableClearButtons();
+    this._enableAddBillButtons();
   };
 
   _emptyContentList(contentList) {
@@ -287,6 +289,26 @@ class SessionContent {
     } else {
       secondaryClearListBtn.removeAttribute('disabled');
       secondaryClearListBtn.classList.remove('disabled');
+    };
+  };
+
+  _enableAddBillButtons() {
+    const addBillButtons = document.querySelectorAll('.addBillBtn');
+    
+    if(sessionInfo.billLimitReached()) {
+      for(const btn of addBillButtons) {
+        btn.setAttribute('disabled', '');
+        btn.setAttribute('title', 'Bill limit reached');
+        btn.classList.add('disabled');
+      };
+
+      return ;
+    };
+
+    for(const btn of addBillButtons) {
+      btn.removeAttribute('disabled');
+      btn.removeAttribute('title');
+      btn.classList.remove('disabled');
     };
   };
 

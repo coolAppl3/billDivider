@@ -23,20 +23,19 @@ afterEach(() => {
   sessionInfo.sharedWithTotal = 0;
   sessionInfo.billsPaid = [];
   sessionInfo.billsToPay = [];
+  sessionInfo.billLimit = 100;
 
   sessionInfo.createdOn = undefined;
   sessionInfo.sessionID = undefined;
 });
 
 describe('set(session)', () => {
-  it('should serialize a deep copy of the object passed in, store it in sessionStorage, and then return undefined', () => {
+  it('should serialize a deep copy of the object passed in, store it in sessionStorage, and then return undefined. If the session object does not contain a billLimit value, it should create one and set to sessionInfo.billLimit', () => {
     const sessionStorageSpy = jest.spyOn(window.sessionStorage, 'setItem');
-
     const mockSession = { mockProperty: 'mockValue' };
-    const serializedCopy = JSON.parse(JSON.stringify(mockSession));
 
     expect(SessionReference.set(mockSession)).toBeUndefined();
-    expect(sessionStorageSpy).toHaveBeenCalledWith('originalSessionReference', JSON.stringify(serializedCopy));
+    expect(sessionStorageSpy).toHaveBeenCalledWith('originalSessionReference', JSON.stringify({ mockProperty: 'mockValue', billLimit: sessionInfo.billLimit }));
   });
 });
 
