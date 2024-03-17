@@ -39,18 +39,21 @@ const startModalHTML = `
             <div
               class="options-container-item selected"
               data-currency="RSD"
+              tabindex="0"
             >
               RSD
             </div>
             <div
               class="options-container-item"
               data-currency="EUR"
+              tabindex="0"
             >
               EUR
             </div>
             <div
               class="options-container-item"
               data-currency="USD"
+              tabindex="0"
             >
               USD
             </div>
@@ -66,6 +69,16 @@ const startModalHTML = `
           >
             Start session
           </button>
+        </div>
+
+        <div class="form-group btn-div">
+          <p
+            class="btn btn-border-light hidden"
+            tabindex="0"
+            id="startModalCancelBtn"
+          >
+            Cancel
+          </p>
         </div>
       </form>
     </div>
@@ -514,5 +527,37 @@ describe('_collapseStartModal()', () => {
     expect(initSession._startModalStartBtn.textContent).toBe('Start session');
     
     jest.now();
+  });
+});
+
+describe('_handleStartModalCancelBtnKeyEvents(e)', () => {
+  it('should not call _cancelStartModal(), if the pressed key is not Enter, then return undefined', () => {
+    const _cancelStartModalSpy = jest.spyOn(initSession, '_cancelStartModal').mockImplementationOnce(() => {});
+    const mockEvent = { key: 'G' };
+
+    expect(initSession._handleStartModalCancelBtnKeyEvents(mockEvent)).toBeUndefined();
+    expect(_cancelStartModalSpy).not.toHaveBeenCalled();
+  });
+  
+  it('should call _cancelStartModal(), if the pressed key is Enter, then return undefined', () => {
+    const _cancelStartModalSpy = jest.spyOn(initSession, '_cancelStartModal').mockImplementationOnce(() => {});
+    const mockEvent = { key: 'Enter' };
+
+    expect(initSession._handleStartModalCancelBtnKeyEvents(mockEvent)).toBeUndefined();
+    expect(_cancelStartModalSpy).toHaveBeenCalled();
+  });
+});
+
+describe('_cancelStartModal()', () => {
+  it('should call a number of functions and return undefined', () => {
+    const _collapseStartModalSpy = jest.spyOn(initSession, '_collapseStartModal').mockImplementationOnce(() => {});
+    const _displayMainSessionElementSpy = jest.spyOn(initSession, '_displayMainSessionElement').mockImplementationOnce(() => {});
+    const _reselectCurrentCurrencySpy = jest.spyOn(initSession, '_reselectCurrentCurrency').mockImplementationOnce(() => {});
+
+    expect(initSession._cancelStartModal()).toBeUndefined();
+
+    expect(_collapseStartModalSpy).toHaveBeenCalled();
+    expect(_displayMainSessionElementSpy).toHaveBeenCalled();
+    expect(_reselectCurrentCurrencySpy).toHaveBeenCalled();
   });
 });

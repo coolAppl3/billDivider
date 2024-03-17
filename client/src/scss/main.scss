@@ -96,13 +96,6 @@
       .btn-container {
         display: flex;
         align-items: center;
-  
-        .btn-div {
-  
-          &:first-child {
-            margin-right: 1rem;
-          }
-        }
       }
     }
   }
@@ -729,6 +722,22 @@
 
     .form-group {
 
+      &:nth-child(3) {
+        margin-bottom: 1rem;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+
+        .btn {
+
+          &.hidden {
+            display: none;
+          }
+        }
+      }
+      
+
       p {
         display: block;
         font-size: 1.4rem;
@@ -767,16 +776,7 @@
       .btn {
         width: 100%;
       }
-
-      &:last-child {
-        margin-bottom: 0;
-        display: flex;
-        flex-direction: column;
-
-        button {
-          margin-bottom: 1rem;
-        }
-      }
+      
     }
   }
 }

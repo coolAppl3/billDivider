@@ -2,6 +2,17 @@
 
 
 ---
+### [0.40.4] (2024-03-17)
+
+
+### Features
+
+* Added a cancel button to the session's start modal to make it more intuitive
+* Removed the "Sign up" button from the hero section in `index.html`, as there's no need for it considering one is available in the navbar and is now always visible if the user is logged in
+  * Removed the `Index` from `index.js` as it no longer serves a purpose
+
+
+---
 ### [0.40.3] (2024-03-17)
 
 

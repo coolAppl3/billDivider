@@ -20,12 +20,15 @@ class InitSession {
     this._optionsContainer = document.querySelector('.options-container');
     this._optionsContainerItems = document.querySelectorAll('.options-container-item');
     this._startModalStartBtn = document.querySelector('#startModalStartBtn');
+    this._startModalCancelBtn = document.querySelector('#startModalCancelBtn');
 
     this._loadEventListeners();
   };
 
   _loadEventListeners() {
     this._startModalForm.addEventListener('submit', this._start.bind(this));
+    this._startModalCancelBtn.addEventListener('click', this._cancelStartModal.bind(this));
+    this._startModalCancelBtn.addEventListener('keyup', this._handleStartModalCancelBtnKeyEvents.bind(this));
 
     this._optionsContainer.addEventListener('click', this._changeCurrency.bind(this));
     this._optionsContainer.addEventListener('keyup', this._handleOptionsContainerKeyEvents.bind(this));
@@ -134,8 +137,9 @@ class InitSession {
   };
 
   _editSharedWith() {
-    this._displayStartModal();
     this._startModalStartBtn.textContent = 'Update';
+    this._startModalCancelBtn.classList.remove('hidden');
+    this._displayStartModal();
   };
 
   _handleOptionsContainerKeyEvents(e) {
@@ -183,6 +187,7 @@ class InitSession {
     setTimeout(() => {
       this._startModal.style.display = 'none'
       this._startModalStartBtn.textContent = 'Start session';
+      this._startModalCancelBtn.classList.add('hidden');
     }, 200);
   };
 
@@ -201,6 +206,25 @@ class InitSession {
     const sessionElement = document.querySelector('.session');
     sessionElement.style.opacity = '0';
     setTimeout(() => sessionElement.style.display = 'none', 200);
+  };
+
+  _reselectCurrentCurrency() {
+    const correctCurrencyElement = document.querySelector(`[data-currency="${sessionInfo.currency}"]`);
+    
+    this._optionsContainerItems.forEach((item) => item.classList.remove('selected'));
+    correctCurrencyElement.classList.add('selected');
+  };
+
+  _handleStartModalCancelBtnKeyEvents(e) {
+    if(e.key === 'Enter') {
+      this._cancelStartModal();
+    };
+  };
+
+  _cancelStartModal() {
+    this._collapseStartModal();
+    this._displayMainSessionElement();
+    this._reselectCurrentCurrency();
   };
 };
 
