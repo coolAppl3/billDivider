@@ -70,7 +70,7 @@ const navbarHTML = `
             <a
               href="signIn.html"
               class="btn btn-border-light"
-              id="sign-in-btn"
+              id="linksContainerFirstBtn"
               >Sign in</a
             >
           </div>
@@ -79,32 +79,10 @@ const navbarHTML = `
             <a
               href="signUp.html"
               class="btn btn-cta"
-              id="sign-up-btn"
+              id="linksContainerSecondBtn"
               >Sign up</a
             >
           </div>
-        </div>
-
-        <div
-          id="user-menu-btn"
-          class="hidden"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 448 512"
-            class="svg-icon"
-            tabindex="0"
-          >
-            <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-            <path
-              d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"
-            />
-          </svg>
-
-          <ul class="user-menu-options hidden">
-            <li><a href="history.html">History</a></li>
-            <li><a href="index.html">Log out</a></li>
-          </ul>
         </div>
       </div>
     </div>
@@ -125,133 +103,125 @@ afterEach(() => {
   jest.resetAllMocks();
 });
 
-describe('_displayUserMenuBtn()', () => {
-  it('should always return undefined', () => {
-    expect(navbar._displayUserMenuBtn()).toBeUndefined();
-    expect(navbar._displayUserMenuBtn(null)).toBeUndefined();
-    expect(navbar._displayUserMenuBtn(0)).toBeUndefined();
-    expect(navbar._displayUserMenuBtn('')).toBeUndefined();
-    expect(navbar._displayUserMenuBtn({})).toBeUndefined();
-    expect(navbar._displayUserMenuBtn([])).toBeUndefined();
-    expect(navbar._displayUserMenuBtn('some value')).toBeUndefined();
-    expect(navbar._displayUserMenuBtn(5)).toBeUndefined();
+describe('_updateLinksContainer', () => {
+  it('should return undefined and stop the function if there is no loginToken', () => {
+    locateLoginToken.mockImplementationOnce(() => { return false; });
+
+    expect(navbar._updateLinksContainer()).toBeUndefined();
+    expect(locateLoginToken).toHaveBeenCalled();
   });
   
-  it('should keep the _userMenuBtn hidden if there is no loginToken in the browser', () => {
-    // Mocking the lack of a loginToken cookie in the browser
-    locateLoginToken.mockReturnValueOnce(false);
-    
-    navbar._displayUserMenuBtn();
-    expect(navbar._userMenuBtn.classList.contains('hidden')).toBeTruthy();
-  });
+  it('should, if a loginToken is found, update the sign in and sign up buttons and turn them into sign out and history buttons, then return undefined', () => {
+    locateLoginToken.mockImplementationOnce(() => { return 'mockLoginToken'; });
+    expect(navbar._updateLinksContainer()).toBeUndefined();
 
-  it('should reveal the _userMenuBtn, and hide the _linksContainer if there is a valid loginToken in the browser', () => {
-    // Mocking the existence of a loginToken cookie in the browser
-    locateLoginToken.mockReturnValueOnce(true);
-    
-    navbar._displayUserMenuBtn();
-    expect(navbar._userMenuBtn.classList.contains('hidden')).toBeFalsy();
-    expect(navbar._linksContainer.classList.contains('hidden')).toBeTruthy();
+    expect(navbar._linksContainerFirstBtn.textContent).toBe('Sign out');
+    expect(navbar._linksContainerFirstBtn.href).toBe('http://localhost/#');
+    expect(navbar._linksContainerFirstBtn.classList.contains('signOut')).toBe(true);
+
+    expect(navbar._linksContainerSecondBtn.textContent).toBe('History');
+    expect(navbar._linksContainerSecondBtn.href).toBe('http://localhost/history.html');
+    expect(navbar._linksContainerSecondBtn.className).toBe('btn btn-light');
   });
   
 });
 
-describe('_displayUserMenu()', () => {
-  it('should always return undefined', () => {
-    expect(navbar._displayUserMenu()).toBeUndefined();
-    expect(navbar._displayUserMenu(null)).toBeUndefined();
-    expect(navbar._displayUserMenu(0)).toBeUndefined();
-    expect(navbar._displayUserMenu('')).toBeUndefined();
-    expect(navbar._displayUserMenu({})).toBeUndefined();
-    expect(navbar._displayUserMenu([])).toBeUndefined();
-    expect(navbar._displayUserMenu('some value')).toBeUndefined();
-    expect(navbar._displayUserMenu(5)).toBeUndefined();
+
+describe('_handleLinksContainerEvents(e)', () => {
+  beforeEach(() => {
+    delete window.location;
+    Object.defineProperty(window, 'location', {
+      writable: true,
+      value: {
+        href: 'index.html',
+      },
+    });
   });
   
-  it('should remove the hidden class from _userMenuOptions if the element has it', () => {
-    navbar._displayUserMenu();
-    expect(navbar._userMenuOptions.classList.contains('hidden')).toBeFalsy();
+  it(`should, if the event object target does not contain a class of "signOut", set window.location.href to e.target.href, then return undefined`, () => {
+    const mockEvent = {
+      preventDefault: () => {},
+      target: {
+        href: 'mockHref',
+        classList: {
+          contains: () => { return false; },
+        },
+      },
+    };
+
+    expect(navbar._handleLinksContainerEvents(mockEvent)).toBeUndefined();
+    expect(window.location.href).toBe('mockHref');
   });
 
-  it('should add the hidden class from _userMenuOptions if the element does not have it', () => {
-    expect(navbar._userMenuOptions.classList.contains('hidden')).toBeTruthy();
+  it(`should, if the event object target contains a class of "signOut", call _signOut(), then return undefined`, () => {
+    const mockEvent = {
+      preventDefault: () => {},
+      target: {
+        href: 'mockHref',
+        classList: {
+          contains: () => { return true; },
+        },
+      },
+    };
+
+    const _signOutSpy = jest.spyOn(navbar, '_signOut').mockImplementationOnce(() => {});
+    
+    expect(navbar._handleLinksContainerEvents(mockEvent)).toBeUndefined();
+    expect(window.location.href).toBe('index.html');
+    expect(_signOutSpy).toHaveBeenCalled();
   });
 });
 
-describe('_logout(e)', () => {
-  // Appending a confirmModal element before every test because an event listener is appended to it at some stage, and jest can't mock that behavior
-
-  let confirmModalElement;
+describe('_signOut()', () => {
+  let mockConfirmModalElement;
 
   beforeEach(() => {
-    confirmModalElement = document.createElement('div');
-    confirmModalElement.className = 'confirm-modal';
-    document.body.appendChild(confirmModalElement);
+    mockConfirmModalElement = document.createElement('div');
+    mockConfirmModalElement.className = 'confirm-modal';
+    document.body.appendChild(mockConfirmModalElement);
   });
 
   afterEach(() => {
-    confirmModalElement.remove();
-    confirmModalElement = null;
+    mockConfirmModalElement.remove();
+    mockConfirmModalElement = null;
   });
 
-  it('should always return undefined, as long as an event is passed in', () => {
-    const mockEvent = { preventDefault: jest.fn() };
-    navbar._logout(mockEvent);
-    expect(navbar._logout(mockEvent)).toBeUndefined();
+  it('should call ConfirmModal.prototype.display(), append an event listener to the confirm modal element, then return undefined', () => {
+
+    expect(navbar._signOut()).toBeUndefined();
+    expect(ConfirmModal.prototype.display).toHaveBeenCalledWith('Are you sure you want to sign out?');
   });
 
-  it(`should always call confirmModal.display with "Are you sure you want to log out?"`, () => {
-    const mockEvent = { preventDefault: jest.fn() };
-    navbar._logout(mockEvent);
-    expect(ConfirmModal.prototype.display).toHaveBeenCalledWith('Are you sure you want to log out?');
-  });
-
-  it(`should always call confirmModal.display with "Are you sure you want to log out?"`, () => {
-    navbar._logoutBtn.dispatchEvent(new MouseEvent('click'));
-    expect(ConfirmModal.prototype.display).toHaveBeenCalledWith('Are you sure you want to log out?');
-  });
-
-  it('should call ConfirmModal.remove() if the user clicks the cancel button, or outside the confirm-modal-container', () => {
-    navbar._logoutBtn.dispatchEvent(new MouseEvent('click'));
+  it(`should, after appending an event listener to the confirm modal element, and assuming an "exit click" is made, call ConfirmModal.prototype.remove() and stop the function`, () => {
+    const mockEvent = new MouseEvent('click');
+    ConfirmModal.prototype.isExitClick.mockImplementationOnce(() => { return true; });
     
-    ConfirmModal.prototype.isExitClick.mockReturnValueOnce(true); // mocking an "exit click"
-    confirmModalElement.dispatchEvent(new MouseEvent('click'));
-
+    navbar._signOut();
+    mockConfirmModalElement.dispatchEvent(mockEvent);
+    
+    expect(ConfirmModal.prototype.isExitClick).toHaveBeenCalledWith(mockEvent);
     expect(ConfirmModal.prototype.remove).toHaveBeenCalled();
   });
-
-  it(`should call the following functions if the user clicks the confirm button:
-
-    confirmModal.remove();
-    LoadingModal.display();
-    cookies.remove('loginToken');
-    redirectAfterDelayMillisecond('index.html', 1000, 'Signed out successfully', 'success');
-  `, () => {
-    navbar._logoutBtn.dispatchEvent(new MouseEvent('click'));
-    
-    // Mocking the confirm button being pressed in the Confirm Modal
-    const confirmMouseClickEvent = new MouseEvent('click');
-
-    // Mocking a target.id value
-    Object.defineProperty(confirmMouseClickEvent, 'target', {
+  
+  it(`should, after appending an event listener to the confirm modal element, and assuming the user clicks the confirmModalConfirmBtn, call ConfirmModal.prototype.remove(), LoadingModal.display(), Cookies.prototype.remove('loginToken), and redirectAfterDelayMilliseconds()`, () => {
+    const mockEvent = new MouseEvent('click');
+    Object.defineProperty(mockEvent, 'target', {
       writable: false,
       value: {
         id: 'confirmModalConfirmBtn',
       },
     });
     
-    // Dispatching the mock event
-    confirmModalElement.dispatchEvent(confirmMouseClickEvent);
-
-
-    // Functions that should be called:
-    expect(ConfirmModal.prototype.remove).toHaveBeenCalled();
+    ConfirmModal.prototype.isExitClick.mockImplementationOnce(() => { return false; });
+    Cookies.prototype.remove.mockImplementationOnce(() => {});
     
-    // Spying on a static method in Loading Modal
-    const LoadingModalSpy = jest.spyOn(LoadingModal, 'display');
-    expect(LoadingModalSpy).toHaveBeenCalled();
-
-    expect(Cookies.prototype.remove).toHaveBeenCalled();
+    navbar._signOut();
+    mockConfirmModalElement.dispatchEvent(mockEvent);
+    
+    expect(ConfirmModal.prototype.isExitClick).toHaveBeenCalledWith(mockEvent);
+    expect(ConfirmModal.prototype.remove).toHaveBeenCalled();
+    expect(LoadingModal.display).toHaveBeenCalled();
+    expect(Cookies.prototype.remove).toHaveBeenCalledWith('loginToken');
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('index.html', 1000, 'Signed out successfully', 'success');
   });
 });

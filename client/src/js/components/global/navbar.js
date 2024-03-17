@@ -11,71 +11,65 @@ const confirmModal = new ConfirmModal();
 class Navbar {
   constructor() {
     this._linksContainer = document.querySelector('.links-container');
-    this._userMenuBtn = document.querySelector('#user-menu-btn');
-    this._userMenuOptions = document.querySelector('.user-menu-options');
-    this._logoutBtn = document.querySelector('.user-menu-options').lastElementChild.firstElementChild;
-
+    this._linksContainerFirstBtn = document.querySelector('#linksContainerFirstBtn');
+    this._linksContainerSecondBtn = document.querySelector('#linksContainerSecondBtn');
+    
     this._loadEventListeners();
   };
 
   _loadEventListeners() {
-    window.addEventListener('DOMContentLoaded', this._displayUserMenuBtn.bind(this));
-    this._userMenuBtn.addEventListener('click', this._displayUserMenu.bind(this));
-    this._userMenuBtn.addEventListener('keyup', this._handleUserMenuKeyEvents.bind(this));
-    this._logoutBtn.addEventListener('click', this._logout.bind(this));
+    window.addEventListener('DOMContentLoaded', this._updateLinksContainer.bind(this));
+    this._linksContainer.addEventListener('click', this._handleLinksContainerEvents.bind(this));
   };
   
-  _displayUserMenuBtn() {
+  _updateLinksContainer() {
     const loginToken = locateLoginToken();
 
     if(!loginToken) {
-      this._linksContainer.classList.remove('hidden');
-      this._userMenuBtn.classList.add('hidden');
       return ;
-    }
-    
-    this._linksContainer.classList.add('hidden');
-    this._userMenuBtn.classList.remove('hidden');
-  };
-
-  _handleUserMenuKeyEvents(e) {
-    const pressedKey = e.key;
-
-    if(pressedKey === 'Enter') {
-      this._displayUserMenu();
     };
+
+    this._linksContainerFirstBtn.textContent = 'Sign out';
+    this._linksContainerFirstBtn.href = '#';
+    this._linksContainerFirstBtn.classList.add('signOut');
+
+    this._linksContainerSecondBtn.textContent = 'History';
+    this._linksContainerSecondBtn.href = 'history.html';
+    this._linksContainerSecondBtn.className = 'btn btn-light';
   };
 
-  _displayUserMenu() {
-    if(this._userMenuOptions.classList.contains('hidden')) {
-      this._userMenuOptions.classList.remove('hidden');
-      return ;
-    }
-    
-    this._userMenuOptions.classList.add('hidden');
-  };
-
-  _logout(e) {
+  _handleLinksContainerEvents(e) {
     e.preventDefault();
 
-    confirmModal.display('Are you sure you want to log out?');
+    if(e.target.classList.contains('signOut')) {
+      this._signOut();
+      return ;
+    };
+    
+    window.location.href = e.target.href;
+  };
+
+  _signOut() {
+    confirmModal.display('Are you sure you want to sign out?');
     const confirmModalElement = document.querySelector('.confirm-modal');
 
-    confirmModalElement.addEventListener('click', (e) => {
+    confirmModalElement.addEventListener('click', function eventHandler(e) {
       if(confirmModal.isExitClick(e)) {
+        confirmModalElement.removeEventListener('click', eventHandler);
         confirmModal.remove();
         return ;
       };
 
       if(e.target.id === 'confirmModalConfirmBtn') {
+        confirmModalElement.removeEventListener('click', eventHandler);
         confirmModal.remove();
+
         LoadingModal.display();
         cookies.remove('loginToken');
         redirectAfterDelayMillisecond('index.html', 1000, 'Signed out successfully', 'success');
       };
     });
-
   };
-}
+};
 
 export default Navbar;
