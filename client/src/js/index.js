@@ -1,32 +1,5 @@
 import '../scss/main.scss';
 import Navbar from './components/global/Navbar';
-import locateLoginToken from './components/global/locateLoginToken';
 
 // Initializing imports
 new Navbar();
-
-
-class Index {
-  constructor() {
-    this._heroBtnContainer = document.querySelector('.hero .btn-container');
-    this._heroSignUpBtn = document.querySelector('#hero-sign-up-btn');
-
-    this.loadEventListeners();
-  };
-
-  loadEventListeners() {
-    window.addEventListener('DOMContentLoaded', this._displayHeroButtons.bind(this));
-  };
-
-  _displayHeroButtons() {
-    const loginToken = locateLoginToken();
-
-    if(loginToken) {
-      this._heroSignUpBtn.style.display = 'none';
-    };
-  };
-};
-
-new Index();
-
-export default Index;

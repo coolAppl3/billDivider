@@ -1,8 +1,8 @@
 import '../scss/main.scss';
+import Navbar from './components/global/Navbar';
 import disableFBCache from './components/global/disableFBCache';
 disableFBCache();
 
-import Navbar from './components/global/Navbar';
 import SessionReference from './components/session/SessionReference';
 import InitSession from './components/session/InitSession';
 import SessionHeader from './components/session/SessionHeader';
