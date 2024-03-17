@@ -2,6 +2,23 @@
 
 
 ---
+### [0.40.3] (2024-03-17)
+
+
+### Features
+
+* Reworked the navigation bar and ditched the drop-down menu
+  * Drop-down menu didn't make a lot of sense when it only displayed two options, and finding it wasn't very intuitive to the user
+<br>
+* A "History" button will no longer be shown in the hero section of `index.html`, since the same button will now permanently be visible in the navbar
+
+
+### Test Changes
+
+* Removed `index.test.js` as it currently only contains one function that hides the "Sign up" button, which is not worth unit testing
+
+
+---
 ### [0.40.2] (2024-03-15)
 
 
