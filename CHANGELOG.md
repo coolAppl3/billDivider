@@ -2,6 +2,22 @@
 
 
 ---
+### [0.41.0] (2024-03-19)
+
+
+### Features
+
+* Added a search bar to filter through bills by name in any given session
+
+
+### Bug Fixes
+
+* Fixed the bill modal overlay not fully covering the body in phone browsers
+* Fixed a bug where editing bills created after v0.40.2 would always behave as if there are unsaved changes
+  * Better object comparison coming in future patches
+
+
+---
 ### [0.40.4] (2024-03-17)
 
 

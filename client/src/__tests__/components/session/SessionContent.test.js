@@ -5,6 +5,7 @@ import BillModal from "../../../js/components/session/BillModal";
 import BillElement from "../../../js/components/session/BillElement";
 import ConfirmModal from "../../../js/components/global/ConfirmModal";
 import messagePopup from "../../../js/components/global/messagePopup";
+import ErrorSpan from "../../../js/components/global/ErrorSpan";
 
 
 jest.mock('../../../js/components/session/SessionInfo');
@@ -13,6 +14,8 @@ jest.mock('../../../js/components/session/BillElement');
 jest.mock('../../../js/components/global/ConfirmModal');
 jest.mock('../../../js/components/global/messagePopup');
 jest.mock('../../../js/components/session/SessionReference');
+jest.mock('../../../js/components/global/ErrorSpan');
+
 
 const sessionContentHTML = `
   <div class="session-content">
@@ -26,11 +29,14 @@ const sessionContentHTML = `
         class="session-content-container-header"
         data-list="main"
       >
-        <h3 class="expandList">
+        <h3
+          class="expandList"
+          tabindex="0"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 320 512"
-            class="svg-icon"
+            class="svg-icon chevron-icon"
           >
             <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
             <path
@@ -49,6 +55,16 @@ const sessionContentHTML = `
       </div>
 
       <div class="h-line"></div>
+
+      <!-- Searchbar -->
+      <div class="content-search content-search-main form-group">
+        <input
+          type="text"
+          placeholder="Search bills by name"
+          id="searchBarMain"
+        />
+        <span class="error-span"></span>
+      </div>
 
       <!-- List -->
       <div
@@ -69,11 +85,14 @@ const sessionContentHTML = `
         class="session-content-container-header"
         data-list="secondary"
       >
-        <h3 class="expandList">
+        <h3
+          class="expandList"
+          tabindex="0"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 320 512"
-            class="svg-icon"
+            class="svg-icon chevron-icon"
           >
             <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
             <path
@@ -83,8 +102,7 @@ const sessionContentHTML = `
           <span
             id="sharedWithListHeader"
             class="sharedWithSpan"
-          ></span
-          >'s bills
+          ></span>
         </h3>
         <button
           class="btn btn-border-danger clearListBtn disabled"
@@ -96,6 +114,16 @@ const sessionContentHTML = `
       </div>
 
       <div class="h-line"></div>
+
+      <!-- Searchbar -->
+      <div class="content-search content-search-secondary form-group">
+        <input
+          type="text"
+          placeholder="Search bills by name"
+          id="searchBarSecondary"
+        />
+        <span class="error-span"></span>
+      </div>
 
       <!-- List -->
       <div
@@ -280,31 +308,35 @@ describe('_handleSessionContentClickEvents(e)', () => {
 });
 
 describe('_render()', () => {
-  it('should always return undefined', () => {
-    jest.spyOn(sessionContent, '_emptyContentList').mockImplementation(() => {});
-    jest.spyOn(sessionContent, '_loadBills').mockImplementation(() => {});
-    jest.spyOn(sessionContent, '_enableClearButtons').mockImplementation(() => {});
-    
-    expect(sessionContent._render()).toBeUndefined();
-    expect(sessionContent._render(null)).toBeUndefined();
-    expect(sessionContent._render(0)).toBeUndefined();
-    expect(sessionContent._render('')).toBeUndefined();
-    expect(sessionContent._render({})).toBeUndefined();
-    expect(sessionContent._render([])).toBeUndefined();
-    expect(sessionContent._render('some value')).toBeUndefined();
-    expect(sessionContent._render(5)).toBeUndefined();
-  });
-
-  it('should call a number of functions', () => {
+  it('should call a number of functions then return undefined', () => {
     const _emptyContentListSpy = jest.spyOn(sessionContent, '_emptyContentList').mockImplementation(() => {});
     const _loadBillsSpy = jest.spyOn(sessionContent, '_loadBills').mockImplementation(() => {});
     const _enableClearButtonsSpy = jest.spyOn(sessionContent, '_enableClearButtons').mockImplementation(() => {});
+    const _enableAddBillButtonsSpy = jest.spyOn(sessionContent, '_enableAddBillButtons').mockImplementation(() => {});
+    const _enableFilterInputsSpy = jest.spyOn(sessionContent, '_enableFilterInputs').mockImplementation(() => {});
 
-    sessionContent._render();
+    expect(sessionContent._render()).toBeUndefined();
+    expect(_emptyContentListSpy).toHaveBeenCalledTimes(2);
     expect(_emptyContentListSpy).toHaveBeenCalledWith(sessionContent._mainContentList);
     expect(_emptyContentListSpy).toHaveBeenCalledWith(sessionContent._secondaryContentList);
+    
     expect(_loadBillsSpy).toHaveBeenCalled();
     expect(_enableClearButtonsSpy).toHaveBeenCalled();
+    expect(_enableAddBillButtonsSpy).toHaveBeenCalled();
+    expect(_enableFilterInputsSpy).toHaveBeenCalled();
+  });
+});
+
+describe('_handleSessionStartedEvent()', () => {
+  it('should call a number of functions then return undefined', () => {
+    const _enableAddBillButtonsSpy = jest.spyOn(sessionContent, '_enableAddBillButtons').mockImplementation(() => {});
+    const _enableFilterInputsSpy = jest.spyOn(sessionContent, '_enableFilterInputs').mockImplementation(() => {});
+    const _scrollContentIntoViewSpy = jest.spyOn(sessionContent, '_scrollContentIntoView').mockImplementation(() => {});
+
+    expect(sessionContent._handleSessionStartedEvent()).toBeUndefined();
+    expect(_enableAddBillButtonsSpy).toHaveBeenCalled();
+    expect(_enableFilterInputsSpy).toHaveBeenCalled();
+    expect(_scrollContentIntoViewSpy).toHaveBeenCalled();
   });
 });
 
@@ -762,6 +794,24 @@ describe('_clearContentList(listOwner)', () => {
 
     expect(_retractContentListSpy).not.toHaveBeenCalled();
     expect(dispatchEventSpy).not.toHaveBeenCalled();
+  });
+});
+
+describe('_startFilterBills(type)', () => {
+  it(`it should call _expandContentList() with the main content list, if the type passed in is equal to a string of "main", then return undefined`, () => {
+    const _expandContentListSpy = jest.spyOn(sessionContent, '_expandContentList').mockImplementationOnce(() => {});
+    const mainContentListElement = document.querySelector('.list-main');
+    
+    expect(sessionContent._startFilterBills('main')).toBeUndefined();
+    expect(_expandContentListSpy).toHaveBeenCalledWith(mainContentListElement);
+  });
+  
+  it(`it should call _expandContentList() with the secondary content list, if the type passed in is equal to a string of "secondary", then return undefined`, () => {
+    const _expandContentListSpy = jest.spyOn(sessionContent, '_expandContentList').mockImplementationOnce(() => {});
+    const mainContentListElement = document.querySelector('.list-secondary');
+    
+    expect(sessionContent._startFilterBills('secondary')).toBeUndefined();
+    expect(_expandContentListSpy).toHaveBeenCalledWith(mainContentListElement);
   });
 });
 

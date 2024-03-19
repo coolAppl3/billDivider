@@ -4,28 +4,37 @@ import BillElement from "./BillElement";
 import ConfirmModal from "../global/ConfirmModal";
 import messagePopup from "../global/messagePopup";
 import SessionReference from "./SessionReference";
+import ErrorSpan from "../global/ErrorSpan";
 
 // Initializing imports
 const billElement = new BillElement();
 const billModal = new BillModal();
 const confirmModal = new ConfirmModal();
+const errorSpan = new ErrorSpan();
 
 class SessionContent {
   constructor() {
     this._sessionContent = document.querySelector('.session-content');
     this._mainContentList = document.querySelector('.list-main');
     this._secondaryContentList = document.querySelector('.list-secondary');
+    this._searchBarMain = document.querySelector('#searchBarMain');
+    this._searchBarSecondary = document.querySelector('#searchBarSecondary');
 
     this._loadEventListeners();
   };
 
   _loadEventListeners() {
     window.addEventListener('render', this._render.bind(this));
-    window.addEventListener('sessionStarted', this._scrollContentIntoView.bind(this));
-    window.addEventListener('sessionStarted', this._enableAddBillButtons.bind(this));
+    window.addEventListener('sessionStarted', this._handleSessionStartedEvent.bind(this));
     
     this._sessionContent.addEventListener('click', this._handleSessionContentClickEvents.bind(this));
     this._sessionContent.addEventListener('keyup', this._handleSessionContentKeyEvents.bind(this));
+
+    this._searchBarMain.addEventListener('keyup', this._filterBills.bind(this, 'main'));
+    this._searchBarSecondary.addEventListener('keyup', this._filterBills.bind(this, 'secondary'));
+
+    this._searchBarMain.addEventListener('focus', this._startFilterBills.bind(this, 'main'));
+    this._searchBarSecondary.addEventListener('focus', this._startFilterBills.bind(this, 'secondary'));
   };
 
   _handleSessionContentKeyEvents(e) {
@@ -84,6 +93,13 @@ class SessionContent {
     this._loadBills();
     this._enableClearButtons();
     this._enableAddBillButtons();
+    this._enableFilterInputs();
+  };
+
+  _handleSessionStartedEvent() {
+    this._enableAddBillButtons();
+    this._enableFilterInputs();
+    this._scrollContentIntoView();
   };
 
   _emptyContentList(contentList) {
@@ -207,6 +223,37 @@ class SessionContent {
     dispatchEvent(new Event('render'));
   };
 
+  _startFilterBills(type) {
+    const contentList = document.querySelector(`.list-${type}`);
+    this._expandContentList(contentList);
+  };
+
+  _filterBills(type, e) {
+    const filterValue = e.target.value.toLowerCase();
+    const bills = document.querySelectorAll(`[data-bill-owner="${type}"]`);
+
+    for(const bill of bills) {
+      const billName = bill.firstElementChild.textContent.split(': ')[1].toLowerCase();
+
+      if(billName.indexOf(filterValue) !== -1) {
+        bill.style.display = 'grid';
+        bill.classList.add('filter-visible');
+      } else {
+        bill.style.display = 'none';
+        bill.classList.remove('filter-visible');
+      };
+    };
+
+    const filterInput = document.querySelector(`.content-search-${type}`);
+    const atLeastOneResult = document.querySelector(`.list-${type} .filter-visible`);
+
+    if(!atLeastOneResult) {
+      errorSpan.display(filterInput, 'No results found');
+    } else {
+      errorSpan.hide(filterInput);
+    };
+  };
+
   // Utility
   
   _slideAndRemoveBill(billElement) {
@@ -309,6 +356,28 @@ class SessionContent {
       btn.removeAttribute('disabled');
       btn.removeAttribute('title');
       btn.classList.remove('disabled');
+    };
+  };
+
+  _enableFilterInputs() {
+    if(sessionInfo.billsPaid.length === 0) {
+      this._searchBarMain.setAttribute('disabled', '');
+      this._searchBarMain.setAttribute('placeholder', 'No bills to filter');
+      this._searchBarMain.classList.add('disabled');
+    } else {
+      this._searchBarMain.removeAttribute('disabled');
+      this._searchBarMain.setAttribute('placeholder', 'Search bills by name');
+      this._searchBarMain.classList.remove('disabled');
+    };
+
+    if(sessionInfo.billsToPay.length === 0) {
+      this._searchBarSecondary.setAttribute('disabled', '');
+      this._searchBarSecondary.setAttribute('placeholder', 'No bills to filter');
+      this._searchBarSecondary.classList.add('disabled');
+    } else {
+      this._searchBarSecondary.removeAttribute('disabled');
+      this._searchBarSecondary.setAttribute('placeholder', 'Search bills by name');
+      this._searchBarSecondary.classList.remove('disabled');
     };
   };
 
