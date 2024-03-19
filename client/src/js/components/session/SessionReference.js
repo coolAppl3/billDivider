@@ -2,9 +2,13 @@ import sessionInfo from "./SessionInfo";
 
 class SessionReference {
   static set(session) {
-    if(!session.billLimit) {
-      session.billLimit = sessionInfo.billLimit;
-    };
+    const billLimitValue = sessionInfo.billLimit;
+
+    delete sessionInfo.billLimit;
+    delete session.billLimit;
+    
+    sessionInfo.billLimit = billLimitValue;
+    session.billLimit = billLimitValue;
 
     const sessionJSONString = JSON.stringify(session);
     const originalSessionReference = JSON.parse(sessionJSONString);
