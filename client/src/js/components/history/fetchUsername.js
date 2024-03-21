@@ -20,8 +20,8 @@ async function fetchUsername() {
     return username;
     
   } catch (err) {
-    console.log(err)
-
+    err.response && console.log(err.response.data);
+    
     if(!err.response) {
       cookies.remove('loginToken');
       redirectAfterDelayMillisecond('signIn.html');

@@ -37,12 +37,12 @@ class RevealPassword {
 
     if(inputType === 'password') {
       this._input.setAttribute('type', 'text');
-      this._revealPasswordIcon.innerHTML = this._eyeSlashIconSVG;
+      this._revealPasswordIcon.firstElementChild.innerHTML = this._eyeSlashIconSVG;
       return ;
     }
 
     this._input.setAttribute('type', 'password');
-    this._revealPasswordIcon.innerHTML = this._eyeIconSVG;
+    this._revealPasswordIcon.firstElementChild.innerHTML = this._eyeIconSVG;
   };
 };
 

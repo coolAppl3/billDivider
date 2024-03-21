@@ -2,12 +2,40 @@
 
 
 ---
+### [0.41.1] (2024-03-21)
+
+
+### Features
+
+* Added slightly more validation to the sign in form, to prevent sending an HTTP request for clearly incorrect credentials, effectively reducing unnecessary load on the backend
+
+
+### Bug Fixes
+
+* Disabled autocomplete in the session bill search bars
+* Disabled auto-capitalization for the username inputs in both `signUp.html` and `signIn.html`
+* Fixed longer error messages under password inputs breaking the position of the password-reveal icon
+* Improved how descriptive form-validation error messages are in `signUp.html`
+* Fixed failed API requests showing too much data, including failed password strings, which was a security concern
+
+
+### Code Refactoring
+
+* Slightly refactored the API logic and responses surrounding loginTokens
+
+
+### Chore Changes
+
+* Removed the leftover `patch-notes.txt` file
+
+
+---
 ### [0.41.0] (2024-03-19)
 
 
 ### Features
 
-* Added a search bar to filter through bills by name in any given session
+* Added search bars to filter through bills by name in any given session
 
 
 ### Bug Fixes

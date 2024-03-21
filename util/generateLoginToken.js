@@ -14,7 +14,6 @@ async function generateLoginToken() {
   };
 
   return token;
-  
 };
 
 module.exports = generateLoginToken;

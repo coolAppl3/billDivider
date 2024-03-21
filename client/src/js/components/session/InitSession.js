@@ -68,7 +68,7 @@ class InitSession {
       dispatchEvent(new Event('render'));
 
     } catch (err) {
-      console.log(err)
+      err.response && console.log(err.response.data);
       
       if(!err.response) {
         cookies.remove('loginToken');

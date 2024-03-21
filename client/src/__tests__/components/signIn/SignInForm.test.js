@@ -180,7 +180,7 @@ describe('_signIn(e)', () => {
     
     const mockResolvedResponse = {
       data: {
-        token: 'mockLoginToken',
+        loginToken: 'mockLoginToken',
       },
     };
 
@@ -206,7 +206,7 @@ describe('_signIn(e)', () => {
     
     const mockResolvedResponse = {
       data: {
-        token: 'mockLoginToken',
+        loginToken: 'mockLoginToken',
       },
     };
 
@@ -219,7 +219,7 @@ describe('_signIn(e)', () => {
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('history.html', 1000, 'Signed in successfully!', 'success');
   });
 
-  it('should catch any potential error in the API request and log it. If the error does not have a response property, it should remove the loginToken from the cookies, redirect the user to signIn.html, and return undefined', async () => {
+  it('should catch any potential error in the API request. If the error does not have a response property, it should remove the loginToken from the cookies, redirect the user to signIn.html, and return undefined', async () => {
     signInForm._usernameInput.value = 'mockUsername';
     signInForm._passwordInput.value = 'mockPassword';
     
@@ -233,12 +233,10 @@ describe('_signIn(e)', () => {
     SignInAPI.prototype.signIn.mockRejectedValueOnce(mockRejectedResponse);
     Cookies.prototype.set.mockImplementationOnce(() => {});
 
-    const consoleSpy = jest.spyOn(window.console, 'log').mockImplementationOnce(() => {});
 
     expect(await signInForm._signIn(mockEvent)).toBeUndefined();
     expect(SignInAPI.prototype.signIn).toHaveBeenCalledWith(mockUserObject);
 
-    expect(consoleSpy).toHaveBeenCalledWith({});
     
     expect(Cookies.prototype.remove).toHaveBeenCalledWith('loginToken');
     expect(Cookies.prototype.set).not.toHaveBeenCalled();
@@ -260,6 +258,7 @@ describe('_signIn(e)', () => {
     const mockRejectedResponse = {
       response: {
         status: 404,
+        data: { mockValue: 'mockProperty' },
       },
     };
 
@@ -271,7 +270,7 @@ describe('_signIn(e)', () => {
     expect(await signInForm._signIn(mockEvent)).toBeUndefined();
     expect(SignInAPI.prototype.signIn).toHaveBeenCalledWith(mockUserObject);
 
-    expect(consoleSpy).toHaveBeenCalledWith(mockRejectedResponse);
+    expect(consoleSpy).toHaveBeenCalledWith(mockRejectedResponse.response.data);
     
     expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(usernameFormGroup, `Username doesn't exist.`);
     expect(LoadingModal.remove).toHaveBeenCalled();
@@ -291,6 +290,7 @@ describe('_signIn(e)', () => {
     const mockRejectedResponse = {
       response: {
         status: 401,
+        data: { mockValue: 'mockProperty' },
       },
     };
 
@@ -302,7 +302,7 @@ describe('_signIn(e)', () => {
     expect(await signInForm._signIn(mockEvent)).toBeUndefined();
     expect(SignInAPI.prototype.signIn).toHaveBeenCalledWith(mockUserObject);
 
-    expect(consoleSpy).toHaveBeenCalledWith(mockRejectedResponse);
+    expect(consoleSpy).toHaveBeenCalledWith(mockRejectedResponse.response.data);
     
     expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(passwordFormGroup, 'Incorrect password.');
     expect(LoadingModal.remove).toHaveBeenCalled();
@@ -320,6 +320,7 @@ describe('_signIn(e)', () => {
     const mockRejectedResponse = {
       response: {
         status: 500,
+        data: { mockValue: 'mockProperty' },
       },
     };
 
@@ -331,7 +332,7 @@ describe('_signIn(e)', () => {
     expect(await signInForm._signIn(mockEvent)).toBeUndefined();
     expect(SignInAPI.prototype.signIn).toHaveBeenCalledWith(mockUserObject);
 
-    expect(consoleSpy).toHaveBeenCalledWith(mockRejectedResponse);
+    expect(consoleSpy).toHaveBeenCalledWith(mockRejectedResponse.response.data);
     
     expect(ErrorSpan.prototype.display).not.toHaveBeenCalled();
     expect(LoadingModal.remove).not.toHaveBeenCalled();
@@ -340,39 +341,70 @@ describe('_signIn(e)', () => {
   });
 });
 
-describe('_usernameInputIsEmpty()', () => {
-  it('should, if the _usernameInput is empty, call ErrorSpan.prototype.display() with the parent element of the input, then return true', () => {
-    signInForm._usernameInput.value = '';
-    const usernameFormGroup = signInForm._usernameInput.parentElement;
+describe('_validateUsername()', () => {
+  it(`should check the value of the username input, and if its length is less than 5 characters-long, call ErrorSpan.prototype.display() with the input's form group, then return false`, () => {
+    signInForm._usernameInput.value = 'Sara';
+    const inputFormGroup = signInForm._usernameInput.parentElement;
 
-    expect(signInForm._usernameInputIsEmpty()).toBe(true);
-    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(usernameFormGroup, 'Please enter a username.');
+    expect(signInForm._validateUsername()).toBe(false);
+    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(inputFormGroup, 'Usernames can not be less than 5 characters long');
   });
   
-  it('should, if the _usernameInput is not empty, call ErrorSpan.prototype.hide() with the parent element of the input, then return false', () => {
-    signInForm._usernameInput.value = 'mockValue';
-    const usernameFormGroup = signInForm._usernameInput.parentElement;
+  it(`should check the value of the username input, and if its length is greater than 24 characters-long, call ErrorSpan.prototype.display() with the input's form group, then return false`, () => {
+    signInForm._usernameInput.value = 'veryLongUsernameForSomeReason';
+    const inputFormGroup = signInForm._usernameInput.parentElement;
 
-    expect(signInForm._usernameInputIsEmpty()).toBe(false);
-    expect(ErrorSpan.prototype.hide).toHaveBeenCalledWith(usernameFormGroup);
+    expect(signInForm._validateUsername()).toBe(false);
+    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(inputFormGroup, 'Usernames can not be more than 24 characters long');
+  });
+
+  it(`should check the value of the username input, and if its length is valid but it contains whitespace, call ErrorSpan.prototype.display() with the input's form group, then return false`, () => {
+    signInForm._usernameInput.value = 'invalid username';
+    const inputFormGroup = signInForm._usernameInput.parentElement;
+
+    expect(signInForm._validateUsername()).toBe(false);
+    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(inputFormGroup, 'Usernames can not contain whitespace.');
+  });
+
+  it(`should check the value of the username input, and if its length is greater than 5 less than 24 characters-long, call ErrorSpan.prototype.hide() with the input's form group, then return true`, () => {
+    signInForm._usernameInput.value = 'validUsername';
+    const inputFormGroup = signInForm._usernameInput.parentElement;
+
+    expect(signInForm._validateUsername()).toBe(true);
+    expect(ErrorSpan.prototype.hide).toHaveBeenCalledWith(inputFormGroup);
   });
 });
 
+describe('_validatePassword()', () => {
+  it(`should check the value of the password input, and if its length is less than 5 characters-long, call ErrorSpan.prototype.display() with the input's form group, then return false`, () => {
+    signInForm._passwordInput.value = 'John12';
+    const inputFormGroup = signInForm._passwordInput.parentElement;
 
-describe('_passwordInputIsEmpty()', () => {
-  it('should, if the _passwordInput is empty, call ErrorSpan.prototype.display() with the parent element of the input, then return true', () => {
-    signInForm._passwordInput.value = '';
-    const usernameFormGroup = signInForm._passwordInput.parentElement;
-
-    expect(signInForm._passwordInputIsEmpty()).toBe(true);
-    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(usernameFormGroup, 'Please enter a password.');
+    expect(signInForm._validatePassword()).toBe(false);
+    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(inputFormGroup, 'Passwords can not be less than 8 characters long');
   });
   
-  it('should, if the _passwordInput is not empty, call ErrorSpan.prototype.hide() with the parent element of the input, then return false', () => {
-    signInForm._passwordInput.value = 'mockValue';
-    const usernameFormGroup = signInForm._passwordInput.parentElement;
+  it(`should check the value of the password input, and if its length is greater than 24 characters-long, call ErrorSpan.prototype.display() with the input's form group, then return false`, () => {
+    signInForm._passwordInput.value = 'iCareSoMuchAboutSecuritySoMyPasswordIsVeryLong';
+    const inputFormGroup = signInForm._passwordInput.parentElement;
 
-    expect(signInForm._passwordInputIsEmpty()).toBe(false);
-    expect(ErrorSpan.prototype.hide).toHaveBeenCalledWith(usernameFormGroup);
+    expect(signInForm._validatePassword()).toBe(false);
+    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(inputFormGroup, 'Passwords can not be more than 40 characters long');
+  });
+
+  it(`should check the value of the password input, and if its length is valid but it contains whitespace, call ErrorSpan.prototype.display() with the input's form group, then return false`, () => {
+    signInForm._passwordInput.value = 'invalid password';
+    const inputFormGroup = signInForm._passwordInput.parentElement;
+
+    expect(signInForm._validatePassword()).toBe(false);
+    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(inputFormGroup, 'Passwords can not contain whitespace.');
+  });
+
+  it(`should check the value of the password input, and if its length is greater than 5 less than 24 characters-long, call ErrorSpan.prototype.hide() with the input's form group, then return true`, () => {
+    signInForm._passwordInput.value = 'validPassword';
+    const inputFormGroup = signInForm._passwordInput.parentElement;
+
+    expect(signInForm._validatePassword()).toBe(true);
+    expect(ErrorSpan.prototype.hide).toHaveBeenCalledWith(inputFormGroup);
   });
 });

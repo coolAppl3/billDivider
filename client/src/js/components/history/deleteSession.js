@@ -20,7 +20,7 @@ async function deleteSession(sessionID) {
     return ;
 
   } catch (err) {
-    console.log(err)
+    err.response && console.log(err.response.data);
 
     if(!err.response) {
       cookies.remove('loginToken');

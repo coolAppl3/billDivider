@@ -48,7 +48,7 @@ class SignUpForm {
     
     try {
       const res = await signUpAPI.signUp(newUser);
-      const loginToken = res.data.data.loginToken;
+      const loginToken = res.data.loginToken;
 
       if(this._keepMeSignedInCheckBox.classList.contains('checked')) {
         cookies.set('loginToken', loginToken, this._loginTokenAge);
@@ -60,13 +60,13 @@ class SignUpForm {
       redirectAfterDelayMillisecond('history.html', 1000, 'Signed up successfully!', 'success');
       
     } catch (err) {
-      console.log(err)
+      err.response && console.log(err.response.data);
 
       if(!err.response) {
         redirectAfterDelayMillisecond('signUp.html');
         return ;
       };
-      
+
       const status = err.response.status;
       
       if(status === 401) {
@@ -100,8 +100,11 @@ class SignUpForm {
       errorSpan.display(inputFormGroup, 'Username can not be longer than 24 characters.');
       return false;
 
+    } else if(value.indexOf(' ') !== -1) {
+      errorSpan.display(inputFormGroup, 'Whitespace is not allowed.');
+      
     } else if(!re.test(value)) {
-      errorSpan.display(inputFormGroup, 'Username must contain at least one letter, and must not contain any whitespace or special characters.');
+      errorSpan.display(inputFormGroup, 'Username must contain at least one English letter, and must not special characters or non-English letters.');
       return false;
 
     } else {
@@ -121,12 +124,16 @@ class SignUpForm {
       errorSpan.display(inputFormGroup, 'Password must be at least 8 characters long.');
       return false;
 
-    } else if(value.length > 24) {
-      errorSpan.display(inputFormGroup, 'Password can not be longer than 24 characters.');
+    } else if(value.length > 40) {
+      errorSpan.display(inputFormGroup, 'Password can not be longer than 40 characters.');
       return false;
 
+    } else if(value.indexOf(' ') !== -1) {
+      errorSpan.display(inputFormGroup, 'Whitespace is not allowed.');
+      return false;
+      
     } else if(!re.test(value)) {
-      errorSpan.display(inputFormGroup, 'Whitespace and special characters, apart from dots and underscores, are not allowed.');
+      errorSpan.display(inputFormGroup, 'Special characters, apart from dots and underscores, are not allowed.');
       return false;
 
     } else {
