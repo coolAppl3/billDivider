@@ -1,3 +1,0 @@
-General:
-
-  - Fixed successful session saving displaying an error message instead of a success message.

@@ -31,7 +31,7 @@ router.post('/signin', async (req, res) => {
   };
 
   try {
-    res.json({ success: true, token: user.loginToken });
+    res.json({ success: true, loginToken: user.loginToken });
   } catch (err) {
     console.log(err);
     res.status(500).json({ success: false, error: 'Something went wrong' });
@@ -69,7 +69,7 @@ router.post('/signup', async (req, res) => {
 
   try {
     const newUser = await user.save(user);
-    res.json({ success: true, data: newUser });
+    res.json({ success: true, loginToken: newUser.loginToken });
   } catch (err) {
     console.log(err);
     res.status(500).json({ success: false, error: 'Something went wrong' });

@@ -180,18 +180,16 @@ describe('_checkUrlForSessionID()', () => {
     expect(dispatchEventSpy).toHaveBeenCalledWith(renderEvent);
   });
 
-  it('should catch any errors with the API request, console log it, and if the error object does not have a response property, call Cookies.prototype.remove() and redirectAfterDelayMilliseconds(), then return undefined', async () => {
+  it('should catch any errors with the API request, and if the error object does not have a response property, call Cookies.prototype.remove() and redirectAfterDelayMilliseconds(), then return undefined', async () => {
     locateLoginToken.mockImplementation(() => { return 'mockLoginToken' });
     
     const mockError = new Error('mock error'); // no response property
     SessionAPI.prototype.getSession.mockRejectedValueOnce(mockError);
     
-    const consoleSpy = jest.spyOn(window.console, 'log');
 
     expect(await initSession._checkUrlForSessionID()).toBeUndefined();
     expect(SessionAPI.prototype.getSession).toHaveBeenCalledWith('mockLoginToken', 'mockSessionID');
 
-    expect(consoleSpy).toHaveBeenCalledWith(mockError);
 
     expect(Cookies.prototype.remove).toHaveBeenCalledWith('loginToken');
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('signIn.html');
@@ -201,6 +199,13 @@ describe('_checkUrlForSessionID()', () => {
     locateLoginToken.mockImplementation(() => { return 'mockLoginToken' });
     
     const mockError = new Error('mock error');
+    Object.defineProperty(mockError, 'response', {
+      writable: true,
+      value: {
+        data: { mockProperty: 'mockValue' },
+      },
+    });
+    
     mockError.response = {
       status: 403,
     };
@@ -211,7 +216,7 @@ describe('_checkUrlForSessionID()', () => {
     expect(await initSession._checkUrlForSessionID()).toBeUndefined();
     expect(SessionAPI.prototype.getSession).toHaveBeenCalledWith('mockLoginToken', 'mockSessionID');
 
-    expect(consoleSpy).toHaveBeenCalledWith(mockError);
+    expect(consoleSpy).toHaveBeenCalledWith(mockError.response.data);
 
     expect(Cookies.prototype.remove).toHaveBeenCalledWith('loginToken');
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('signIn.html', 1000, 'Not logged in');
@@ -221,6 +226,13 @@ describe('_checkUrlForSessionID()', () => {
     locateLoginToken.mockImplementation(() => { return 'mockLoginToken' });
     
     const mockError = new Error('mock error');
+    Object.defineProperty(mockError, 'response', {
+      writable: true,
+      value: {
+        data: { mockProperty: 'mockValue' },
+      },
+    });
+    
     mockError.response = {
       status: 404,
     };
@@ -231,7 +243,7 @@ describe('_checkUrlForSessionID()', () => {
     expect(await initSession._checkUrlForSessionID()).toBeUndefined();
     expect(SessionAPI.prototype.getSession).toHaveBeenCalledWith('mockLoginToken', 'mockSessionID');
 
-    expect(consoleSpy).toHaveBeenCalledWith(mockError);
+    expect(consoleSpy).toHaveBeenCalledWith(mockError.response.data);
 
     expect(Cookies.prototype.remove).not.toHaveBeenCalledWith('loginToken');
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('session.html', 1000, 'Session not found');
@@ -242,6 +254,13 @@ describe('_checkUrlForSessionID()', () => {
     locateLoginToken.mockImplementation(() => { return 'mockLoginToken' });
     
     const mockError = new Error('mock error');
+    Object.defineProperty(mockError, 'response', {
+      writable: true,
+      value: {
+        data: { mockProperty: 'mockValue' },
+      },
+    });
+    
     mockError.response = {
       status: 500,
     };
@@ -252,7 +271,7 @@ describe('_checkUrlForSessionID()', () => {
     expect(await initSession._checkUrlForSessionID()).toBeUndefined();
     expect(SessionAPI.prototype.getSession).toHaveBeenCalledWith('mockLoginToken', 'mockSessionID');
 
-    expect(consoleSpy).toHaveBeenCalledWith(mockError);
+    expect(consoleSpy).toHaveBeenCalledWith(mockError.response.data);
 
     expect(Cookies.prototype.remove).toHaveBeenCalledWith('loginToken');
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('session.html', 1000, 'Something went wrong');

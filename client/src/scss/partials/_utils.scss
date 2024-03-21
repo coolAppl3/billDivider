@@ -405,18 +405,37 @@ a {
   #revealPassword {
     position: absolute;
     right: 1rem;
-    bottom: 1px;
+    top: 37px;
     line-height: 40px;
     cursor: pointer;
     transition: fill 200ms;
-
-    fill: $light;
-    height: 40px;
-    width: 18px;
     overflow: visible;
 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: transparent;
+    }
+
+    svg {
+      transition: fill 200ms;
+      fill: $light;
+      overflow: visible;
+    }
+    
     &:hover {
-      fill: $cta;
+
+      svg {
+        fill: $cta;
+      }
     }
     
   }
@@ -436,10 +455,6 @@ a {
       font-size: 1.2rem;
       color: $danger;
       margin-top: 4px;
-    }
-
-    #revealPassword {
-      bottom: 22px;
     }
   }
  

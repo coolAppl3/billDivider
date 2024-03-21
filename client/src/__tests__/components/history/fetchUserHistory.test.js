@@ -42,6 +42,13 @@ describe('fetchUserHistory()', () => {
 
   it(`should, if the API request fails, console log the error, and if there is no error.response property, call cookies.remove('loginToken) and redirectAfterDelayMillisecond('signIn.html)`, async () => {
     const mockError = new Error('mock error');
+    Object.defineProperty(mockError, 'response', {
+      writable: true,
+      value: {
+        data: { mockProperty: 'mockValue' },
+      },
+    });
+    
     HistoryAPI.prototype.getSessionHistory.mockRejectedValueOnce(mockError);
     
     locateLoginToken.mockReturnValueOnce('mockLoginToken');
@@ -51,16 +58,24 @@ describe('fetchUserHistory()', () => {
     expect(locateLoginToken).toHaveBeenCalled();
     expect(HistoryAPI.prototype.getSessionHistory).toHaveBeenCalledWith('mockLoginToken');
     
-    expect(consoleSpy).toHaveBeenCalledWith(mockError);
+    expect(consoleSpy).toHaveBeenCalledWith(mockError.response.data);
     expect(Cookies.prototype.remove).toHaveBeenCalledWith('loginToken');
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('signIn.html');
   });
 
   it(`should, if the API request fails, console log the error, and if error.response.status is equal to 404, call cookies.remove('loginToken') and redirectAfterDelayMillisecond('signIn.html', 1000, 'Not logged in')`, async () => {
     const mockError = new Error('mock error');
+    Object.defineProperty(mockError, 'response', {
+      writable: true,
+      value: {
+        data: { mockProperty: 'mockValue' },
+      },
+    });
+    
     mockError.response = {
       status: 404,
     };
+    
     HistoryAPI.prototype.getSessionHistory.mockRejectedValueOnce(mockError);
     
     locateLoginToken.mockReturnValueOnce('mockLoginToken');
@@ -70,13 +85,20 @@ describe('fetchUserHistory()', () => {
     expect(locateLoginToken).toHaveBeenCalled();
     expect(HistoryAPI.prototype.getSessionHistory).toHaveBeenCalledWith('mockLoginToken');
     
-    expect(consoleSpy).toHaveBeenCalledWith(mockError);
+    expect(consoleSpy).toHaveBeenCalledWith(mockError.response.data);
     expect(Cookies.prototype.remove).toHaveBeenCalledWith('loginToken');
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('signIn.html', 1000, 'Not logged in');
   });
 
   it(`should, if the API request fails, console log the error, and if error.response.status is equal to anything else (most likely 500), call cookies.remove('loginToken') and redirectAfterDelayMillisecond('signIn.html', 1000, 'Not logged in')`, async () => {
     const mockError = new Error('mock error');
+    Object.defineProperty(mockError, 'response', {
+      writable: true,
+      value: {
+        data: { mockProperty: 'mockValue' },
+      },
+    });
+    
     mockError.response = {
       status: 500,
     };
@@ -89,7 +111,7 @@ describe('fetchUserHistory()', () => {
     expect(locateLoginToken).toHaveBeenCalled();
     expect(HistoryAPI.prototype.getSessionHistory).toHaveBeenCalledWith('mockLoginToken');
     
-    expect(consoleSpy).toHaveBeenCalledWith(mockError);
+    expect(consoleSpy).toHaveBeenCalledWith(mockError.response.data);
     expect(Cookies.prototype.remove).toHaveBeenCalledWith('loginToken');
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('signIn.html');
   });

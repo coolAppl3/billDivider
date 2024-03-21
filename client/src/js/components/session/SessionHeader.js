@@ -223,7 +223,7 @@ class SessionHeader {
           redirectAfterDelayMillisecond('history.html', 1000, 'Session deleted', 'success');
 
         } catch (err) {
-          console.log(err);
+          err.response && console.log(err.response.data);
           redirectAfterDelayMillisecond('history.html');
         };
       };
@@ -254,7 +254,7 @@ class SessionHeader {
           redirectAfterDelayMillisecond('history.html', 1000, 'Session updated', 'success');
     
         } catch (err) {
-          console.log(err);
+          err.response && console.log(err.response.data);
           redirectAfterDelayMillisecond('history.html');
         };
       };
@@ -278,7 +278,7 @@ class SessionHeader {
       redirectAfterDelayMillisecond('history.html', 1000, 'Session saved', 'success');
 
     } catch (err) {
-      console.log(err);
+      err.response && console.log(err.response.data);
       redirectAfterDelayMillisecond('session.html');
     };
   };

@@ -139,7 +139,7 @@ afterEach(() => {
   jest.resetAllMocks();
 });
 
-describe('_signup(e)', () => {
+describe('_signUp(e)', () => {
   let mockEvent;
 
   beforeEach(() => {
@@ -179,9 +179,7 @@ describe('_signup(e)', () => {
     
     const mockResolvedResponse = {
       data: {
-        data: {
-          loginToken: 'mockLoginToken',
-        },
+        loginToken: 'mockLoginToken',
       },
     };
     
@@ -207,9 +205,7 @@ describe('_signup(e)', () => {
     
     const mockResolvedResponse = {
       data: {
-        data: {
-          loginToken: 'mockLoginToken',
-        },
+        loginToken: 'mockLoginToken',
       },
     };
     
@@ -223,7 +219,7 @@ describe('_signup(e)', () => {
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('history.html', 1000, 'Signed up successfully!', 'success');
   });
 
-  it('should catch any potential error in the API request and log it. If the error does not have a response property, it should redirect the user to signUp.html and return undefined', async () => {
+  it('should catch any potential error in the API request. If the error does not have a response property, it should redirect the user to signUp.html and return undefined', async () => {
     signUpForm._usernameInput.value = 'JohnDoe';
     signUpForm._passwordInput.value = 'JohnDoe123';
 
@@ -237,14 +233,10 @@ describe('_signup(e)', () => {
     SignUpAPI.prototype.signUp.mockRejectedValueOnce(mockRejectedResponse);
     Cookies.prototype.set.mockImplementationOnce(() => {});
 
-    const consoleSpy = jest.spyOn(window.console, 'log');
-
     expect(await signUpForm._signUp(mockEvent)).toBeUndefined();
     expect(SignUpAPI.prototype.signUp).toHaveBeenCalledWith(mockNewUserObject);
 
     expect(Cookies.prototype.set).not.toHaveBeenCalled();
-
-    expect(consoleSpy).toHaveBeenCalledWith(mockRejectedResponse);
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('signUp.html');
   });
 
@@ -260,6 +252,7 @@ describe('_signup(e)', () => {
     const mockRejectedResponse = {
       response: {
         status: 401,
+        data: { mockValue: 'mockProperty' },
       },
     }; 
     
@@ -273,7 +266,7 @@ describe('_signup(e)', () => {
 
     expect(Cookies.prototype.set).not.toHaveBeenCalled();
 
-    expect(consoleSpy).toHaveBeenCalledWith(mockRejectedResponse);
+    expect(consoleSpy).toHaveBeenCalledWith(mockRejectedResponse.response.data);
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('signUp.html');
   });
 
@@ -291,6 +284,7 @@ describe('_signup(e)', () => {
     const mockRejectedResponse = {
       response: {
         status: 409,
+        data: { mockValue: 'mockProperty' },
       },
     }; 
     
@@ -304,7 +298,7 @@ describe('_signup(e)', () => {
 
     expect(Cookies.prototype.set).not.toHaveBeenCalled();
 
-    expect(consoleSpy).toHaveBeenCalledWith(mockRejectedResponse);
+    expect(consoleSpy).toHaveBeenCalledWith(mockRejectedResponse.response.data);
 
     expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(usernameFormGroup, 'Username already taken.');
     expect(LoadingModal.remove).toHaveBeenCalled();
@@ -314,8 +308,6 @@ describe('_signup(e)', () => {
     signUpForm._usernameInput.value = 'JohnDoe';
     signUpForm._passwordInput.value = 'JohnDoe123';
 
-    const usernameFormGroup = signUpForm._usernameInput.parentElement;
-
     const mockNewUserObject = {
       username: 'JohnDoe',
       password: 'JohnDoe123',
@@ -324,6 +316,7 @@ describe('_signup(e)', () => {
     const mockRejectedResponse = {
       response: {
         status: 500,
+        data: { mockValue: 'mockProperty' },
       },
     }; 
     
@@ -337,7 +330,7 @@ describe('_signup(e)', () => {
 
     expect(Cookies.prototype.set).not.toHaveBeenCalled();
 
-    expect(consoleSpy).toHaveBeenCalledWith(mockRejectedResponse);
+    expect(consoleSpy).toHaveBeenCalledWith(mockRejectedResponse.response.data);
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('signUp.html');
   });
 });
@@ -371,7 +364,7 @@ describe('_validateUsername(input)', () => {
     signUpForm._usernameInput.value = 'invalid_username';
     
     expect(signUpForm._validateUsername(signUpForm._usernameInput)).toBe(false);
-    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(usernameFormGroup, 'Username must contain at least one letter, and must not contain any whitespace or special characters.');
+    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(usernameFormGroup, 'Username must contain at least one English letter, and must not special characters or non-English letters.');
   });
 
   it('should check the value of the value of _usernameInput, and if it is a valid value, call ErrorSpan.prototype.hide() with the parent element of _usernameInput, then return true', () => {
@@ -401,18 +394,25 @@ describe('_validatePassword(input)', () => {
     expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(passwordFormGroup, 'Password must be at least 8 characters long.');
   });
 
-  it('should check the value of the value of _passwordInput, and if its length is greater than 24 characters, call ErrorSpan.prototype.display() with the parent element of _passwordInput, then return false', () => {
-    signUpForm._passwordInput.value = 'extremelyLongPasswordForSomeReason';
+  it('should check the value of the value of _passwordInput, and if its length is greater than 40 characters, call ErrorSpan.prototype.display() with the parent element of _passwordInput, then return false', () => {
+    signUpForm._passwordInput.value = 'iCareSoMuchAboutSecuritySoMyPasswordIsVeryLong';
     
     expect(signUpForm._validatePassword(signUpForm._passwordInput)).toBe(false);
-    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(passwordFormGroup, 'Password can not be longer than 24 characters.');
+    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(passwordFormGroup, 'Password can not be longer than 40 characters.');
   });
 
   it('should check the value of the value of _passwordInput, and does not match the regex in the function, call ErrorSpan.prototype.display() with the parent element of _passwordInput, then return false', () => {
-    signUpForm._passwordInput.value = 'invalid - password!';
+    signUpForm._passwordInput.value = 'invalid password!';
     
     expect(signUpForm._validatePassword(signUpForm._passwordInput)).toBe(false);
-    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(passwordFormGroup, 'Whitespace and special characters, apart from dots and underscores, are not allowed.');
+    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(passwordFormGroup, 'Whitespace is not allowed.');
+  });
+
+  it('should check the value of the value of _passwordInput, and does not match the regex in the function, call ErrorSpan.prototype.display() with the parent element of _passwordInput, then return false', () => {
+    signUpForm._passwordInput.value = 'invalid-password!';
+    
+    expect(signUpForm._validatePassword(signUpForm._passwordInput)).toBe(false);
+    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(passwordFormGroup, 'Special characters, apart from dots and underscores, are not allowed.');
   });
 
   it('should check the value of the value of _passwordInput, and if it is a valid value, call ErrorSpan.prototype.hide() with the parent element of _passwordInput, then return true', () => {

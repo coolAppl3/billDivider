@@ -36,10 +36,10 @@ class SignInForm {
     e.preventDefault();
     LoadingModal.display();
 
-    const emptyUsername = this._usernameInputIsEmpty();
-    const emptyPassword = this._passwordInputIsEmpty();
+    const isValidUsername = this._validateUsername();
+    const isValidPassword = this._validatePassword();
     
-    if(emptyPassword || emptyUsername) {
+    if(!isValidUsername || !isValidPassword) {
       LoadingModal.remove();
       return ;
     };
@@ -51,7 +51,7 @@ class SignInForm {
     
     try {
       const res = await signInAPI.signIn(user);
-      const loginToken = res.data.token;
+      const loginToken = res.data.loginToken;
 
       // Saving the loginToken depending on the user's preference.
       if(this._keepMeSignedInCheckBox.classList.contains('checked')) {
@@ -63,8 +63,8 @@ class SignInForm {
       redirectAfterDelayMillisecond('history.html', 1000, 'Signed in successfully!', 'success');
       
     } catch (err) {
-      console.log(err)
-      
+      err.response && console.log(err.response.data);
+
       if(!err.response) {
         cookies.remove('loginToken');
         redirectAfterDelayMillisecond('signIn.html');
@@ -91,30 +91,46 @@ class SignInForm {
     }
   };
 
-  _usernameInputIsEmpty() {
+  _validateUsername() {
     const value = this._usernameInput.value;
     const inputFormGroup = this._usernameInput.parentElement;
     
-    if(value === '') {
-      errorSpan.display(inputFormGroup, 'Please enter a username.');
-      return true;
-    }
+    if(value.length < 5) {
+      errorSpan.display(inputFormGroup, 'Usernames can not be less than 5 characters long');
+      return false;
+
+    } else if(value.length > 24) {
+      errorSpan.display(inputFormGroup, 'Usernames can not be more than 24 characters long');
+      return false;
+      
+    } else if(value.indexOf(' ') !== -1) {
+      errorSpan.display(inputFormGroup, 'Usernames can not contain whitespace.');
+      return false;
+    };
 
     errorSpan.hide(inputFormGroup);
-    return false;
+    return true;
   };
 
-  _passwordInputIsEmpty() {
+  _validatePassword() {
     const value = this._passwordInput.value;
     const inputFormGroup = this._passwordInput.parentElement;
     
-    if(value === '') {
-      errorSpan.display(inputFormGroup, 'Please enter a password.');
-      return true;
-    }
+    if(value.length < 8) {
+      errorSpan.display(inputFormGroup, 'Passwords can not be less than 8 characters long');
+      return false;
+
+    } else if(value.length > 40) {
+      errorSpan.display(inputFormGroup, 'Passwords can not be more than 40 characters long');
+      return false;
+
+    } else if(value.indexOf(' ') !== -1) {
+      errorSpan.display(inputFormGroup, 'Passwords can not contain whitespace.');
+      return false;
+    };
 
     errorSpan.hide(inputFormGroup);
-    return false;
+    return true;
   };
 };
 
