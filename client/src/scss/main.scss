@@ -2,7 +2,7 @@
 @import './partials/utils.scss';
 
 
-// // Desktop Navbar
+// Desktop Navbar
 .main-nav {
   height: 6rem;
   max-height: 6rem;
@@ -60,14 +60,47 @@
   }
 }
 
+// Footer
+.footer {
+  margin: 0;
+  padding: 0;
+  height: 3rem;
+  background: rgb(35, 35, 35);
+
+  &-container {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    p {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #CECCD5;
+    }
+
+    a {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #CECCD5;
+      text-decoration: underline;
+      transition: color 200ms;
+
+      &:hover {
+        color: $cta;
+      }
+    }
+  }
+}
+
 // index.html --- --- ---
 
 // Hero
 .hero {
-  height: calc(100vh - 6rem);
-  max-height: calc(100vh - 6rem);
-  height: calc(100svh - 6rem);
-  max-height: calc(100svh - 6rem);
+  height: calc(100vh - 9rem);
+  max-height: calc(100vh - 9rem);
+  height: calc(100svh - 9rem);
+  max-height: calc(100svh - 9rem);
   overflow: hidden;
 
   .container {
@@ -75,14 +108,17 @@
   }
   
   &-container {
-    margin: auto 0;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
     .svg-div {
-      grid-column: span 1;
-      margin: auto 0;
-      text-align: end;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      max-width: 50%;
     }
 
     &-content {
@@ -105,12 +141,13 @@
 
 // Sign Up
 .sign-up {
-  height: 100vh;
-  max-height: 100vh;
-  height: 100svh;
-  max-height: 100svh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 
   &-container {
+    padding: 6rem 0;
     height: 100%;
     display: flex;
     align-items: center;
@@ -1047,6 +1084,434 @@
       font-size: 1.4rem;
       font-weight: bold;
       height: fit-content;
+    }
+  }
+}
+
+
+// verification.html
+.verification {
+  height: 100vh;
+  max-height: 100vh;
+  height: 100svh;
+  max-height: 100svh;
+
+  .container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &-container {
+    margin: auto;
+    padding: 4rem 2rem;
+    background: $secondary;
+    border-radius: 5px;
+    width: 35rem;
+    max-width: 35rem;
+    position: relative;
+
+    .content-t {
+      font-size: 2.6rem;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .h-line {
+      height: 1px;
+      width: calc(100% + 4rem);
+      background: rgba(200, 200, 200, 0.15);
+      margin: 4rem 0 3rem;
+      transform: translateX(-2rem);
+    }
+
+    .description {
+      margin-bottom: 2rem;
+
+      .content-p {
+        margin: 0;
+        font-size: 1.4rem;
+        line-height: 1.2;
+        font-weight: 400;
+
+        &:first-child {
+          margin-bottom: 1rem;
+        }
+
+        &:last-child {
+          font-size: 1.2rem;
+          font-weight: bold;
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .form-group {
+
+      input {
+        text-transform: uppercase;
+      }
+    }
+
+    .btn {
+      margin-bottom: 2rem;
+      width: 100%;
+    }
+
+    .resend {
+      font-size: 1.2rem;
+      color: rgba(200, 200, 200, 0.85);
+      font-weight: bold;
+      margin-bottom: 3rem;
+
+      span {
+        cursor: pointer;
+        color: $cta;
+        transition: color 200ms;
+
+        &:hover {
+          color: $light;
+        }
+      }
+    }
+
+    .links-container {
+      font-size: 1.4rem;
+      font-weight: bold;
+
+      p {
+        &:hover {
+          color: rgba(200, 200, 200, 0.85);
+        }
+
+        &:first-child {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          font-size: 1.4rem;
+          font-weight: bold;
+          padding: 1rem;
+          cursor: pointer;
+          transition: color 200ms;
+          width: fit-content;
+
+          display: flex;
+          align-items: center;
+
+          .svg-icon {
+            margin-right: 2px;
+            margin-bottom: 1px;
+            height: 1.4rem;
+            fill: $cta;
+          }
+        }
+
+        &:last-child {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          font-size: 1.4rem;
+          font-weight: bold;
+          padding: 1rem;
+          cursor: pointer;
+          transition: color 200ms;
+          width: fit-content;
+
+          display: flex;
+          align-items: center;
+
+          .svg-icon {
+            margin-right: 2px;
+            margin-bottom: 2px;
+            fill: $cta;
+          }
+        }
+      }
+    }
+  }
+}
+
+// recovery.html
+.recovery {
+  height: 100vh;
+  max-height: 100vh;
+  height: 100svh;
+  max-height: 100svh;
+
+  .container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &-container {
+    margin: auto;
+    padding: 4rem 2rem;
+    background: $secondary;
+    border-radius: 5px;
+    width: 35rem;
+    max-width: 35rem;
+    position: relative;
+
+    .content-t {
+      font-size: 2.6rem;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .h-line {
+      height: 1px;
+      width: calc(100% + 4rem);
+      background: rgba(200, 200, 200, 0.15);
+      margin: 4rem 0 3rem;
+      transform: translateX(-2rem);
+    }
+    
+    .content-p {
+      margin: 0;
+      margin-bottom: 2rem;
+      font-size: 1.4rem;
+      line-height: 1.2;
+      font-weight: 400;
+    }
+
+    .form-group {
+
+      input.recoveryCode {
+        text-transform: uppercase;
+      }
+    }
+
+    .btn {
+      margin-bottom: 2rem;
+      width: 100%;
+    }
+
+    .links-container {
+      margin-top: 3rem;
+      font-size: 1.4rem;
+      font-weight: bold;
+
+      p {
+        &:hover {
+          color: rgba(200, 200, 200, 0.85);
+        }
+
+        &:first-child {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          font-size: 1.4rem;
+          font-weight: bold;
+          padding: 1rem;
+          cursor: pointer;
+          transition: color 200ms;
+          width: fit-content;
+
+          display: flex;
+          align-items: center;
+
+          .svg-icon {
+            margin-right: 2px;
+            margin-bottom: 1px;
+            height: 1.4rem;
+            fill: $cta;
+          }
+        }
+
+        &:last-child {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          font-size: 1.4rem;
+          font-weight: bold;
+          padding: 1rem;
+          cursor: pointer;
+          transition: color 200ms;
+          width: fit-content;
+
+          display: flex;
+          align-items: center;
+
+          .svg-icon {
+            margin-right: 2px;
+            margin-bottom: 2px;
+            fill: $cta;
+          }
+        }
+      }
+    }
+  }
+}
+
+// updatePassword.html
+.updatePassword {
+  height: 100vh;
+  max-height: 100vh;
+  height: 100svh;
+  max-height: 100svh;
+
+  .container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &-container {
+    margin: auto;
+    padding: 4rem 2rem;
+    background: $secondary;
+    border-radius: 5px;
+    width: 35rem;
+    max-width: 35rem;
+    position: relative;
+
+    .content-t {
+      font-size: 2.6rem;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .h-line {
+      height: 1px;
+      width: calc(100% + 4rem);
+      background: rgba(200, 200, 200, 0.15);
+      margin: 4rem 0 3rem;
+      transform: translateX(-2rem);
+    }
+    
+    .content-p {
+      margin: 0;
+      margin-bottom: 2rem;
+      font-size: 1.4rem;
+      line-height: 1.2;
+      font-weight: 400;
+    }
+
+
+    .btn {
+      margin-bottom: 2rem;
+      width: 100%;
+    }
+
+    .links-container {
+      margin-top: 3rem;
+      font-size: 1.4rem;
+      font-weight: bold;
+
+      p {
+        &:hover {
+          color: rgba(200, 200, 200, 0.85);
+        }
+
+        &:first-child {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          font-size: 1.4rem;
+          font-weight: bold;
+          padding: 1rem;
+          cursor: pointer;
+          transition: color 200ms;
+          width: fit-content;
+
+          display: flex;
+          align-items: center;
+
+          .svg-icon {
+            margin-right: 2px;
+            margin-bottom: 1px;
+            height: 1.4rem;
+            fill: $cta;
+          }
+        }
+
+        &:last-child {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          font-size: 1.4rem;
+          font-weight: bold;
+          padding: 1rem;
+          cursor: pointer;
+          transition: color 200ms;
+          width: fit-content;
+
+          display: flex;
+          align-items: center;
+
+          .svg-icon {
+            margin-right: 2px;
+            margin-bottom: 2px;
+            fill: $cta;
+          }
+        }
+      }
+    }
+  }
+}
+
+.terms {
+  padding: 6rem 0 !important;
+
+  &-container {
+    max-width: 720px;
+    margin: 0 auto;
+
+    .content-t {
+      margin-bottom: 1rem;
+    }
+
+    .terms-desc {
+      font-size: 1.6rem;
+      font-weight: 400;
+      line-height: 1.4;
+      margin-bottom: 3rem;
+      color: #CECCD5;
+    }
+
+    &-group {
+      &:not(&:last-child) {
+        margin-bottom: 3rem;
+      }
+
+      &-t {
+        margin-bottom: 1rem;
+        font-size: 2rem;
+        font-weight: bold;
+      }
+  
+      &-p {
+        font-size: 1.6rem;
+        font-weight: 400;
+        line-height: 1.4;
+        color: #CECCD5;
+
+        &:not(&:last-child) {
+          margin-bottom: 1rem;
+        }
+      }
+
+      &-ul {
+        list-style: decimal;
+        padding-left: 3rem;
+
+        &:not(&:last-child) {
+          margin-bottom: 1rem;
+        }
+      }
+
+      &-li {
+        list-style-type: disc;
+        font-size: 1.6rem;
+        font-weight: 400;
+        line-height: 1.4;
+        color: #CECCD5;
+        margin-bottom: 1rem;
+      }
     }
   }
 }

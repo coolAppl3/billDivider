@@ -1,4 +1,8 @@
 class ValidateUser {
+  validateEmail(email) {
+    const re = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?$/;
+    return re.test(email);
+  };
   
   validateUsername(username) {
     // Username must be 5-24 characters long (both inclusive) and:
@@ -7,30 +11,17 @@ class ValidateUser {
     // Must not include any whitespace
     
     const re = /^[a-zA-Z0-9]*[a-zA-Z][a-zA-Z0-9]{4,24}$/;
-    
-    if(!re.test(username)) {
-      return false;
-    }
-
-    return true;
+    return re.test(username);
   };
-
-  
   
   validatePassword(password) {
-    // Password must be 8-24 characters long (both inclusive) and:
+    // Password must be 8-40 characters long (both inclusive) and:
     // Can accept dots and underscores
     // Must not include any other special characters
     // Must not include any whitespace
     
-    const re = /^[a-zA-Z0-9_.]{8,24}$/;
-    
-    if(!re.test(password)) {
-      return false;
-
-    } else {
-      return true;
-    };
+    const re = /^[a-zA-Z0-9_.]{8,40}$/;
+    return re.test(password);
   };
 };
 

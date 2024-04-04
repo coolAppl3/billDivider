@@ -22,7 +22,7 @@ afterEach(() => {
 describe(`redirectAfterDelayMillisecond(
   target,
   delay = 1000,
-  message = 'Something went wrong',
+  message = 'Something went wrong.',
   popupColor = 'danger'
 )`, () => {
 
@@ -43,7 +43,7 @@ describe(`redirectAfterDelayMillisecond(
       redirectAfterDelayMillisecond();
       jest.advanceTimersByTime(1000);
   
-      expect(messagePopup).toHaveBeenCalledWith('Something went wrong', 'danger');
+      expect(messagePopup).toHaveBeenCalledWith('Something went wrong.', 'danger', 1000);
       expect(window.location.href).toBe('index.html');
     });
   
@@ -52,7 +52,7 @@ describe(`redirectAfterDelayMillisecond(
       redirectAfterDelayMillisecond(0);
       jest.advanceTimersByTime(1000);
   
-      expect(messagePopup).toHaveBeenCalledWith('Something went wrong', 'danger');
+      expect(messagePopup).toHaveBeenCalledWith('Something went wrong.', 'danger', 1000);
       expect(window.location.href).toBe('index.html');
     });
   
@@ -61,7 +61,7 @@ describe(`redirectAfterDelayMillisecond(
       redirectAfterDelayMillisecond('someString');
       jest.advanceTimersByTime(1000);
   
-      expect(messagePopup).toHaveBeenCalledWith('Something went wrong', 'danger');
+      expect(messagePopup).toHaveBeenCalledWith('Something went wrong.', 'danger', 1000);
       expect(window.location.href).toBe('index.html');
     });
   
@@ -70,7 +70,7 @@ describe(`redirectAfterDelayMillisecond(
       redirectAfterDelayMillisecond('somePage .html');
       jest.advanceTimersByTime(1000);
   
-      expect(messagePopup).toHaveBeenCalledWith('Something went wrong', 'danger');
+      expect(messagePopup).toHaveBeenCalledWith('Something went wrong.', 'danger', 1000);
       expect(window.location.href).toBe('index.html');
     });
   
@@ -79,16 +79,16 @@ describe(`redirectAfterDelayMillisecond(
       redirectAfterDelayMillisecond('redirect.html');
       jest.advanceTimersByTime(1000);
   
-      expect(messagePopup).toHaveBeenCalledWith('Something went wrong', 'danger');
+      expect(messagePopup).toHaveBeenCalledWith('Something went wrong.', 'danger', 1000);
       expect(window.location.href).toBe('redirect.html');
     });
     
     it(`should call messagePopup with the passed in arguments, and redirect the user accordingly, if the target argument is valid`, () => {
       jest.useFakeTimers();
-      redirectAfterDelayMillisecond('redirect.html', 1000, 'Some message', 'cta');
+      redirectAfterDelayMillisecond('redirect.html', 1000, 'Some message.', 'cta');
       jest.advanceTimersByTime(1000);
   
-      expect(messagePopup).toHaveBeenCalledWith('Some message', 'cta');
+      expect(messagePopup).toHaveBeenCalledWith('Some message.', 'cta', 1000);
       expect(window.location.href).toBe('redirect.html');
     });
   })
@@ -104,7 +104,7 @@ describe(`redirectAfterDelayMillisecond(
       expect(window.location.href).not.toBe('redirect.html');
   
       jest.advanceTimersByTime(500); // marks 1000 milliseconds since the function was called
-      expect(messagePopup).toHaveBeenCalledWith('Something went wrong', 'danger');
+      expect(messagePopup).toHaveBeenCalledWith('Something went wrong.', 'danger', 1000);
       expect(window.location.href).toBe('redirect.html');
     });
   
@@ -118,7 +118,7 @@ describe(`redirectAfterDelayMillisecond(
       expect(window.location.href).not.toBe('redirect.html');
   
       jest.advanceTimersByTime(500); // marks 1000 milliseconds since the function was called
-      expect(messagePopup).toHaveBeenCalledWith('Something went wrong', 'danger');
+      expect(messagePopup).toHaveBeenCalledWith('Something went wrong.', 'danger', 1000);
       expect(window.location.href).toBe('redirect.html');
     });
   
@@ -132,7 +132,7 @@ describe(`redirectAfterDelayMillisecond(
       expect(window.location.href).not.toBe('redirect.html');
   
       jest.advanceTimersByTime(500); // marks 1000 milliseconds since the function was called
-      expect(messagePopup).toHaveBeenCalledWith('Something went wrong', 'danger');
+      expect(messagePopup).toHaveBeenCalledWith('Something went wrong.', 'danger', 1000);
       expect(window.location.href).toBe('redirect.html');
     });
     
@@ -146,7 +146,7 @@ describe(`redirectAfterDelayMillisecond(
     jest.advanceTimersByTime(1000);
 
     expect(sessionStorage.getItem('unsavedSessionChanges')).toBeNull();
-    expect(messagePopup).toHaveBeenCalledWith('Something went wrong', 'danger');
+    expect(messagePopup).toHaveBeenCalledWith('Something went wrong.', 'danger', 1000);
     expect(window.location.href).toBe('redirect.html');
   });
 });

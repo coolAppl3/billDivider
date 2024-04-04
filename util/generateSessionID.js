@@ -1,5 +1,5 @@
 function generateSessionID() {
-  const allowedChars = 'abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ0123456789'; // Letter "o" not allowed
+  const allowedChars = 'abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ0123456789'; // Uppercase or lowercase letter "o" not allowed
   let id = '';
 
   for(let i = 0; i < 16; i++) {
@@ -7,7 +7,6 @@ function generateSessionID() {
   };
 
   return id;
-  
 };
 
 module.exports = generateSessionID;

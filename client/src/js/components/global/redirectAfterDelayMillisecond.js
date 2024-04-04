@@ -1,15 +1,14 @@
 import messagePopup from "./messagePopup";
-import LoadingModal from "./LoadingModal";
 
 function redirectAfterDelayMillisecond(
   target,
   delay = 1000,
-  message = 'Something went wrong',
+  message = 'Something went wrong.',
   popupColor = 'danger'
 ) {
 
-  if(!target || typeof target !== 'string' || !target.endsWith('.html') || target.includes(' ')) {
-    messagePopup('Something went wrong', 'danger');
+  if(!target || typeof target !== 'string' || target.indexOf('.html') === -1 || target.includes(' ')) {
+    messagePopup('Something went wrong.', 'danger', delay);
     setTimeout(() => window.location.href = 'index.html', 1000);
     return ;
   };
@@ -22,7 +21,7 @@ function redirectAfterDelayMillisecond(
     sessionStorage.removeItem('unsavedSessionChanges');
   };
 
-  messagePopup(message, popupColor);
+  messagePopup(message, popupColor, delay);
   setTimeout(() => window.location.href = target, delay);
 };
 

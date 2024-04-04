@@ -13,7 +13,7 @@ const cookies = new Cookies();
 const errorSpan = new ErrorSpan();
 
 new FormCheckbox('keepMeSignedIn');
-new RevealPassword('password');
+new RevealPassword('password', 'revealPassword');
 new LinksContainer();
 
 class SignInForm {
@@ -24,12 +24,17 @@ class SignInForm {
 
     this._keepMeSignedInCheckBox = document.querySelector('#keepMeSignedIn');
     this._loginTokenAge = 1209600000; // 14 days
+
+    this._recoveryBtn = document.querySelector('#recovery');
     
     this._loadEventListeners();
   };
 
   _loadEventListeners() {
     this._signInContainerForm.addEventListener('submit', this._signIn.bind(this));
+
+    this._recoveryBtn.addEventListener('keyup', this._handleRecoveryBtnKeyEvents.bind(this));
+    this._recoveryBtn.addEventListener('click', this._startAccountRecovery.bind(this));
   };
 
   async _signIn(e) {
@@ -87,7 +92,21 @@ class SignInForm {
         return ;
       };
 
-      redirectAfterDelayMillisecond('signUp.html', 1000, 'Something went wrong');
+      if(status === 403) { // email not verified or account locked
+        if(err.response.data.message === 'Email not verified.') {
+          const inputFormGroup = this._passwordInput.parentElement;
+          errorSpan.display(inputFormGroup, 'Email not verified. Please check your email to complete the verification process.');
+          LoadingModal.remove();
+          return ;
+        };
+        
+        const inputFormGroup = this._passwordInput.parentElement;
+        errorSpan.display(inputFormGroup, 'Account locked due to many failed sign in attempts. Click on "Forgot my password" above to recover your account.');
+        LoadingModal.remove();
+        return ;
+      };
+
+      redirectAfterDelayMillisecond('signIn.html');
     }
   };
 
@@ -131,6 +150,17 @@ class SignInForm {
 
     errorSpan.hide(inputFormGroup);
     return true;
+  };
+
+  _handleRecoveryBtnKeyEvents(e) {
+    if(e.key === 'Enter') {
+      this._startAccountRecovery();
+    };
+  };
+
+  _startAccountRecovery() {
+    LoadingModal.display();
+    redirectAfterDelayMillisecond('recovery.html', 1000, 'Starting account recovery process.', 'cta');
   };
 };
 

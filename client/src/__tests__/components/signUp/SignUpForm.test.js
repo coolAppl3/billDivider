@@ -24,16 +24,27 @@ const signUpFormHTML = `
       <div class="sign-up-container">
         <form class="sign-up-container-form">
           <h3 class="content-t">Create a new account</h3>
-          <p class="content-p">Quick and simple. No email needed!</p>
+          <p class="content-p">Just a few quick and simple steps!</p>
 
           <div class="h-line"></div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              type="text"
+              id="email"
+              autocomplete="email"
+              autocapitalize="off"
+            />
+            <span class="error-span"></span>
+          </div>
 
           <div class="form-group">
             <label for="username">Username</label>
             <input
               type="text"
               id="username"
-              autocomplete="off"
+              autocomplete="username"
+              autocapitalize="off"
             />
             <span class="error-span"></span>
           </div>
@@ -43,20 +54,50 @@ const signUpFormHTML = `
             <input
               type="password"
               id="password"
-              autocomplete="on"
+              autocomplete="new-password"
             />
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 576 512"
-              class="svg-icon"
+            <div
+              class="svg-div"
               id="revealPassword"
-              tabindex="0"
             >
-              <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-              <path
-                d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z"
-              />
-            </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 576 512"
+                class="svg-icon"
+                tabindex="0"
+              >
+                <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                <path
+                  d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z"
+                />
+              </svg>
+            </div>
+            <span class="error-span"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword">Confirm password</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              autocomplete="new-password"
+            />
+            <div
+              class="svg-div"
+              id="revealConfirmPassword"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 576 512"
+                class="svg-icon"
+                tabindex="0"
+              >
+                <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                <path
+                  d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z"
+                />
+              </svg>
+            </div>
             <span class="error-span"></span>
           </div>
 
@@ -71,6 +112,17 @@ const signUpFormHTML = `
             <p>Keep me signed in</p>
           </div>
 
+          <div class="form-group description-group">
+            <p>
+              By signing up to Bill Divider, you are agreeing to our
+              <a
+                href="termsOfService.html"
+                target="_blank"
+                >Terms of Service</a
+              >.
+            </p>
+          </div>
+
           <div class="btn-div">
             <button
               type="submit"
@@ -82,8 +134,7 @@ const signUpFormHTML = `
 
           <p>
             Already have an account?
-            <a href="signIn.html">Sign in here</a>. Alternatively, you can
-            <a href="session.html">start an anonymous session</a>.
+            <a href="signIn.html">Sign in here</a>. Alternatively, you can <a href="session.html">start an anonymous session</a>.
           </p>
 
           <div class="links-container">
@@ -139,201 +190,260 @@ afterEach(() => {
   jest.resetAllMocks();
 });
 
-describe('_signUp(e)', () => {
-  let mockEvent;
-
-  beforeEach(() => {
-    mockEvent = { preventDefault: () => {}, };
-  });
-
-  afterEach(() => {
-    mockEvent = null;
-  });
-
+describe('_signUp', () => {
   it('should always call e.preventDefault() and LoadingModal.display()', async () => {
-    signUpForm._usernameInput.value = ''; // ensuring an invalid value to force an early return for this test
-    const mockEVentSpy = jest.spyOn(mockEvent, 'preventDefault');
-    
+    const mockEvent = { preventDefault: () => {} };
+    const mockEventSpy = jest.spyOn(mockEvent, 'preventDefault');
+
+    await signUpForm._signUp(mockEvent);
+    expect(mockEventSpy).toHaveBeenCalled();
+    expect(LoadingModal.display).toHaveBeenCalled();
+  });
+  
+  it('should call 4 validation functions for the form inputs', async () => {
+    const _validateEmailSpy = jest.spyOn(signUpForm, '_validateEmail');
+    const _validateUsernameSpy = jest.spyOn(signUpForm, '_validateUsername');
+    const _validatePasswordSpy = jest.spyOn(signUpForm, '_validatePassword');
+    const _validateConfirmPasswordSpy = jest.spyOn(signUpForm, '_validateConfirmPassword');
+
+    const mockEvent = { preventDefault: () => {} };
     await signUpForm._signUp(mockEvent);
 
-    expect(mockEVentSpy).toHaveBeenCalled();
+    expect(_validateEmailSpy).toHaveBeenCalledWith(signUpForm._emailInput);
+    expect(_validateUsernameSpy).toHaveBeenCalledWith(signUpForm._usernameInput);
+    expect(_validatePasswordSpy).toHaveBeenCalledWith(signUpForm._passwordInput);
+    expect(_validateConfirmPasswordSpy).toHaveBeenCalledWith(signUpForm._confirmPasswordInput);
+  });
+
+  it('should, if the email provided is invalid, call LoadingModal.remove(), stop the function, and return undefined', async () => {
+    signUpForm._emailInput.value = 'invalidEmail.com';
+    signUpForm._usernameInput.value = 'validUsername';
+    signUpForm._passwordInput.value = 'validPassword';
+    signUpForm._confirmPasswordInput.value = 'validPassword';
+    
+    const mockEvent = { preventDefault: () => {} };
+    expect(await signUpForm._signUp(mockEvent)).toBeUndefined();
+    expect(LoadingModal.remove).toHaveBeenCalled();
+  });
+
+  it('should, if the username provided is invalid, call LoadingModal.remove(), stop the function, and return undefined', async () => {
+    signUpForm._emailInput.value = 'validEmail@example.com';
+    signUpForm._usernameInput.value = 'invalid-username!';
+    signUpForm._passwordInput.value = 'validPassword';
+    signUpForm._confirmPasswordInput.value = 'validPassword';
+    
+    const mockEvent = { preventDefault: () => {} };
+    expect(await signUpForm._signUp(mockEvent)).toBeUndefined();
+    expect(LoadingModal.remove).toHaveBeenCalled();
+  });
+
+  it('should, if the password provided is invalid, call LoadingModal.remove(), stop the function, and return undefined', async () => {
+    signUpForm._emailInput.value = 'validEmail@example.com';
+    signUpForm._usernameInput.value = 'validUsername';
+    signUpForm._passwordInput.value = 'invalid->password';
+    signUpForm._confirmPasswordInput.value = 'invalid->password';
+    
+    const mockEvent = { preventDefault: () => {} };
+    expect(await signUpForm._signUp(mockEvent)).toBeUndefined();
     expect(LoadingModal.remove).toHaveBeenCalled();
   });
   
-  it('should, if either the username or password are invalid, call LoadingModal.remove() and return undefined ', async () => {
-    signUpForm._usernameInput.value = '';
-
+  it('should, if the confirm password input value is not identical to the password input value, call LoadingModal.remove(), stop the function, and return undefined', async () => {
+    signUpForm._emailInput.value = 'validEmail@example.com';
+    signUpForm._usernameInput.value = 'validUsername';
+    signUpForm._passwordInput.value = 'validPassword';
+    signUpForm._confirmPasswordInput.value = 'nonIdenticalPassword';
+    
+    const mockEvent = { preventDefault: () => {} };
     expect(await signUpForm._signUp(mockEvent)).toBeUndefined();
     expect(LoadingModal.remove).toHaveBeenCalled();
   });
 
-  it(`should, if both inputs are valid, create a newUser object with the name and password, call SignUpAPI.prototype.signUp(newUser). If the API request is successful, it should receive a loginToken, add it to the browser's cookies, call LoadingModal.display(), redirect the user to history.html, then return undefined. If _keepMeSignedInCheckBox contains a class of "contains", the loginToken cookie should have an age equal to the value of _loginTokenAge`, async () => {
-    signUpForm._usernameInput.value = 'JohnDoe';
-    signUpForm._passwordInput.value = 'JohnDoe123';
-    signUpForm._keepMeSignedInCheckBox.classList.add('checked');
+  it(`should, if all inputs are valid, call SignUpAPI.prototype.signUp, and assuming the request was successful, redirect the user to verification.html and return undefined. The link should also include the user's unverifiedUserID and a query regarding whether or not they would like to stay signed in`, async () => {
+    signUpForm._emailInput.value = 'validEmail@example.com';
+    signUpForm._usernameInput.value = 'validUsername';
+    signUpForm._passwordInput.value = 'validPassword';
+    signUpForm._confirmPasswordInput.value = 'validPassword';
 
-    const mockNewUserObject = {
-      username: 'JohnDoe',
-      password: 'JohnDoe123',
+    const newUser = {
+      email: signUpForm._emailInput.value,
+      username: signUpForm._usernameInput.value,
+      password: signUpForm._passwordInput.value,
     };
-    
-    const mockResolvedResponse = {
-      data: {
-        loginToken: 'mockLoginToken',
-      },
-    };
-    
-    SignUpAPI.prototype.signUp.mockResolvedValueOnce(mockResolvedResponse);
-    Cookies.prototype.set.mockImplementationOnce(() => {});
 
+    SignUpAPI.prototype.signUp.mockResolvedValueOnce({ data: { unverifiedUserID: 'mockUnverifiedUserID' } });
+    signUpForm._keepMeSignedInCheckbox.classList.add('checked');
+
+    const mockEvent = { preventDefault: () => {} };
     expect(await signUpForm._signUp(mockEvent)).toBeUndefined();
-    expect(SignUpAPI.prototype.signUp).toHaveBeenCalledWith(mockNewUserObject);
-    expect(Cookies.prototype.set).toHaveBeenCalledWith('loginToken', 'mockLoginToken', signUpForm._loginTokenAge);
-    expect(LoadingModal.display).toHaveBeenCalled();
-    expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('history.html', 1000, 'Signed up successfully!', 'success');
+
+    expect(SignUpAPI.prototype.signUp).toHaveBeenCalledWith(newUser);
+    expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('verification.html?id=mockUnverifiedUserID&keepMeSignedIn=true', 2000, 'Signed up successfully!', 'success');
   });
+  
+  it(`should, if all inputs are valid, call SignUpAPI.prototype.signUp, and if the request fails without a response object, it should call redirectAfterDelayMillisecond('signUp.html')`, async () => {
+    signUpForm._emailInput.value = 'validEmail@example.com';
+    signUpForm._usernameInput.value = 'validUsername';
+    signUpForm._passwordInput.value = 'validPassword';
+    signUpForm._confirmPasswordInput.value = 'validPassword';
 
-  it(`should, if both inputs are valid, create a newUser object with the name and password, call SignUpAPI.prototype.signUp(newUser). If the API request is successful, it should receive a loginToken, add it to the browser's cookies, call LoadingModal.display(), redirect the user to history.html, then return undefined. If _keepMeSignedInCheckBox does not contain a class of "checked", the cookie shouldn't have an age, and will be automatically removed when the browser is closed`, async () => {
-    signUpForm._usernameInput.value = 'JohnDoe';
-    signUpForm._passwordInput.value = 'JohnDoe123';
-    signUpForm._keepMeSignedInCheckBox.classList.remove('checked');
-
-    const mockNewUserObject = {
-      username: 'JohnDoe',
-      password: 'JohnDoe123',
+    const newUser = {
+      email: signUpForm._emailInput.value,
+      username: signUpForm._usernameInput.value,
+      password: signUpForm._passwordInput.value,
     };
-    
-    const mockResolvedResponse = {
-      data: {
-        loginToken: 'mockLoginToken',
-      },
-    };
-    
-    SignUpAPI.prototype.signUp.mockResolvedValueOnce(mockResolvedResponse);
-    Cookies.prototype.set.mockImplementationOnce(() => {});
 
+    SignUpAPI.prototype.signUp.mockRejectedValueOnce('mockError');
+
+    const mockEvent = { preventDefault: () => {} };
     expect(await signUpForm._signUp(mockEvent)).toBeUndefined();
-    expect(SignUpAPI.prototype.signUp).toHaveBeenCalledWith(mockNewUserObject);
-    expect(Cookies.prototype.set).toHaveBeenCalledWith('loginToken', 'mockLoginToken');
-    expect(LoadingModal.display).toHaveBeenCalled();
-    expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('history.html', 1000, 'Signed up successfully!', 'success');
-  });
 
-  it('should catch any potential error in the API request. If the error does not have a response property, it should redirect the user to signUp.html and return undefined', async () => {
-    signUpForm._usernameInput.value = 'JohnDoe';
-    signUpForm._passwordInput.value = 'JohnDoe123';
-
-    const mockNewUserObject = {
-      username: 'JohnDoe',
-      password: 'JohnDoe123',
-    };
-    
-    const mockRejectedResponse = {}; 
-    
-    SignUpAPI.prototype.signUp.mockRejectedValueOnce(mockRejectedResponse);
-    Cookies.prototype.set.mockImplementationOnce(() => {});
-
-    expect(await signUpForm._signUp(mockEvent)).toBeUndefined();
-    expect(SignUpAPI.prototype.signUp).toHaveBeenCalledWith(mockNewUserObject);
-
-    expect(Cookies.prototype.set).not.toHaveBeenCalled();
+    expect(SignUpAPI.prototype.signUp).toHaveBeenCalledWith(newUser);
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('signUp.html');
   });
 
-  it('should catch any potential error in the API request and log it. If error.response.status is equal to 401, it should redirect the user to signUp.html and return undefined', async () => {
-    signUpForm._usernameInput.value = 'JohnDoe';
-    signUpForm._passwordInput.value = 'JohnDoe123';
+  it(`should, if all inputs are valid, call SignUpAPI.prototype.signUp, and if the request fails with a status of 401, it should call redirectAfterDelayMillisecond('signUp.html')`, async () => {
+    signUpForm._emailInput.value = 'validEmail@example.com';
+    signUpForm._usernameInput.value = 'validUsername';
+    signUpForm._passwordInput.value = 'validPassword';
+    signUpForm._confirmPasswordInput.value = 'validPassword';
 
-    const mockNewUserObject = {
-      username: 'JohnDoe',
-      password: 'JohnDoe123',
+    const newUser = {
+      email: signUpForm._emailInput.value,
+      username: signUpForm._usernameInput.value,
+      password: signUpForm._passwordInput.value,
     };
-    
-    const mockRejectedResponse = {
-      response: {
-        status: 401,
-        data: { mockValue: 'mockProperty' },
-      },
-    }; 
-    
-    SignUpAPI.prototype.signUp.mockRejectedValueOnce(mockRejectedResponse);
-    Cookies.prototype.set.mockImplementationOnce(() => {});
 
-    const consoleSpy = jest.spyOn(window.console, 'log');
+    SignUpAPI.prototype.signUp.mockRejectedValueOnce('mockError');
 
+    const mockEvent = { preventDefault: () => {} };
     expect(await signUpForm._signUp(mockEvent)).toBeUndefined();
-    expect(SignUpAPI.prototype.signUp).toHaveBeenCalledWith(mockNewUserObject);
 
-    expect(Cookies.prototype.set).not.toHaveBeenCalled();
-
-    expect(consoleSpy).toHaveBeenCalledWith(mockRejectedResponse.response.data);
+    expect(SignUpAPI.prototype.signUp).toHaveBeenCalledWith(newUser);
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('signUp.html');
   });
 
-  it('should catch any potential error in the API request and log it. If error.response.status is equal to 409, it should call ErrorSpan.prototype.display() with the parent element of _usernameInput, call LoadingModal.remove(), then return undefined', async () => {
-    signUpForm._usernameInput.value = 'JohnDoe';
-    signUpForm._passwordInput.value = 'JohnDoe123';
+  it(`should, if all inputs are valid, call SignUpAPI.prototype.signUp, and if the request fails with a status of 409 and res.data.message is equal to "Email address already in use.", it should call ErrorSpan.prototype.display() and LoadingModal.remove(), then return undefined`, async () => {
+    signUpForm._emailInput.value = 'validEmail@example.com';
+    signUpForm._usernameInput.value = 'validUsername';
+    signUpForm._passwordInput.value = 'validPassword';
+    signUpForm._confirmPasswordInput.value = 'validPassword';
 
-    const usernameFormGroup = signUpForm._usernameInput.parentElement;
-
-    const mockNewUserObject = {
-      username: 'JohnDoe',
-      password: 'JohnDoe123',
+    const newUser = {
+      email: signUpForm._emailInput.value,
+      username: signUpForm._usernameInput.value,
+      password: signUpForm._passwordInput.value,
     };
-    
-    const mockRejectedResponse = {
+
+    const mockRejectedValue = {
       response: {
         status: 409,
-        data: { mockValue: 'mockProperty' },
+        data: { success: false, message: 'Email address already in use.' },
       },
-    }; 
+    };
+    SignUpAPI.prototype.signUp.mockRejectedValueOnce(mockRejectedValue);
+
+    const mockEvent = { preventDefault: () => {} };
+    const inputFormGroup = signUpForm._emailInput.parentElement;
     
-    SignUpAPI.prototype.signUp.mockRejectedValueOnce(mockRejectedResponse);
-    Cookies.prototype.set.mockImplementationOnce(() => {});
-
-    const consoleSpy = jest.spyOn(window.console, 'log');
-
     expect(await signUpForm._signUp(mockEvent)).toBeUndefined();
-    expect(SignUpAPI.prototype.signUp).toHaveBeenCalledWith(mockNewUserObject);
-
-    expect(Cookies.prototype.set).not.toHaveBeenCalled();
-
-    expect(consoleSpy).toHaveBeenCalledWith(mockRejectedResponse.response.data);
-
-    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(usernameFormGroup, 'Username already taken.');
+    expect(SignUpAPI.prototype.signUp).toHaveBeenCalledWith(newUser);
+    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(inputFormGroup, 'Email address already in use.');
     expect(LoadingModal.remove).toHaveBeenCalled();
   });
 
-  it('should catch any potential error in the API request and log it. If error.response.status is not equal to 409 (most likely 500), it should redirect the user to signUp.html, then return undefined', async () => {
-    signUpForm._usernameInput.value = 'JohnDoe';
-    signUpForm._passwordInput.value = 'JohnDoe123';
+  it(`should, if all inputs are valid, call SignUpAPI.prototype.signUp, and if the request fails with a status of 409 and res.data.message is equal to "Username already taken.", it should call ErrorSpan.prototype.display() and LoadingModal.remove(), then return undefined`, async () => {
+    signUpForm._emailInput.value = 'validEmail@example.com';
+    signUpForm._usernameInput.value = 'validUsername';
+    signUpForm._passwordInput.value = 'validPassword';
+    signUpForm._confirmPasswordInput.value = 'validPassword';
 
-    const mockNewUserObject = {
-      username: 'JohnDoe',
-      password: 'JohnDoe123',
+    const newUser = {
+      email: signUpForm._emailInput.value,
+      username: signUpForm._usernameInput.value,
+      password: signUpForm._passwordInput.value,
     };
-    
-    const mockRejectedResponse = {
+
+    const mockRejectedValue = {
       response: {
-        status: 500,
-        data: { mockValue: 'mockProperty' },
+        status: 409,
+        data: { success: false, message: 'Username already taken.' },
       },
-    }; 
+    };
+    SignUpAPI.prototype.signUp.mockRejectedValueOnce(mockRejectedValue);
+
+    const mockEvent = { preventDefault: () => {} };
+    const inputFormGroup = signUpForm._usernameInput.parentElement;
     
-    SignUpAPI.prototype.signUp.mockRejectedValueOnce(mockRejectedResponse);
-    Cookies.prototype.set.mockImplementationOnce(() => {});
-
-    const consoleSpy = jest.spyOn(window.console, 'log');
-
     expect(await signUpForm._signUp(mockEvent)).toBeUndefined();
-    expect(SignUpAPI.prototype.signUp).toHaveBeenCalledWith(mockNewUserObject);
+    expect(SignUpAPI.prototype.signUp).toHaveBeenCalledWith(newUser);
+    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(inputFormGroup, 'Username already taken.');
+    expect(LoadingModal.remove).toHaveBeenCalled();
+  });
 
-    expect(Cookies.prototype.set).not.toHaveBeenCalled();
+  it(`should, if all inputs are valid, call SignUpAPI.prototype.signUp, and if the request fails with a response object, but not a status of 401 or 409 (most likely 500), it should call redirectAfterDelayMillisecond('signUp.html')`, async () => {
+    signUpForm._emailInput.value = 'validEmail@example.com';
+    signUpForm._usernameInput.value = 'validUsername';
+    signUpForm._passwordInput.value = 'validPassword';
+    signUpForm._confirmPasswordInput.value = 'validPassword';
 
-    expect(consoleSpy).toHaveBeenCalledWith(mockRejectedResponse.response.data);
+    const newUser = {
+      email: signUpForm._emailInput.value,
+      username: signUpForm._usernameInput.value,
+      password: signUpForm._passwordInput.value,
+    };
+
+    SignUpAPI.prototype.signUp.mockRejectedValueOnce({ response: { status: 500 } });
+
+    const mockEvent = { preventDefault: () => {} };
+    expect(await signUpForm._signUp(mockEvent)).toBeUndefined();
+
+    expect(SignUpAPI.prototype.signUp).toHaveBeenCalledWith(newUser);
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('signUp.html');
   });
 });
+
+describe('_validateEmail(input)', () => {
+  let inputFormGroup;
+
+  beforeEach(() => {
+    inputFormGroup = signUpForm._emailInput.parentElement;
+  });
+  
+  afterEach(() => {
+    signUpForm._emailInput.value = '';
+    inputFormGroup = null;
+  });
+
+  it('should, if the length of the email is above 150 characters, call ErrorSpan.prototype.display() then return false', () => {
+    signUpForm._emailInput.value = 'superLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLong@email.com';
+
+    expect(signUpForm._validateEmail(signUpForm._emailInput)).toBe(false);
+    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(inputFormGroup, 'Email address can not be longer than 150 characters.');
+  });
+
+  it('should, if the email contains any whitespace, call ErrorSpan.prototype.display() then return false', () => {
+    signUpForm._emailInput.value = 'white space@example.com';
+
+    expect(signUpForm._validateEmail(signUpForm._emailInput)).toBe(false);
+    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(inputFormGroup, 'Email address can not contain any whitespace.');
+  });
+  
+  it('should, if the email does not match the regular expression which mimics regular browser email input validation, call ErrorSpan.prototype.display() then return false', () => {
+    signUpForm._emailInput.value = 'example.com';
+
+    expect(signUpForm._validateEmail(signUpForm._emailInput)).toBe(false);
+    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(inputFormGroup, 'Invalid email address.');
+  });
+
+  it('should, if a valid email is provided, call ErrorSpan.prototype.hide() then return true', () => {
+    signUpForm._emailInput.value = 'example@example.com';
+
+    expect(signUpForm._validateEmail(signUpForm._emailInput)).toBe(true);
+    expect(ErrorSpan.prototype.hide).toHaveBeenCalledWith(inputFormGroup);
+  });
+});
+
 
 describe('_validateUsername(input)', () => {
   let usernameFormGroup;
@@ -420,5 +530,35 @@ describe('_validatePassword(input)', () => {
     
     expect(signUpForm._validatePassword(signUpForm._passwordInput)).toBe(true);
     expect(ErrorSpan.prototype.hide).toHaveBeenCalled()
+  });
+});
+
+describe('_validateConfirmPassword(input)', () => {
+  let inputFormGroup;
+
+  beforeEach(() => {
+    inputFormGroup = signUpForm._confirmPasswordInput.parentElement;
+  });
+
+  afterEach(() => {
+    signUpForm._passwordInput.value = '';
+    signUpForm._confirmPasswordInput.value = '';
+    inputFormGroup = null;
+  });
+  
+  it('should compare the _confirmPasswordInput value to the _passwordInput value, and if they do not match, call ErrorSpan.prototype.display() with the parent element of _confirmPasswordInput and return false', () => {
+    signUpForm._passwordInput.value = 'somePassword';
+    signUpForm._confirmPasswordInput.value = 'someOtherPassword';
+
+    expect(signUpForm._validateConfirmPassword(signUpForm._confirmPasswordInput)).toBe(false);
+    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(inputFormGroup, 'Passwords are not identical.');
+  });
+  
+  it('should compare the _confirmPasswordInput value to the _passwordInput value, and if they match, call ErrorSpan.prototype.hide() with the parent element of _confirmPasswordInput and return true', () => {
+    signUpForm._passwordInput.value = 'somePassword';
+    signUpForm._confirmPasswordInput.value = 'somePassword';
+
+    expect(signUpForm._validateConfirmPassword(signUpForm._confirmPasswordInput)).toBe(true);
+    expect(ErrorSpan.prototype.hide).toHaveBeenCalledWith(inputFormGroup);
   });
 });

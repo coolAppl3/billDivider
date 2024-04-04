@@ -13,13 +13,17 @@ class HistoryAPI {
 
   async getSessionHistory(loginToken) {
     return axios.get(this._sessionHistoryURL, {
-      headers: { loginToken },
+      headers: {
+        Authorization: `Bearer ${loginToken}`,
+      },
     });
   };
 
   async getUsername(loginToken) {
     return axios.get(this._usernameURL, {
-      headers: { loginToken },
+      headers: {
+        Authorization: `Bearer ${loginToken}`,
+      },
     });
   };
 

@@ -1,7 +1,7 @@
 const User = require('../models/User');
 
 async function generateLoginToken() {
-  const allowedChars = 'abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ0123456789'; // Letter "o" not allowed
+  const allowedChars = 'abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ0123456789'; // Uppercase or lowercase "o" not allowed
   let token = '';
 
   for(let i = 0; i < 32; i++) {
@@ -10,7 +10,7 @@ async function generateLoginToken() {
 
   tokenExists = await User.findOne({ loginToken: token });
   if(tokenExists) {
-    generateLoginToken();
+    return await generateLoginToken();
   };
 
   return token;

@@ -9,25 +9,33 @@ class SessionAPI {
 
   async addSession(loginToken, session) {
     return axios.post(this._sessionURL, session, {
-      headers: { loginToken },
+      headers: {
+        Authorization: `Bearer ${loginToken}`,
+      },
     });
   };
 
   async getSession(loginToken, sessionID) {
     return axios.get(`${this._sessionURL}/${sessionID}`, {
-      headers: { loginToken },
+      headers: {
+        Authorization: `Bearer ${loginToken}`,
+      },
     });
   };
 
   async deleteSession(loginToken, sessionID) {
     return axios.delete(`${this._sessionURL}/${sessionID}`, {
-      headers: { loginToken },
+      headers: {
+        Authorization: `Bearer ${loginToken}`,
+      },
     });
   };
 
   async updateSession(loginToken, sessionID, session) {
     return axios.put(`${this._sessionURL}/${sessionID}`, session, {
-      headers: { loginToken },
+      headers: {
+        Authorization: `Bearer ${loginToken}`,
+      },
     });
   };
 };

@@ -1,5 +1,4 @@
 import SignUpAPI from "../services/SignUpAPI";
-import Cookies from "../global/Cookies";
 import RevealPassword from "../signing/RevealPassword";
 import LinksContainer from "../signing/LinksContainer";
 import LoadingModal from "../global/LoadingModal";
@@ -9,20 +8,22 @@ import FormCheckbox from "../global/FormCheckbox";
 
 // Initializing imports
 const signUpAPI = new SignUpAPI();
-const cookies = new Cookies();
 const errorSpan = new ErrorSpan();
 
 new FormCheckbox('keepMeSignedIn');
-new RevealPassword('password');
+new RevealPassword('password', 'revealPassword');
+new RevealPassword('confirmPassword', 'revealConfirmPassword');
 new LinksContainer();
 
 class SignUpForm {
   constructor() {
     this._signUpContainerForm = document.querySelector('.sign-up-container-form');
+    this._emailInput = document.querySelector('#email');
     this._usernameInput = document.querySelector('#username');
     this._passwordInput = document.querySelector('#password');
+    this._confirmPasswordInput = document.querySelector('#confirmPassword');
 
-    this._keepMeSignedInCheckBox = document.querySelector('#keepMeSignedIn');
+    this._keepMeSignedInCheckbox = document.querySelector('#keepMeSignedIn');
     this._loginTokenAge = 1209600000; // 14 days
 
     this._loadEventListeners();
@@ -36,28 +37,35 @@ class SignUpForm {
     e.preventDefault();
     LoadingModal.display();
 
-    const isValidUsername = this._validateUsername(this._usernameInput); // returns true if it is
-    const isValidPassword = this._validatePassword(this._passwordInput); // returns true if it is
+    const isValidEmail = this._validateEmail(this._emailInput);
+    const isValidUsername = this._validateUsername(this._usernameInput);
+    const isValidPassword = this._validatePassword(this._passwordInput);
+    const isValidConfirmPassword = this._validateConfirmPassword(this._confirmPasswordInput);
 
-    if(!isValidUsername || !isValidPassword) {
+    if(!isValidEmail || !isValidUsername || !isValidPassword || !isValidConfirmPassword) {
       LoadingModal.remove();
       return ;
     };
 
-    const newUser = { username: this._usernameInput.value, password: this._passwordInput.value };
+    const newUser = {
+      email: this._emailInput.value,
+      username: this._usernameInput.value,
+      password: this._passwordInput.value,
+    };
     
     try {
       const res = await signUpAPI.signUp(newUser);
-      const loginToken = res.data.loginToken;
+      const unverifiedUserID = res.data.unverifiedUserID;
 
-      if(this._keepMeSignedInCheckBox.classList.contains('checked')) {
-        cookies.set('loginToken', loginToken, this._loginTokenAge);
+      let keepMeSignedIn;
+      if(this._keepMeSignedInCheckbox.classList.contains('checked')) {
+        keepMeSignedIn = true;
       } else {
-        cookies.set('loginToken', loginToken);
+        keepMeSignedIn = '';
       };
 
-      LoadingModal.display();
-      redirectAfterDelayMillisecond('history.html', 1000, 'Signed up successfully!', 'success');
+      const redirectLink = `verification.html?id=${unverifiedUserID}&keepMeSignedIn=${keepMeSignedIn}`;
+      redirectAfterDelayMillisecond(redirectLink, 2000, 'Signed up successfully!', 'success');
       
     } catch (err) {
       err.response && console.log(err.response.data);
@@ -76,6 +84,13 @@ class SignUpForm {
       };
       
       if(status === 409) { // Username taken
+        if(err.response.data.message === 'Email address already in use.') {
+          const inputFormGroup = this._emailInput.parentElement;
+          errorSpan.display(inputFormGroup, 'Email address already in use.');
+          LoadingModal.remove();
+          return ;
+        };
+        
         const inputFormGroup = this._usernameInput.parentElement;
         errorSpan.display(inputFormGroup, 'Username already taken.');
         LoadingModal.remove();
@@ -83,7 +98,32 @@ class SignUpForm {
       };
 
       redirectAfterDelayMillisecond('signUp.html');
-    }
+    };
+  };
+
+  _validateEmail(input) {
+    const value = input.value;
+    const inputFormGroup = input.parentElement;
+
+    const re = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?$/;
+
+    if(value.length > 150) {
+      errorSpan.display(inputFormGroup, 'Email address can not be longer than 150 characters.');
+      return false;
+    };
+
+    if(value.indexOf(' ') !== -1) {
+      errorSpan.display(inputFormGroup, 'Email address can not contain any whitespace.');
+      return false;
+    };
+    
+    if(!re.test(value)) {
+      errorSpan.display(inputFormGroup, 'Invalid email address.');
+      return false;
+    };
+
+    errorSpan.hide(inputFormGroup);
+    return true;
   };
 
   _validateUsername(input) {
@@ -95,23 +135,25 @@ class SignUpForm {
     if(value.length < 5) {
       errorSpan.display(inputFormGroup, 'Username must be at least 5 characters long.');
       return false;
-
-    } else if(value.length > 24) {
-      errorSpan.display(inputFormGroup, 'Username can not be longer than 24 characters.');
-      return false;
-
-    } else if(value.indexOf(' ') !== -1) {
-      errorSpan.display(inputFormGroup, 'Whitespace is not allowed.');
-      
-    } else if(!re.test(value)) {
-      errorSpan.display(inputFormGroup, 'Username must contain at least one English letter, and must not special characters or non-English letters.');
-      return false;
-
-    } else {
-      errorSpan.hide(inputFormGroup);
-      return true;
     };
     
+    if(value.length > 24) {
+      errorSpan.display(inputFormGroup, 'Username can not be longer than 24 characters.');
+      return false;
+    };
+    
+    if(value.indexOf(' ') !== -1) {
+      errorSpan.display(inputFormGroup, 'Whitespace is not allowed.');
+      return false;
+    };
+    
+    if(!re.test(value)) {
+      errorSpan.display(inputFormGroup, 'Username must contain at least one English letter, and must not special characters or non-English letters.');
+      return false;
+    };
+    
+    errorSpan.hide(inputFormGroup);
+    return true;
   };
 
   _validatePassword(input) {
@@ -123,23 +165,40 @@ class SignUpForm {
     if(value.length < 8) {
       errorSpan.display(inputFormGroup, 'Password must be at least 8 characters long.');
       return false;
-
-    } else if(value.length > 40) {
+    };
+    
+    if(value.length > 40) {
       errorSpan.display(inputFormGroup, 'Password can not be longer than 40 characters.');
       return false;
-
-    } else if(value.indexOf(' ') !== -1) {
+    };
+    
+    if(value.indexOf(' ') !== -1) {
       errorSpan.display(inputFormGroup, 'Whitespace is not allowed.');
       return false;
-      
-    } else if(!re.test(value)) {
+    };
+    
+    if(!re.test(value)) {
       errorSpan.display(inputFormGroup, 'Special characters, apart from dots and underscores, are not allowed.');
       return false;
-
-    } else {
-      errorSpan.hide(inputFormGroup);
-      return true;
     };
+    
+    errorSpan.hide(inputFormGroup);
+    return true;
+  };
+
+  _validateConfirmPassword(input) {
+    const value = input.value;
+    const inputFormGroup = input.parentElement;
+
+    const passwordValue = this._passwordInput.value;
+
+    if(value !== passwordValue) {
+      errorSpan.display(inputFormGroup, 'Passwords are not identical.');
+      return false;
+    };
+
+    errorSpan.hide(inputFormGroup);
+    return true;
   };
 };
 

@@ -35,7 +35,6 @@ class Navbar {
 
     this._linksContainerSecondBtn.textContent = 'History';
     this._linksContainerSecondBtn.href = 'history.html';
-    this._linksContainerSecondBtn.className = 'btn btn-light';
   };
 
   _handleLinksContainerEvents(e) {
