@@ -3,9 +3,11 @@ import disableFBCache from './components/global/disableFBCache';
 disableFBCache();
 import locateLoginToken from './components/global/locateLoginToken';
 import SignUpForm from './components/signUp/SignUpForm';
+import DisplayTerms from './components/global/DisplayTerms';
 
 // Initializing imports
 new SignUpForm();
+new DisplayTerms();
 
 class SignUp {
   constructor() {
@@ -13,10 +15,10 @@ class SignUp {
   };
 
   _loadEventListeners() {
-    window.addEventListener('DOMContentLoaded', this._redirectIfLoggedIn.bind(this));
+    window.addEventListener('DOMContentLoaded', this._redirectIfSignedIn.bind(this));
   };
 
-  _redirectIfLoggedIn() {
+  _redirectIfSignedIn() {
     const loginToken = locateLoginToken();
     
     if(loginToken) { // already logged in and shouldn't be on this page - redirecting...

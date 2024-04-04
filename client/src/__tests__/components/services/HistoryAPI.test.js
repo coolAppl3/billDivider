@@ -28,7 +28,9 @@ describe('getSessionHistory(loginToken)', () => {
 
     await historyAPI.getSessionHistory(loginToken);
     expect(axios.get).toHaveBeenCalledWith(`https://${window.location.hostname}/api/users/history`, {
-      headers: { loginToken },
+      headers: {
+        Authorization: `Bearer ${loginToken}`,
+      },
     });
   });
 });
@@ -40,7 +42,9 @@ describe('getUsername(loginToken)', () => {
 
     await historyAPI.getUsername(loginToken);
     expect(axios.get).toHaveBeenCalledWith(`https://${window.location.hostname}/api/users/username`, {
-      headers: { loginToken },
+      headers: {
+        Authorization: `Bearer ${loginToken}`,
+      },
     });
   });
 });

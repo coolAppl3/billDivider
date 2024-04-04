@@ -6,6 +6,7 @@ import InitSession from "../js/components/session/InitSession";
 import SessionHeader from "../js/components/session/SessionHeader";
 import SessionContent from "../js/components/session/SessionContent";
 import BillModal from "../js/components/session/BillModal";
+import DisplayTerms from "../js/components/global/DisplayTerms";
 
 jest.mock('../js/components/global/Navbar');
 jest.mock('../js/components/session/SessionReference');

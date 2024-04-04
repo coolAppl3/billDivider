@@ -1,7 +1,7 @@
 class RevealPassword {
-  constructor(inputID) {
+  constructor(inputID, iconID) {
     this._input = document.querySelector(`#${inputID}`);
-    this._revealPasswordIcon = document.querySelector('#revealPassword');
+    this._revealPasswordIcon = document.querySelector(`#${iconID}`);
 
     this._eyeSlashIconSVG = `
       <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->

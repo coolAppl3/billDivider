@@ -29,7 +29,9 @@ describe('addSession(loginToken, session)', () => {
 
     await sessionAPI.addSession(loginToken, session);
     expect(axios.post).toHaveBeenCalledWith(`https://${window.location.hostname}/api/users/session`, session, {
-      headers: { loginToken },
+      headers: {
+        Authorization: `Bearer ${loginToken}`,
+      },
     });
   });
 });
@@ -42,7 +44,9 @@ describe('getSession(loginToken, sessionID)', () => {
 
     await sessionAPI.getSession(loginToken, sessionID);
     expect(axios.get).toHaveBeenCalledWith(`https://${window.location.hostname}/api/users/session/${sessionID}`, {
-      headers: { loginToken },
+      headers: {
+        Authorization: `Bearer ${loginToken}`,
+      },
     });
   });
 });
@@ -55,7 +59,9 @@ describe('deleteSession(loginToken, sessionID)', () => {
 
     await sessionAPI.deleteSession(loginToken, sessionID);
     expect(axios.delete).toHaveBeenCalledWith(`https://${window.location.hostname}/api/users/session/${sessionID}`, {
-      headers: { loginToken },
+      headers: {
+        Authorization: `Bearer ${loginToken}`,
+      },
     });
   });
 });
@@ -69,7 +75,9 @@ describe('updateSession(loginToken, sessionID)', () => {
 
     await sessionAPI.updateSession(loginToken, sessionID, session);
     expect(axios.put).toHaveBeenCalledWith(`https://${window.location.hostname}/api/users/session/${sessionID}`, session, {
-      headers: { loginToken },
+      headers: {
+        Authorization: `Bearer ${loginToken}`,
+      },
     });
   });
 });

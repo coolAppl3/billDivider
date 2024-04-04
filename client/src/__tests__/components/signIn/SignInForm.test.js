@@ -33,7 +33,8 @@ const signInFormHTML = `
             <input
               type="text"
               id="username"
-              autocomplete="off"
+              autocomplete="username"
+              autocapitalize="off"
             />
             <span class="error-span"></span>
           </div>
@@ -43,20 +44,30 @@ const signInFormHTML = `
             <input
               type="password"
               id="password"
-              autocomplete="on"
+              autocomplete="current-password"
             />
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 576 512"
-              class="svg-icon"
+            <div
+              class="svg-div"
               id="revealPassword"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 576 512"
+                class="svg-icon"
+                tabindex="0"
+              >
+                <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                <path
+                  d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z"
+                />
+              </svg>
+            </div>
+            <p
+              id="recovery"
               tabindex="0"
             >
-              <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-              <path
-                d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z"
-              />
-            </svg>
+              Forgot my password
+            </p>
             <span class="error-span"></span>
           </div>
 
@@ -82,8 +93,7 @@ const signInFormHTML = `
 
           <p>
             Don't have an account?
-            <a href="signUp.html">Sign up here</a>. Alternatively, you can
-            <a href="session.html">start an anonymous session</a>.
+            <a href="signUp.html">Sign up here</a>. Alternatively, you can <a href="session.html">start an anonymous session</a>.
           </p>
 
           <div class="links-container">
@@ -308,7 +318,71 @@ describe('_signIn(e)', () => {
     expect(LoadingModal.remove).toHaveBeenCalled();
   });
 
-  it('should catch any potential error in the API request and log it. if error.response.status is not equal to 404 or 401 (most likely 500), it should redirect the user to signUp.html', async () => {
+  it(`should catch any potential error in the API request and log it. if error.response.status is equal to 403, and the response message is "Email not verified.", it should call ErrorSpan.prototype.display() with the parent element of _passwordInput, call LoadingModal.remove(), then return undefined`, async () => {
+    signInForm._usernameInput.value = 'mockUsername';
+    signInForm._passwordInput.value = 'mockPassword';
+    
+    const passwordFormGroup = signInForm._passwordInput.parentElement;
+    
+    const mockUserObject = {
+      username: 'mockUsername',
+      password: 'mockPassword',
+    };
+    
+    const mockRejectedResponse = {
+      response: {
+        status: 403,
+        data: { success: false, message: 'Email not verified.' },
+      },
+    };
+
+    SignInAPI.prototype.signIn.mockRejectedValueOnce(mockRejectedResponse);
+    Cookies.prototype.set.mockImplementationOnce(() => {});
+
+    const consoleSpy = jest.spyOn(window.console, 'log').mockImplementationOnce(() => {});
+
+    expect(await signInForm._signIn(mockEvent)).toBeUndefined();
+    expect(SignInAPI.prototype.signIn).toHaveBeenCalledWith(mockUserObject);
+
+    expect(consoleSpy).toHaveBeenCalledWith(mockRejectedResponse.response.data);
+    
+    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(passwordFormGroup, 'Email not verified. Please check your email to complete the verification process.');
+    expect(LoadingModal.remove).toHaveBeenCalled();
+  });
+
+  it(`should catch any potential error in the API request and log it. if error.response.status is equal to 403, and the response message is not "Email not verified.", it should call ErrorSpan.prototype.display() with the parent element of _passwordInput, call LoadingModal.remove(), then return undefined`, async () => {
+    signInForm._usernameInput.value = 'mockUsername';
+    signInForm._passwordInput.value = 'mockPassword';
+    
+    const passwordFormGroup = signInForm._passwordInput.parentElement;
+    
+    const mockUserObject = {
+      username: 'mockUsername',
+      password: 'mockPassword',
+    };
+    
+    const mockRejectedResponse = {
+      response: {
+        status: 403,
+        data: { success: false, message: 'Account locked.' },
+      },
+    };
+
+    SignInAPI.prototype.signIn.mockRejectedValueOnce(mockRejectedResponse);
+    Cookies.prototype.set.mockImplementationOnce(() => {});
+
+    const consoleSpy = jest.spyOn(window.console, 'log').mockImplementationOnce(() => {});
+
+    expect(await signInForm._signIn(mockEvent)).toBeUndefined();
+    expect(SignInAPI.prototype.signIn).toHaveBeenCalledWith(mockUserObject);
+
+    expect(consoleSpy).toHaveBeenCalledWith(mockRejectedResponse.response.data);
+    
+    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(passwordFormGroup, 'Account locked due to many failed sign in attempts. Click on "Forgot my password" above to recover your account.');
+    expect(LoadingModal.remove).toHaveBeenCalled();
+  });
+
+  it('should catch any potential error in the API request and log it. if error.response.status is not equal to 404 or 401 (most likely 500), it should redirect the user to signIn.html', async () => {
     signInForm._usernameInput.value = 'mockUsername';
     signInForm._passwordInput.value = 'mockPassword';
     
@@ -337,7 +411,7 @@ describe('_signIn(e)', () => {
     expect(ErrorSpan.prototype.display).not.toHaveBeenCalled();
     expect(LoadingModal.remove).not.toHaveBeenCalled();
 
-    expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('signUp.html', 1000, 'Something went wrong');
+    expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('signIn.html');
   });
 });
 
@@ -406,5 +480,23 @@ describe('_validatePassword()', () => {
 
     expect(signInForm._validatePassword()).toBe(true);
     expect(ErrorSpan.prototype.hide).toHaveBeenCalledWith(inputFormGroup);
+  });
+});
+
+describe('_handleRecoveryBtnKeyEvents(e)', () => {
+  it('should, if the pressed key is not Enter, not call signInForm._startAccountRecovery() and return undefined', () => {
+    const _startAccountRecoverySpy = jest.spyOn(signInForm, '_startAccountRecovery').mockImplementationOnce(() => {});
+    const mockEvent = { key: 'G' };
+
+    expect(signInForm._handleRecoveryBtnKeyEvents(mockEvent)).toBeUndefined();
+    expect(_startAccountRecoverySpy).not.toHaveBeenCalled();
+  });
+  
+  it('should, if the pressed key is Enter, call signInForm._startAccountRecovery() and return undefined', () => {
+    const _startAccountRecoverySpy = jest.spyOn(signInForm, '_startAccountRecovery').mockImplementationOnce(() => {});
+    const mockEvent = { key: 'Enter' };
+
+    expect(signInForm._handleRecoveryBtnKeyEvents(mockEvent)).toBeUndefined();
+    expect(_startAccountRecoverySpy).toHaveBeenCalled();
   });
 });

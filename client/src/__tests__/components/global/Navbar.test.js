@@ -78,7 +78,7 @@ const navbarHTML = `
           <div class="btn-div">
             <a
               href="signUp.html"
-              class="btn btn-cta"
+              class="btn btn-light"
               id="linksContainerSecondBtn"
               >Sign up</a
             >

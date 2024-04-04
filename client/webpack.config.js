@@ -15,6 +15,10 @@ module.exports = {
     signIn: './src/js/signIn.js',
     session: './src/js/session.js',
     history: './src/js/history.js',
+    verification: './src/js/verification.js',
+    recovery: './src/js/recovery.js',
+    updatePassword: './src/js/updatePassword.js',
+    termsOfService: './src/js/termsOfService.js',
   },
 
   output: {
@@ -149,5 +153,48 @@ module.exports = {
       ],
     }),
 
+    // verification.html
+    new HtmlWebpackPlugin({
+      title: 'Email Verification - Bill Divider',
+      filename: 'verification.html',
+      template: 'src/html/verification.html',
+
+      chunks: [
+        "verification"
+      ],
+    }),
+
+    // recovery.html
+    new HtmlWebpackPlugin({
+      title: 'Account Recovery - Bill Divider',
+      filename: 'recovery.html',
+      template: 'src/html/recovery.html',
+
+      chunks: [
+        "recovery"
+      ],
+    }),
+    
+    // updatePassword.html
+    new HtmlWebpackPlugin({
+      title: 'Update Password - Bill Divider',
+      filename: 'updatePassword.html',
+      template: 'src/html/updatePassword.html',
+
+      chunks: [
+        "updatePassword"
+      ],
+    }),
+
+    // termsOfService.html
+    new HtmlWebpackPlugin({
+      title: 'Terms of Service - Bill Divider',
+      filename: 'termsOfService.html',
+      template: 'src/html/termsOfService.html',
+
+      chunks: [
+        "termsOfService"
+      ],
+    }),
   ],
 };

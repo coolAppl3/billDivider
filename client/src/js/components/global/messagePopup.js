@@ -1,4 +1,4 @@
-function messagePopup(message, type = 'cta', durationMilliseconds = 200) {
+function messagePopup(message, type = 'cta', durationMilliseconds = 2000) {
   if(typeof message !== 'string') {
     message = '';
   };
@@ -38,8 +38,8 @@ function messagePopup(message, type = 'cta', durationMilliseconds = 200) {
 
   setTimeout(() => {
     popup.style.transform = 'translateY(-10rem)';
-    setTimeout(() => popup.remove(), durationMilliseconds);
-  }, 2000);
+    setTimeout(() => popup.remove(), 200);
+  }, durationMilliseconds);
 };
 
 export default messagePopup;

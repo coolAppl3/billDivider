@@ -38,6 +38,8 @@
       }
     }
   }
+
+  
 }
 
 // Tablets
@@ -122,7 +124,8 @@
       }
     }
   }
-  
+
+ 
 }
 
 // In Between
@@ -177,6 +180,43 @@
 
     &-content {
       grid-template-columns: repeat(1, 1fr);
+    }
+  }
+
+  .terms {
+
+    &-container {
+      .content-t {
+        font-size: 2.4rem;
+        font-weight: 500;
+      }
+  
+      &-group {
+        
+        &-t {
+          font-size: 1.8rem;
+        }
+      }
+    }
+  }
+
+   // JavaScript Utilities
+   .termsPopup {
+
+    &-container {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .content-p {
+        margin-bottom: 1rem;
+        margin-right: 0;
+        font-size: 1.4rem;
+      }
+
+      .btn {
+        width: 100%;
+      }
     }
   }
 }
@@ -295,5 +335,4 @@
       grid-template-columns: repeat(1, 1fr);
     }
   }
-  
 }

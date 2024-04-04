@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 require('dotenv').config();
+const removeUnverifiedUsers = require('./cron-jobs/removeUnverifiedUsers');
 const connectDB = require('./config/db');
 
 // Connecting to database
@@ -35,10 +36,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Importing Routers
 const userRouter = require('./routes/users');
 
-// routes
+// Routes
 app.use('/api/users', userRouter);
 
 // Initialization
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
+// Starting cron jobs
+removeUnverifiedUsers();

@@ -294,6 +294,10 @@ a {
   margin-bottom: 2rem;
   position: relative;
 
+  &.hidden {
+    display: none !important;
+  }
+
   &.checkbox-group {
     display: flex;
     align-items: center;
@@ -358,6 +362,26 @@ a {
     }
   }
 
+  &.description-group {
+    
+    p {
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: rgba(200, 200, 200, 0.85);
+
+      a {
+        color: $cta;
+        font-weight: bold;
+        text-decoration: underline;
+        transition: filter 200ms;
+
+        &:hover {
+          filter: brightness(0.7);
+        }
+      }
+    }
+  }
+
   &.disabled {
     filter: brightness(0.6);
   }
@@ -402,7 +426,7 @@ a {
     }
   }
 
-  #revealPassword {
+  #revealPassword, #revealConfirmPassword {
     position: absolute;
     right: 1rem;
     top: 37px;
@@ -458,6 +482,20 @@ a {
     }
   }
  
+  #recovery {
+    width: fit-content;
+    margin: 0;
+    margin-top: 4px;
+    font-weight: 400;
+    font-size: 1.2rem;
+    text-decoration: underline;
+    cursor: pointer;
+    transition: color 200ms;
+
+    &:hover {
+      color: $cta;
+    }
+  }
 }
 
 .section {
@@ -469,7 +507,7 @@ a {
 
 // JavaScript Utilities
 
-// Dialog
+// messagePopup
 .popup {
   position: fixed;
   z-index: 20;
@@ -490,6 +528,7 @@ a {
   p {
     font-weight: bold;
     font-size: 1.4rem;
+    text-align: center;
   }
 }
 
@@ -572,5 +611,43 @@ a {
       }
     }
 
+  }
+}
+
+// termsPopup
+.termsPopup {
+  background: $secondary;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 5.9rem;
+  height: fit-content;
+  padding: 1rem;
+  z-index: 10;
+  transition: transform 300ms;
+  border-top: 1px solid $cta;
+
+  &-container {
+    height: 100% !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .content-p {
+      margin: 0;
+      margin-right: 2rem;
+      font-weight: bold;
+
+      a {
+        color: $cta;
+        transition: filter 200ms;
+        text-decoration: underline;
+
+        &:hover {
+          filter: brightness(0.7);
+        }
+      }
+    }
   }
 }

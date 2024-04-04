@@ -11,7 +11,8 @@ async function fetchUsername() {
   const loginToken = locateLoginToken();
 
   if(!loginToken) { // Not logged in - Redirecting...
-    return redirectAfterDelayMillisecond('signIn.html');
+    redirectAfterDelayMillisecond('signIn.html');
+    return ;
   };
 
   try {

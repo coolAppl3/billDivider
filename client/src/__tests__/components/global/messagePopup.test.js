@@ -4,7 +4,7 @@ beforeEach(() => {
   document.body.innerHTML = '';
 });
 
-describe(`messagePopup(message, type = 'cta')`, () => {
+describe(`messagePopup(message, type = 'cta', durationMilliseconds)`, () => {
   it('should always return undefined', () => {
     expect(messagePopup()).toBeUndefined();
     expect(messagePopup(null)).toBeUndefined();
@@ -41,11 +41,24 @@ describe(`messagePopup(message, type = 'cta')`, () => {
   it('should remove the message popup after 2.2 seconds', () => {
     jest.useFakeTimers();
     messagePopup('Some message');
-    jest.advanceTimersByTime(2200); // mocking the delay before the element is removed from the DOM
+    jest.advanceTimersByTime(2200);
 
     const messagePopupElement = document.querySelector('.popup');
     expect(messagePopupElement).toBeNull();
     jest.now();
   });
   
+  it('should remove the message popup after the value of durationMilliseconds plus 200 milliseconds', () => {
+    jest.useFakeTimers();
+    messagePopup('Some message', 'cta', 3000);
+    jest.advanceTimersByTime(2200);
+
+    const messagePopupElement = document.querySelector('.popup');
+    expect(messagePopupElement).not.toBeNull();
+
+    jest.advanceTimersByTime(1000);
+    expect(messagePopupElement).not.toBeNull();
+    
+    jest.now();
+  });
 });
