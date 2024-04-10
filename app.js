@@ -1,8 +1,13 @@
 const path = require('path');
 const express = require('express');
 require('dotenv').config();
-const removeUnverifiedUsers = require('./cron-jobs/removeUnverifiedUsers');
 const connectDB = require('./config/db');
+const rateLimiter = require('./middleware/rateLimiter');
+const userRouter = require('./routes/users');
+
+// cron-jobs
+const removeUnverifiedUsers = require('./cron-jobs/removeUnverifiedUsers');
+const updateLimitTrackers = require('./cron-jobs/updateLimitTrackers');
 
 // Connecting to database
 connectDB();
@@ -27,14 +32,13 @@ if(process.env.NODE_ENV !== 'production') {
       credentials: true,
     })
   );
-
 };
 
 // Static Files
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Importing Routers
-const userRouter = require('./routes/users');
+// Rate limiting
+app.use(rateLimiter);
 
 // Routes
 app.use('/api/users', userRouter);
@@ -46,3 +50,4 @@ app.listen(port, () => {
 
 // Starting cron jobs
 removeUnverifiedUsers();
+updateLimitTrackers();

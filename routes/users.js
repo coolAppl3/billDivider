@@ -2,17 +2,19 @@ const express = require('express');
 const User = require('../models/User');
 const UnverifiedUser = require('../models/UnverifiedUser');
 const bcrypt = require('bcrypt');
-const ValidateUser = require('../util/ValidateUser');
 const nodemailer = require('nodemailer');
 
 // Util
+const ValidateUser = require('../util/ValidateUser');
+const EmailTemplate = require('../util/EmailTemplate');
+const { default: mongoose } = require('mongoose');
 const generateLoginToken = require('../util/generateLoginToken');
 const generateSessionID = require('../util/generateSessionID');
 const generateEmailVerificationCode = require('../util/generateEmailVerificationCode');
-const { default: mongoose } = require('mongoose');
 
 // Initializing imports
 const validateUser = new ValidateUser();
+const emailTemplate = new EmailTemplate();
 
 // ---
 const router = express.Router();
@@ -34,7 +36,15 @@ const transporter = nodemailer.createTransport({
 // Sign up
 router.post('/signup', async (req, res) => {
   const { email, username, password } = req.body;
-  const hash = await bcrypt.hash(password, 10);
+
+  let hash;
+  try {
+    hash = await bcrypt.hash(password, 10);
+  } catch (err) {
+    res.status(400).json({ success: false, message: 'Insufficient data provided.' });
+    console.log(err)
+    return ;
+  }
 
   const isValidEmail = validateUser.validateEmail(email);
   const isValidUsername = validateUser.validateUsername(username);
@@ -79,17 +89,7 @@ router.post('/signup', async (req, res) => {
     from: process.env.TRANSPORTER_USER,
     to: email,
     subject: '[No Reply] Email Verification Code - Bill Divider',
-    text: `
-    Hey there,
-  
-    Thank you for signing up to Bill Divider!
-    
-    To complete the sign up process, you would need to enter the following email-verification code: ${verificationCode}. Alternatively, click on the following link: https://billdivider.fun/verification.html?id=${unverifiedUser._id}&keepMeSignedIn=&verificationCode=${verificationCode}.
-    
-    If this request wasn't made by you, please ignore this email.
-    
-    Best,
-    Bill Divider Automated Email Service`,
+    html: emailTemplate.verificationEmail(unverifiedUser._id, verificationCode),
   };
 
   try {
@@ -205,17 +205,7 @@ router.post('/resendVerification', async (req, res) => {
     from: process.env.TRANSPORTER_USER,
     to: email,
     subject: '[No Reply] Email Verification Code - Bill Divider',
-    text: `
-    Hey there,
-  
-    Thank you for signing up to Bill Divider!
-    
-    To complete the sign up process, you would need to enter the following email-verification code: ${emailVerificationCode}. Alternatively, click on the following link: https://billdivider.fun/verification.html?id=${unverifiedUser._id}&keepMeSignedIn=&verificationCode=${emailVerificationCode}.
-    
-    If this request wasn't made by you, please ignore this email.
-    
-    Best,
-    Bill Divider Automated Email Service`,
+    html: emailTemplate.verificationEmail(unverifiedUserID._id, emailVerificationCode),
   };
 
   try {
@@ -246,12 +236,20 @@ router.post('/signin', async (req, res) => {
     return ;
   };
 
-  if(user.failedLoginAttempts >= 3) {
+  if(user.failedLoginAttempts >= 5) {
     res.status(403).json({ success: false, message: 'Account locked due to many failed sign in attempts.' });
     return ;
   };
 
-  const passwordIsCorrect = await bcrypt.compare(password, user.password);
+  let passwordIsCorrect;
+  try {
+    passwordIsCorrect = await bcrypt.compare(password, user.password);
+  } catch (err) {
+    res.status(400).json({ success: false, message: 'Insufficient data provided.' });
+    console.log(err)
+    return ;
+  }
+
   if(!passwordIsCorrect) {
     let newFailedLoginAttempts = user.failedLoginAttempts + 1;
     
@@ -335,17 +333,7 @@ router.post('/recovery', async (req, res) => {
     from: process.env.TRANSPORTER_USER,
     to: recoveryEmail,
     subject: '[No Reply] Account Recovery - Bill Divider',
-    text: `
-    Dear ${user.username},
-  
-    Hope you're doing well!
-
-    We've received an account recovery request from you. To recover your account, please click the following link: https://billdivider.fun/updatePassword.html?id=${user._id}&recoveryCode=${recoveryCode}.
-
-    If this request wasn't made by you, please ignore this email.
-    
-    Best,
-    Bill Divider Automated Email Service`,
+    html: emailTemplate.recoveryEmail(user.username, user._id, recoveryCode),
   };
 
   try {
@@ -384,7 +372,15 @@ router.post('/recovery', async (req, res) => {
 // Update password
 router.put('/recovery', async (req, res) => {
   const { userID, recoveryCode, newPassword } = req.body;
-  const hash = await bcrypt.hash(newPassword, 10);
+
+  let hash;
+  try {
+    hash = await bcrypt.hash(newPassword, 10);
+  } catch (err) {
+    res.status(400).json({ success: false, message: 'Insufficient data provided.' });
+    console.log(err)
+    return ;
+  }
 
   if(!mongoose.Types.ObjectId.isValid(userID)) {
     res.status(404).json({ success: false, message: 'Invalid userID. Invalid recovery request.' });
@@ -439,13 +435,17 @@ router.put('/recovery', async (req, res) => {
 // Get single session
 router.get('/session/:sessionID', async (req, res) => {
   const authHeader = req.headers['authorization'];
+  if(!authHeader) {
+    res.status(401).json({ success: false, message: 'Invalid credentials. Request denied.' });
+    return ;
+  };
+  
   const loginToken = authHeader.substring(7);
-
   const requestedSessionID = req.params.sessionID;
 
   const user = await User.findOne({ loginToken: loginToken });
   if(!user) {
-    res.status(403).json({ success: false, message: 'Invalid login token. Please log in.' });
+    res.status(403).json({ success: false, message: 'Invalid login token. Please sign in.' });
     return ;
   };
 
@@ -468,13 +468,17 @@ router.get('/session/:sessionID', async (req, res) => {
 // Add session
 router.post('/session', async (req, res) => {
   const authHeader = req.headers['authorization'];
+  if(!authHeader) {
+    res.status(401).json({ success: false, message: 'Invalid credentials. Request denied.' });
+    return ;
+  };
+  
   const loginToken = authHeader.substring(7);
-
   const newSession = req.body;
   
   const user = await User.findOne({ loginToken: loginToken});
   if(!user) {
-    res.status(403).json({ success: false, message: 'Invalid login token. Please login.' });
+    res.status(401).json({ success: false, message: 'Invalid login token. Please sign in.' });
     return ;
   };
 
@@ -509,8 +513,12 @@ router.post('/session', async (req, res) => {
 // Delete session
 router.delete('/session/:sessionID', async (req, res) => {
   const authHeader = req.headers['authorization'];
-  const loginToken = authHeader.substring(7);
+  if(!authHeader) {
+    res.status(401).json({ success: false, message: 'Invalid credentials. Request denied.' });
+    return ;
+  };
   
+  const loginToken = authHeader.substring(7);
   const sessionID = req.params.sessionID;
   
   const user = await User.findOne({ loginToken: loginToken });
@@ -548,6 +556,11 @@ router.delete('/session/:sessionID', async (req, res) => {
 // Update session
 router.put('/session/:sessionID', async (req, res) => {
   const authHeader = req.headers['authorization'];
+  if(!authHeader) {
+    res.status(401).json({ success: false, message: 'Invalid credentials. Request denied.' });
+    return ;
+  };
+  
   const loginToken = authHeader.substring(7);
   
   const requestSessionID = req.params.sessionID;
@@ -555,7 +568,7 @@ router.put('/session/:sessionID', async (req, res) => {
 
   const user = await User.findOne({ loginToken: loginToken });
   if(!user) {
-    res.status(403).json({ success: false, message: 'Invalid credentials.' });
+    res.status(403).json({ success: false, message: 'Invalid login token. Please sign in.' });
     return ;
   };
 
@@ -584,7 +597,7 @@ router.put('/session/:sessionID', async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).json({ success: false, message: 'Something went wrong.' });
-  }
+  };
 });
 
 
@@ -594,6 +607,11 @@ router.put('/session/:sessionID', async (req, res) => {
 // Retrieve user history 
 router.get('/history', async (req, res) => {
   const authHeader = req.headers['authorization'];
+  if(!authHeader) {
+    res.status(401).json({ success: false, message: 'Invalid credentials. Request denied.' });
+    return ;
+  };
+  
   const loginToken = authHeader.substring(7);
 
   const user = await User.findOne({ loginToken: loginToken });
@@ -602,31 +620,11 @@ router.get('/history', async (req, res) => {
     return ;
   };
 
-  userHistory = user.history;
+  const sessions = user.history;
+  const username = user.username;
   
   try {
-    res.json({ success: true, data: userHistory });
-  } catch (err) {
-    console.log(err)
-    res.status(500).json({ success: false, message: 'Something went wrong.' });
-  }
-});
-
-// Retrieve username
-router.get('/username', async (req, res) => {
-  const authHeader = req.headers['authorization'];
-  const loginToken = authHeader.substring(7);
-
-  const user = await User.findOne({ loginToken: loginToken });
-  if(!user) {
-    res.status(404).json({ success: false, message: 'Invalid credentials.' });
-    return ;
-  };
-
-  username = user.username;
-  
-  try {
-    res.json({ success: true, data: username });
+    res.json({ success: true, data: { sessions, username } });
   } catch (err) {
     console.log(err)
     res.status(500).json({ success: false, message: 'Something went wrong.' });

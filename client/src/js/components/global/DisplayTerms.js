@@ -37,7 +37,7 @@ class DisplayTerms {
     const desc = document.createElement('p');
     desc.className = 'content-p';
 
-    desc.innerHTML = `By using Bill Divider, you accept our <a href="termsOfService.html">Terms of Service</a>, which also contains our Cookies Policy.`;
+    desc.innerHTML = `By using Bill Divider, you accept our <a href="termsOfService.html" target="_blank">Terms of Service</a>, which also contains our Cookies Policy.`;
     
     const confirmTermsBtn = document.createElement('p');
     confirmTermsBtn.id = 'confirmTermsBtn';

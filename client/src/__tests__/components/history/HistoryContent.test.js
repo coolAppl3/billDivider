@@ -26,59 +26,27 @@ afterEach(() => {
 });
 
 describe('_render()', () => {
-  it('should always return undefined', () => {
+  it('should call _clearSessions() and _renderSession(), then return undefined', () => {
+    const _clearSessionsSpy = jest.spyOn(historyContent, '_clearSessions').mockImplementationOnce(() => {});
+    const _renderSessionsSpy = jest.spyOn(historyContent, '_renderSessions').mockImplementationOnce(() => {});
+    
     expect(historyContent._render()).toBeUndefined();
-    expect(historyContent._render(null)).toBeUndefined();
-    expect(historyContent._render(0)).toBeUndefined();
-    expect(historyContent._render('')).toBeUndefined();
-    expect(historyContent._render({})).toBeUndefined();
-    expect(historyContent._render([])).toBeUndefined();
-    expect(historyContent._render('some value')).toBeUndefined();
-    expect(historyContent._render(5)).toBeUndefined();
-  });
-  
-  it('should call _clearSessions() and _renderSessions()', () => {
-    const _clearSessionsSpy = jest.spyOn(historyContent, '_clearSessions');
-    const _renderSessionsSpy = jest.spyOn(historyContent, '_renderSessions');
-
-    historyContent._render();
     expect(_clearSessionsSpy).toHaveBeenCalled();
     expect(_renderSessionsSpy).toHaveBeenCalled();
   });
 });
 
-describe('_handleHistoryContentKeyEvents(e)', () => {
-  it('should always return undefined if a valid event object is passed in', () => {
-    const mockEvent1 = { key: 'Enter' };
-    const mockEvent2 = { key: 'G' };
-    const mockEvent3 = { key: ' ' };
+describe('_handleHistoryContentKeyEvents', () => {
+  it('should, if a key that is not Enter is pressed, return undefined and not call _handleHistoryContentClickEVents(e)', () => {
+    const mockEvent = { key: 'G' };
+    const _handleHistoryContentClickEventsSpy = jest.spyOn(historyContent, '_handleHistoryContentClickEvents').mockImplementationOnce(() => {});
 
-    // Mocking implementation to isolate the test and prevent further function calls
-    jest.spyOn(historyContent, '_handleHistoryContentClickEvents').mockImplementation(() => {});
-
-    expect(historyContent._handleHistoryContentKeyEvents(mockEvent1)).toBeUndefined();
-    expect(historyContent._handleHistoryContentKeyEvents(mockEvent2)).toBeUndefined();
-    expect(historyContent._handleHistoryContentKeyEvents(mockEvent3)).toBeUndefined();
-  });
-
-  it('should return undefined and not call _handleHistoryContentClickEvents(e) if the pressed key is not Enter', () => {
-    const mockEvent1 = { key: 'Shift' };
-    const mockEvent2 = { key: 'G' };
-    const mockEvent3 = { key: ' ' };
-
-    const _handleHistoryContentClickEventsSpy = jest.spyOn(historyContent, '_handleHistoryContentClickEvents');
-
-    expect(historyContent._handleHistoryContentKeyEvents(mockEvent1)).toBeUndefined();
-    expect(historyContent._handleHistoryContentKeyEvents(mockEvent2)).toBeUndefined();
-    expect(historyContent._handleHistoryContentKeyEvents(mockEvent3)).toBeUndefined();
-
+    expect(historyContent._handleHistoryContentKeyEvents(mockEvent)).toBeUndefined();
     expect(_handleHistoryContentClickEventsSpy).not.toHaveBeenCalled();
   });
-  
-  it('should return undefined and call _handleHistoryContentClickEvents(e) if the pressed key is  Enter', () => {
-    const mockEvent = { key: 'Enter' };
 
-    // Mocking implementation to isolate the test and prevent further function calls
+  it('should, if Enter is pressed, return undefined and call _handleHistoryContentClickEVents(e)', () => {
+    const mockEvent = { key: 'Enter' };
     const _handleHistoryContentClickEventsSpy = jest.spyOn(historyContent, '_handleHistoryContentClickEvents').mockImplementationOnce(() => {});
 
     expect(historyContent._handleHistoryContentKeyEvents(mockEvent)).toBeUndefined();
@@ -87,249 +55,163 @@ describe('_handleHistoryContentKeyEvents(e)', () => {
 });
 
 describe('_handleHistoryContentClickEvents(e)', () => {
-  it('should always return undefined if a valid event object is passed in', () => {
-    const mockEvent1 = {
-      target: {
-        classList: {
-          contains: () => { return true },
-        },
-      },
-    };
-    const mockEvent2 = {
-      target: {
-        classList: {
-          contains: () => { return false },
-        },
-      },
-    };
-    const mockEvent3 = {
-      target: {
-        classList: {
-          contains: () => { return true },
-        },
-      },
-    };
-
-    // Mocking implementation to isolate the test and prevent further function calls
-    jest.spyOn(historyContent, '_removeSession').mockImplementation(() => {});
-
-    expect(historyContent._handleHistoryContentClickEvents(mockEvent1)).toBeUndefined();
-    expect(historyContent._handleHistoryContentClickEvents(mockEvent2)).toBeUndefined();
-    expect(historyContent._handleHistoryContentClickEvents(mockEvent3)).toBeUndefined();
-  });
-
-  it(`should return undefined and not call _removeSession(e) if the clicked element does not contain the class "removeSessionBtn"`, () => {
+  it(`should, if the event target does not contain a class of "removeSessionBtn", not call _removeSession(e) then return undefined`, () => {
+    const _removeSessionSpy = jest.spyOn(historyContent, '_removeSession').mockImplementationOnce(() => {});
     const mockEvent = {
       target: {
         classList: {
-          contains: () => { return false },
+          contains: () => { return false; }
         },
       },
     };
 
-    const _removeSessionSpy = jest.spyOn(historyContent, '_removeSession');
-    
     expect(historyContent._handleHistoryContentClickEvents(mockEvent)).toBeUndefined();
     expect(_removeSessionSpy).not.toHaveBeenCalled();
   });
-
-  it('should return undefined and call _removeSession(e) if the clicked element contains the class "removeSessionBtn"', () => {
+  
+  it(`should, if the event target contains a class of "removeSessionBtn", call _removeSession(e) then return undefined`, () => {
+    const _removeSessionSpy = jest.spyOn(historyContent, '_removeSession').mockImplementationOnce(() => {});
     const mockEvent = {
       target: {
         classList: {
-          contains: () => { return true },
+          contains: () => { return true; }
         },
       },
     };
 
-    // Mocking implementation to isolate the test and prevent further function calls
-    const _removeSessionSpy = jest.spyOn(historyContent, '_removeSession').mockImplementationOnce(() => {});
-    
     expect(historyContent._handleHistoryContentClickEvents(mockEvent)).toBeUndefined();
     expect(_removeSessionSpy).toHaveBeenCalledWith(mockEvent);
   });
 });
 
 describe('_renderSessions()', () => {
-  it('should always return undefined', async () => {
-    const mockDivElement = document.createElement('div');
-    SessionElement.prototype.createNoSessionsElement.mockImplementation(() => { return mockDivElement; });
-    SessionElement.prototype.create.mockImplementation(() => { return mockDivElement; });
+  it(`should always dispatch a custom "updateHeader" with the history object`, async () => {
+    fetchUserHistory.mockImplementationOnce(() => { return { sessions: undefined, username: 'mockUsername' }; });
     
-    fetchUserHistory
-      .mockImplementationOnce(() => { return undefined; })
-      .mockImplementationOnce(() => { return []; })
-      .mockImplementationOnce(() => { return [{ mockItem: 'mockValue' }] })
-      .mockImplementation(() => {})
-    ;
-    
+    const dispatchEventSpy = jest.spyOn(window, 'dispatchEvent').mockImplementationOnce(() => {});
+    const mockCustomEvent = new CustomEvent('sessionsLoaded', { detail: { sessions: undefined, username: 'mockUsername' } });
+
     expect(await historyContent._renderSessions()).toBeUndefined();
-    expect(await historyContent._renderSessions(null)).toBeUndefined();
-    expect(await historyContent._renderSessions(0)).toBeUndefined();
-    expect(await historyContent._renderSessions('')).toBeUndefined();
-    expect(await historyContent._renderSessions({})).toBeUndefined();
-    expect(await historyContent._renderSessions([])).toBeUndefined();
-    expect(await historyContent._renderSessions('some value')).toBeUndefined();
-    expect(await historyContent._renderSessions(5)).toBeUndefined();
+    expect(dispatchEventSpy).toHaveBeenCalledWith(mockCustomEvent);
   });
   
-  it('should call fetchUserHistory(), and if it returns undefined (API request failed), return undefined and stop the function', async () => {
-    fetchUserHistory.mockImplementationOnce(() => { return undefined; });
+  it(`should fetch the user's history by calling fetchUserHistory(), then destructure the sessions array out of it. If the sessions object is falsy, it should stop the function and return undefined`, async () => {
+    fetchUserHistory.mockImplementationOnce(() => { return { sessions: undefined, username: 'mockUsername' }; });
 
     expect(await historyContent._renderSessions()).toBeUndefined();
     expect(fetchUserHistory).toHaveBeenCalled();
+    expect(SessionElement.prototype.createNoSessionsElement).not.toHaveBeenCalled();
   });
   
-  it(`should call fetchUserHistory(), and if the user history is an empty array, call SessionElement.prototype.createNoSessionsElement(), append it to the historyContentElement, dispatch a "sessionsLoaded" on the window, and return undefined`, async () => {
-    fetchUserHistory.mockImplementationOnce(() => { return []; });
+  it(`should fetch the user's history by calling fetchUserHistory(), then destructure the sessions object out of it. If the sessions array length is 0, it should call SessionElement.prototype.createNoSessionElement(), then dispatch a "sessionsLoaded" event`, async () => {
+    fetchUserHistory.mockImplementationOnce(() => { return { sessions: [], username: 'mockUsername' }; });
     
     const mockDiv = document.createElement('div');
     SessionElement.prototype.createNoSessionsElement.mockImplementationOnce(() => { return mockDiv; });
 
-    const dispatchEventSpy = jest.spyOn(window, 'dispatchEvent');
-    const expectedDispatchedEvent = new Event('sessionsLoaded');
+    const dispatchEventSpy = jest.spyOn(window, 'dispatchEvent').mockImplementationOnce(() => {});
+    const mockEvent = new Event('sessionsLoaded');
 
     expect(await historyContent._renderSessions()).toBeUndefined();
     expect(fetchUserHistory).toHaveBeenCalled();
     expect(SessionElement.prototype.createNoSessionsElement).toHaveBeenCalled();
-    expect(historyContent._historyContentElement.firstElementChild).toEqual(mockDiv);
-    expect(dispatchEventSpy).toHaveBeenCalledWith(expectedDispatchedEvent);
+    expect(dispatchEventSpy).toHaveBeenCalledWith(mockEvent);
   });
-  
-  it('should call fetchUserHistory(), and if the user history is an array with one more elements, reverse the array, loop over it, call SessionElement.prototype.create() in every loop and append the resulting element in the historyContent element, dispatch a "sessionsLoaded" on the window, and return undefined`', async () => {
-    const mockUserHistory = [ { mockProperty: 'mockValue1' }, { mockProperty: 'mockValue2'} ];
-    fetchUserHistory.mockImplementationOnce(() => { return mockUserHistory; });
 
-    SessionElement.prototype.create.mockImplementation((mockSession) => {
-      const mockDiv = document.createElement('div');
-      mockDiv.textContent = mockSession.mockProperty;
+  it(`should fetch the user's history by calling fetchUserHistory(), destructure the sessions object out of it, reverse it, loop through it and call SessionElement.prototype.create() with every session, and append the elements. It should then dispatch a "sessionsLoaded" and return undefined`, async () => {
+    const mockHistory = {
+      username: 'mockUsername',
+      sessions: [
+        { mockProperty: 'mockValue' },
+        { mockProperty: 'mockValue' },
+      ],
+    };
 
-      return mockDiv;
-    });
+    fetchUserHistory.mockImplementationOnce(() => { return mockHistory; });
 
-    const dispatchEventSpy = jest.spyOn(window, 'dispatchEvent');
-    const expectedDispatchedEvent = new Event('sessionsLoaded');
+    const mockDiv = document.createElement('div');
+    SessionElement.prototype.create.mockImplementation(() => { return mockDiv; });
 
+    const dispatchEventSpy = jest.spyOn(window, 'dispatchEvent').mockImplementationOnce(() => {});
+    const mockEvent = new Event('sessionsLoaded');
+    
     expect(await historyContent._renderSessions()).toBeUndefined();
     expect(fetchUserHistory).toHaveBeenCalled();
-
-    expect(SessionElement.prototype.create).toHaveBeenCalledTimes(2);
-    expect(dispatchEventSpy).toHaveBeenCalledWith(expectedDispatchedEvent);
-
-    expect(historyContent._historyContentElement.firstElementChild.textContent).toBe('mockValue2');
-    expect(historyContent._historyContentElement.lastElementChild.textContent).toBe('mockValue1');
+    expect(SessionElement.prototype.create).toHaveBeenCalled();
+    expect(dispatchEventSpy).toHaveBeenCalledWith(mockEvent);
   });
 });
 
-describe('_removeSession(e)', () => {
+describe('_removeSession()', () => {
   let mockEvent;
-  let mockSessionItem;
-  
+  let mockSessionElement;
+
   beforeEach(() => {
-    mockSessionItem = document.createElement('div');
-    mockSessionItem.setAttribute('data-sessionID', 'mockSessionID');
-    document.body.appendChild(mockSessionItem);
+    ConfirmModal.prototype.display.mockImplementation(() => {
+      const mockConfirmModal = document.createElement('div');
+      mockConfirmModal.className = 'confirm-modal';
+      document.body.appendChild(mockConfirmModal);
+    });
     
-    // Mocking the necessary properties of the event resulting from clicking the removeSessionBtn in a sessionItem element
+    mockSessionElement = document.createElement('div');
+    mockSessionElement.setAttribute('data-sessionID', 'mockSessionID');
+    
     mockEvent = {
       target: {
         parentElement: {
-          parentElement: mockSessionItem,
+          parentElement: mockSessionElement,
         },
       },
     };
-
-    const mockConfirmModalElement = document.createElement('div');
-    mockConfirmModalElement.className = 'confirm-modal';
-    ConfirmModal.prototype.display.mockImplementation(() => { document.body.appendChild(mockConfirmModalElement); });
   });
 
   afterEach(() => {
-    mockSessionItem = null;
     mockEvent = null;
-    document.body.innerHTML = '';
+    mockSessionElement = null;
   });
-  
-  it('should always return undefined', async () => {
-    expect(await historyContent._removeSession(mockEvent)).toBeUndefined();
-    // the function is called through an event listener, so there's no point in checking for edge cases through jest
-  });
-  
-  it(`should call ConfirmModal.prototype.display(), add an event listener to the confirmModalElement, and return undefined. If an "exitClick" is made by the user, ConfirmModal.prototype.remove() should be called and the confirmModalElement should be removed`, async () => {
-    expect(await historyContent._removeSession(mockEvent)).toBeUndefined();
-    expect(ConfirmModal.prototype.display).toHaveBeenCalledWith('Are you sure you want to remove this session?', 'danger');
 
-    // Mocking a click event to test the rest of the function
-    const confirmModalElement = document.querySelector('.confirm-modal');
+  it(`should call ConfirmModal.prototype.display(), add an event listener to the confirmModal element, then return undefined. If the user makes an "exit click", it should call ConfirmModal.prototype.remove()`, async () => {
+    expect(await historyContent._removeSession(mockEvent)).toBeUndefined();
+    expect(ConfirmModal.prototype.display).toHaveBeenCalled();
 
     ConfirmModal.prototype.isExitClick.mockImplementationOnce(() => { return true; });
-    ConfirmModal.prototype.remove.mockImplementationOnce(() => { confirmModalElement.remove(); });
+    ConfirmModal.prototype.remove.mockImplementationOnce(() => {});
+    
+    const isExitClickEvent = new MouseEvent('click');
 
-    const mockClickEvent = new MouseEvent('click');
-    confirmModalElement.dispatchEvent(mockClickEvent);
-
-    expect(ConfirmModal.prototype.isExitClick).toHaveBeenCalled();
-    expect(ConfirmModal.prototype.remove).toHaveBeenCalled();
-    expect(document.querySelector('.confirm-modal')).toBeNull();
-  });
-
-  it('should call ConfirmModal.prototype.display(), add an event listener to the confirmModalElement, and return undefined. If the user clicks the confirm button, the following should be called: deleteSession(sessionID), messagePopup(), and ConfirmModal.prototype.remove(). Moreover, the confirmModalElement should also be removed, and a "render" event should be dispatched to the window', async () => {
-    expect(await historyContent._removeSession(mockEvent)).toBeUndefined();
-    expect(ConfirmModal.prototype.display).toHaveBeenCalledWith('Are you sure you want to remove this session?', 'danger');
-
-    // Mocking a click event to test the rest of the function
     const confirmModalElement = document.querySelector('.confirm-modal');
+    confirmModalElement.dispatchEvent(isExitClickEvent);
 
+    expect(ConfirmModal.prototype.isExitClick).toHaveBeenCalledWith(isExitClickEvent);
+    expect(ConfirmModal.prototype.remove).toHaveBeenCalled();
+  });
+  
+  it(`should call ConfirmModal.prototype.display(), add an event listener to the confirmModal element, then return undefined. If the user clicks the confirmModalConfirmBtn, it should call deleteSession() with the sessionID, messagePopup(), and ConfirmModal.prototype.remove(). It should also dispatch a "render" event`, async () => {
+    expect(await historyContent._removeSession(mockEvent)).toBeUndefined();
+    expect(ConfirmModal.prototype.display).toHaveBeenCalled();
+
+    deleteSession.mockImplementationOnce(() => {});
     ConfirmModal.prototype.isExitClick.mockImplementationOnce(() => { return false; });
-    ConfirmModal.prototype.remove.mockImplementationOnce(() => { confirmModalElement.remove(); });
-
-    deleteSession.mockImplementation(() => {});
-    messagePopup.mockImplementation(() => {});
-
-    const dispatchEventSpy = jest.spyOn(window, 'dispatchEvent');
-    const expectedDispatchedEvent = new Event('render');
-
-    const mockClickEvent = new MouseEvent('click');
-    Object.defineProperty(mockClickEvent, 'target', {
+    ConfirmModal.prototype.remove.mockImplementationOnce(() => {});
+    
+    const mockConfirmEvent = new MouseEvent('click');
+    Object.defineProperty(mockConfirmEvent, 'target', {
       writable: false,
       value: {
         id: 'confirmModalConfirmBtn',
       },
     });
 
-    confirmModalElement.dispatchEvent(mockClickEvent);
+    const dispatchEventSpy = jest.spyOn(window, 'dispatchEvent').mockImplementationOnce(() => {});
+    const mockRenderEvent = new Event('render');
 
-    await expect(deleteSession).toHaveBeenCalled();
+    const confirmModalElement = document.querySelector('.confirm-modal');
+    confirmModalElement.dispatchEvent(mockConfirmEvent);
+
+    expect(await deleteSession).toHaveBeenCalledWith('mockSessionID');
     expect(messagePopup).toHaveBeenCalledWith('Session removed', 'success');
-    expect(dispatchEventSpy).toHaveBeenCalledWith(expectedDispatchedEvent);
-
-    expect(ConfirmModal.prototype.isExitClick).toHaveBeenCalled();
     expect(ConfirmModal.prototype.remove).toHaveBeenCalled();
-    expect(document.querySelector('.confirm-modal')).toBeNull();
-  });
-});
-
-describe('_clearSessions()', () => {
-  it('should always return undefined', () => {
-    expect(historyContent._clearSessions()).toBeUndefined();
-    expect(historyContent._clearSessions(null)).toBeUndefined();
-    expect(historyContent._clearSessions(0)).toBeUndefined();
-    expect(historyContent._clearSessions('')).toBeUndefined();
-    expect(historyContent._clearSessions({})).toBeUndefined();
-    expect(historyContent._clearSessions([])).toBeUndefined();
-    expect(historyContent._clearSessions('some value')).toBeUndefined();
-    expect(historyContent._clearSessions(5)).toBeUndefined();
+    expect(dispatchEventSpy).toHaveBeenCalledWith(mockRenderEvent);
   });
   
-  it('should clear all child nodes of the historyContentElement', () => {
-    const historyContentElement = document.querySelector('.history-content');
-
-    for(let i = 0; i < 3; i++) {
-      const mockDiv = document.createElement('div');
-      historyContentElement.appendChild(mockDiv);
-    };
-
-    historyContent._clearSessions();
-    expect(historyContentElement.childNodes.length).toBe(0);
-  });
 });

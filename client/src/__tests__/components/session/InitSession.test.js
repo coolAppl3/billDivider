@@ -250,7 +250,7 @@ describe('_checkUrlForSessionID()', () => {
   });
 
 
-  it(`should catch any errors with the API request, console log it, and if the error's status code is not 403 or 404 (most likely 500), call Cookies.prototype.remove() and redirectAfterDelayMilliseconds('session.html', 1000, 'Something went wrong'), then return undefined`, async () => {
+  it(`should catch any errors with the API request, console log it, and if the error's status code is not 403 or 404 (most likely 500), call Cookies.prototype.remove() and redirectAfterDelayMilliseconds('signIn.html', 1000, 'Something went wrong'), then return undefined`, async () => {
     locateLoginToken.mockImplementation(() => { return 'mockLoginToken' });
     
     const mockError = new Error('mock error');
@@ -274,7 +274,7 @@ describe('_checkUrlForSessionID()', () => {
     expect(consoleSpy).toHaveBeenCalledWith(mockError.response.data);
 
     expect(Cookies.prototype.remove).toHaveBeenCalledWith('loginToken');
-    expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('session.html', 1000, 'Something went wrong');
+    expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('signIn.html', 1000, 'Something went wrong');
   });
 });
 

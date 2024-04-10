@@ -206,7 +206,7 @@ describe('_sendRecoveryCode(e)', () => {
 
   it('should, if a valid recovery email is provided, call RecoveryAPI.prototype.sendRecoveryEmail(). If the request fails with a status of 429, it should call ErrorSpan.prototype.display(), LoadingModal.remove(), then return undefined', async () => {
     recoveryForm._recoveryInput.value = 'validEmail@example.com';
-    RecoveryAPI.prototype.sendRecoveryEmail.mockRejectedValue({ response: { status: 429 } });
+    RecoveryAPI.prototype.sendRecoveryEmail.mockRejectedValue({ response: { status: 429, data: { message: 'mockMessage' } } });
     
     const inputFormGroup = recoveryForm._recoveryInput.parentElement;
 

@@ -1,5 +1,3 @@
-import fetchUserHistory from "./fetchUserHistory";
-import fetchUsername from "./fetchUsername";
 import createDateString from "../global/createDateString";
 
 class HistoryHeader {
@@ -11,31 +9,18 @@ class HistoryHeader {
   };
 
   _loadEventListeners() {
-    window.addEventListener('DOMContentLoaded', this._render.bind(this));
-    window.addEventListener('render', this._render.bind(this));
+    window.addEventListener('updateHeader', this._renderHeaderInfo.bind(this));
   };
 
-  _render() {
-    this._renderHeaderInfo();
-    this._renderUsername();
-  };
+  _renderHeaderInfo(e) {
+    const username = e.detail.username;
+    const sessions = e.detail.sessions;
 
-  async _renderUsername() {
-    const username = await fetchUsername(); 
-
-    if(!username) {
+    if(!sessions || !username) {
       return ;
     };
     
     this._usernameElement.textContent = username;
-  };
-
-  async _renderHeaderInfo() {
-    const sessions = await fetchUserHistory();
-
-    if(!sessions) {
-      return ;
-    };
     
     const totalSessions = this._getTotalSessions(sessions);
     this._totalSessionsElement.textContent = totalSessions;

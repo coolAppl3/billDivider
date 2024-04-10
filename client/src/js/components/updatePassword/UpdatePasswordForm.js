@@ -5,6 +5,7 @@ import LoadingModal from "../global/LoadingModal";
 import redirectAfterDelayMillisecond from "../global/redirectAfterDelayMillisecond";
 import Cookies from "../global/Cookies";
 import RecoveryAPI from "../services/RecoveryAPI";
+import messagePopup from "../global/messagePopup";
 
 // Initializing imports
 const errorSpan = new ErrorSpan();
@@ -81,6 +82,12 @@ class UpdatePasswordForm {
 
       if(status === 409) {
         errorSpan.display(passwordInputFormGroup, 'Invalid password.');
+        LoadingModal.remove();
+        return ;
+      };
+
+      if(status === 429) { // Too many requests
+        messagePopup('Too many requests. Please try again in a few minutes.', 'danger', 5000);
         LoadingModal.remove();
         return ;
       };

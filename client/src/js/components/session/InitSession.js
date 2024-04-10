@@ -6,6 +6,7 @@ import LoadingModal from '../global/LoadingModal';
 import locateLoginToken from "../global/locateLoginToken";
 import SessionReference from "./SessionReference";
 import redirectAfterDelayMillisecond from "../global/redirectAfterDelayMillisecond";
+import messagePopup from "../global/messagePopup";
 
 // Initializing imports
 const sessionAPI = new SessionAPI();
@@ -82,17 +83,22 @@ class InitSession {
         cookies.remove('loginToken');
         redirectAfterDelayMillisecond('signIn.html', 1000, 'Not logged in');
         return ;
-
-      } else if(status === 404) { // Session ID not found
+      }; 
+      
+      if(status === 404) { // Session ID not found
         redirectAfterDelayMillisecond('session.html', 1000, 'Session not found');
         return ;
-        
-      } else { // Most likely 500
-        cookies.remove('loginToken');
-        redirectAfterDelayMillisecond('session.html', 1000, 'Something went wrong');
+      };
+
+      if(status === 429) { // Too many requests
+        messagePopup('Too many requests. Please try again in a few minutes.', 'danger', 5000);
+        LoadingModal.remove();
         return ;
       };
-    }
+      
+      cookies.remove('loginToken');
+      redirectAfterDelayMillisecond('signIn.html', 1000, 'Something went wrong');
+    };
   };
 
   _start(e) {

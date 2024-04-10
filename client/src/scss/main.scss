@@ -147,12 +147,13 @@
   min-height: 100vh;
 
   &-container {
-    padding: 6rem 0;
+    padding: 4rem 0;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
 
+    
     &-form {
       padding: 4rem 2rem;
       background: $secondary;
@@ -160,6 +161,65 @@
       width: 35rem;
       max-width: 35rem;
       position: relative;
+
+      .progress {
+        height: 6rem;
+        max-height: 6rem;
+        overflow: hidden;
+  
+        &-container {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          height: 100%;
+          width: 24rem;
+          max-width: 24rem;
+          margin: 0 auto;
+         
+        
+          &-step {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+
+            &.disabled {
+              filter: brightness(0.6);
+            }
+
+            &.selected {
+
+              .step {
+
+                &-line {
+                  background: $cta;
+                }
+
+                &-title {
+                  color: $cta;
+                }
+              }
+            }
+  
+            .step {
+              
+              &-line {
+                background: $light;
+                width: 90%;
+                height: 3px;
+                border-radius: 50px;
+                margin-bottom: 4px;
+              }
+
+              &-title {
+                margin-bottom: 0;
+                font-weight: bold;
+              }
+            }
+          }
+        }
+      }
+  
 
       .content-t {
         font-size: 2.6rem;
@@ -172,7 +232,7 @@
         height: 1px;
         width: calc(100% + 4rem);
         background: rgba(200, 200, 200, 0.15);
-        margin: 4rem 0 3rem;
+        margin: 1rem 0 3rem;
         transform: translateX(-2rem);
       }
 
@@ -180,7 +240,7 @@
         font-size: 1.4rem;
         font-weight: 400;
         text-align: center;
-        // margin-bottom: 4rem;
+        margin-bottom: 0rem;
       }
 
       .btn-div {
@@ -1112,6 +1172,71 @@
     max-width: 35rem;
     position: relative;
 
+    .progress {
+      height: 6rem;
+      max-height: 6rem;
+      overflow: hidden;
+
+      &-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        height: 100%;
+        width: 24rem;
+        max-width: 24rem;
+        margin: 0 auto;
+      
+        &-step {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+
+          &.completed {
+
+            .step {
+              
+              &-line {
+                background: $success;
+              }
+            }
+          }
+
+
+          &.selected {
+
+            .step {
+
+              &-line {
+                background: $cta;
+              }
+
+              &-title {
+                color: $cta;
+              }
+            }
+          }
+
+          .step {
+            
+            &-line {
+              background: $light;
+              width: 90%;
+              height: 3px;
+              border-radius: 50px;
+              margin-bottom: 4px;
+            }
+
+            &-title {
+              margin-bottom: 0;
+              font-weight: bold;
+              font-size: 1.2rem;
+              color: rgba(200, 200, 200, 0.85);
+            }
+          }
+        }
+      }
+    }
+
     .content-t {
       font-size: 2.6rem;
       text-align: center;
@@ -1122,7 +1247,7 @@
       height: 1px;
       width: calc(100% + 4rem);
       background: rgba(200, 200, 200, 0.15);
-      margin: 4rem 0 3rem;
+      margin: 2rem 0 3rem;
       transform: translateX(-2rem);
     }
 

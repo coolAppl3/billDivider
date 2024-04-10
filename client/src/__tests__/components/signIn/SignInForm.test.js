@@ -378,7 +378,7 @@ describe('_signIn(e)', () => {
 
     expect(consoleSpy).toHaveBeenCalledWith(mockRejectedResponse.response.data);
     
-    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(passwordFormGroup, 'Account locked due to many failed sign in attempts. Click on "Forgot my password" above to recover your account.');
+    expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(passwordFormGroup, 'Account locked due to many failed sign in attempts. Click "Forgot my password" above to recover your account.');
     expect(LoadingModal.remove).toHaveBeenCalled();
   });
 

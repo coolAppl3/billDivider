@@ -266,7 +266,7 @@ describe('_signUp', () => {
     signUpForm._confirmPasswordInput.value = 'validPassword';
 
     const newUser = {
-      email: signUpForm._emailInput.value,
+      email: signUpForm._emailInput.value.toLowerCase(),
       username: signUpForm._usernameInput.value,
       password: signUpForm._passwordInput.value,
     };
@@ -278,7 +278,7 @@ describe('_signUp', () => {
     expect(await signUpForm._signUp(mockEvent)).toBeUndefined();
 
     expect(SignUpAPI.prototype.signUp).toHaveBeenCalledWith(newUser);
-    expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('verification.html?id=mockUnverifiedUserID&keepMeSignedIn=true', 2000, 'Signed up successfully!', 'success');
+    expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('verification.html?id=mockUnverifiedUserID&keepMeSignedIn=true', 2000, 'Account created!', 'success');
   });
   
   it(`should, if all inputs are valid, call SignUpAPI.prototype.signUp, and if the request fails without a response object, it should call redirectAfterDelayMillisecond('signUp.html')`, async () => {
@@ -288,7 +288,7 @@ describe('_signUp', () => {
     signUpForm._confirmPasswordInput.value = 'validPassword';
 
     const newUser = {
-      email: signUpForm._emailInput.value,
+      email: signUpForm._emailInput.value.toLowerCase(),
       username: signUpForm._usernameInput.value,
       password: signUpForm._passwordInput.value,
     };
@@ -309,7 +309,7 @@ describe('_signUp', () => {
     signUpForm._confirmPasswordInput.value = 'validPassword';
 
     const newUser = {
-      email: signUpForm._emailInput.value,
+      email: signUpForm._emailInput.value.toLowerCase(),
       username: signUpForm._usernameInput.value,
       password: signUpForm._passwordInput.value,
     };
@@ -330,7 +330,7 @@ describe('_signUp', () => {
     signUpForm._confirmPasswordInput.value = 'validPassword';
 
     const newUser = {
-      email: signUpForm._emailInput.value,
+      email: signUpForm._emailInput.value.toLowerCase(),
       username: signUpForm._usernameInput.value,
       password: signUpForm._passwordInput.value,
     };
@@ -359,7 +359,7 @@ describe('_signUp', () => {
     signUpForm._confirmPasswordInput.value = 'validPassword';
 
     const newUser = {
-      email: signUpForm._emailInput.value,
+      email: signUpForm._emailInput.value.toLowerCase(),
       username: signUpForm._usernameInput.value,
       password: signUpForm._passwordInput.value,
     };
@@ -388,7 +388,7 @@ describe('_signUp', () => {
     signUpForm._confirmPasswordInput.value = 'validPassword';
 
     const newUser = {
-      email: signUpForm._emailInput.value,
+      email: signUpForm._emailInput.value.toLowerCase(),
       username: signUpForm._usernameInput.value,
       password: signUpForm._passwordInput.value,
     };

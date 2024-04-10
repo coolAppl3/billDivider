@@ -1,6 +1,28 @@
 # Changelog
 
 ---
+### [1.1.0] (2024-04-10)
+
+
+### Features
+
+* Implemented rate-limiting throughout the app to prevent abuse
+* Reduced the amount of HTTP requests made when reloading or browsing `history.html`
+* Improved how verification and recovery emails look
+* Increased the failed sign in attempts limit from 3 to 5
+* Added a section in the sign up and verification forms to indicate where the user are in their sign up process
+* Verification emails now also state that the verification code is only valid for 15 minutes
+
+
+### Bug Fixes
+
+* Fixed a few requests with insufficient data causing the app to crash
+  * These requests shouldn't be possible, but this is just an extra precaution
+<br>
+* Fixed the height of the terms popup not adjusting to smaller screens
+
+
+---
 ### [1.0.0] (2024-04-05)
 
 
