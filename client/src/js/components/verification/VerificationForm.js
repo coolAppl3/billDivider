@@ -65,7 +65,7 @@ class VerificationForm {
 
     const searchParams = new URL(window.location.href).searchParams;
     const unverifiedUserID = searchParams.get('id');
-    const keepMeSignedIn = searchParams.get('keepMeSignedIn'); // Either a string of true or an empty string
+    const keepMeSignedIn = searchParams.get('keepMeSignedIn'); // Either a "true" string or an empty string
     
     const verificationCode = this._verificationInput.value.toUpperCase();
     const verificationData = { unverifiedUserID, verificationCode };
@@ -107,6 +107,12 @@ class VerificationForm {
       if(status === 401) {
         const inputFormGroup = this._verificationInput.parentElement;
         errorSpan.display(inputFormGroup, 'Incorrect verification code.');
+        LoadingModal.remove();
+        return ;
+      };
+
+      if(status === 429) { // Too many requests
+        messagePopup('Too many requests. Please try again in a few minutes.', 'danger', 5000);
         LoadingModal.remove();
         return ;
       };

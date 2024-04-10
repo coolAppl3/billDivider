@@ -17,8 +17,8 @@ async function fetchUserHistory() {
 
   try {
     const res = await historyAPI.getSessionHistory(loginToken);
-    const sessions = res.data.data;
-    return sessions;
+    const history = res.data.data;
+    return history;
 
   } catch (err) {
     err.response && console.log(err.response.data);

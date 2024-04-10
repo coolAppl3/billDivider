@@ -887,7 +887,7 @@ describe('_addSession(loginToken)', () => {
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('history.html', 1000, 'Session saved', 'success');
   });
 
-  it('should  set sessionInfo.createdOn to Date.now(), call SessionAPI.prototype.addSession(loginToken, sessionInfo). If the HTTP request fails, it should redirect the user to session.html with an error message, then return undefined', async () => {
+  it('should  set sessionInfo.createdOn to Date.now(), call SessionAPI.prototype.addSession(loginToken, sessionInfo). If the HTTP request fails, it should redirect the user to history.html with an error message, then return undefined', async () => {
     const mockError = { mockProperty: 'mockValue' };
     SessionAPI.prototype.addSession.mockRejectedValueOnce(mockError);
 
@@ -897,7 +897,7 @@ describe('_addSession(loginToken)', () => {
     expect(dateSpy).toHaveBeenCalled();
     expect(sessionInfo.createdOn).toBe('mockTimeStamp');
     expect(await SessionAPI.prototype.addSession).toHaveBeenCalledWith('mockLoginToken', sessionInfo);
-    expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('session.html');
+    expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('history.html');
   });
 });
 

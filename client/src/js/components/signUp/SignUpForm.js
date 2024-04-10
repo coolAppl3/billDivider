@@ -5,6 +5,7 @@ import LoadingModal from "../global/LoadingModal";
 import redirectAfterDelayMillisecond from "../global/redirectAfterDelayMillisecond";
 import ErrorSpan from "../global/ErrorSpan";
 import FormCheckbox from "../global/FormCheckbox";
+import messagePopup from "../global/messagePopup";
 
 // Initializing imports
 const signUpAPI = new SignUpAPI();
@@ -48,7 +49,7 @@ class SignUpForm {
     };
 
     const newUser = {
-      email: this._emailInput.value,
+      email: this._emailInput.value.toLowerCase(),
       username: this._usernameInput.value,
       password: this._passwordInput.value,
     };
@@ -65,7 +66,7 @@ class SignUpForm {
       };
 
       const redirectLink = `verification.html?id=${unverifiedUserID}&keepMeSignedIn=${keepMeSignedIn}`;
-      redirectAfterDelayMillisecond(redirectLink, 2000, 'Signed up successfully!', 'success');
+      redirectAfterDelayMillisecond(redirectLink, 2000, 'Account created!', 'success');
       
     } catch (err) {
       err.response && console.log(err.response.data);
@@ -93,6 +94,12 @@ class SignUpForm {
         
         const inputFormGroup = this._usernameInput.parentElement;
         errorSpan.display(inputFormGroup, 'Username already taken.');
+        LoadingModal.remove();
+        return ;
+      };
+
+      if(status === 429) { // Too many requests
+        messagePopup('Too many requests. Please try again in a few minutes.', 'danger', 5000);
         LoadingModal.remove();
         return ;
       };

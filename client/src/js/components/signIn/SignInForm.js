@@ -6,6 +6,7 @@ import LoadingModal from '../global/LoadingModal';
 import redirectAfterDelayMillisecond from '../global/redirectAfterDelayMillisecond';
 import ErrorSpan from '../global/ErrorSpan';
 import FormCheckbox from '../global/FormCheckbox';
+import messagePopup from '../global/messagePopup';
 
 // Initializing imports
 const signInAPI = new SignInAPI();
@@ -101,7 +102,13 @@ class SignInForm {
         };
         
         const inputFormGroup = this._passwordInput.parentElement;
-        errorSpan.display(inputFormGroup, 'Account locked due to many failed sign in attempts. Click on "Forgot my password" above to recover your account.');
+        errorSpan.display(inputFormGroup, 'Account locked due to many failed sign in attempts. Click "Forgot my password" above to recover your account.');
+        LoadingModal.remove();
+        return ;
+      };
+
+      if(status === 429) { // Too many requests
+        messagePopup('Too many requests. Please try again in a few minutes.', 'danger', 5000);
         LoadingModal.remove();
         return ;
       };

@@ -224,6 +224,20 @@ class SessionHeader {
 
         } catch (err) {
           err.response && console.log(err.response.data);
+
+          if(!err.response) {
+            redirectAfterDelayMillisecond('history.html');
+            return ;
+          };
+
+          const status = err.response.status;
+
+          if(status === 429) { // Too many requests
+            messagePopup('Too many requests. Please try again in a few minutes.', 'danger', 5000);
+            LoadingModal.remove();
+            return ;
+          };
+          
           redirectAfterDelayMillisecond('history.html');
         };
       };
@@ -255,6 +269,20 @@ class SessionHeader {
     
         } catch (err) {
           err.response && console.log(err.response.data);
+
+          if(!err.response) {
+            redirectAfterDelayMillisecond('history.html');
+            return ;
+          };
+
+          const status = err.response.status;
+
+          if(status === 429) { // Too many requests
+            messagePopup('Too many requests. Please try again in a few minutes.', 'danger', 5000);
+            LoadingModal.remove();
+            return ;
+          };
+
           redirectAfterDelayMillisecond('history.html');
         };
       };
@@ -279,6 +307,20 @@ class SessionHeader {
 
     } catch (err) {
       err.response && console.log(err.response.data);
+
+      if(!err.response) {
+        redirectAfterDelayMillisecond('history.html');
+        return ;
+      };
+
+      const status = err.response.status;
+
+      if(status === 429) { // Too many requests
+        messagePopup('Too many requests. Please try again in a few minutes.', 'danger', 5000);
+        LoadingModal.remove();
+        return ;
+      };
+      
       redirectAfterDelayMillisecond('session.html');
     };
   };

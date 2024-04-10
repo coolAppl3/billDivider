@@ -3,6 +3,7 @@ import LinksContainer from "../signing/LinksContainer";
 import ErrorSpan from "../global/ErrorSpan";
 import redirectAfterDelayMillisecond from "../global/redirectAfterDelayMillisecond";
 import LoadingModal from "../global/LoadingModal";
+import messagePopup from "../global/messagePopup";
 
 
 // Initializing imports
@@ -71,6 +72,12 @@ class RecoveryForm {
       };
 
       if(status === 429) {
+        if(err.response.data.message === 'Too many requests.') {
+          messagePopup('Too many requests. Please try again in a few minutes.', 'danger', 5000);
+          LoadingModal.remove();
+          return ;
+        };
+        
         errorSpan.display(inputFormGroup, 'A recovery email has already been sent within the last 24 hours. Please try again later.');
         LoadingModal.remove();
         return ;

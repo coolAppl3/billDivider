@@ -43,7 +43,11 @@ class HistoryContent {
   };
 
   async _renderSessions() {
-    const sessions = await fetchUserHistory();
+    const history = await fetchUserHistory();
+    const { sessions } = history;
+
+    const historyEvent = new CustomEvent('updateHeader', { detail: history });
+    window.dispatchEvent(historyEvent);
 
     if(!sessions) {
       return ;
@@ -53,7 +57,7 @@ class HistoryContent {
       const noSessionsElement = sessionElement.createNoSessionsElement();
       this._historyContentElement.appendChild(noSessionsElement);
 
-      dispatchEvent(new Event('sessionsLoaded'));
+      window.dispatchEvent(new Event('sessionsLoaded'));
       return ;
     };
 
@@ -63,7 +67,7 @@ class HistoryContent {
       this._historyContentElement.appendChild(sessionItem);
     };
 
-    dispatchEvent(new Event('sessionsLoaded'));
+    window.dispatchEvent(new Event('sessionsLoaded'));
   };
   
   async _removeSession(e) {
@@ -89,10 +93,9 @@ class HistoryContent {
         confirmModalElement.removeEventListener('click', eventHandler);
         confirmModal.remove();
         
-        dispatchEvent(new Event('render'));
+        window.dispatchEvent(new Event('render'));
       };
     }.bind(this));
-    
   };
 
   _clearSessions() {
