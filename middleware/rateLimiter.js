@@ -6,15 +6,17 @@ async function rateLimiter(req, res, next) {
   const lowRateCountLimit = 15; // per minute
   const lowRateCountLimitEndpoints = ['/signup', '/verification', '/resendVerification', '/signin', '/recovery'];
 
-  const { path, ip } = req;
+  const userIpAddress = req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || req.connection.remoteAddress;
+  
+  const { path } = req;
   const requestEndpoint = path.substring(10); // removing /api/users from the path
   
   const isLowRateEndpoint = lowRateCountLimitEndpoints.some((endpoint) => endpoint === requestEndpoint);
   if(isLowRateEndpoint) {
-    const document = await LowRateTracker.findOne({ ip: ip });
+    const document = await LowRateTracker.findOne({ ip: userIpAddress });
 
     if(!document) {
-      await createRateTracker(LowRateTracker, ip, next);
+      await createRateTracker(LowRateTracker, userIpAddress, next);
       return ;
     };
 
@@ -22,21 +24,21 @@ async function rateLimiter(req, res, next) {
     return ;
   };
 
-  const document = await HighRateTracker.findOne({ ip: ip });
+  const document = await HighRateTracker.findOne({ ip: userIpAddress });
 
   if(!document) {
-    await createRateTracker(HighRateTracker, ip, next);
+    await createRateTracker(HighRateTracker, userIpAddress, next);
     return ;
   };
 
   updateRateTracker(HighRateTracker, highRateCountLimit, document, res, next);
 };
 
-async function createRateTracker(Model, ip, next) {
+async function createRateTracker(Model, userIpAddress, next) {
   const timestamp = Date.now();
 
   const newDocument = new Model({
-    ip,
+    ip: userIpAddress,
     timestamp,
     count: 1,
   });
