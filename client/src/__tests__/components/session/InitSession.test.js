@@ -8,6 +8,7 @@ import LoadingModal from "../../../js/components/global/LoadingModal";
 import locateLoginToken from "../../../js/components/global/locateLoginToken";
 import SessionReference from "../../../js/components/session/SessionReference";
 import redirectAfterDelayMillisecond from "../../../js/components/global/redirectAfterDelayMillisecond";
+import generateAPIKey from "../../../js/components/global/generateAPIKey";
 
 jest.mock('../../../js/components/services/SessionAPI');
 jest.mock('../../../js/components/session/SessionInfo');
@@ -17,6 +18,7 @@ jest.mock('../../../js/components/global/LoadingModal');
 jest.mock('../../../js/components/global/locateLoginToken');
 jest.mock('../../../js/components/session/SessionReference');
 jest.mock('../../../js/components/global/redirectAfterDelayMillisecond');
+jest.mock('../../../js/components/global/generateAPIKey');
 
 const startModalHTML = `
   <div class="start-modal">
@@ -86,15 +88,20 @@ const startModalHTML = `
 `;
 
 let initSession;
+let mockAPIKey;
 
 beforeEach(() => {
   document.body.innerHTML = startModalHTML;
   initSession = new InitSession();
+
+  mockAPIKey = 'a5tZAgqE8sbF7Ddar5h9FmeA9MQCY1hmgKW3UgKpjiGbqJHWNmT8P8genEPvkcuq';
+  generateAPIKey.mockImplementation(() => { return mockAPIKey; });
 });
 
 afterEach(() => {
   document.body.innerHTML = '';
   initSession = null;
+  mockAPIKey = null;
   jest.resetAllMocks();
 });
 
@@ -167,7 +174,7 @@ describe('_checkUrlForSessionID()', () => {
     const renderEvent = new Event('render');
 
     expect(await initSession._checkUrlForSessionID()).toBeUndefined();
-    expect(SessionAPI.prototype.getSession).toHaveBeenCalledWith('mockLoginToken', 'mockSessionID');
+    expect(SessionAPI.prototype.getSession).toHaveBeenCalledWith('mockLoginToken', mockAPIKey, 'mockSessionID');
 
     expect(sessionInfo.set).toHaveBeenCalledWith(mockSuccessfulResponse.data.data);
     expect(SessionReference.set).toHaveBeenCalledWith(mockSuccessfulResponse.data.data);
@@ -188,7 +195,7 @@ describe('_checkUrlForSessionID()', () => {
     
 
     expect(await initSession._checkUrlForSessionID()).toBeUndefined();
-    expect(SessionAPI.prototype.getSession).toHaveBeenCalledWith('mockLoginToken', 'mockSessionID');
+    expect(SessionAPI.prototype.getSession).toHaveBeenCalledWith('mockLoginToken', mockAPIKey, 'mockSessionID');
 
 
     expect(Cookies.prototype.remove).toHaveBeenCalledWith('loginToken');
@@ -214,7 +221,7 @@ describe('_checkUrlForSessionID()', () => {
     const consoleSpy = jest.spyOn(window.console, 'log');
 
     expect(await initSession._checkUrlForSessionID()).toBeUndefined();
-    expect(SessionAPI.prototype.getSession).toHaveBeenCalledWith('mockLoginToken', 'mockSessionID');
+    expect(SessionAPI.prototype.getSession).toHaveBeenCalledWith('mockLoginToken', mockAPIKey, 'mockSessionID');
 
     expect(consoleSpy).toHaveBeenCalledWith(mockError.response.data);
 
@@ -241,7 +248,7 @@ describe('_checkUrlForSessionID()', () => {
     const consoleSpy = jest.spyOn(window.console, 'log');
 
     expect(await initSession._checkUrlForSessionID()).toBeUndefined();
-    expect(SessionAPI.prototype.getSession).toHaveBeenCalledWith('mockLoginToken', 'mockSessionID');
+    expect(SessionAPI.prototype.getSession).toHaveBeenCalledWith('mockLoginToken', mockAPIKey, 'mockSessionID');
 
     expect(consoleSpy).toHaveBeenCalledWith(mockError.response.data);
 
@@ -269,7 +276,7 @@ describe('_checkUrlForSessionID()', () => {
     const consoleSpy = jest.spyOn(window.console, 'log');
 
     expect(await initSession._checkUrlForSessionID()).toBeUndefined();
-    expect(SessionAPI.prototype.getSession).toHaveBeenCalledWith('mockLoginToken', 'mockSessionID');
+    expect(SessionAPI.prototype.getSession).toHaveBeenCalledWith('mockLoginToken', mockAPIKey, 'mockSessionID');
 
     expect(consoleSpy).toHaveBeenCalledWith(mockError.response.data);
 

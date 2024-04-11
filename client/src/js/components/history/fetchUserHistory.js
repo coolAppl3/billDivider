@@ -2,6 +2,8 @@ import HistoryAPI from "../services/HistoryAPI";
 import locateLoginToken from "../global/locateLoginToken";
 import Cookies from "../global/Cookies";
 import redirectAfterDelayMillisecond from "../global/redirectAfterDelayMillisecond";
+import messagePopup from "../global/messagePopup";
+import generateAPIKey from "../global/generateAPIKey";
 
 // Initializing imports
 const historyAPI = new HistoryAPI();
@@ -15,8 +17,10 @@ async function fetchUserHistory() {
     return ;
   };
 
+  const APIKey = generateAPIKey();
+  
   try {
-    const res = await historyAPI.getSessionHistory(loginToken);
+    const res = await historyAPI.getSessionHistory(loginToken, APIKey);
     const history = res.data.data;
     return history;
 
@@ -37,6 +41,22 @@ async function fetchUserHistory() {
       return ;
     }
 
+    if(status === 429) { // Too many requests
+      messagePopup('Too many requests. Please try again in a few minutes.', 'danger', 5000);
+      LoadingModal.remove();
+      return ;
+    };
+
+    if(status === 401) {
+      if(err.response.data.message === 'API key missing or invalid.') {
+        cookies.remove('loginToken');
+        redirectAfterDelayMillisecond('signIn.html');
+        return ;
+      };
+    
+      return ;
+    };
+    
     cookies.remove('loginToken');
     redirectAfterDelayMillisecond('signIn.html');
   };

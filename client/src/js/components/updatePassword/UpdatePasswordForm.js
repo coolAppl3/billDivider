@@ -6,6 +6,7 @@ import redirectAfterDelayMillisecond from "../global/redirectAfterDelayMilliseco
 import Cookies from "../global/Cookies";
 import RecoveryAPI from "../services/RecoveryAPI";
 import messagePopup from "../global/messagePopup";
+import generateAPIKey from "../global/generateAPIKey";
 
 // Initializing imports
 const errorSpan = new ErrorSpan();
@@ -49,8 +50,10 @@ class UpdatePasswordForm {
     const newPassword = this._passwordInput.value;
     const recoveryData = { userID, recoveryCode, newPassword };
 
+    const APIKey = generateAPIKey();
+    
     try {
-      const res = await recoveryAPI.updatePassword(recoveryData);
+      const res = await recoveryAPI.updatePassword(APIKey, recoveryData);
       const loginToken = res.data.loginToken;
 
       cookies.set('loginToken', loginToken);
@@ -74,10 +77,14 @@ class UpdatePasswordForm {
       };
 
       if(status === 401) {
+        if(err.response.data.message === 'API key missing or invalid.') {
+          redirectAfterDelayMillisecond(`updatePassword.html${window.location.search}`);
+          return ;
+        };
+        
         errorSpan.display(passwordInputFormGroup, 'Invalid recovery code. Please follow the link in the recovery email and do not amend it.');
         LoadingModal.remove();
         return ;
-
       };
 
       if(status === 409) {

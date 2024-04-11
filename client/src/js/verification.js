@@ -2,10 +2,12 @@ import '../scss/main.scss';
 import VerificationForm from './components/verification/VerificationForm';
 import DisplayTerms from './components/global/DisplayTerms';
 import locateLoginToken from './components/global/locateLoginToken';
+import generateAPIKey from './components/global/generateAPIKey';
 
 // Initializing imports
 new VerificationForm();
 new DisplayTerms();
+generateAPIKey();
 
 class Verification {
   constructor() {

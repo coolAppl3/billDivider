@@ -7,6 +7,7 @@ import redirectAfterDelayMillisecond from '../global/redirectAfterDelayMilliseco
 import ErrorSpan from '../global/ErrorSpan';
 import FormCheckbox from '../global/FormCheckbox';
 import messagePopup from '../global/messagePopup';
+import generateAPIKey from "../global/generateAPIKey";
 
 // Initializing imports
 const signInAPI = new SignInAPI();
@@ -55,8 +56,10 @@ class SignInForm {
       password: this._passwordInput.value,
     }
     
+    const APIKey = generateAPIKey();
+    
     try {
-      const res = await signInAPI.signIn(user);
+      const res = await signInAPI.signIn(APIKey, user);
       const loginToken = res.data.loginToken;
 
       // Saving the loginToken depending on the user's preference.
@@ -86,7 +89,12 @@ class SignInForm {
         return ;
       };
       
-      if(status === 401) { // incorrect password
+      if(status === 401) {
+        if(err.response.data.message === 'API key missing or invalid.') {
+          redirectAfterDelayMillisecond('signIn.html');
+          return ;
+        };
+
         const inputFormGroup = this._passwordInput.parentElement;
         errorSpan.display(inputFormGroup, 'Incorrect password.');
         LoadingModal.remove();

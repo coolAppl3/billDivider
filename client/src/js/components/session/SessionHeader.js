@@ -7,6 +7,7 @@ import locateLoginToken from "../global/locateLoginToken";
 import SessionReference from "./SessionReference";
 import LoadingModal from "../global/LoadingModal";
 import redirectAfterDelayMillisecond from "../global/redirectAfterDelayMillisecond";
+import generateAPIKey from "../global/generateAPIKey";
 
 // Initializing imports
 const confirmModal = new ConfirmModal();
@@ -187,21 +188,23 @@ class SessionHeader {
       redirectAfterDelayMillisecond('session.html');
       return ;
     };
+
+    const APIKey = generateAPIKey();
     
     if(SessionReference.referenceExists() && SessionReference.changesMade()) {
       if(sessionInfo.isEmpty()) {
-        await this._deleteSession(loginToken, sessionInfo.sessionID);
+        await this._deleteSession(loginToken, APIKey, sessionInfo.sessionID);
         return ;
       };
       
-      await this._updateSession(loginToken, sessionInfo.sessionID);
+      await this._updateSession(loginToken, APIKey, sessionInfo.sessionID);
       return ;
     };
 
-    await this._addSession(loginToken);
+    await this._addSession(loginToken, APIKey);
   };
 
-  async _deleteSession(loginToken, sessionID) {
+  async _deleteSession(loginToken, APIKey, sessionID) {
     LoadingModal.remove();
     confirmModal.display('Saving this session with no bills will delete it. Are you sure you want to continue?', 'danger');
     const confirmModalElement = document.querySelector('.confirm-modal');
@@ -219,7 +222,7 @@ class SessionHeader {
         confirmModal.remove();
 
         try {
-          await sessionAPI.deleteSession(loginToken, sessionID);
+          await sessionAPI.deleteSession(loginToken, APIKey, sessionID);
           redirectAfterDelayMillisecond('history.html', 1000, 'Session deleted', 'success');
 
         } catch (err) {
@@ -237,6 +240,15 @@ class SessionHeader {
             LoadingModal.remove();
             return ;
           };
+
+          if(status === 401) {
+            if(err.response.data.message === 'API key missing or invalid.') {
+              redirectAfterDelayMillisecond('history.html');
+              return ;
+            };
+          
+            return ;
+          };
           
           redirectAfterDelayMillisecond('history.html');
         };
@@ -244,7 +256,7 @@ class SessionHeader {
     }.bind(this));
   };
 
-  async _updateSession(loginToken, sessionID) {
+  async _updateSession(loginToken, APIKey, sessionID) {
     LoadingModal.remove();
     const extraOption = { btnName: 'Save as a new session', btnID: 'saveAsNewSession', };
     
@@ -264,7 +276,7 @@ class SessionHeader {
         confirmModal.remove();
 
         try {
-          await sessionAPI.updateSession(loginToken, sessionID, sessionInfo);
+          await sessionAPI.updateSession(loginToken, APIKey, sessionID, sessionInfo);
           redirectAfterDelayMillisecond('history.html', 1000, 'Session updated', 'success');
     
         } catch (err) {
@@ -283,6 +295,15 @@ class SessionHeader {
             return ;
           };
 
+          if(status === 401) {
+            if(err.response.data.message === 'API key missing or invalid.') {
+              redirectAfterDelayMillisecond('history.html');
+              return ;
+            };
+          
+            return ;
+          };
+
           redirectAfterDelayMillisecond('history.html');
         };
       };
@@ -292,17 +313,17 @@ class SessionHeader {
         confirmModalElement.removeEventListener('click', eventHandler);
         confirmModal.remove();
 
-        await this._addSession(loginToken);
+        await this._addSession(loginToken, APIKey);
       };
     }.bind(this));
   };
 
-  async _addSession(loginToken) {
+  async _addSession(loginToken, APIKey) {
     try {
       const timestamp = Date.now();
       sessionInfo.createdOn = timestamp;
 
-      await sessionAPI.addSession(loginToken, sessionInfo);
+      await sessionAPI.addSession(loginToken, APIKey, sessionInfo);
       redirectAfterDelayMillisecond('history.html', 1000, 'Session saved', 'success');
 
     } catch (err) {
@@ -320,8 +341,17 @@ class SessionHeader {
         LoadingModal.remove();
         return ;
       };
+
+      if(status === 401) {
+        if(err.response.data.message === 'API key missing or invalid.') {
+          redirectAfterDelayMillisecond('history.html');
+          return ;
+        };
       
-      redirectAfterDelayMillisecond('session.html');
+        return ;
+      };
+      
+      redirectAfterDelayMillisecond('history.html');
     };
   };
 

@@ -7,6 +7,7 @@ import locateLoginToken from "../global/locateLoginToken";
 import SessionReference from "./SessionReference";
 import redirectAfterDelayMillisecond from "../global/redirectAfterDelayMillisecond";
 import messagePopup from "../global/messagePopup";
+import generateAPIKey from "../global/generateAPIKey";
 
 // Initializing imports
 const sessionAPI = new SessionAPI();
@@ -54,8 +55,10 @@ class InitSession {
       return ;
     };
     
+    const APIKey = generateAPIKey();
+    
     try {
-      const res = await sessionAPI.getSession(loginToken, sessionID);
+      const res = await sessionAPI.getSession(loginToken, APIKey, sessionID);
       const session = await res.data.data;
 
       sessionInfo.set(session);
@@ -87,6 +90,16 @@ class InitSession {
       
       if(status === 404) { // Session ID not found
         redirectAfterDelayMillisecond('session.html', 1000, 'Session not found');
+        return ;
+      };
+
+      if(status === 401) {
+        if(err.response.data.message === 'API key missing or invalid.') {
+          cookies.remove('loginToken');
+          redirectAfterDelayMillisecond('signIn.html', 1000, 'Something went wrong');
+          return ;
+        };
+      
         return ;
       };
 

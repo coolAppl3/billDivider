@@ -11,12 +11,20 @@ class VerificationAPI {
     : `https://${window.location.hostname}/api/users/resendVerification`;
   };
 
-  async verify(verificationData) {
-    return axios.post(this._verificationURL, verificationData);
+  async verify(APIKey, verificationData) {
+    return axios.post(this._verificationURL, verificationData, {
+      headers: {
+        'x-api-key': APIKey,
+      },
+    });
   };
 
-  async resendVerificationEmail(unverifiedUserID) {
-    return axios.post(this._resendVerificationURL, unverifiedUserID);
+  async resendVerificationEmail(APIKey, unverifiedUserID) {
+    return axios.post(this._resendVerificationURL, unverifiedUserID , {
+      headers: {
+        'x-api-key': APIKey,
+      },
+    });
   };
 };
 

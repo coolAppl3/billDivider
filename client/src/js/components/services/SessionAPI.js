@@ -7,34 +7,38 @@ class SessionAPI {
     : `https://${window.location.hostname}/api/users/session`;
   };
 
-  async addSession(loginToken, session) {
+  async addSession(loginToken, APIKey, session) {
     return axios.post(this._sessionURL, session, {
       headers: {
         Authorization: `Bearer ${loginToken}`,
+        'x-api-key': APIKey,
       },
     });
   };
 
-  async getSession(loginToken, sessionID) {
+  async getSession(loginToken, APIKey, sessionID) {
     return axios.get(`${this._sessionURL}/${sessionID}`, {
       headers: {
         Authorization: `Bearer ${loginToken}`,
+        'x-api-key': APIKey,
       },
     });
   };
 
-  async deleteSession(loginToken, sessionID) {
+  async deleteSession(loginToken, APIKey, sessionID) {
     return axios.delete(`${this._sessionURL}/${sessionID}`, {
       headers: {
         Authorization: `Bearer ${loginToken}`,
+        'x-api-key': APIKey,
       },
     });
   };
 
-  async updateSession(loginToken, sessionID, session) {
+  async updateSession(loginToken, APIKey, sessionID, session) {
     return axios.put(`${this._sessionURL}/${sessionID}`, session, {
       headers: {
         Authorization: `Bearer ${loginToken}`,
+        'x-api-key': APIKey,
       },
     });
   };

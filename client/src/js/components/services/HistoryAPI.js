@@ -5,28 +5,16 @@ class HistoryAPI {
     this._sessionHistoryURL = window.location.hostname === 'localhost'
     ? `http://${window.location.hostname}:5000/api/users/history`
     : `https://${window.location.hostname}/api/users/history`;
-
-    this._usernameURL = window.location.hostname === 'localhost'
-    ? `http://${window.location.hostname}:5000/api/users/username`
-    : `https://${window.location.hostname}/api/users/username`;
   };
 
-  async getSessionHistory(loginToken) {
+  async getSessionHistory(loginToken, APIKey) {
     return axios.get(this._sessionHistoryURL, {
       headers: {
         Authorization: `Bearer ${loginToken}`,
+        'x-api-key': APIKey,
       },
     });
   };
-
-  async getUsername(loginToken) {
-    return axios.get(this._usernameURL, {
-      headers: {
-        Authorization: `Bearer ${loginToken}`,
-      },
-    });
-  };
-
 };
 
 

@@ -5,6 +5,7 @@ import Cookies from "../global/Cookies";
 import VerificationAPI from "../services/VerificationAPI";
 import messagePopup from "../global/messagePopup";
 import LinksContainer from "../signing/LinksContainer";
+import generateAPIKey from "../global/generateAPIKey";
 
 // Initializing imports
 const errorSpan = new ErrorSpan();
@@ -70,8 +71,10 @@ class VerificationForm {
     const verificationCode = this._verificationInput.value.toUpperCase();
     const verificationData = { unverifiedUserID, verificationCode };
   
+    const APIKey = generateAPIKey();
+
     try {
-      const res = await verificationAPI.verify(verificationData);
+      const res = await verificationAPI.verify(APIKey, verificationData);
       const loginToken = await res.data.loginToken;
 
       if(keepMeSignedIn) {
@@ -105,6 +108,15 @@ class VerificationForm {
       };
 
       if(status === 401) {
+        if(err.response.data.message === 'API key missing or invalid.') {
+          const pathname = window.location.pathname.substring(1);
+          const search = window.location.search;
+          
+          const redirectLink = `${pathname}${search}`;
+          redirectAfterDelayMillisecond(redirectLink);
+          return ;
+        };
+
         const inputFormGroup = this._verificationInput.parentElement;
         errorSpan.display(inputFormGroup, 'Incorrect verification code.');
         LoadingModal.remove();
@@ -160,8 +172,10 @@ class VerificationForm {
     const searchParams = new URL(window.location.href).searchParams;
     const unverifiedUserID = searchParams.get('id');
 
+    const APIKey = generateAPIKey();
+    
     try {
-      await verificationAPI.resendVerificationEmail({ unverifiedUserID });
+      await verificationAPI.resendVerificationEmail(APIKey, { unverifiedUserID });
       messagePopup('Verification email resent.', 'success');
       
     } catch (err) {
@@ -178,6 +192,8 @@ class VerificationForm {
 
       const status = err.response.status;
 
+      
+
       if(status === 404) {
         messagePopup('Account does not exist or has already been validated.', 'danger', 3000);
         return ;
@@ -185,6 +201,25 @@ class VerificationForm {
 
       if(status === 403) {
         messagePopup('Email resend limit exceeded.', 'danger', 3000);
+        return ;
+      };
+
+      if(status === 401) {
+        if(err.response.data.message === 'API key missing or invalid.') {
+          const pathname = window.location.pathname.substring(1);
+          const search = window.location.search;
+          
+          const redirectLink = `${pathname}${search}`;
+          redirectAfterDelayMillisecond(redirectLink);
+          return ;
+        };
+
+        return ;
+      };
+
+      if(status === 429) { // Too many requests
+        messagePopup('Too many requests. Please try again in a few minutes.', 'danger', 5000);
+        LoadingModal.remove();
         return ;
       };
       

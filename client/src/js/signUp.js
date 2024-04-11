@@ -4,10 +4,12 @@ disableFBCache();
 import locateLoginToken from './components/global/locateLoginToken';
 import SignUpForm from './components/signUp/SignUpForm';
 import DisplayTerms from './components/global/DisplayTerms';
+import generateAPIKey from './components/global/generateAPIKey';
 
 // Initializing imports
 new SignUpForm();
 new DisplayTerms();
+generateAPIKey();
 
 class SignUp {
   constructor() {

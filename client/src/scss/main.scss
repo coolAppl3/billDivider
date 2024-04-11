@@ -141,9 +141,6 @@
 
 // Sign Up
 .sign-up {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-height: 100vh;
 
   &-container {
@@ -171,7 +168,6 @@
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           height: 100%;
-          width: 24rem;
           max-width: 24rem;
           margin: 0 auto;
          

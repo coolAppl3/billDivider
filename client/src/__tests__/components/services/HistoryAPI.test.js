@@ -25,25 +25,13 @@ describe('getSessionHistory(loginToken)', () => {
   it('should call axios.get() with the appropriate parameters', async () => {
     axios.get.mockImplementationOnce(() => { return { success: true, data: {} } });
     const loginToken = 'someLoginToken';
+    const APIKey = 'z5tZAgqE8sbF7Ddar5h9FmeA9MQCY1hmgKW3UgKpjiGbqJHWNmT8P8genEPvkcuq';
 
-    await historyAPI.getSessionHistory(loginToken);
+    await historyAPI.getSessionHistory(loginToken, APIKey);
     expect(axios.get).toHaveBeenCalledWith(`https://${window.location.hostname}/api/users/history`, {
       headers: {
         Authorization: `Bearer ${loginToken}`,
-      },
-    });
-  });
-});
-
-describe('getUsername(loginToken)', () => {
-  it('should call axios.get() with the appropriate parameters', async () => {
-    axios.get.mockImplementationOnce(() => { return { success: true, username: 'someUsername' } });
-    const loginToken = 'someLoginToken';
-
-    await historyAPI.getUsername(loginToken);
-    expect(axios.get).toHaveBeenCalledWith(`https://${window.location.hostname}/api/users/username`, {
-      headers: {
-        Authorization: `Bearer ${loginToken}`,
+        'x-api-key': APIKey,
       },
     });
   });

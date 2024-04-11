@@ -7,12 +7,20 @@ class RecoveryAPI {
     : `https://${window.location.hostname}/api/users/recovery`;
   };
 
-  async sendRecoveryEmail(recoveryEmail) {
-    return axios.post(this._recoveryURL, recoveryEmail);
+  async sendRecoveryEmail(APIKey, recoveryEmail) {
+    return axios.post(this._recoveryURL, recoveryEmail, {
+      headers: {
+        'x-api-key': APIKey,
+      },
+    });
   };
 
-  async updatePassword(recoveryData) {
-    return axios.put(this._recoveryURL, recoveryData);
+  async updatePassword(APIKey, recoveryData) {
+    return axios.put(this._recoveryURL, recoveryData, {
+      headers: {
+        'x-api-key': APIKey,
+      },
+    });
   };
 };
 

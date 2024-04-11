@@ -4,14 +4,23 @@ import SessionAPI from "../../../js/components/services/SessionAPI";
 import locateLoginToken from "../../../js/components/global/locateLoginToken";
 import redirectAfterDelayMillisecond from "../../../js/components/global/redirectAfterDelayMillisecond";
 import Cookies from "../../../js/components/global/Cookies";
+import generateAPIKey from "../../../js/components/global/generateAPIKey";
 
 jest.mock('../../../js/components/services/SessionAPI');
 jest.mock('../../../js/components/global/locateLoginToken');
 jest.mock('../../../js/components/global/redirectAfterDelayMillisecond');
 jest.mock('../../../js/components/global/Cookies');
+jest.mock('../../../js/components/global/generateAPIKey');
 
+let mockAPIKey;
+
+beforeEach(() => {
+  mockAPIKey = 'a5tZAgqE8sbF7Ddar5h9FmeA9MQCY1hmgKW3UgKpjiGbqJHWNmT8P8genEPvkcuq';
+  generateAPIKey.mockImplementation(() => { return mockAPIKey; });
+});
 
 afterEach(() => {
+  mockAPIKey = null;
   jest.resetAllMocks();
 });
 
@@ -33,7 +42,7 @@ describe('deleteSEssion(sessionID)', () => {
 
     expect(await deleteSession(sessionID)).toBeUndefined();
     expect(locateLoginToken).toHaveBeenCalled();
-    expect(SessionAPI.prototype.deleteSession).toHaveBeenCalledWith('mockLoginToken', sessionID);
+    expect(SessionAPI.prototype.deleteSession).toHaveBeenCalledWith('mockLoginToken', mockAPIKey, sessionID);
   });
   
   it(`should, if the API request fails, console log the error, and if there is no error.response property, call cookies.remove('loginToken) and redirectAfterDelayMillisecond('signIn.html')`, async () => {
@@ -53,7 +62,7 @@ describe('deleteSEssion(sessionID)', () => {
 
     await deleteSession(sessionID);
     expect(locateLoginToken).toHaveBeenCalled();;
-    expect(SessionAPI.prototype.deleteSession).toHaveBeenCalledWith('mockLoginToken', sessionID);
+    expect(SessionAPI.prototype.deleteSession).toHaveBeenCalledWith('mockLoginToken', mockAPIKey, sessionID);
 
     expect(consoleSpy).toHaveBeenCalledWith(mockError.response.data);
     expect(Cookies.prototype.remove).toHaveBeenCalledWith('loginToken');
@@ -81,7 +90,7 @@ describe('deleteSEssion(sessionID)', () => {
 
     await deleteSession(sessionID);
     expect(locateLoginToken).toHaveBeenCalled();;
-    expect(SessionAPI.prototype.deleteSession).toHaveBeenCalledWith('mockLoginToken', sessionID);
+    expect(SessionAPI.prototype.deleteSession).toHaveBeenCalledWith('mockLoginToken', mockAPIKey, sessionID);
 
     expect(consoleSpy).toHaveBeenCalledWith(mockError.response.data);
     expect(Cookies.prototype.remove).toHaveBeenCalledWith('loginToken');
@@ -109,7 +118,7 @@ describe('deleteSEssion(sessionID)', () => {
 
     await deleteSession(sessionID);
     expect(locateLoginToken).toHaveBeenCalled();;
-    expect(SessionAPI.prototype.deleteSession).toHaveBeenCalledWith('mockLoginToken', sessionID);
+    expect(SessionAPI.prototype.deleteSession).toHaveBeenCalledWith('mockLoginToken', mockAPIKey, sessionID);
 
     expect(consoleSpy).toHaveBeenCalledWith(mockError.response.data);
     expect(Cookies.prototype.remove).toHaveBeenCalledWith('loginToken');
