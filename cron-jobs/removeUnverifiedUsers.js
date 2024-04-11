@@ -22,7 +22,7 @@ async function removeUnverifiedUsers() {
         try {
           await UnverifiedUser.findOneAndDelete({ loginToken: user.loginToken });
           await User.findOneAndDelete({ loginToken: user.loginToken });
-          console.log(`User ${user._id} has been deleted due to not verifying their email address.`);
+          
         } catch (err) {
           console.log(err);
         };

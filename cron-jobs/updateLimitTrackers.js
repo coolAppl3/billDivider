@@ -12,20 +12,20 @@ async function updateLimitTrackers() {
 
 async function updateTracker(Model) {
   try {
-    const highRateCollection = await Model.find({});
-    const ipAddressesToDelete = [];
+    const collection = await Model.find({});
+    const APIKeysToDelete = [];
 
-    for(const document of highRateCollection) {
+    for(const document of collection) {
       if(Date.now() - document.timestamp >= (60 * 1000)) {
-        ipAddressesToDelete.push(document.ip);
+        APIKeysToDelete.push(document.token);
       };
     };
 
-    await Model.deleteMany({ ip: { $in: ipAddressesToDelete } });
+    await Model.deleteMany({ token: { $in: APIKeysToDelete } });
     
   } catch (err) {
     console.log(err);
-  }
+  };
 };
 
 module.exports = updateLimitTrackers;

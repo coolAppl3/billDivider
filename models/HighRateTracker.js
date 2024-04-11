@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const HighRateTrackerSchema = new mongoose.Schema({
-  ip: {
+  token: {
     type: String,
     required: true,
   },

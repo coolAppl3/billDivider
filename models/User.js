@@ -38,6 +38,10 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 1,
   },
+  rateLimitReachedCount: {
+    type: Number,
+    default: 0
+  },
   history: {
     type: Array,
     default: [],
