@@ -8,6 +8,7 @@ import LoadingModal from "../../../js/components/global/LoadingModal";
 import redirectAfterDelayMillisecond from "../../../js/components/global/redirectAfterDelayMillisecond";
 import ErrorSpan from "../../../js/components/global/ErrorSpan";
 import FormCheckbox from "../../../js/components/global/FormCheckbox";
+import generateAPIKey from "../../../js/components/global/generateAPIKey";
 
 jest.mock('../../../js/components/services/SignInAPI');
 jest.mock('../../../js/components/global/Cookies');
@@ -18,6 +19,7 @@ jest.mock('../../../js/components/global/locateLoginToken');
 jest.mock('../../../js/components/global/redirectAfterDelayMillisecond');
 jest.mock('../../../js/components/global/ErrorSpan');
 jest.mock('../../../js/components/global/FormCheckbox');
+jest.mock('../../../js/components/global/generateAPIKey');
 
 const signInFormHTML = `
   <section class="sign-in">
@@ -137,15 +139,20 @@ const signInFormHTML = `
 `;
 
 let signInForm;
+let mockAPIKey;
 
 beforeEach(() => {
   document.body.innerHTML = signInFormHTML;
   signInForm = new SignInForm();
+
+  mockAPIKey = 'a5tZAgqE8sbF7Ddar5h9FmeA9MQCY1hmgKW3UgKpjiGbqJHWNmT8P8genEPvkcuq';
+  generateAPIKey.mockImplementation(() => { return mockAPIKey; });
 });
 
 afterEach(() => {
   document.body.innerHTML = '';
   signInForm = null;
+  mockAPIKey = null;
   jest.resetAllMocks();
 });
 
@@ -198,7 +205,7 @@ describe('_signIn(e)', () => {
     Cookies.prototype.set.mockImplementationOnce(() => {});
 
     expect(await signInForm._signIn(mockEvent)).toBeUndefined();
-    expect(SignInAPI.prototype.signIn).toHaveBeenCalledWith(mockUserObject);
+    expect(SignInAPI.prototype.signIn).toHaveBeenCalledWith(mockAPIKey, mockUserObject);
     expect(Cookies.prototype.set).toHaveBeenCalledWith('loginToken', 'mockLoginToken', signInForm._loginTokenAge);
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('history.html', 1000, 'Signed in successfully!', 'success');
   });
@@ -224,7 +231,7 @@ describe('_signIn(e)', () => {
     Cookies.prototype.set.mockImplementationOnce(() => {});
 
     expect(await signInForm._signIn(mockEvent)).toBeUndefined();
-    expect(SignInAPI.prototype.signIn).toHaveBeenCalledWith(mockUserObject);
+    expect(SignInAPI.prototype.signIn).toHaveBeenCalledWith(mockAPIKey, mockUserObject);
     expect(Cookies.prototype.set).toHaveBeenCalledWith('loginToken', 'mockLoginToken');
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('history.html', 1000, 'Signed in successfully!', 'success');
   });
@@ -245,7 +252,7 @@ describe('_signIn(e)', () => {
 
 
     expect(await signInForm._signIn(mockEvent)).toBeUndefined();
-    expect(SignInAPI.prototype.signIn).toHaveBeenCalledWith(mockUserObject);
+    expect(SignInAPI.prototype.signIn).toHaveBeenCalledWith(mockAPIKey, mockUserObject);
 
     
     expect(Cookies.prototype.remove).toHaveBeenCalledWith('loginToken');
@@ -254,7 +261,7 @@ describe('_signIn(e)', () => {
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('signIn.html');
   });
   
-  it('should catch any potential error in the API request and log it. if error.response.status is equal to 404, it should call ErrorSpan.prototype.display() with the parent element of _usernameInput, call LoadingModal.remove(), then return undefined', async () => {
+  it('should catch any potential error in the API request and log it. If error.response.status is equal to 404, it should call ErrorSpan.prototype.display() with the parent element of _usernameInput, call LoadingModal.remove(), then return undefined', async () => {
     signInForm._usernameInput.value = 'mockUsername';
     signInForm._passwordInput.value = 'mockPassword';
     
@@ -278,7 +285,7 @@ describe('_signIn(e)', () => {
     const consoleSpy = jest.spyOn(window.console, 'log').mockImplementationOnce(() => {});
 
     expect(await signInForm._signIn(mockEvent)).toBeUndefined();
-    expect(SignInAPI.prototype.signIn).toHaveBeenCalledWith(mockUserObject);
+    expect(SignInAPI.prototype.signIn).toHaveBeenCalledWith(mockAPIKey, mockUserObject);
 
     expect(consoleSpy).toHaveBeenCalledWith(mockRejectedResponse.response.data);
     
@@ -286,7 +293,7 @@ describe('_signIn(e)', () => {
     expect(LoadingModal.remove).toHaveBeenCalled();
   });
 
-  it('should catch any potential error in the API request and log it. if error.response.status is equal to 401, it should call ErrorSpan.prototype.display() with the parent element of _passwordInput, call LoadingModal.remove(), then return undefined', async () => {
+  it(`should catch any potential error in the API request and log it. If error.response.status is equal to 401, and err.response.data.message is not equal to "API key missing or invalid.", it should call ErrorSpan.prototype.display() with the parent element of _passwordInput, call LoadingModal.remove(), then return undefined`, async () => {
     signInForm._usernameInput.value = 'mockUsername';
     signInForm._passwordInput.value = 'mockPassword';
     
@@ -310,7 +317,7 @@ describe('_signIn(e)', () => {
     const consoleSpy = jest.spyOn(window.console, 'log').mockImplementationOnce(() => {});
 
     expect(await signInForm._signIn(mockEvent)).toBeUndefined();
-    expect(SignInAPI.prototype.signIn).toHaveBeenCalledWith(mockUserObject);
+    expect(SignInAPI.prototype.signIn).toHaveBeenCalledWith(mockAPIKey, mockUserObject);
 
     expect(consoleSpy).toHaveBeenCalledWith(mockRejectedResponse.response.data);
     
@@ -318,7 +325,36 @@ describe('_signIn(e)', () => {
     expect(LoadingModal.remove).toHaveBeenCalled();
   });
 
-  it(`should catch any potential error in the API request and log it. if error.response.status is equal to 403, and the response message is "Email not verified.", it should call ErrorSpan.prototype.display() with the parent element of _passwordInput, call LoadingModal.remove(), then return undefined`, async () => {
+  it(`should catch any potential error in the API request and log it. If error.response.status is equal to 401, and err.response.data.message is  equal to "API key missing or invalid.", it should redirectAfterDelayMillisecond('signIn.html'), then return undefined`, async () => {
+    signInForm._usernameInput.value = 'mockUsername';
+    signInForm._passwordInput.value = 'mockPassword';
+    
+    const mockUserObject = {
+      username: 'mockUsername',
+      password: 'mockPassword',
+    };
+    
+    const mockRejectedResponse = {
+      response: {
+        status: 401,
+        data: { message: 'API key missing or invalid.' },
+      },
+    };
+
+    SignInAPI.prototype.signIn.mockRejectedValueOnce(mockRejectedResponse);
+    Cookies.prototype.set.mockImplementationOnce(() => {});
+
+    const consoleSpy = jest.spyOn(window.console, 'log').mockImplementationOnce(() => {});
+
+    expect(await signInForm._signIn(mockEvent)).toBeUndefined();
+    expect(SignInAPI.prototype.signIn).toHaveBeenCalledWith(mockAPIKey, mockUserObject);
+
+    expect(consoleSpy).toHaveBeenCalledWith(mockRejectedResponse.response.data);
+    
+    expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('signIn.html');
+  });
+
+  it(`should catch any potential error in the API request and log it. If error.response.status is equal to 403, and the response message is "Email not verified.", it should call ErrorSpan.prototype.display() with the parent element of _passwordInput, call LoadingModal.remove(), then return undefined`, async () => {
     signInForm._usernameInput.value = 'mockUsername';
     signInForm._passwordInput.value = 'mockPassword';
     
@@ -342,7 +378,7 @@ describe('_signIn(e)', () => {
     const consoleSpy = jest.spyOn(window.console, 'log').mockImplementationOnce(() => {});
 
     expect(await signInForm._signIn(mockEvent)).toBeUndefined();
-    expect(SignInAPI.prototype.signIn).toHaveBeenCalledWith(mockUserObject);
+    expect(SignInAPI.prototype.signIn).toHaveBeenCalledWith(mockAPIKey, mockUserObject);
 
     expect(consoleSpy).toHaveBeenCalledWith(mockRejectedResponse.response.data);
     
@@ -350,7 +386,7 @@ describe('_signIn(e)', () => {
     expect(LoadingModal.remove).toHaveBeenCalled();
   });
 
-  it(`should catch any potential error in the API request and log it. if error.response.status is equal to 403, and the response message is not "Email not verified.", it should call ErrorSpan.prototype.display() with the parent element of _passwordInput, call LoadingModal.remove(), then return undefined`, async () => {
+  it(`should catch any potential error in the API request and log it. If error.response.status is equal to 403, and the response message is not "Email not verified.", it should call ErrorSpan.prototype.display() with the parent element of _passwordInput, call LoadingModal.remove(), then return undefined`, async () => {
     signInForm._usernameInput.value = 'mockUsername';
     signInForm._passwordInput.value = 'mockPassword';
     
@@ -374,7 +410,7 @@ describe('_signIn(e)', () => {
     const consoleSpy = jest.spyOn(window.console, 'log').mockImplementationOnce(() => {});
 
     expect(await signInForm._signIn(mockEvent)).toBeUndefined();
-    expect(SignInAPI.prototype.signIn).toHaveBeenCalledWith(mockUserObject);
+    expect(SignInAPI.prototype.signIn).toHaveBeenCalledWith(mockAPIKey, mockUserObject);
 
     expect(consoleSpy).toHaveBeenCalledWith(mockRejectedResponse.response.data);
     
@@ -382,7 +418,7 @@ describe('_signIn(e)', () => {
     expect(LoadingModal.remove).toHaveBeenCalled();
   });
 
-  it('should catch any potential error in the API request and log it. if error.response.status is not equal to 404 or 401 (most likely 500), it should redirect the user to signIn.html', async () => {
+  it('should catch any potential error in the API request and log it. If error.response.status is not equal to 404 or 401 (most likely 500), it should redirect the user to signIn.html', async () => {
     signInForm._usernameInput.value = 'mockUsername';
     signInForm._passwordInput.value = 'mockPassword';
     
@@ -404,7 +440,7 @@ describe('_signIn(e)', () => {
     const consoleSpy = jest.spyOn(window.console, 'log').mockImplementationOnce(() => {});
 
     expect(await signInForm._signIn(mockEvent)).toBeUndefined();
-    expect(SignInAPI.prototype.signIn).toHaveBeenCalledWith(mockUserObject);
+    expect(SignInAPI.prototype.signIn).toHaveBeenCalledWith(mockAPIKey, mockUserObject);
 
     expect(consoleSpy).toHaveBeenCalledWith(mockRejectedResponse.response.data);
     

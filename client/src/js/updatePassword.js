@@ -2,10 +2,12 @@ import '../scss/main.scss';
 import UpdatePasswordForm from './components/updatePassword/UpdatePasswordForm';
 import DisplayTerms from './components/global/DisplayTerms';
 import locateLoginToken from './components/global/locateLoginToken';
+import generateAPIKey from './components/global/generateAPIKey';
 
 // Initializing imports
 new UpdatePasswordForm();
 new DisplayTerms();
+generateAPIKey();
 
 class UpdatePassword {
   constructor() {

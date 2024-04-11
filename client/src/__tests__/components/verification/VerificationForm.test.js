@@ -7,6 +7,7 @@ import Cookies from "../../../js/components/global/Cookies";
 import VerificationAPI from "../../../js/components/services/VerificationAPI";
 import messagePopup from "../../../js/components/global/messagePopup";
 import LinksContainer from "../../../js/components/signing/LinksContainer";
+import generateAPIKey from "../../../js/components/global/generateAPIKey";
 
 jest.mock('../../../js/components/global/ErrorSpan');
 jest.mock('../../../js/components/global/LoadingModal');
@@ -15,6 +16,7 @@ jest.mock('../../../js/components/global/Cookies');
 jest.mock('../../../js/components/services/VerificationAPI');
 jest.mock('../../../js/components/global/messagePopup');
 jest.mock('../../../js/components/signing/LinksContainer');
+jest.mock('../../../js/components/global/generateAPIKey');
 
 const verificationFormHTML = `
 <section class="verification">
@@ -95,10 +97,14 @@ const verificationFormHTML = `
 `;
 
 let verificationForm;
+let mockAPIKey;
 
 beforeEach(() => {
   document.body.innerHTML = verificationFormHTML;
   verificationForm = new VerificationForm();
+
+  mockAPIKey = 'a5tZAgqE8sbF7Ddar5h9FmeA9MQCY1hmgKW3UgKpjiGbqJHWNmT8P8genEPvkcuq';
+  generateAPIKey.mockImplementation(() => { return mockAPIKey; });
 
   delete window.location;
   Object.defineProperty(window, 'location', {
@@ -120,6 +126,7 @@ afterEach(() => {
   
   document.body.innerHTML = '';
   verificationForm = null;
+  mockAPIKey = null;
   jest.resetAllMocks();
 });
 
@@ -157,7 +164,7 @@ describe('_verify(e)', () => {
     const expectedVerificationData = { unverifiedUserID: 'mockUnverifiedUserID', verificationCode: 'ABCDEF' };
 
     expect(await verificationForm._verify(mockEvent)).toBeUndefined();
-    expect(VerificationAPI.prototype.verify).toHaveBeenCalledWith(expectedVerificationData);
+    expect(VerificationAPI.prototype.verify).toHaveBeenCalledWith(mockAPIKey, expectedVerificationData);
     expect(Cookies.prototype.set).toHaveBeenCalledWith('loginToken', 'mockLoginToken');
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('history.html', 1000, 'Email verified!', 'success');
   });
@@ -172,7 +179,7 @@ describe('_verify(e)', () => {
     const expectedVerificationData = { unverifiedUserID: 'mockUnverifiedUserID', verificationCode: 'ABCDEF' };
 
     expect(await verificationForm._verify(mockEvent)).toBeUndefined();
-    expect(VerificationAPI.prototype.verify).toHaveBeenCalledWith(expectedVerificationData);
+    expect(VerificationAPI.prototype.verify).toHaveBeenCalledWith(mockAPIKey, expectedVerificationData);
     expect(Cookies.prototype.set).toHaveBeenCalledWith('loginToken', 'mockLoginToken', verificationForm._loginTokenAge);
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('history.html', 1000, 'Email verified!', 'success');
   });
@@ -186,7 +193,7 @@ describe('_verify(e)', () => {
     const consoleSpy = jest.spyOn(window.console, 'log');
 
     expect(await verificationForm._verify(mockEvent)).toBeUndefined();
-    expect(VerificationAPI.prototype.verify).toHaveBeenCalledWith(expectedVerificationData);
+    expect(VerificationAPI.prototype.verify).toHaveBeenCalledWith(mockAPIKey, expectedVerificationData);
     expect(consoleSpy).not.toHaveBeenCalled();
   });
 
@@ -199,22 +206,22 @@ describe('_verify(e)', () => {
     const consoleSpy = jest.spyOn(window.console, 'log');
 
     expect(await verificationForm._verify(mockEvent)).toBeUndefined();
-    expect(VerificationAPI.prototype.verify).toHaveBeenCalledWith(expectedVerificationData);
+    expect(VerificationAPI.prototype.verify).toHaveBeenCalledWith(mockAPIKey, expectedVerificationData);
     expect(consoleSpy).toHaveBeenCalledWith('mockData');
   });
   
-  it('should, if a valid verification code is passed in, call VerificationAPI.prototype.verify(). If the request fails without a response object, it should refresh the page with an error message using redirectAfterDelayMillisecond(), then return undefined ', async () => {
+  it('should, if a valid verification code is passed in, call VerificationAPI.prototype.verify(). If the request fails without a response object, it should refresh the page with an error message using redirectAfterDelayMillisecond(), then return undefined', async () => {
     VerificationAPI.prototype.verify.mockRejectedValue({});
 
     verificationForm._verificationInput.value = 'ABCDEF';
     const expectedVerificationData = { unverifiedUserID: 'mockUnverifiedUserID', verificationCode: 'ABCDEF' };
 
     expect(await verificationForm._verify(mockEvent)).toBeUndefined();
-    expect(VerificationAPI.prototype.verify).toHaveBeenCalledWith(expectedVerificationData);
+    expect(VerificationAPI.prototype.verify).toHaveBeenCalledWith(mockAPIKey, expectedVerificationData);
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('verification.html?id=mockUnverifiedUserID&keepMeSignedIn=');
   });
 
-  it('should, if a valid verification code is passed in, call VerificationAPI.prototype.verify(). If the request fails with a status code of 404, it should call ErrorSpan.prototype.display(), LoadingModal.remove(), then return undefined ', async () => {
+  it('should, if a valid verification code is passed in, call VerificationAPI.prototype.verify(). If the request fails with a status code of 404, it should call ErrorSpan.prototype.display(), LoadingModal.remove(), then return undefined', async () => {
     VerificationAPI.prototype.verify.mockRejectedValue({ response: { status: 404 } });
     const inputFormGroup = verificationForm._verificationInput.parentElement;
 
@@ -222,33 +229,44 @@ describe('_verify(e)', () => {
     const expectedVerificationData = { unverifiedUserID: 'mockUnverifiedUserID', verificationCode: 'ABCDEF' };
     
     expect(await verificationForm._verify(mockEvent)).toBeUndefined();
-    expect(VerificationAPI.prototype.verify).toHaveBeenCalledWith(expectedVerificationData);
+    expect(VerificationAPI.prototype.verify).toHaveBeenCalledWith(mockAPIKey, expectedVerificationData);
     expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(inputFormGroup, 'Account does not exist or has already been validated.');
     expect(LoadingModal.remove).toHaveBeenCalled();
   });
 
-  it('should, if a valid verification code is passed in, call VerificationAPI.prototype.verify(). If the request fails with a status code of 401, it should call ErrorSpan.prototype.display(), LoadingModal.remove(), then return undefined ', async () => {
-    VerificationAPI.prototype.verify.mockRejectedValue({ response: { status: 401 } });
+  it(`should, if a valid verification code is passed in, call VerificationAPI.prototype.verify(). If the request fails with a status code of 401, and err.response.data.message is not equal to "API key missing or invalid." it should call ErrorSpan.prototype.display(), LoadingModal.remove(), then return undefined`, async () => {
+    VerificationAPI.prototype.verify.mockRejectedValue({ response: { status: 401, data: { message: 'mockMessage' } } });
     const inputFormGroup = verificationForm._verificationInput.parentElement;
 
     verificationForm._verificationInput.value = 'ABCDEF';
     const expectedVerificationData = { unverifiedUserID: 'mockUnverifiedUserID', verificationCode: 'ABCDEF' };
 
     expect(await verificationForm._verify(mockEvent)).toBeUndefined();
-    expect(VerificationAPI.prototype.verify).toHaveBeenCalledWith(expectedVerificationData);
+    expect(VerificationAPI.prototype.verify).toHaveBeenCalledWith(mockAPIKey, expectedVerificationData);
     expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(inputFormGroup, 'Incorrect verification code.');
     expect(LoadingModal.remove).toHaveBeenCalled();
   });
 
+  it(`should, if a valid verification code is passed in, call VerificationAPI.prototype.verify(). If the request fails with a status code of 401, and err.response.data.message is equal to "API key missing or invalid." it should refresh the page with an error message using redirectAfterDelayMillisecond(), then return undefined`, async () => {
+    VerificationAPI.prototype.verify.mockRejectedValue({ response: { status: 401, data: { message: 'API key missing or invalid.' } } });
 
-  it('should, if a valid verification code is passed in, call VerificationAPI.prototype.verify(). If the request fails with a different status code (most likely 500), it should refresh the page with an error message using redirectAfterDelayMillisecond(), then return undefined ', async () => {
+    verificationForm._verificationInput.value = 'ABCDEF';
+    const expectedVerificationData = { unverifiedUserID: 'mockUnverifiedUserID', verificationCode: 'ABCDEF' };
+
+    expect(await verificationForm._verify(mockEvent)).toBeUndefined();
+    expect(VerificationAPI.prototype.verify).toHaveBeenCalledWith(mockAPIKey, expectedVerificationData);
+    expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('verification.html?id=mockUnverifiedUserID&keepMeSignedIn=');
+  });
+
+
+  it('should, if a valid verification code is passed in, call VerificationAPI.prototype.verify(). If the request fails with a different status code (most likely 500), it should refresh the page with an error message using redirectAfterDelayMillisecond(), then return undefined', async () => {
     VerificationAPI.prototype.verify.mockRejectedValue({ response: { status: 500 } });
 
     verificationForm._verificationInput.value = 'ABCDEF';
     const expectedVerificationData = { unverifiedUserID: 'mockUnverifiedUserID', verificationCode: 'ABCDEF' };
 
     expect(await verificationForm._verify(mockEvent)).toBeUndefined();
-    expect(VerificationAPI.prototype.verify).toHaveBeenCalledWith(expectedVerificationData);
+    expect(VerificationAPI.prototype.verify).toHaveBeenCalledWith(mockAPIKey, expectedVerificationData);
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('verification.html?id=mockUnverifiedUserID&keepMeSignedIn=');
   });
 });
@@ -309,7 +327,7 @@ describe('_resendVerificationEmail()', () => {
     VerificationAPI.prototype.resendVerificationEmail.mockResolvedValueOnce({ message: 'mockMessage' });
 
     expect(await verificationForm._resendVerificationEmail()).toBeUndefined();
-    expect(VerificationAPI.prototype.resendVerificationEmail).toHaveBeenCalledWith({ unverifiedUserID: 'mockUnverifiedUserID' });
+    expect(VerificationAPI.prototype.resendVerificationEmail).toHaveBeenCalledWith(mockAPIKey, { unverifiedUserID: 'mockUnverifiedUserID' });
     expect(messagePopup).toHaveBeenCalledWith('Verification email resent.', 'success');
   });
 
@@ -318,7 +336,7 @@ describe('_resendVerificationEmail()', () => {
     const consoleSpy = jest.spyOn(window.console, 'log');
 
     expect(await verificationForm._resendVerificationEmail()).toBeUndefined();
-    expect(VerificationAPI.prototype.resendVerificationEmail).toHaveBeenCalledWith({ unverifiedUserID: 'mockUnverifiedUserID' });
+    expect(VerificationAPI.prototype.resendVerificationEmail).toHaveBeenCalledWith(mockAPIKey, { unverifiedUserID: 'mockUnverifiedUserID' });
     expect(consoleSpy).not.toHaveBeenCalled();
   });
 
@@ -327,7 +345,7 @@ describe('_resendVerificationEmail()', () => {
     const consoleSpy = jest.spyOn(window.console, 'log');
 
     expect(await verificationForm._resendVerificationEmail()).toBeUndefined();
-    expect(VerificationAPI.prototype.resendVerificationEmail).toHaveBeenCalledWith({ unverifiedUserID: 'mockUnverifiedUserID' });
+    expect(VerificationAPI.prototype.resendVerificationEmail).toHaveBeenCalledWith(mockAPIKey, { unverifiedUserID: 'mockUnverifiedUserID' });
     expect(consoleSpy).toHaveBeenCalledWith('mockData');
   });
 
@@ -335,7 +353,7 @@ describe('_resendVerificationEmail()', () => {
     VerificationAPI.prototype.resendVerificationEmail.mockRejectedValueOnce({});
 
     expect(await verificationForm._resendVerificationEmail()).toBeUndefined();
-    expect(VerificationAPI.prototype.resendVerificationEmail).toHaveBeenCalledWith({ unverifiedUserID: 'mockUnverifiedUserID' });
+    expect(VerificationAPI.prototype.resendVerificationEmail).toHaveBeenCalledWith(mockAPIKey, { unverifiedUserID: 'mockUnverifiedUserID' });
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('verification.html?id=mockUnverifiedUserID&keepMeSignedIn=');
   });
 
@@ -343,7 +361,7 @@ describe('_resendVerificationEmail()', () => {
     VerificationAPI.prototype.resendVerificationEmail.mockRejectedValueOnce({ response: { status: 404 } });
 
     expect(await verificationForm._resendVerificationEmail()).toBeUndefined();
-    expect(VerificationAPI.prototype.resendVerificationEmail).toHaveBeenCalledWith({ unverifiedUserID: 'mockUnverifiedUserID' });
+    expect(VerificationAPI.prototype.resendVerificationEmail).toHaveBeenCalledWith(mockAPIKey, { unverifiedUserID: 'mockUnverifiedUserID' });
     expect(messagePopup).toHaveBeenCalledWith('Account does not exist or has already been validated.', 'danger', 3000);
   });
 
@@ -351,7 +369,7 @@ describe('_resendVerificationEmail()', () => {
     VerificationAPI.prototype.resendVerificationEmail.mockRejectedValueOnce({ response: { status: 403 } });
 
     expect(await verificationForm._resendVerificationEmail()).toBeUndefined();
-    expect(VerificationAPI.prototype.resendVerificationEmail).toHaveBeenCalledWith({ unverifiedUserID: 'mockUnverifiedUserID' });
+    expect(VerificationAPI.prototype.resendVerificationEmail).toHaveBeenCalledWith(mockAPIKey, { unverifiedUserID: 'mockUnverifiedUserID' });
     expect(messagePopup).toHaveBeenCalledWith('Email resend limit exceeded.', 'danger', 3000);
   });
 
@@ -359,7 +377,7 @@ describe('_resendVerificationEmail()', () => {
     VerificationAPI.prototype.resendVerificationEmail.mockRejectedValueOnce({ response: { status: 500 } });
 
     expect(await verificationForm._resendVerificationEmail()).toBeUndefined();
-    expect(VerificationAPI.prototype.resendVerificationEmail).toHaveBeenCalledWith({ unverifiedUserID: 'mockUnverifiedUserID' });
+    expect(VerificationAPI.prototype.resendVerificationEmail).toHaveBeenCalledWith(mockAPIKey, { unverifiedUserID: 'mockUnverifiedUserID' });
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('verification.html?id=mockUnverifiedUserID&keepMeSignedIn=');
   });
 });

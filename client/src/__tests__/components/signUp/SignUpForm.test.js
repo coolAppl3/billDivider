@@ -8,6 +8,7 @@ import LoadingModal from "../../../js/components/global/LoadingModal";
 import redirectAfterDelayMillisecond from "../../../js/components/global/redirectAfterDelayMillisecond";
 import ErrorSpan from "../../../js/components/global/ErrorSpan";
 import FormCheckbox from "../../../js/components/global/FormCheckbox";
+import generateAPIKey from "../../../js/components/global/generateAPIKey";
 
 jest.mock('../../../js/components/services/SignUpAPI');
 jest.mock('../../../js/components/global/Cookies');
@@ -17,6 +18,7 @@ jest.mock('../../../js/components/global/LoadingModal');
 jest.mock('../../../js/components/global/redirectAfterDelayMillisecond');
 jest.mock('../../../js/components/global/ErrorSpan');
 jest.mock('../../../js/components/global/FormCheckbox');
+jest.mock('../../../js/components/global/generateAPIKey');
 
 const signUpFormHTML = `
   <section class="sign-up">
@@ -178,15 +180,19 @@ const signUpFormHTML = `
 `;
 
 let signUpForm;
+let mockAPIKey;
 
 beforeEach(() => {
   document.body.innerHTML = signUpFormHTML;
   signUpForm = new SignUpForm();
+  mockAPIKey = 'a5tZAgqE8sbF7Ddar5h9FmeA9MQCY1hmgKW3UgKpjiGbqJHWNmT8P8genEPvkcuq';
+  generateAPIKey.mockImplementation(() => { return mockAPIKey; });
 });
 
 afterEach(() => {
   document.body.innerHTML = '';
   signUpForm = null;
+  mockAPIKey = null;
   jest.resetAllMocks();
 });
 
@@ -277,7 +283,7 @@ describe('_signUp', () => {
     const mockEvent = { preventDefault: () => {} };
     expect(await signUpForm._signUp(mockEvent)).toBeUndefined();
 
-    expect(SignUpAPI.prototype.signUp).toHaveBeenCalledWith(newUser);
+    expect(SignUpAPI.prototype.signUp).toHaveBeenCalledWith(mockAPIKey, newUser);
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('verification.html?id=mockUnverifiedUserID&keepMeSignedIn=true', 2000, 'Account created!', 'success');
   });
   
@@ -298,7 +304,7 @@ describe('_signUp', () => {
     const mockEvent = { preventDefault: () => {} };
     expect(await signUpForm._signUp(mockEvent)).toBeUndefined();
 
-    expect(SignUpAPI.prototype.signUp).toHaveBeenCalledWith(newUser);
+    expect(SignUpAPI.prototype.signUp).toHaveBeenCalledWith(mockAPIKey, newUser);
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('signUp.html');
   });
 
@@ -319,7 +325,7 @@ describe('_signUp', () => {
     const mockEvent = { preventDefault: () => {} };
     expect(await signUpForm._signUp(mockEvent)).toBeUndefined();
 
-    expect(SignUpAPI.prototype.signUp).toHaveBeenCalledWith(newUser);
+    expect(SignUpAPI.prototype.signUp).toHaveBeenCalledWith(mockAPIKey, newUser);
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('signUp.html');
   });
 
@@ -347,7 +353,7 @@ describe('_signUp', () => {
     const inputFormGroup = signUpForm._emailInput.parentElement;
     
     expect(await signUpForm._signUp(mockEvent)).toBeUndefined();
-    expect(SignUpAPI.prototype.signUp).toHaveBeenCalledWith(newUser);
+    expect(SignUpAPI.prototype.signUp).toHaveBeenCalledWith(mockAPIKey, newUser);
     expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(inputFormGroup, 'Email address already in use.');
     expect(LoadingModal.remove).toHaveBeenCalled();
   });
@@ -376,7 +382,7 @@ describe('_signUp', () => {
     const inputFormGroup = signUpForm._usernameInput.parentElement;
     
     expect(await signUpForm._signUp(mockEvent)).toBeUndefined();
-    expect(SignUpAPI.prototype.signUp).toHaveBeenCalledWith(newUser);
+    expect(SignUpAPI.prototype.signUp).toHaveBeenCalledWith(mockAPIKey, newUser);
     expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(inputFormGroup, 'Username already taken.');
     expect(LoadingModal.remove).toHaveBeenCalled();
   });
@@ -398,7 +404,7 @@ describe('_signUp', () => {
     const mockEvent = { preventDefault: () => {} };
     expect(await signUpForm._signUp(mockEvent)).toBeUndefined();
 
-    expect(SignUpAPI.prototype.signUp).toHaveBeenCalledWith(newUser);
+    expect(SignUpAPI.prototype.signUp).toHaveBeenCalledWith(mockAPIKey, newUser);
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('signUp.html');
   });
 });

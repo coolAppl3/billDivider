@@ -7,8 +7,12 @@ class SignInAPI {
     : `https://${window.location.hostname}/api/users/signin`;
   };
 
-  async signIn(user) {
-    return axios.post(this._apiURL, user);
+  async signIn(APIKey, user) {
+    return axios.post(this._apiURL, user, {
+      headers: {
+        'x-api-key': APIKey,
+      },
+    });
   };
 };
 

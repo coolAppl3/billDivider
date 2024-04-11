@@ -25,9 +25,14 @@ describe('signIn(user)', () => {
   it('should call axios.post() with the appropriate parameters', async () => {
     axios.post.mockImplementationOnce(() => { return { success: true, data: { loginToken: 'SomeToken' } } });
     const user = { username: 'someUsername', password: 'somePassword' };
+    const mockAPIKey = 'a5tZAgqE8sbF7Ddar5h9FmeA9MQCY1hmgKW3UgKpjiGbqJHWNmT8P8genEPvkcuq';
 
-    await signInAPI.signIn(user);
-    expect(axios.post).toHaveBeenCalledWith(`https://${window.location.hostname}/api/users/signin`, user);
+    await signInAPI.signIn(mockAPIKey, user);
+    expect(axios.post).toHaveBeenCalledWith(`https://${window.location.hostname}/api/users/signin`, user, {
+      headers: {
+        'x-api-key': mockAPIKey,
+      },
+    });
   });
 });
 

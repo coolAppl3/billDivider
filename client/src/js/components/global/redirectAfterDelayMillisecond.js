@@ -2,7 +2,7 @@ import messagePopup from "./messagePopup";
 
 function redirectAfterDelayMillisecond(
   target,
-  delay = 1000,
+  delay = 2000,
   message = 'Something went wrong.',
   popupColor = 'danger'
 ) {
@@ -14,7 +14,7 @@ function redirectAfterDelayMillisecond(
   };
 
   if(typeof delay !== 'number' || delay <= 0) {
-    delay = 1000;
+    delay = 2000;
   };
 
   if(sessionStorage.getItem('unsavedSessionChanges')) {

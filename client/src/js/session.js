@@ -8,7 +8,7 @@ import SessionReference from './components/session/SessionReference';
 import InitSession from './components/session/InitSession';
 import SessionHeader from './components/session/SessionHeader';
 import SessionContent from './components/session/SessionContent';
-
+import generateAPIKey from './components/global/generateAPIKey';
 
 // Initializing imports
 new Navbar();
@@ -16,6 +16,7 @@ new DisplayTerms();
 new InitSession();
 new SessionHeader();
 new SessionContent();
+generateAPIKey();
 
 class Session {
   constructor() {

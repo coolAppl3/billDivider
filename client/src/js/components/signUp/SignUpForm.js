@@ -6,6 +6,7 @@ import redirectAfterDelayMillisecond from "../global/redirectAfterDelayMilliseco
 import ErrorSpan from "../global/ErrorSpan";
 import FormCheckbox from "../global/FormCheckbox";
 import messagePopup from "../global/messagePopup";
+import generateAPIKey from "../global/generateAPIKey";
 
 // Initializing imports
 const signUpAPI = new SignUpAPI();
@@ -54,8 +55,10 @@ class SignUpForm {
       password: this._passwordInput.value,
     };
     
+    const APIKey = generateAPIKey();
+    
     try {
-      const res = await signUpAPI.signUp(newUser);
+      const res = await signUpAPI.signUp(APIKey, newUser);
       const unverifiedUserID = res.data.unverifiedUserID;
 
       let keepMeSignedIn;
@@ -79,6 +82,11 @@ class SignUpForm {
       const status = err.response.status;
       
       if(status === 401) {
+        if(err.response.data.message === 'API key missing or invalid.') {
+          redirectAfterDelayMillisecond('signUp.html');
+          return ;
+        };
+        
         // Invalid username or password - The validation functions should prevent HTTP requests with an invalid username or password. However, as an extra layer of security, the page will be reloaded if a malicious user attempts to force an HTTP request with invalid credentials
         redirectAfterDelayMillisecond('signUp.html');
         return ;

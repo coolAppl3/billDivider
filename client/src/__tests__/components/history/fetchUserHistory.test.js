@@ -4,13 +4,23 @@ import HistoryAPI from "../../../js/components/services/HistoryAPI";
 import locateLoginToken from "../../../js/components/global/locateLoginToken";
 import Cookies from "../../../js/components/global/Cookies";
 import redirectAfterDelayMillisecond from "../../../js/components/global/redirectAfterDelayMillisecond";
+import generateAPIKey from "../../../js/components/global/generateAPIKey";
 
 jest.mock('../../../js/components/services/HistoryAPI');
 jest.mock('../../../js/components/global/locateLoginToken');
 jest.mock('../../../js/components/global/Cookies');
 jest.mock('../../../js/components/global/redirectAfterDelayMillisecond');
+jest.mock('../../../js/components/global/generateAPIKey');
+
+let mockAPIKey;
+
+beforeEach(() => {
+  mockAPIKey = 'a5tZAgqE8sbF7Ddar5h9FmeA9MQCY1hmgKW3UgKpjiGbqJHWNmT8P8genEPvkcuq';
+  generateAPIKey.mockImplementation(() => { return mockAPIKey; });
+});
 
 afterEach(() => {
+  mockAPIKey = null;
   jest.resetAllMocks();
 });
 
@@ -37,7 +47,7 @@ describe('fetchUserHistory()', () => {
 
     expect(await fetchUserHistory()).toEqual([{ mockSession1: 'mockValue1' }, { mockSession2: 'mockValue2' }]);
     expect(locateLoginToken).toHaveBeenCalled();
-    expect(HistoryAPI.prototype.getSessionHistory).toHaveBeenCalledWith('mockLoginToken');
+    expect(HistoryAPI.prototype.getSessionHistory).toHaveBeenCalledWith('mockLoginToken', mockAPIKey);
   });
 
   it(`should, if the API request fails, console log the error, and if there is no error.response property, call cookies.remove('loginToken) and redirectAfterDelayMillisecond('signIn.html)`, async () => {
@@ -56,7 +66,7 @@ describe('fetchUserHistory()', () => {
 
     await fetchUserHistory();
     expect(locateLoginToken).toHaveBeenCalled();
-    expect(HistoryAPI.prototype.getSessionHistory).toHaveBeenCalledWith('mockLoginToken');
+    expect(HistoryAPI.prototype.getSessionHistory).toHaveBeenCalledWith('mockLoginToken', mockAPIKey);
     
     expect(consoleSpy).toHaveBeenCalledWith(mockError.response.data);
     expect(Cookies.prototype.remove).toHaveBeenCalledWith('loginToken');
@@ -83,7 +93,7 @@ describe('fetchUserHistory()', () => {
 
     await fetchUserHistory();
     expect(locateLoginToken).toHaveBeenCalled();
-    expect(HistoryAPI.prototype.getSessionHistory).toHaveBeenCalledWith('mockLoginToken');
+    expect(HistoryAPI.prototype.getSessionHistory).toHaveBeenCalledWith('mockLoginToken', mockAPIKey);
     
     expect(consoleSpy).toHaveBeenCalledWith(mockError.response.data);
     expect(Cookies.prototype.remove).toHaveBeenCalledWith('loginToken');
@@ -109,7 +119,7 @@ describe('fetchUserHistory()', () => {
 
     await fetchUserHistory();
     expect(locateLoginToken).toHaveBeenCalled();
-    expect(HistoryAPI.prototype.getSessionHistory).toHaveBeenCalledWith('mockLoginToken');
+    expect(HistoryAPI.prototype.getSessionHistory).toHaveBeenCalledWith('mockLoginToken', mockAPIKey);
     
     expect(consoleSpy).toHaveBeenCalledWith(mockError.response.data);
     expect(Cookies.prototype.remove).toHaveBeenCalledWith('loginToken');

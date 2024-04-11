@@ -4,7 +4,7 @@ import ErrorSpan from "../global/ErrorSpan";
 import redirectAfterDelayMillisecond from "../global/redirectAfterDelayMillisecond";
 import LoadingModal from "../global/LoadingModal";
 import messagePopup from "../global/messagePopup";
-
+import generateAPIKey from "../global/generateAPIKey";
 
 // Initializing imports
 const recoveryAPI = new RecoveryAPI();
@@ -24,7 +24,6 @@ class RecoveryForm {
     this._recoveryForm.addEventListener('submit', this._sendRecoveryCode.bind(this));
   };
   
-  
   async _sendRecoveryCode(e) {
     e.preventDefault();
     LoadingModal.display();
@@ -36,9 +35,10 @@ class RecoveryForm {
     };
 
     const recoveryEmail = this._recoveryInput.value;
+    const APIKey = generateAPIKey();
     
     try {
-      await recoveryAPI.sendRecoveryEmail({ recoveryEmail });
+      await recoveryAPI.sendRecoveryEmail(APIKey, { recoveryEmail });
       this._recoveryInput.value = '';
       redirectAfterDelayMillisecond('index.html', 5000, `Recovery email sent. Follow its instructions to continue.`, 'success');
       
@@ -54,6 +54,11 @@ class RecoveryForm {
       const inputFormGroup = this._recoveryInput.parentElement;
 
       if(status === 401) {
+        if(err.response.data.message === 'API key missing or invalid.') {
+          redirectAfterDelayMillisecond('recovery.html');
+          return ;
+        };
+        
         errorSpan.display(inputFormGroup, 'Invalid email address.');
         LoadingModal.remove();
         return ;

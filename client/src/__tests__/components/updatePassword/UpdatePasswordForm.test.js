@@ -7,6 +7,7 @@ import LoadingModal from "../../../js/components/global/LoadingModal";
 import redirectAfterDelayMillisecond from "../../../js/components/global/redirectAfterDelayMillisecond";
 import Cookies from "../../../js/components/global/Cookies";
 import RecoveryAPI from "../../../js/components/services/RecoveryAPI";
+import generateAPIKey from "../../../js/components/global/generateAPIKey";
 
 
 jest.mock('../../../js/components/global/ErrorSpan');
@@ -16,6 +17,7 @@ jest.mock('../../../js/components/global/LoadingModal');
 jest.mock('../../../js/components/global/redirectAfterDelayMillisecond');
 jest.mock('../../../js/components/global/Cookies');
 jest.mock('../../../js/components/services/RecoveryAPI');
+jest.mock('../../../js/components/global/generateAPIKey');
 
 const updatePasswordFormHTML = `
 <section class="updatePassword">
@@ -138,15 +140,20 @@ const updatePasswordFormHTML = `
 `;
 
 let updatePasswordForm;
+let mockAPIKey;
 
 beforeEach(() => {
   document.body.innerHTML = updatePasswordFormHTML;
   updatePasswordForm = new UpdatePasswordForm();
+  
+  mockAPIKey = 'a5tZAgqE8sbF7Ddar5h9FmeA9MQCY1hmgKW3UgKpjiGbqJHWNmT8P8genEPvkcuq';
+  generateAPIKey.mockImplementation(() => { return mockAPIKey; });
 });
 
 afterEach(() => {
   document.body.innerHTML = '';
   updatePasswordForm = null;
+  mockAPIKey = null;
   jest.resetAllMocks();
 });
 
@@ -220,7 +227,7 @@ describe('_updatePassword(e)', () => {
     };
     
     expect(await updatePasswordForm._updatePassword(mockEvent)).toBeUndefined();
-    expect(RecoveryAPI.prototype.updatePassword).toHaveBeenCalledWith(recoveryData);
+    expect(RecoveryAPI.prototype.updatePassword).toHaveBeenCalledWith(mockAPIKey, recoveryData);
     expect(Cookies.prototype.set).toHaveBeenCalledWith('loginToken', 'mockLoginToken');
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('history.html', 1000, 'Account recovered successfully!', 'success');
 
@@ -240,7 +247,7 @@ describe('_updatePassword(e)', () => {
     };
 
     expect(await updatePasswordForm._updatePassword(mockEvent)).toBeUndefined();
-    expect(RecoveryAPI.prototype.updatePassword).toHaveBeenCalledWith(recoveryData);
+    expect(RecoveryAPI.prototype.updatePassword).toHaveBeenCalledWith(mockAPIKey, recoveryData);
     expect(consoleSpy).not.toHaveBeenCalled();
   });
   
@@ -258,7 +265,7 @@ describe('_updatePassword(e)', () => {
     };
 
     expect(await updatePasswordForm._updatePassword(mockEvent)).toBeUndefined();
-    expect(RecoveryAPI.prototype.updatePassword).toHaveBeenCalledWith(recoveryData);
+    expect(RecoveryAPI.prototype.updatePassword).toHaveBeenCalledWith(mockAPIKey, recoveryData);
     expect(consoleSpy).toHaveBeenCalledWith('mockData');
   });
 
@@ -275,7 +282,7 @@ describe('_updatePassword(e)', () => {
     };
 
     expect(await updatePasswordForm._updatePassword(mockEvent)).toBeUndefined();
-    expect(RecoveryAPI.prototype.updatePassword).toHaveBeenCalledWith(recoveryData);
+    expect(RecoveryAPI.prototype.updatePassword).toHaveBeenCalledWith(mockAPIKey, recoveryData);
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('updatePassword.html?id=mockUserID&recoveryCode=mockRecoveryCode');
   });
 
@@ -293,13 +300,13 @@ describe('_updatePassword(e)', () => {
     };
 
     expect(await updatePasswordForm._updatePassword(mockEvent)).toBeUndefined();
-    expect(RecoveryAPI.prototype.updatePassword).toHaveBeenCalledWith(recoveryData);
+    expect(RecoveryAPI.prototype.updatePassword).toHaveBeenCalledWith(mockAPIKey, recoveryData);
     expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(passwordInputFormGroup, 'Invalid request. Please follow the link in the recovery email and do not amend it.');
     expect(LoadingModal.remove).toHaveBeenCalled();
   });
 
   it(`should, if the new password is valid, call RecoveryAPI.prototype.updatePassword(recoveryData). If the request fails with a status of 401, it should call ErrorSpan.prototype.display(), LoadingModal.remove(), then return undefined`, async () => {
-    RecoveryAPI.prototype.updatePassword.mockRejectedValueOnce({ response: { status: 401 } });
+    RecoveryAPI.prototype.updatePassword.mockRejectedValueOnce({ response: { status: 401, data: { message: 'mockMessage' } } });
     const passwordInputFormGroup = updatePasswordForm._passwordInput.parentElement;
 
     updatePasswordForm._passwordInput.value = 'validPassword';
@@ -312,7 +319,7 @@ describe('_updatePassword(e)', () => {
     };
 
     expect(await updatePasswordForm._updatePassword(mockEvent)).toBeUndefined();
-    expect(RecoveryAPI.prototype.updatePassword).toHaveBeenCalledWith(recoveryData);
+    expect(RecoveryAPI.prototype.updatePassword).toHaveBeenCalledWith(mockAPIKey, recoveryData);
     expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(passwordInputFormGroup, 'Invalid recovery code. Please follow the link in the recovery email and do not amend it.');
     expect(LoadingModal.remove).toHaveBeenCalled();
   });
@@ -331,7 +338,7 @@ describe('_updatePassword(e)', () => {
     };
 
     expect(await updatePasswordForm._updatePassword(mockEvent)).toBeUndefined();
-    expect(RecoveryAPI.prototype.updatePassword).toHaveBeenCalledWith(recoveryData);
+    expect(RecoveryAPI.prototype.updatePassword).toHaveBeenCalledWith(mockAPIKey, recoveryData);
     expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(passwordInputFormGroup, 'Invalid password.');
     expect(LoadingModal.remove).toHaveBeenCalled();
   });
@@ -350,7 +357,7 @@ describe('_updatePassword(e)', () => {
     };
 
     expect(await updatePasswordForm._updatePassword(mockEvent)).toBeUndefined();
-    expect(RecoveryAPI.prototype.updatePassword).toHaveBeenCalledWith(recoveryData);
+    expect(RecoveryAPI.prototype.updatePassword).toHaveBeenCalledWith(mockAPIKey, recoveryData);
     expect(redirectAfterDelayMillisecond).toHaveBeenCalledWith('updatePassword.html?id=mockUserID&recoveryCode=mockRecoveryCode');
   });
 });

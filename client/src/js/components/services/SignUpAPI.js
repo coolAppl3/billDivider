@@ -7,8 +7,12 @@ class SignUpAPI {
     : `https://${window.location.hostname}/api/users/signup`;
   };
 
-  async signUp(user) {
-    return axios.post(this._apiURL, user);
+  async signUp(APIKey, user) {
+    return axios.post(this._apiURL, user, {
+      headers: {
+        'x-api-key': APIKey,
+      },
+    });
   };
 };
 

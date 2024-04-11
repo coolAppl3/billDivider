@@ -2,10 +2,12 @@ import '../scss/main.scss';
 import RecoveryForm from './components/recovery/RecoveryForm';
 import DisplayTerms from './components/global/DisplayTerms';
 import locateLoginToken from './components/global/locateLoginToken';
+import generateAPIKey from './components/global/generateAPIKey';
 
 // Initializing imports
 new RecoveryForm();
 new DisplayTerms();
+generateAPIKey();
 
 class Recovery {
   constructor() {
