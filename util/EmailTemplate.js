@@ -8,7 +8,7 @@ class EmailTemplate {
       <p style="line-height: 22px; margin: 0; margin-bottom: 20px">Hey there,</p>
       <p style="line-height: 22px; margin: 0; margin-bottom: 20px">Thank you for signing up to Bill Divider!</p>
       <p style="line-height: 22px; margin: 0; margin-bottom: 20px">
-        To complete the sign up process, you would need to enter the following email-verification code: ${verificationCode}. Alternatively, you can click on the following link: <a href="https://billdivider.fun/verification.html?id=${unverifiedUserID}&keepMeSignedIn=&verificationCode=${verificationCode}">https://billdivider.fun/verification.html?id=${unverifiedUserID}&keepMeSignedIn=&verificationCode=${verificationCode}</a>.
+        To complete the sign up process, you would need to enter the following email-verification code: <span style="font-weight: bold; color: #8685ef">${verificationCode}</span>. Alternatively, you can click on the following link: <a href="https://billdivider.fun/verification.html?id=${unverifiedUserID}&keepMeSignedIn=&verificationCode=${verificationCode}">https://billdivider.fun/verification.html?id=${unverifiedUserID}&keepMeSignedIn=&verificationCode=${verificationCode}</a>.
       </p>
       <p style="line-height: 22px; margin: 0; margin-bottom: 20px">
         Please note that the verification code is only valid for 15 minutes from when this email was sent.

@@ -1,22 +1,27 @@
 const LowRateTracker = require('../models/LowRateTracker');
 const HighRateTracker = require('../models/HighRateTracker');
+const User = require('../models/User');
 
 async function rateLimiter(req, res, next) {
   const highRateCountLimit = 45; // per minute
   const lowRateCountLimit = 15; // per minute
   const lowRateCountLimitEndpoints = ['/signup', '/verification', '/resendVerification', '/signin', '/recovery'];
 
-  const userIpAddress = req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || req.connection.remoteAddress;
+  const userAPIKey = req.headers['x-api-key'];
+  if(!userAPIKey || userAPIKey.length !== 64 || !userAPIKey.startsWith('a')) {
+    res.status(401).json({ success: false, message: 'API key missing or invalid.' });
+    return ;
+  };
   
   const { path } = req;
   const requestEndpoint = path.substring(10); // removing /api/users from the path
   
   const isLowRateEndpoint = lowRateCountLimitEndpoints.some((endpoint) => endpoint === requestEndpoint);
   if(isLowRateEndpoint) {
-    const document = await LowRateTracker.findOne({ ip: userIpAddress });
+    const document = await LowRateTracker.findOne({ token: userAPIKey });
 
     if(!document) {
-      await createRateTracker(LowRateTracker, userIpAddress, next);
+      await createRateTracker(LowRateTracker, userAPIKey, next);
       return ;
     };
 
@@ -24,21 +29,28 @@ async function rateLimiter(req, res, next) {
     return ;
   };
 
-  const document = await HighRateTracker.findOne({ ip: userIpAddress });
+  const authHeader = req.headers['authorization'];
+  if(!authHeader) {
+    res.status(401).json({ success: false, message: 'Invalid credentials. Request denied.' });
+    return ;
+  };
+
+  const loginToken = authHeader.substring(7);
+  const document = await HighRateTracker.findOne({ token: loginToken });
 
   if(!document) {
-    await createRateTracker(HighRateTracker, userIpAddress, next);
+    await createRateTracker(HighRateTracker, loginToken, next);
     return ;
   };
 
   updateRateTracker(HighRateTracker, highRateCountLimit, document, res, next);
 };
 
-async function createRateTracker(Model, userIpAddress, next) {
+async function createRateTracker(Model, userToken, next) {
   const timestamp = Date.now();
-
+  
   const newDocument = new Model({
-    ip: userIpAddress,
+    token: userToken,
     timestamp,
     count: 1,
   });
@@ -55,13 +67,21 @@ async function createRateTracker(Model, userIpAddress, next) {
 
 async function updateRateTracker(Model, rateCount, document, res, next) {
   if(document.count >= rateCount) {
+    if(document.token.length === 32) { // loginToken
+      await User.findOneAndUpdate(
+        { loginToken: document.token },
+        { $inc: { rateLimitReachedCount: 1 } },
+        { new: true }
+      );
+    };
+    
     res.status(429).json({ success: false, message: 'Too many requests.' });
     return ;
   };
 
   try {
     await Model.findOneAndUpdate(
-      { ip: document.ip},
+      { token: document.token},
       { $inc: { count: 1 } },
       { new: true }
     );
