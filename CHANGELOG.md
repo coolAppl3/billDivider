@@ -2,6 +2,16 @@
 
 
 ---
+### [1.1.3] (2024-04-13)
+
+
+### Bug Fixes
+
+* Fixed the history header not loading and crashing `history.html`
+* Fixed the history header's flickering as the page loads due to the hight of its inner elements changing
+
+
+---
 ### [1.1.2] (2024-04-12)
 
 

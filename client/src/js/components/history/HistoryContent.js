@@ -3,6 +3,7 @@ import deleteSession from "./deleteSession";
 import SessionElement from "./SessionElement";
 import messagePopup from '../global/messagePopup';
 import ConfirmModal from '../global/ConfirmModal';
+import createDateString from "../global/createDateString";
 
 // Initializing imports
 const sessionElement = new SessionElement();
@@ -11,6 +12,11 @@ const confirmModal = new ConfirmModal();
 class HistoryContent {
   constructor() {
     this._historyContentElement = document.querySelector('.history-content');
+
+    this._usernameElement = document.querySelector('#username');
+    this._totalSessionsElement = document.querySelector('#totalSessions');
+    this._latestSessionDateElement = document.querySelector('#latestSessionDate');
+    
     this._loadEventListeners();
   };
 
@@ -22,9 +28,18 @@ class HistoryContent {
     this._historyContentElement.addEventListener('keyup', this._handleHistoryContentKeyEvents.bind(this));
   };
 
-  _render() {
+  async _render() {
+    const history = await fetchUserHistory();
+
+    if(!history) {
+      return ;
+    };
+    
+    const { sessions, username } = history;
+    
     this._clearSessions();
-    this._renderSessions();
+    this._renderSessions(sessions);
+    this._renderHeaderInfo(sessions, username);
   };
 
   _handleHistoryContentKeyEvents(e) {
@@ -42,17 +57,11 @@ class HistoryContent {
     };
   };
 
-  async _renderSessions() {
-    const history = await fetchUserHistory();
-    const { sessions } = history;
-
-    const historyEvent = new CustomEvent('updateHeader', { detail: history });
-    window.dispatchEvent(historyEvent);
-
+  _renderSessions(sessions) {
     if(!sessions) {
       return ;
     };
-
+    
     if(sessions.length === 0) {
       const noSessionsElement = sessionElement.createNoSessionsElement();
       this._historyContentElement.appendChild(noSessionsElement);
@@ -104,6 +113,50 @@ class HistoryContent {
     for(let session of sessionElementsArray) {
       session.remove();
     };
+  };
+
+  _renderHeaderInfo(sessions, username) {
+    if(username) {
+      this._usernameElement.textContent = username;
+    };
+    
+    const totalSessions = this._getTotalSessions(sessions);
+    this._totalSessionsElement.textContent = totalSessions;
+
+    const latestSessionDate = this._getLatestSessionDate(sessions);
+    this._latestSessionDateElement.textContent = latestSessionDate;
+  };
+
+  _getTotalSessions(sessions) {
+    if(!sessions || !Array.isArray(sessions)) {
+      return ;
+    };
+    
+    let total = sessions.length;
+    return total;
+  };
+
+  _getLatestSessionDate(sessions) {
+    if(!sessions || !Array.isArray(sessions)) {
+      return ;
+    };
+    
+    if(sessions.length === 0) {
+      const latestSessionDate = '-';
+      return latestSessionDate;
+    };
+    
+    const timestampArr = sessions.map((sessions) => sessions.createdOn);
+
+    let latestTimestamp = timestampArr[0];
+    timestampArr.forEach((timestamp) => {
+      if(timestamp > latestTimestamp) {
+        latestTimestamp = timestamp;
+      };
+    });
+
+    const latestSessionDate = createDateString(latestTimestamp);
+    return latestSessionDate;
   };
 };
 
