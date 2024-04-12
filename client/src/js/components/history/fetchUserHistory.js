@@ -25,6 +25,7 @@ async function fetchUserHistory() {
     return history;
 
   } catch (err) {
+    console.log(err)
     err.response && console.log(err.response.data);
 
     if(!err.response) {
@@ -49,8 +50,8 @@ async function fetchUserHistory() {
 
     if(status === 401) {
       if(err.response.data.message === 'API key missing or invalid.') {
-        cookies.remove('loginToken');
-        redirectAfterDelayMillisecond('signIn.html');
+        // cookies.remove('loginToken');
+        // redirectAfterDelayMillisecond('signIn.html');
         return ;
       };
     
