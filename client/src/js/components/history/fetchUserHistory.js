@@ -13,7 +13,6 @@ async function fetchUserHistory() {
   const loginToken = locateLoginToken();
 
   if(!loginToken) { // Not logged in - Redirecting...
-    return ;
     redirectAfterDelayMillisecond('signIn.html');
     return ;
   };
@@ -26,9 +25,7 @@ async function fetchUserHistory() {
     return history;
 
   } catch (err) {
-    console.log(err)
     err.response && console.log(err.response.data);
-    return ;
 
     if(!err.response) {
       cookies.remove('loginToken');

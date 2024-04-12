@@ -9,7 +9,7 @@ async function rateLimiter(req, res, next) {
 
   const userAPIKey = req.headers['x-api-key'];
   if(!userAPIKey || userAPIKey.length !== 64 || !userAPIKey.startsWith('a')) {
-    res.status(401).json({ success: false, message: 'API key missing or invalid...' });
+    res.status(401).json({ success: false, message: 'API key missing or invalid.' });
     return ;
   };
   

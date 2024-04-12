@@ -9,7 +9,7 @@ class HistoryHeader {
   };
 
   _loadEventListeners() {
-    window.addEventListener('updateHeader', this._renderHeaderInfo.bind(this));
+    // window.addEventListener('updateHeader', this._renderHeaderInfo.bind(this));
   };
 
   _renderHeaderInfo(e) {
