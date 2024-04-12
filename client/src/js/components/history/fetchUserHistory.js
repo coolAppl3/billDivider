@@ -13,6 +13,7 @@ async function fetchUserHistory() {
   const loginToken = locateLoginToken();
 
   if(!loginToken) { // Not logged in - Redirecting...
+    return ;
     redirectAfterDelayMillisecond('signIn.html');
     return ;
   };
@@ -27,6 +28,7 @@ async function fetchUserHistory() {
   } catch (err) {
     console.log(err)
     err.response && console.log(err.response.data);
+    return ;
 
     if(!err.response) {
       cookies.remove('loginToken');
@@ -50,8 +52,8 @@ async function fetchUserHistory() {
 
     if(status === 401) {
       if(err.response.data.message === 'API key missing or invalid.') {
-        // cookies.remove('loginToken');
-        // redirectAfterDelayMillisecond('signIn.html');
+        cookies.remove('loginToken');
+        redirectAfterDelayMillisecond('signIn.html');
         return ;
       };
     
