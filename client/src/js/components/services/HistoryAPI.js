@@ -17,6 +17,4 @@ class HistoryAPI {
   };
 };
 
-
-
 export default HistoryAPI;
