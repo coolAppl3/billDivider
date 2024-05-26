@@ -8,7 +8,7 @@
 ### Bug Fixes
 
 - Installed the latest version of `webpack-dev-server` to update `webpack-dev-middleware`.
-  - High severity security vaulnrability was found in version `5.3.4` and below.
+  - High severity security vulnerability was found in version `5.3.4` and below.
 
 
 ---
