@@ -2,6 +2,16 @@
 
 
 ---
+### [1.1.4] (2024-05-26)
+
+
+### Bug Fixes
+
+- Installed the latest version of `webpack-dev-server` to update `webpack-dev-middleware`.
+  - High severity security vaulnrability was found in version `5.3.4` and below.
+
+
+---
 ### [1.1.3] (2024-04-13)
 
 
