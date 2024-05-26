@@ -28,7 +28,7 @@ module.exports = {
     assetModuleFilename: (pathData) => {
       const { filename } = pathData;
 
-      if (filename.endsWith('.woff') || filename.endsWith('.woff2') || filename.endsWith('.eot') || filename.endsWith('.ttf') || filename.endsWith('.otf')|| filename.endsWith('.otf'))  {
+      if (filename.endsWith('.woff') || filename.endsWith('.woff2') || filename.endsWith('.eot') || filename.endsWith('.ttf') || filename.endsWith('.otf') || filename.endsWith('.otf')) {
         return 'assets/fonts/[name][ext]';
       };
 
@@ -86,7 +86,7 @@ module.exports = {
       },
 
     ],
-    
+
   },
 
   plugins: [
@@ -174,7 +174,7 @@ module.exports = {
         "recovery"
       ],
     }),
-    
+
     // updatePassword.html
     new HtmlWebpackPlugin({
       title: 'Update Password - Bill Divider',
