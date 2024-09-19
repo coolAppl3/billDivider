@@ -1,11 +1,19 @@
 # Changelog
 
+---
+## [1.1.5] (2024-09-19)
+
+### Chore Changes
+
+- Updated app dependencies.
+- Changed last patch's details to reflect a chore change instead of a bug fix.
+
 
 ---
 ### [1.1.4] (2024-05-26)
 
 
-### Bug Fixes
+### Chore Changes
 
 - Installed the latest version of `webpack-dev-server` to update `webpack-dev-middleware`.
   - High severity security vulnerability was found in version `5.3.4` and below.
