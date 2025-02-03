@@ -23,9 +23,9 @@ app.use(express.urlencoded({ extended: false }));
 
 // CORS
 const cors = require('cors');
-if(process.env.NODE_ENV !== 'production') {
-  const whitelist = ['http://localhost:3000', 'http://localhost:5000', 'http://46.240.183.31:3000', '46.240.183.31:3000', 'http://46.240.183.31:5000', '46.240.183.31:5000'];
-  
+if (process.env.NODE_ENV !== 'production') {
+  const whitelist = ['http://localhost:3000', 'http://localhost:5000'];
+
   app.use(
     cors({
       origin: whitelist,
