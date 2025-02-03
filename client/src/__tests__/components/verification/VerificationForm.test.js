@@ -110,7 +110,7 @@ beforeEach(() => {
   Object.defineProperty(window, 'location', {
     writable: true,
     value: {
-      href: 'https://billdivider.fun/verification.html?id=mockUnverifiedUserID&keepMeSignedIn=',
+      href: 'https://billdivider.cc/verification.html?id=mockUnverifiedUserID&keepMeSignedIn=',
       pathname: '/verification.html',
       search: '?id=mockUnverifiedUserID&keepMeSignedIn=',
     },
@@ -123,7 +123,7 @@ afterEach(() => {
     writable: true,
     value: {},
   });
-  
+
   document.body.innerHTML = '';
   verificationForm = null;
   mockAPIKey = null;
@@ -134,13 +134,13 @@ describe('_verify(e)', () => {
   let mockEvent;
 
   beforeEach(() => {
-    mockEvent = { preventDefault: () => {} };
+    mockEvent = { preventDefault: () => { } };
   });
 
   afterEach(() => {
     mockEvent = null;
   });
-  
+
   it('should always call e.preventDefault() and LoadingModal.display()', async () => {
     const mockEventSpy = jest.spyOn(mockEvent, 'preventDefault');
     await verificationForm._verify(mockEvent);
@@ -148,17 +148,17 @@ describe('_verify(e)', () => {
     expect(mockEventSpy).toHaveBeenCalled();
     expect(LoadingModal.display).toHaveBeenCalled();
   });
-  
+
   it('should, if the verification code is invalid, call LoadingModal.remove(), return undefined, and stop the function', async () => {
     verificationForm._verificationInput.value = '1234567';
 
     expect(await verificationForm._verify(mockEvent)).toBeUndefined();
     expect(LoadingModal.remove).toHaveBeenCalled();
   });
-  
+
   it('should, if a valid verification code is passed in, extract the unverifiedUSerID and keepMeSignedIn values from the URL, transform the verification code passed in to uppercase, call VerificationAPI.protoType.verify() with the data collected, and if the request is successful, retrieve the loginToken and assign it to the browser cookies, then return undefined. If keeMeSignedIn is falsy, the cookie has no age. The user should finally be redirected to history.html', async () => {
     VerificationAPI.prototype.verify.mockResolvedValueOnce({ data: { loginToken: 'mockLoginToken' } });
-    Cookies.prototype.set.mockImplementationOnce(() => {});
+    Cookies.prototype.set.mockImplementationOnce(() => { });
 
     verificationForm._verificationInput.value = 'abcdef';
     const expectedVerificationData = { unverifiedUserID: 'mockUnverifiedUserID', verificationCode: 'ABCDEF' };
@@ -170,10 +170,10 @@ describe('_verify(e)', () => {
   });
 
   it('should, if a valid verification code is passed in, extract the unverifiedUSerID and keepMeSignedIn values from the URL, transform the verification code passed in to uppercase, call VerificationAPI.protoType.verify() with the data collected, and if the request is successful, retrieve the loginToken and assign it to the browser cookies, then return undefined. If keeMeSignedIn is truthy, the cookie age is set to 14 days. The user should finally be redirected to history.html', async () => {
-    window.location.href = 'https://billdivider.fun/verification.html?id=mockUnverifiedUserID&keepMeSignedIn=true';
-    
+    window.location.href = 'https://billdivider.cc/verification.html?id=mockUnverifiedUserID&keepMeSignedIn=true';
+
     VerificationAPI.prototype.verify.mockResolvedValueOnce({ data: { loginToken: 'mockLoginToken' } });
-    Cookies.prototype.set.mockImplementationOnce(() => {});
+    Cookies.prototype.set.mockImplementationOnce(() => { });
 
     verificationForm._verificationInput.value = 'abcdef';
     const expectedVerificationData = { unverifiedUserID: 'mockUnverifiedUserID', verificationCode: 'ABCDEF' };
@@ -209,7 +209,7 @@ describe('_verify(e)', () => {
     expect(VerificationAPI.prototype.verify).toHaveBeenCalledWith(mockAPIKey, expectedVerificationData);
     expect(consoleSpy).toHaveBeenCalledWith('mockData');
   });
-  
+
   it('should, if a valid verification code is passed in, call VerificationAPI.prototype.verify(). If the request fails without a response object, it should refresh the page with an error message using redirectAfterDelayMillisecond(), then return undefined', async () => {
     VerificationAPI.prototype.verify.mockRejectedValue({});
 
@@ -227,7 +227,7 @@ describe('_verify(e)', () => {
 
     verificationForm._verificationInput.value = 'ABCDEF';
     const expectedVerificationData = { unverifiedUserID: 'mockUnverifiedUserID', verificationCode: 'ABCDEF' };
-    
+
     expect(await verificationForm._verify(mockEvent)).toBeUndefined();
     expect(VerificationAPI.prototype.verify).toHaveBeenCalledWith(mockAPIKey, expectedVerificationData);
     expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(inputFormGroup, 'Account does not exist or has already been validated.');
@@ -281,14 +281,14 @@ describe('_validateCode()', () => {
   afterEach(() => {
     inputFormGroup = null;
   });
-  
+
   it('should transform the value of _verificationInput to uppercase, then validate it. If the length is not equal to 6, it should call ErrorSpan.prototype.display() and return false', () => {
     verificationForm._verificationInput.value = 'ABCD';
 
     expect(verificationForm._validateCode()).toBe(false);
     expect(ErrorSpan.prototype.display).toHaveBeenCalledWith(inputFormGroup, 'Verification code must be 6 characters long.');
   });
-  
+
   it('should transform the value of _verificationInput to uppercase, then validate it. If the code contains whitespace, it should call ErrorSpan.prototype.display() and return false', () => {
     verificationForm._verificationInput.value = 'ABC DE';
 
@@ -307,16 +307,16 @@ describe('_validateCode()', () => {
 describe('_handleResendEmailBtnKeyEvents(e)', () => {
   it('should, if Enter is pressed, call _resendVerificationEmail() and return undefined', () => {
     const mockEvent = { key: 'Enter' };
-    const _resendVerificationEmailSpy = jest.spyOn(verificationForm, '_resendVerificationEmail').mockImplementationOnce(() => {});
-    
+    const _resendVerificationEmailSpy = jest.spyOn(verificationForm, '_resendVerificationEmail').mockImplementationOnce(() => { });
+
     expect(verificationForm._handleResendEmailBtnKeyEvents(mockEvent)).toBeUndefined();
     expect(_resendVerificationEmailSpy).toHaveBeenCalled();
   });
-  
+
   it('should, if the pressed key is not Enter, not call _resendVerificationEmail() but still return undefined', () => {
     const mockEvent = { key: 'G' };
-    const _resendVerificationEmailSpy = jest.spyOn(verificationForm, '_resendVerificationEmail').mockImplementationOnce(() => {});
-    
+    const _resendVerificationEmailSpy = jest.spyOn(verificationForm, '_resendVerificationEmail').mockImplementationOnce(() => { });
+
     expect(verificationForm._handleResendEmailBtnKeyEvents(mockEvent)).toBeUndefined();
     expect(_resendVerificationEmailSpy).not.toHaveBeenCalled();
   });

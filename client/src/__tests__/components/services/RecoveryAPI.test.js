@@ -9,7 +9,7 @@ beforeEach(() => {
   Object.defineProperty(window, 'location', {
     writable: true,
     value: {
-      hostname: 'billdivider.fun',
+      hostname: 'billdivider.cc',
     },
   });
 
@@ -23,9 +23,9 @@ afterEach(() => {
 
 describe('sendRecoveryEmail(APIKey, mockRecoveryEmail)', () => {
   it('should call axios.get() with the appropriate parameters', async () => {
-    axios.get.mockImplementationOnce(() => { return { success: true, data: {} } });
+    axios.get.mockImplementationOnce(() => { return { success: true, data: {} }; });
     const APIKey = 'a5tZAgqE8sbF7Ddar5h9FmeA9MQCY1hmgKW3UgKpjiGbqJHWNmT8P8genEPvkcuq';
-    const mockRecoveryEmail = 'mockRecoveryEmail'
+    const mockRecoveryEmail = 'mockRecoveryEmail';
 
     await recoveryAPI.sendRecoveryEmail(APIKey, mockRecoveryEmail);
     expect(axios.post).toHaveBeenCalledWith(`https://${window.location.hostname}/api/users/recovery`, mockRecoveryEmail, {
@@ -38,7 +38,7 @@ describe('sendRecoveryEmail(APIKey, mockRecoveryEmail)', () => {
 
 describe('updatePassword(APIKey, mockRecoveryData)', () => {
   it('should call axios.get() with the appropriate parameters', async () => {
-    axios.get.mockImplementationOnce(() => { return { success: true, data: {} } });
+    axios.get.mockImplementationOnce(() => { return { success: true, data: {} }; });
     const APIKey = 'a5tZAgqE8sbF7Ddar5h9FmeA9MQCY1hmgKW3UgKpjiGbqJHWNmT8P8genEPvkcuq';
     const mockRecoveryData = { mockNewPassword: 'mockPassword', mockUserID: 'mockUserID' };
 

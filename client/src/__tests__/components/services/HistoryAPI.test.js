@@ -9,7 +9,7 @@ beforeEach(() => {
   Object.defineProperty(window, 'location', {
     writable: true,
     value: {
-      hostname: 'billdivider.fun',
+      hostname: 'billdivider.cc',
     },
   });
 
@@ -23,7 +23,7 @@ afterEach(() => {
 
 describe('getSessionHistory(loginToken)', () => {
   it('should call axios.get() with the appropriate parameters', async () => {
-    axios.get.mockImplementationOnce(() => { return { success: true, data: {} } });
+    axios.get.mockImplementationOnce(() => { return { success: true, data: {} }; });
     const loginToken = 'someLoginToken';
     const APIKey = 'z5tZAgqE8sbF7Ddar5h9FmeA9MQCY1hmgKW3UgKpjiGbqJHWNmT8P8genEPvkcuq';
 

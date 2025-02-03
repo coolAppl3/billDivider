@@ -5,14 +5,14 @@ jest.mock('axios');
 let signUpAPI;
 
 beforeEach(() => {
-  delete window.location
+  delete window.location;
   Object.defineProperty(window, 'location', {
     writable: true,
     value: {
-      hostname: 'billdivider.fun'
+      hostname: 'billdivider.cc'
     },
   });
-  
+
   signUpAPI = new SignUpAPI();
 });
 
@@ -23,7 +23,7 @@ afterEach(() => {
 
 describe('signUp(user)', () => {
   it('should call axios.post() with the appropriate parameters', async () => {
-    axios.post.mockImplementationOnce(() => { return { success: true, data: {} } });
+    axios.post.mockImplementationOnce(() => { return { success: true, data: {} }; });
     const newUser = { username: 'someUsername', password: 'somePassword' };
     const mockAPIKey = 'a5tZAgqE8sbF7Ddar5h9FmeA9MQCY1hmgKW3UgKpjiGbqJHWNmT8P8genEPvkcuq';
 
