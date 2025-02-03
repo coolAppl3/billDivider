@@ -5,11 +5,11 @@ jest.mock('axios');
 let sessionAPI;
 
 beforeEach(() => {
-  delete window.location
+  delete window.location;
   Object.defineProperty(window, 'location', {
     writable: true,
     value: {
-      hostname: 'billdivider.fun'
+      hostname: 'billdivider.cc'
     },
   });
 
@@ -23,7 +23,7 @@ afterEach(() => {
 
 describe('addSession(loginToken, session)', () => {
   it('should call axios.post() with the appropriate parameters', async () => {
-    axios.post.mockImplementationOnce(() => { return { success: true, data: {} } });
+    axios.post.mockImplementationOnce(() => { return { success: true, data: {} }; });
     const loginToken = 'someLoginToken';
     const APIKey = 'z5tZAgqE8sbF7Ddar5h9FmeA9MQCY1hmgKW3UgKpjiGbqJHWNmT8P8genEPvkcuq';
     const session = { someKey: 'mockValue' };
@@ -40,7 +40,7 @@ describe('addSession(loginToken, session)', () => {
 
 describe('getSession(loginToken, sessionID)', () => {
   it('should call axios.get() with the appropriate parameters', async () => {
-    axios.get.mockImplementationOnce(() => { return { success: true, data: {} } });
+    axios.get.mockImplementationOnce(() => { return { success: true, data: {} }; });
     const loginToken = 'someLoginToken';
     const APIKey = 'z5tZAgqE8sbF7Ddar5h9FmeA9MQCY1hmgKW3UgKpjiGbqJHWNmT8P8genEPvkcuq';
     const sessionID = 'someSessionID';
@@ -57,7 +57,7 @@ describe('getSession(loginToken, sessionID)', () => {
 
 describe('deleteSession(loginToken, sessionID)', () => {
   it('should call axios.delete() with the appropriate parameters', async () => {
-    axios.delete.mockImplementationOnce(() => { return { success: true, data: {} } });
+    axios.delete.mockImplementationOnce(() => { return { success: true, data: {} }; });
     const loginToken = 'someLoginToken';
     const APIKey = 'z5tZAgqE8sbF7Ddar5h9FmeA9MQCY1hmgKW3UgKpjiGbqJHWNmT8P8genEPvkcuq';
     const sessionID = 'someSessionID';
@@ -74,7 +74,7 @@ describe('deleteSession(loginToken, sessionID)', () => {
 
 describe('updateSession(loginToken, sessionID)', () => {
   it('should call axios.put() with the appropriate parameters', async () => {
-    axios.put.mockImplementationOnce(() => { return { success: true, data: {} } });
+    axios.put.mockImplementationOnce(() => { return { success: true, data: {} }; });
     const loginToken = 'someLoginToken';
     const APIKey = 'z5tZAgqE8sbF7Ddar5h9FmeA9MQCY1hmgKW3UgKpjiGbqJHWNmT8P8genEPvkcuq';
     const sessionID = 'someSessionID';
